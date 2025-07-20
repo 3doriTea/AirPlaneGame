@@ -150,16 +150,10 @@
     <ClInclude Include="Source\SampleGame.h" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="Assets\Model\airplane.obj" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Other\History\log20250720.md">
       <SubType>
       </SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="Assets\Model\OBJ\cube.obj" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
