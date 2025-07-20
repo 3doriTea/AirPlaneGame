@@ -52,7 +52,7 @@ void mtgb::MainWindow::Initialize()
 		DWORD     exWindowStyle{ WS_EX_OVERLAPPEDWINDOW };
 		LPCSTR    className{ Game::Title().data() };
 		LPCSTR    windowName{ Game::Title().data() };
-		DWORD     windowStyle{ WS_OVERLAPPEDWINDOW & ~WS_THICKFRAME };
+		DWORD     windowStyle{ WS_OVERLAPPEDWINDOW };//& ~WS_THICKFRAME };
 		int       windowPositionX{ CW_USEDEFAULT };
 		int       windowPositionY{ CW_USEDEFAULT };
 		int       windowWidth{ windowRect.right - windowRect.left };
@@ -134,6 +134,31 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 	case WM_MOUSEMOVE:  // マウスが動いた
 		Game::System<Input>().UpdateMousePositionData(LOWORD(lParam), HIWORD(lParam));
 		return S_OK;
+	case WM_SIZE:  // ウィンドウサイズが変わった
+		
+		return S_OK;
+	case WM_NCCALCSIZE:
+		// wParamについて：TRUEならNCCALCSIZE_PARAMS / FALSEならRect*
+		if (wParam) return 0;
+		break;
+	case WM_NCHITTEST:
+	{
+		LRESULT hitResult{ DefWindowProc(hWnd, message, wParam, lParam) };
+		switch (hitResult)
+		{
+		case HTLEFT:
+		case HTRIGHT:
+		case HTTOP:
+		case HTBOTTOM:
+		case HTTOPLEFT:
+		case HTTOPRIGHT:
+		case HTBOTTOMLEFT:
+		case HTBOTTOMRIGHT:
+			return HTCLIENT; // サイズは変えさせない
+		default:
+			return hitResult;
+		}
+	}
 	default:  // それ以外のメッセージは譲渡
 		break;
 	}
