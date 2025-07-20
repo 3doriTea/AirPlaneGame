@@ -7,6 +7,8 @@ using namespace mtgb;
 namespace
 {
 	static const float PLAYER_SPEED{ 0.01f };
+	std::string str = "Hello,World!";
+	int hText;
 }
 
 Player::Player() : GameObject(GameObjectBuilder()
@@ -21,6 +23,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
+	hText = DirectWrite::Load(str);
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
@@ -84,5 +87,7 @@ void Player::Draw() const
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
 
+
+	Draw::Text(hText, mousePos);
 	//testme(Naohiro)
 }

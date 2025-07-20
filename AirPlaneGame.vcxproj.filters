@@ -195,6 +195,9 @@
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp">
       <Filter>mtgb\MTBin</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Direct2D\Direct2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -398,5 +401,17 @@
     <ClInclude Include="mtgb\MTBin\MemoryStream.h">
       <Filter>mtgb\MTBin</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\Fbx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IModelPack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\PathUtility.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Other\History\log20250720.md" />
   </ItemGroup>
 </Project>
