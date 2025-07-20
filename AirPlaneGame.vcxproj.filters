@@ -13,10 +13,390 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="mtgb">
+      <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{1af1d065-3a5b-48ca-af77-ba3dc3bef107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\Direct2D">
+      <UniqueIdentifier>{dcb6fe85-1ca1-4fd4-85bc-d4881d09aef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\MTBin">
+      <UniqueIdentifier>{bd9379eb-fff6-4864-b34d-e5a34323700d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TheMain.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="mtgb\AssetsManager.cpp">
+      <Filter>mtgb</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Audio.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\AudioClip.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\AudioOneShot.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\AudioPlayer.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\AudioPlayerCP.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Color.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ComponentPool.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Debug.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DirectWrite.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DirectX11Draw.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DirectX11Manager.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Draw.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Entity.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\FbxParts.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Figure.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Game.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\GameObject.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\GameScene.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\GameTime.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\HLSLInclude.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\IComponent.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\IComponentPool.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Image.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Input.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\InputData.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\IShader.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ISystem.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MainWindow.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Matrix4x4.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Model.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\mtgb.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\OBJ.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Quaternion.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RigidBody.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RigidBodyCP.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\SceneSystem.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Screen.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Sprite.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Texture2D.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Timer.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Transform.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TransformCP.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Vector2.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Vector2Int.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Vector3.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Vector4.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WaveData.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\World.cpp">
+      <Filter>mtgb</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Bullet.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Camera.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Player.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SampleGame.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TheMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTBin\MemoryStream.cpp">
+      <Filter>mtgb\MTBin</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mtgb\AssetsManager.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Audio.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AudioClip.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AudioOneShot.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AudioPlayer.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AudioPlayerCP.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\cmtgb.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Color.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ComponentPool.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Debug.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DirectWrite.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DirectX11Draw.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DirectX11Manager.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Draw.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Entity.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\FbxParts.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Figure.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Game.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\GameObject.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\GameObjectBuilder.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\GameScene.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\GameTime.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Handlers.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\HLSLInclude.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IComponent.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IComponentPool.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Image.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Input.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputData.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputKeyCode.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputMouseCode.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IShader.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ISystem.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MainWindow.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Matrix4x4.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Model.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTAssert.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\mtgb.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTStringUtility.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\OBJ.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Quaternion.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RectInt.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ReleaseUtility.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RigidBody.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RigidBodyCP.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\SceneSystem.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Screen.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Sprite.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Texture2D.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Timer.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Transform.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TransformCP.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector2.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector2Int.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector3.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector3Ref.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector4.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WaveData.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\World.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Bullet.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Camera.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Player.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SampleGame.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Direct2D\Direct2D.h">
+      <Filter>mtgb\Direct2D</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTBin\Common.h">
+      <Filter>mtgb\MTBin</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTBin\MemoryStream.h">
+      <Filter>mtgb\MTBin</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

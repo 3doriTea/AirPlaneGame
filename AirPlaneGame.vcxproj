@@ -18,6 +18,133 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="mtgb\AssetsManager.cpp" />
+    <ClCompile Include="mtgb\Audio.cpp" />
+    <ClCompile Include="mtgb\AudioClip.cpp" />
+    <ClCompile Include="mtgb\AudioOneShot.cpp" />
+    <ClCompile Include="mtgb\AudioPlayer.cpp" />
+    <ClCompile Include="mtgb\AudioPlayerCP.cpp" />
+    <ClCompile Include="mtgb\Color.cpp" />
+    <ClCompile Include="mtgb\ComponentPool.cpp" />
+    <ClCompile Include="mtgb\Debug.cpp" />
+    <ClCompile Include="mtgb\DirectWrite.cpp" />
+    <ClCompile Include="mtgb\DirectX11Draw.cpp" />
+    <ClCompile Include="mtgb\DirectX11Manager.cpp" />
+    <ClCompile Include="mtgb\Draw.cpp" />
+    <ClCompile Include="mtgb\Entity.cpp" />
+    <ClCompile Include="mtgb\FbxParts.cpp" />
+    <ClCompile Include="mtgb\Figure.cpp" />
+    <ClCompile Include="mtgb\Game.cpp" />
+    <ClCompile Include="mtgb\GameObject.cpp" />
+    <ClCompile Include="mtgb\GameScene.cpp" />
+    <ClCompile Include="mtgb\GameTime.cpp" />
+    <ClCompile Include="mtgb\HLSLInclude.cpp" />
+    <ClCompile Include="mtgb\IComponent.cpp" />
+    <ClCompile Include="mtgb\IComponentPool.cpp" />
+    <ClCompile Include="mtgb\Image.cpp" />
+    <ClCompile Include="mtgb\Input.cpp" />
+    <ClCompile Include="mtgb\InputData.cpp" />
+    <ClCompile Include="mtgb\IShader.cpp" />
+    <ClCompile Include="mtgb\ISystem.cpp" />
+    <ClCompile Include="mtgb\MainWindow.cpp" />
+    <ClCompile Include="mtgb\Matrix4x4.cpp" />
+    <ClCompile Include="mtgb\Model.cpp" />
+    <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
+    <ClCompile Include="mtgb\mtgb.cpp" />
+    <ClCompile Include="mtgb\OBJ.cpp" />
+    <ClCompile Include="mtgb\Quaternion.cpp" />
+    <ClCompile Include="mtgb\RigidBody.cpp" />
+    <ClCompile Include="mtgb\RigidBodyCP.cpp" />
+    <ClCompile Include="mtgb\SceneSystem.cpp" />
+    <ClCompile Include="mtgb\Screen.cpp" />
+    <ClCompile Include="mtgb\Sprite.cpp" />
+    <ClCompile Include="mtgb\Texture2D.cpp" />
+    <ClCompile Include="mtgb\Timer.cpp" />
+    <ClCompile Include="mtgb\Transform.cpp" />
+    <ClCompile Include="mtgb\TransformCP.cpp" />
+    <ClCompile Include="mtgb\Vector2.cpp" />
+    <ClCompile Include="mtgb\Vector2Int.cpp" />
+    <ClCompile Include="mtgb\Vector3.cpp" />
+    <ClCompile Include="mtgb\Vector4.cpp" />
+    <ClCompile Include="mtgb\WaveData.cpp" />
+    <ClCompile Include="mtgb\World.cpp" />
+    <ClCompile Include="Source\Bullet.cpp" />
+    <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\PlayScene.cpp" />
+    <ClCompile Include="Source\SampleGame.cpp" />
+    <ClCompile Include="Source\TheMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="mtgb\AssetsManager.h" />
+    <ClInclude Include="mtgb\Audio.h" />
+    <ClInclude Include="mtgb\AudioClip.h" />
+    <ClInclude Include="mtgb\AudioOneShot.h" />
+    <ClInclude Include="mtgb\AudioPlayer.h" />
+    <ClInclude Include="mtgb\AudioPlayerCP.h" />
+    <ClInclude Include="mtgb\cmtgb.h" />
+    <ClInclude Include="mtgb\Color.h" />
+    <ClInclude Include="mtgb\ComponentPool.h" />
+    <ClInclude Include="mtgb\Debug.h" />
+    <ClInclude Include="mtgb\Direct2D\Direct2D.h" />
+    <ClInclude Include="mtgb\DirectWrite.h" />
+    <ClInclude Include="mtgb\DirectX11Draw.h" />
+    <ClInclude Include="mtgb\DirectX11Manager.h" />
+    <ClInclude Include="mtgb\Draw.h" />
+    <ClInclude Include="mtgb\Entity.h" />
+    <ClInclude Include="mtgb\FbxParts.h" />
+    <ClInclude Include="mtgb\Figure.h" />
+    <ClInclude Include="mtgb\Game.h" />
+    <ClInclude Include="mtgb\GameObject.h" />
+    <ClInclude Include="mtgb\GameObjectBuilder.h" />
+    <ClInclude Include="mtgb\GameScene.h" />
+    <ClInclude Include="mtgb\GameTime.h" />
+    <ClInclude Include="mtgb\Handlers.h" />
+    <ClInclude Include="mtgb\HLSLInclude.h" />
+    <ClInclude Include="mtgb\IComponent.h" />
+    <ClInclude Include="mtgb\IComponentPool.h" />
+    <ClInclude Include="mtgb\Image.h" />
+    <ClInclude Include="mtgb\Input.h" />
+    <ClInclude Include="mtgb\InputData.h" />
+    <ClInclude Include="mtgb\InputKeyCode.h" />
+    <ClInclude Include="mtgb\InputMouseCode.h" />
+    <ClInclude Include="mtgb\IShader.h" />
+    <ClInclude Include="mtgb\ISystem.h" />
+    <ClInclude Include="mtgb\MainWindow.h" />
+    <ClInclude Include="mtgb\Matrix4x4.h" />
+    <ClInclude Include="mtgb\Model.h" />
+    <ClInclude Include="mtgb\MTAssert.h" />
+    <ClInclude Include="mtgb\MTBin\Common.h" />
+    <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
+    <ClInclude Include="mtgb\mtgb.h" />
+    <ClInclude Include="mtgb\MTStringUtility.h" />
+    <ClInclude Include="mtgb\OBJ.h" />
+    <ClInclude Include="mtgb\Quaternion.h" />
+    <ClInclude Include="mtgb\RectInt.h" />
+    <ClInclude Include="mtgb\ReleaseUtility.h" />
+    <ClInclude Include="mtgb\RigidBody.h" />
+    <ClInclude Include="mtgb\RigidBodyCP.h" />
+    <ClInclude Include="mtgb\SceneSystem.h" />
+    <ClInclude Include="mtgb\Screen.h" />
+    <ClInclude Include="mtgb\Sprite.h" />
+    <ClInclude Include="mtgb\Texture2D.h" />
+    <ClInclude Include="mtgb\Timer.h" />
+    <ClInclude Include="mtgb\Transform.h" />
+    <ClInclude Include="mtgb\TransformCP.h" />
+    <ClInclude Include="mtgb\Vector2.h" />
+    <ClInclude Include="mtgb\Vector2Int.h" />
+    <ClInclude Include="mtgb\Vector3.h" />
+    <ClInclude Include="mtgb\Vector3Ref.h" />
+    <ClInclude Include="mtgb\Vector4.h" />
+    <ClInclude Include="mtgb\WaveData.h" />
+    <ClInclude Include="mtgb\World.h" />
+    <ClInclude Include="Source\Bullet.h" />
+    <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\PlayScene.h" />
+    <ClInclude Include="Source\SampleGame.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -43,14 +170,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -70,6 +197,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)mtgb;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)mtgb;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -107,10 +240,13 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(FBX)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(FBX)\lib\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -122,17 +258,17 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(FBX)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(FBX)\lib\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="TheMain.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
