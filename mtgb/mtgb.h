@@ -18,6 +18,8 @@
 #include "MainWindow.h"
 #include "Screen.h"
 #include "DirectX11Manager.h"
+#include "Direct2D/Direct2D.h"
+#include "DirectWrite.h"
 #include "RigidBodyCP.h"
 #include "TransformCP.h"
 #include "AudioPlayerCP.h"

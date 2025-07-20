@@ -2,6 +2,7 @@
 #include "cmtgb.h"
 #include "Vector4.h"
 
+
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
@@ -19,11 +20,8 @@ struct ID3D11Texture2D;
 
 namespace mtgb
 {
-	class DirectX11Manager;
-	class Texture2D;
 	class Figure;
 	class IShader;
-	class OBJ;
 
 	/// <summary>
 	/// シェーダタイプ
@@ -81,10 +79,12 @@ namespace mtgb
 	/// </summary>
 	class DirectX11Draw final
 	{
-		friend DirectX11Manager;
-		friend Texture2D;
-		friend IShader;
-		friend OBJ;
+		friend class DirectX11Manager;
+		friend class Texture2D;
+		friend class IShader;
+		friend class DirectWrite;
+		friend class Direct2D;
+		friend class OBJ;
 
 	public:
 		/// <summary>

@@ -24,6 +24,11 @@ namespace mtgb
 	using OBJModelHandle = int32_t;
 
 	/// <summary>
+	/// テキストのハンドル
+	/// </summary>
+	using TextHandle = int32_t;
+
+	/// <summary>
 	/// 無効なハンドル値
 	/// </summary>
 	static const int32_t INVALID_HANDLE{ -1 };

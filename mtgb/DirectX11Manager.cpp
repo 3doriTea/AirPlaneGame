@@ -60,7 +60,7 @@ void mtgb::DirectX11Manager::Initialize()
 		nullptr,                      // ビデオアダプターの指定
 		D3D_DRIVER_TYPE_HARDWARE,     // ドライバのタイプ (ハードウェアかソフトウェアか)
 		nullptr,                      // ドライバのタイプがソフトウェアの場合に指定するモジュール
-		D3D11_CREATE_DEVICE_DEBUG,    // フラグ (デバッグ用にする)
+		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,    // フラグ (デバッグ用にする),Direct2D使えるようにする
 		nullptr,                      // デバイス、コンテキストのレベル設定 (nullptrで最高レベル)
 		0,                            // レベル設定の数
 		D3D11_SDK_VERSION,            // DirectX11のSDKバージョン

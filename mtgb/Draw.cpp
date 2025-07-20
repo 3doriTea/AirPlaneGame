@@ -7,6 +7,7 @@
 #include "OBJ.h"
 #include "Transform.h"
 #include "SceneSystem.h"
+#include "DirectWrite.h"
 
 void mtgb::Draw::Box(
 	const Vector2Int& _begin,
@@ -39,6 +40,12 @@ void mtgb::Draw::Image(
 
 	Transform* pCameraTransform = Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
 	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+}
+
+void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int origin)
+{
+	/*DirectWrite* pDirectWrite*/
+	Game::System<mtgb::DirectWrite>().Draw(_hText, origin.x, origin.y);
 }
 
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)

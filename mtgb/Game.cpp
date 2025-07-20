@@ -49,7 +49,8 @@ void mtgb::Game::InitializeSystems(const std::list<ISystem*>& _uninitialized)
 {
 	for (auto&& pRegisterSystem : _uninitialized)
 	{
-		pRegisterSystem->Initialize();
+		pRegisterSystem->
+			Initialize();
 	}
 }
 

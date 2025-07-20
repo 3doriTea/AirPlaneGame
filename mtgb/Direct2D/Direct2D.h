@@ -1,17 +1,31 @@
 #pragma once
-#include <d3d11_1.h>
-#include <d2d1.h>
-#include <Windows.h>
-#include <dwrite.h>  // direct write ‚Ì‚â‚Â
+#include "cmtgb.h"
+
+
+
+struct IDXGIDevice;
+struct ID2D1Factory;
+struct IDXGISurface;
+struct ID2D1SolidColorBrush;
+struct ID2D1RenderTarget;
 
 namespace mtgb
 {
-	class Direct2D
+	class Direct2D : public ISystem
 	{
+		friend class DirectWrite;
+	public:
+		void Initialize() override;
+		void Update() override;
+		void Draw();
+		void Release();
+
 	private:
-		IDXGIDevice* pDXGIDevice_;
-		ID2D1Factory* pD2DFactory_;
-		ID2D1Device* pD2DDevice_;
+		static IDXGIDevice* pDXGIDevice_;
+		static ID2D1Factory* pD2DFactory_;
+		static IDXGISurface* pDXGISurface_;
+		static ID2D1SolidColorBrush* pD2DBrush_;
+		static ID2D1RenderTarget* pRenderTarget_;
 
 	};
 }

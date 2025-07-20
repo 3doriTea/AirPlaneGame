@@ -28,6 +28,7 @@
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
+    <ClCompile Include="mtgb\Direct2D\Direct2D.cpp" />
     <ClCompile Include="mtgb\DirectWrite.cpp" />
     <ClCompile Include="mtgb\DirectX11Draw.cpp" />
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
@@ -93,6 +94,7 @@
     <ClInclude Include="mtgb\DirectX11Manager.h" />
     <ClInclude Include="mtgb\Draw.h" />
     <ClInclude Include="mtgb\Entity.h" />
+    <ClInclude Include="mtgb\Fbx.h" />
     <ClInclude Include="mtgb\FbxParts.h" />
     <ClInclude Include="mtgb\Figure.h" />
     <ClInclude Include="mtgb\Game.h" />
@@ -105,6 +107,7 @@
     <ClInclude Include="mtgb\IComponent.h" />
     <ClInclude Include="mtgb\IComponentPool.h" />
     <ClInclude Include="mtgb\Image.h" />
+    <ClInclude Include="mtgb\IModelPack.h" />
     <ClInclude Include="mtgb\Input.h" />
     <ClInclude Include="mtgb\InputData.h" />
     <ClInclude Include="mtgb\InputKeyCode.h" />
@@ -120,6 +123,7 @@
     <ClInclude Include="mtgb\mtgb.h" />
     <ClInclude Include="mtgb\MTStringUtility.h" />
     <ClInclude Include="mtgb\OBJ.h" />
+    <ClInclude Include="mtgb\PathUtility.h" />
     <ClInclude Include="mtgb\Quaternion.h" />
     <ClInclude Include="mtgb\RectInt.h" />
     <ClInclude Include="mtgb\ReleaseUtility.h" />
