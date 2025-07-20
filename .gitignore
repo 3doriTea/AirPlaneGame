@@ -3,8 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Assets Directory exclusive
-!Assets/
+
 
 # User-specific files
 *.rsuser
@@ -364,3 +363,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Assets Directory exclusive
+!Assets/*
