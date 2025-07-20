@@ -20,7 +20,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
-	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
+	hModel_ = OBJ::Load("Model/airplane.obj");
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
