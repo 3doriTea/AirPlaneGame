@@ -4,6 +4,9 @@
 #include "Texture2D.h"
 #include "ReleaseUtility.h"
 #include "IShader.h"
+#include "DirectWrite.h"
+#include "OBJ.h"
+
 
 ID3D11Device* mtgb::DirectX11Draw::pDevice_{ nullptr };                                                    // 描画を行うための環境、リソースの作成に使う
 ID3D11DeviceContext* mtgb::DirectX11Draw::pContext_{ nullptr };                                            // GPUに命令出すやつ

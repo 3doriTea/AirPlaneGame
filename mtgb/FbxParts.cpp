@@ -241,7 +241,7 @@ void mtgb::FbxParts::InitializeTexture(FbxSurfaceMaterial* _pMaterial, const DWO
 		wsprintf(name, "%s%s", name, ext);
 
 		pMaterial_[_i].pTexture = new Texture2D{};
-		pMaterial_[_i].pTexture->Load(ToWString(name));
+		pMaterial_[_i].pTexture->Load(ToWString(std::string{ name }));
 	}
 }
 

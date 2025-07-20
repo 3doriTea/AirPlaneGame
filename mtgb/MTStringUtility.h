@@ -9,10 +9,11 @@ namespace mtgb
 	/// </summary>
 	/// <param name="_cstr"></param>
 	/// <returns></returns>
-	static inline std::wstring ToWString(const char* _cstr)
+	/*static inline std::wstring ToWString(char* _cstr)
 	{
-		return ToWString(_cstr);
-	}
+		std::string str{ _cstr };
+		return ToWString(str);
+	}*/
 
 	/// <summary>
 	/// ƒƒCƒh•¶š—ñ‚É•ÏŠ·‚·‚é

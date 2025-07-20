@@ -1,10 +1,12 @@
 #pragma once
 #include "ISystem.h"
 #include "cmtgb.h"
+#include "IModelPack.h"
+#include <map>
+#include "Handlers.h"
 
 namespace mtgb
 {
-	class Fbx;
 
 	class Model : public ISystem
 	{
@@ -14,7 +16,7 @@ namespace mtgb
 		/// </summary>
 		struct ModelData
 		{
-			Fbx* pFbx;
+			IModelPack* pModelPack;
 			float currentFrame;
 			float animationSpeed;
 			int beginFrame, endFrame;
