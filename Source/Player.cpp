@@ -83,4 +83,6 @@ void Player::Draw() const
 	Draw::OBJModel(hModel_, pTransform_);
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
+
+	//testme(Naohiro)
 }
