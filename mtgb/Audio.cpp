@@ -57,7 +57,7 @@ void mtgb::Audio::Update()
 	auto itr = pOneShotQueue_.begin();
 	while (true)
 	{
-		(*itr)->timeLeft -= Time::DeltaTime();
+		(*itr)->timeLeft -= Time::DeltaTimeF();
 
 		float diff{ (*itr)->timeLeft };  // ·•ª
 		LOGF("diff:%f\n", diff);
