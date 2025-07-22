@@ -23,7 +23,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
-	hText = DirectWrite::Load(str);
+	hText = DirectWrite::Load(str,36);
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);

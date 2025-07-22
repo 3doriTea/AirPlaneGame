@@ -59,9 +59,8 @@ namespace mtgb
 		
 
 		//static void TextBox();
-		static void Text(
-			const TextHandle _hText,
-			const Vector2Int origin);
+		static void Text(const TextHandle _hText, const Vector2Int& origin);
+
 
 	public:
 		Draw();

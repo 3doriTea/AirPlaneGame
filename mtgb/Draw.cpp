@@ -42,7 +42,7 @@ void mtgb::Draw::Image(
 	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
 }
 
-void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int origin)
+void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
 {
 	/*DirectWrite* pDirectWrite*/
 	Game::System<mtgb::DirectWrite>().Draw(_hText, origin.x, origin.y);
