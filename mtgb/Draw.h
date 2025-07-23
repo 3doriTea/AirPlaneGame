@@ -56,11 +56,11 @@ namespace mtgb
 		static void OBJModel(
 			const OBJModelHandle _hOBJModel,
 			const Transform* _pTransform);
-		
 
 		//static void TextBox();
 		static void Text(const TextHandle _hText, const Vector2Int& origin);
 
+		static void Text(const std::string& _text, const Vector2Int& _origin);
 
 	public:
 		Draw();

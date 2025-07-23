@@ -143,6 +143,7 @@
     <ClInclude Include="mtgb\Vector4.h" />
     <ClInclude Include="mtgb\WaveData.h" />
     <ClInclude Include="mtgb\World.h" />
+    <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Player.h" />
