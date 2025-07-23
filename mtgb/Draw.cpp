@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Sprite.h"
 #include "OBJ.h"
+#include "Model.h"
 #include "Transform.h"
 #include "SceneSystem.h"
 #include "DirectWrite.h"
@@ -42,10 +43,19 @@ void mtgb::Draw::Image(
 	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
 }
 
+void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
+{
+}
+
 void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
 {
 	/*DirectWrite* pDirectWrite*/
-	Game::System<mtgb::DirectWrite>().Draw(_hText, origin.x, origin.y);
+	Game::System<mtgb::DirectWrite>().Draw(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y));
+}
+
+void mtgb::Draw::Text(const std::string& _text, const Vector2Int& _origin)
+{
+	Game::System<mtgb::DirectWrite>().ImmediateDraw(_text, static_cast<float>(_origin.x), static_cast<float>(_origin.y));
 }
 
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)

@@ -88,6 +88,7 @@ void Player::Draw() const
 	//Draw::Image(hImage_, pTransform_);
 
 
-	Draw::Text(hText, mousePos);
+	//Draw::Text(hText, mousePos);
+	//Draw::Text("Hello ‚±‚ñ‚É‚¿‚Í", mousePos);
 	//testme(Naohiro)
 }

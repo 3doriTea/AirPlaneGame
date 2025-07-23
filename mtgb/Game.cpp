@@ -4,6 +4,11 @@
 #include "IComponentPool.h"
 
 
+namespace
+{
+	static const mtgb::Vector2Int DEFAULT_SCREEN_SIZE{ 800, 600 };
+}
+
 mtgb::Game::Game() :
 	pRegisterSystems_{},
 	pFrameUpdateSystems_{},
@@ -14,6 +19,11 @@ mtgb::Game::Game() :
 
 mtgb::Game::~Game()
 {
+}
+
+mtgb::Vector2Int mtgb::Game::GetScreenSize() const
+{
+	return DEFAULT_SCREEN_SIZE;
 }
 
 void mtgb::Game::Exit()
