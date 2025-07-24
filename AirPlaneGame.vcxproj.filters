@@ -344,15 +344,6 @@
     <ClInclude Include="mtgb\MTBin\MemoryStream.h">
       <Filter>mtgb\MTBin</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\Fbx.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\IModelPack.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\PathUtility.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\AudioPlayer.h">
       <Filter>mtgb\Component</Filter>
     </ClInclude>
@@ -486,10 +477,16 @@
       <Filter>mtgb\System\ComponentPool</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\ProfileUtlity.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb</Filter>
     </ClInclude>
-    <ClInclude Include="Bar.h">
-      <Filter>Game\PlayScene</Filter>
+    <ClInclude Include="mtgb\Fbx.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IModelPack.h">
+      <Filter>mtgb</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\PathUtility.h">
+      <Filter>mtgb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
