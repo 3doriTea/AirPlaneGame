@@ -97,6 +97,9 @@
     <Filter Include="Game\PlayScene">
       <UniqueIdentifier>{77f22293-232a-4541-8485-ae705549e177}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mtgb\System\Draw\Fbx">
+      <UniqueIdentifier>{353f749a-1df7-4698-9711-40779bcf64cf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -273,6 +276,9 @@
     <ClCompile Include="Bar.cpp">
       <Filter>Game\PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Fbx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -343,6 +349,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\MTBin\MemoryStream.h">
       <Filter>mtgb\MTBin</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IModelPack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\PathUtility.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioPlayer.h">
       <Filter>mtgb\Component</Filter>
@@ -477,16 +489,13 @@
       <Filter>mtgb\System\ComponentPool</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\ProfileUtlity.h">
-      <Filter>mtgb</Filter>
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Fbx.h">
-      <Filter>mtgb</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\IModelPack.h">
-      <Filter>mtgb</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\PathUtility.h">
-      <Filter>mtgb</Filter>
+      <Filter>mtgb\System\Draw\Fbx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

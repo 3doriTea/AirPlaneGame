@@ -35,6 +35,7 @@
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
+    <ClCompile Include="mtgb\Fbx.cpp" />
     <ClCompile Include="mtgb\FbxParts.cpp" />
     <ClCompile Include="mtgb\Figure.cpp" />
     <ClCompile Include="mtgb\Game.cpp" />
