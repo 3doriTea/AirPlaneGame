@@ -21,7 +21,7 @@ namespace mtgb
         DirectX::XMVECTOR pos;
     };
 
-    struct SimpleContantBuffer
+    struct SimpleConstantBuffer
     {
         DirectX::XMMATRIX mWVP;
     };

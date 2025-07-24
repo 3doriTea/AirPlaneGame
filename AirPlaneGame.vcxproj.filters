@@ -94,6 +94,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{1af1d065-3a5b-48ca-af77-ba3dc3bef107}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\PlayScene">
+      <UniqueIdentifier>{77f22293-232a-4541-8485-ae705549e177}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -266,6 +269,9 @@
     </ClCompile>
     <ClCompile Include="mtgb\Direct2D\Direct2D.cpp">
       <Filter>mtgb\System\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Game\PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -478,6 +484,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\ComponentPool.h">
       <Filter>mtgb\System\ComponentPool</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ProfileUtlity.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
