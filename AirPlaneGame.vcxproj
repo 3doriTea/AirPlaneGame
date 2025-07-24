@@ -19,6 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_tables.cpp" />
+    <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="mtgb\AssetsManager.cpp" />
     <ClCompile Include="mtgb\Audio.cpp" />
     <ClCompile Include="mtgb\AudioClip.cpp" />
@@ -60,6 +67,7 @@
     <ClCompile Include="mtgb\SceneSystem.cpp" />
     <ClCompile Include="mtgb\Screen.cpp" />
     <ClCompile Include="mtgb\Sprite.cpp" />
+    <ClCompile Include="mtgb\Text.cpp" />
     <ClCompile Include="mtgb\Texture2D.cpp" />
     <ClCompile Include="mtgb\Timer.cpp" />
     <ClCompile Include="mtgb\Transform.cpp" />
@@ -78,6 +86,14 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\imstb_textedit.h" />
+    <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="mtgb\AssetsManager.h" />
     <ClInclude Include="mtgb\Audio.h" />
     <ClInclude Include="mtgb\AudioClip.h" />
@@ -132,6 +148,7 @@
     <ClInclude Include="mtgb\SceneSystem.h" />
     <ClInclude Include="mtgb\Screen.h" />
     <ClInclude Include="mtgb\Sprite.h" />
+    <ClInclude Include="mtgb\Text.h" />
     <ClInclude Include="mtgb\Texture2D.h" />
     <ClInclude Include="mtgb\Timer.h" />
     <ClInclude Include="mtgb\Transform.h" />

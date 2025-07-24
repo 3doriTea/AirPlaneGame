@@ -4,8 +4,22 @@
 #include "MTAssert.h"
 #include "Screen.h"
 #include "Input.h"
+#include "../ImGui/imgui.h"
+#include "../ImGui/imgui_impl_win32.h"
+#include "../ImGui/imgui_impl_dx11.h"
 
 using namespace mtgb;
+
+
+/// <summary>
+/// ウィンドウからのメッセージを受信してImGuiの入力やイベントを有効にするためのコールバック関数
+/// </summary>
+/// <param name="hwnd">ウィンドウハンドル</param>
+/// <param name="msg">メッセージ</param>
+/// <param name="wParam">パラメータ</param>
+/// <param name="lParam">パラメータ</param>
+/// <returns></returns>
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 /// <summary>
 /// ウィンドウからのメッセージを受信するコールバック関数

@@ -94,6 +94,12 @@
     <Filter Include="Game">
       <UniqueIdentifier>{1af1d065-3a5b-48ca-af77-ba3dc3bef107}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui">
+      <UniqueIdentifier>{c7b7ba4b-3519-4497-b063-d5e2acd7f508}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Text">
+      <UniqueIdentifier>{4920500e-d02e-4512-b366-1f4818977216}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -266,6 +272,30 @@
     </ClCompile>
     <ClCompile Include="mtgb\Direct2D\Direct2D.cpp">
       <Filter>mtgb\System\Direct2D</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_tables.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Text.cpp">
+      <Filter>mtgb\System\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -478,6 +508,33 @@
     </ClInclude>
     <ClInclude Include="mtgb\ComponentPool.h">
       <Filter>mtgb\System\ComponentPool</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_dx11.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_win32.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Text.h">
+      <Filter>mtgb\System\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
