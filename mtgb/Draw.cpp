@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "OBJ.h"
 #include "Text.h"
+#include "Model.h"
 #include "Transform.h"
 #include "SceneSystem.h"
 #include "DirectWrite.h"
@@ -41,6 +42,10 @@ void mtgb::Draw::Image(
 
 	Transform* pCameraTransform = Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
 	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+}
+
+void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
+{
 }
 
 void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)

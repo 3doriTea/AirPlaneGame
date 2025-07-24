@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
@@ -41,6 +42,7 @@
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
+    <ClCompile Include="mtgb\Fbx.cpp" />
     <ClCompile Include="mtgb\FbxParts.cpp" />
     <ClCompile Include="mtgb\Figure.cpp" />
     <ClCompile Include="mtgb\Game.cpp" />
@@ -86,6 +88,7 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
@@ -160,6 +163,7 @@
     <ClInclude Include="mtgb\Vector4.h" />
     <ClInclude Include="mtgb\WaveData.h" />
     <ClInclude Include="mtgb\World.h" />
+    <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Player.h" />

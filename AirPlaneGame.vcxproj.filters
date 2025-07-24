@@ -94,6 +94,12 @@
     <Filter Include="Game">
       <UniqueIdentifier>{1af1d065-3a5b-48ca-af77-ba3dc3bef107}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game\PlayScene">
+      <UniqueIdentifier>{77f22293-232a-4541-8485-ae705549e177}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Draw\Fbx">
+      <UniqueIdentifier>{353f749a-1df7-4698-9711-40779bcf64cf}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{c7b7ba4b-3519-4497-b063-d5e2acd7f508}</UniqueIdentifier>
     </Filter>
@@ -273,6 +279,12 @@
     <ClCompile Include="mtgb\Direct2D\Direct2D.cpp">
       <Filter>mtgb\System\Direct2D</Filter>
     </ClCompile>
+    <ClCompile Include="Bar.cpp">
+      <Filter>Game\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Fbx.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -367,9 +379,6 @@
     </ClInclude>
     <ClInclude Include="mtgb\MTBin\MemoryStream.h">
       <Filter>mtgb\MTBin</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Fbx.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\IModelPack.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -535,6 +544,15 @@
     </ClInclude>
     <ClInclude Include="mtgb\Text.h">
       <Filter>mtgb\System\Text</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ProfileUtlity.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Bar.h">
+      <Filter>Game\PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Fbx.h">
+      <Filter>mtgb\System\Draw\Fbx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

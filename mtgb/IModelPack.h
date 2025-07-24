@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 
 namespace mtgb
 {
@@ -13,7 +15,20 @@ namespace mtgb
 		IModelPack() {}
 		virtual ~IModelPack() {}
 
+		/// <summary>
+		/// 3Dモデルの読み込みをする
+		/// </summary>
+		/// <param name="_fileName">3Dモデルのファイル名</param>
+		virtual void Load(const std::string& _fileName) = 0;
+		/// <summary>
+		/// 3Dモデルを描画する
+		/// </summary>
+		/// <param name="_pTransform">座標系</param>
+		/// <param name="_frame">アニメーションフレーム</param>
 		virtual void Draw(Transform* _pTransform, int _frame) = 0;
+		/// <summary>
+		/// 解放処理
+		/// </summary>
 		virtual void Release() = 0;
 	};
 }

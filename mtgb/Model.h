@@ -33,7 +33,7 @@ namespace mtgb
 
 	private:
 		ModelHandle handleCounter_;  // ƒnƒ“ƒhƒ‰‚Ì‰ÁŽZ—p
-		std::map<ModelHandle, ModelData*> modelDatas_;
+		std::map<ModelHandle, ModelData*> modelData_;
 
 	};
 }

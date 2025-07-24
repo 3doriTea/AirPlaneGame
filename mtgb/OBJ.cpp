@@ -66,7 +66,7 @@ void mtgb::OBJ::Initialize()
 	//コンスタントバッファー作成
 	D3D11_BUFFER_DESC cb;
 	cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cb.ByteWidth = sizeof(SimpleContantBuffer);
+	cb.ByteWidth = sizeof(SimpleConstantBuffer);
 	cb.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	cb.MiscFlags = 0;
 	cb.Usage = D3D11_USAGE_DYNAMIC;
@@ -148,7 +148,7 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 
 	//シェーダーのコンスタントバッファーに各種データを渡す	
 	D3D11_MAPPED_SUBRESOURCE pData;
-	SimpleContantBuffer cb;
+	SimpleConstantBuffer cb;
 
 
 	HRESULT hResult = DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);

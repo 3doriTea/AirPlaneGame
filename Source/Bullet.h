@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
+
 class Bullet : public mtgb::GameObject
 {
 public:

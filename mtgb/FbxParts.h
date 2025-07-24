@@ -9,10 +9,6 @@
 #include <fbxsdk.h>
 
 
-#pragma comment(lib, "LibFbxSDK-MT.lib")
-#pragma comment(lib, "LibXml2-MT.lib")
-#pragma comment(lib, "zlib-MT.lib")
-
 namespace fbxsdk
 {/*
 	class FbxMesh;
@@ -83,13 +79,56 @@ namespace mtgb
 		};
 
 	public:
-		FbxParts();
+		FbxParts(FbxNode* _pNode);
 		~FbxParts();
 
 		void Initialize() override;
 
-		void Draw(Transform* _pTransfrom);
-		void DrawSkinAnime(Transform* _pTransform, FbxTime _time);
+		/// <summary>
+		/// モデルを描画する
+		/// </summary>
+		/// <param name="_transform">座標系</param>
+		void Draw(const Transform& _transfrom);
+		/// <summary>
+		/// ボーンありでモデルを描画する
+		/// </summary>
+		/// <param name="_transform">座標系</param>
+		/// <param name="_time">アニメーションフレーム</param>
+		void DrawSkinAnimation(const Transform& _transform, FbxTime _time);
+		/// <summary>
+		/// ボーンありでモデルを描画する
+		/// </summary>
+		/// <param name="_takeName"></param>
+		/// <param name="_transform">座標系</param>
+		/// <param name="_time">フレーム</param>
+		void DrawSkinAnimation(const std::string& _takeName, const Transform& _transform, FbxTime _time);
+		/// <summary>
+		/// ボーン無しでモデルを描画する
+		/// </summary>
+		/// <param name="_transform">座標系</param>
+		/// <param name="_time">フレーム</param>
+		void DrawMeshAnimation(const Transform& _transform, FbxTime _time);
+
+		/// <summary>
+		/// 試しにボーンのアニメーション無しのときの座標を取得する
+		/// </summary>
+		/// <param name="_boneName">名前</param>
+		/// <param name="_pPosition">座標の参照渡し</param>
+		/// <returns>ボーンの取得に成功した true / false</returns>
+		bool TryGetBonePosition(const std::string& _boneName, Vector3* _pPosition);
+		/// <summary>
+		/// 試しにボーンのアニメーション中の座標を取得する
+		/// </summary>
+		/// <param name="_boneName">名前</param>
+		/// <param name="_pPosition">座標の参照渡し</param>
+		/// <returns>ボーンの取得に成功した true / false</returns>
+		bool TryGetBonePositionAtNow(const std::string& _boneName, Vector3* _pPosition);
+
+		/// <summary>
+		/// Fbxのスキンを取得
+		/// </summary>
+		/// <returns>スキンのポインタ</returns>
+		FbxSkin* GetSkin() { return pSkin_; }
 
 	private:
 		/// <summary>
@@ -117,7 +156,6 @@ namespace mtgb
 		/// 骨情報の初期化
 		/// </summary>
 		void InitializeSkelton();
-
 
 	private:
 		uint32_t vertexCount_;  // 頂点数
