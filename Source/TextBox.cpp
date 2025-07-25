@@ -47,8 +47,22 @@ void TextBox::Show(const std::string& _text)
                     mtgb::Timer::Remove(hTimer_);
                     hTimer_ = nullptr;
                 }
+
+                // 1秒後にテキストをクリアする単発タイマーをセット
+                cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
+                    {
+                        testtext_.clear();
+                        currentIndex_ = 0;
+                        finished_ = false;
+                        cTimer_ = nullptr;
+                    });
             }
         });
+
+    if (finished_ == true)
+    {
+        testtext_.clear();
+    }
 }
 
 bool TextBox::IsFinished()
@@ -59,7 +73,7 @@ bool TextBox::IsFinished()
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
 {
-    if (currentIndex_ > 0)
+    if (currentIndex_ > 0 && !testtext_.empty())
     {
         Draw::ImmediateText(testtext_.substr(0, currentIndex_), 400.0f, 400.0f, 48);
     }

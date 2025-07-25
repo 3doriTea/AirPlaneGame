@@ -20,4 +20,5 @@ private:
 	size_t currentIndex_;
 	bool finished_;
 	TimerHandle hTimer_;
+	TimerHandle cTimer_;
 };
