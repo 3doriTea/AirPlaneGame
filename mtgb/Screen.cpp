@@ -1,23 +1,6 @@
 #include "Screen.h"
-#include <Windows.h>
 #include <string>
-
-namespace
-{
-	struct ProfileInt
-	{
-		const char* section;
-		const char* param;
-		int initValue;
-		static const char* PATH;
-
-		inline const int Get() const
-		{
-			return GetPrivateProfileInt(section, param, initValue, PATH);
-		}
-	};
-	const char* ProfileInt::PATH{ "./setup.ini" };
-}
+#include "ProfileUtlity.h"
 
 mtgb::Screen::Screen() :
 	width_{ 0 },
@@ -33,9 +16,9 @@ mtgb::Screen::~Screen()
 void mtgb::Screen::Initialize()
 {
 	// ÉXÉNÉäÅ[ÉìÇÃèÓïÒÇéÊìæ
-	width_    = ProfileInt{ .section = "SCREEN", .param = "Width",  .initValue = 800 }.Get();
-	height_   = ProfileInt{ .section = "SCREEN", .param = "Height", .initValue = 600 }.Get();
-	fpsLimit_ = ProfileInt{ .section = "GAME",   .param = "Fps",    .initValue = 60  }.Get();
+	width_    = ProfileInt::Load().Section("SCREEN").Param("Width") .InitValue(800).Get();
+	height_   = ProfileInt::Load().Section("SCREEN").Param("Height").InitValue(600).Get();
+	fpsLimit_ = ProfileInt::Load().Section("GAME")  .Param("Fps")   .InitValue(60) .Get();
 }
 
 void mtgb::Screen::Update()

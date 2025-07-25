@@ -10,6 +10,7 @@
 //#include <type_traits>
 #include "ISystem.h"
 #include "cmtgb.h"
+#include "Vector2Int.h"
 
 
 namespace mtgb
@@ -87,6 +88,8 @@ namespace mtgb
 		/// </summary>
 		/// <returns></returns>
 		virtual std::string_view GetTitle() const = 0;
+
+		virtual Vector2Int GetScreenSize() const;
 
 	private:
 		std::map<std::string, ISystem*> pRegisterSystems_;  // ìoò^çœÇ›ÇÃÉVÉXÉeÉÄ

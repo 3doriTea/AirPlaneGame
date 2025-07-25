@@ -365,4 +365,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Assets Directory exclusive
-!Assets/*
+!Assets/**
+
+

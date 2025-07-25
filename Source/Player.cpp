@@ -9,6 +9,8 @@ namespace
 	static const float PLAYER_SPEED{ 0.01f };
 	std::string str = "Hello,World!";
 	int hText;
+	int timer = 0;
+	TimerHandle timerHandle;
 }
 
 Player::Player() : GameObject(GameObjectBuilder()
@@ -23,10 +25,11 @@ Player::Player() : GameObject(GameObjectBuilder()
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
-	hText = DirectWrite::Load(str,36);
+	hText = Text::Load(str,36);
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
+	timerHandle = Timer::AddInterval(0.01, [this]() {timer += 10; });
 }
 
 Player::~Player()
@@ -35,17 +38,19 @@ Player::~Player()
 
 void Player::Update()
 {
+	if (timer > 100000)
+	{
+		timer = 0;
+	}
 	if (InputData::GetKeyDown(KeyCode::C))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
-		//pAudioPlayer_->Play();
-		//Audio::PlayOneShotFile("Sound/Meow.wav");
-		//massert(false);
+		
 	}
 
 	if (InputData::GetKeyDown(KeyCode::F))
 	{
-		//Audio::PlayOneShotFile("Sound/080415pianobgm3popver.wav");
+		
 	}
 
 	if (InputData::GetKey(KeyCode::W))
@@ -86,8 +91,8 @@ void Player::Draw() const
 	Draw::OBJModel(hModel_, pTransform_);
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
-
-
-	Draw::Text(hText, mousePos);
+	Draw::ImmediateText(std::to_string(timer),0,0);
+	//Draw::Text(hText, mousePos);
+	
 	//testme(Naohiro)
 }

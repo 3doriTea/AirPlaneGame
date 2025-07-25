@@ -32,6 +32,7 @@
 #include "Audio.h"
 #include "OBJ.h"
 #include "MTImGui.h"
+#include "Text.h"
 
 #pragma endregion
 

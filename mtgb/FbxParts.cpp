@@ -8,7 +8,8 @@
 #include "MTStringUtility.h"
 
 
-mtgb::FbxParts::FbxParts()
+mtgb::FbxParts::FbxParts(FbxNode* _pNode) :
+	pNode_{ _pNode }
 {
 }
 
@@ -19,6 +20,100 @@ mtgb::FbxParts::~FbxParts()
 void mtgb::FbxParts::Initialize()
 {
 	IShader::Initialize();
+}
+
+void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
+{
+	using namespace DirectX;
+
+	for (int i = 0; i < boneCount_; i++)
+	{
+		FbxAnimEvaluator* evaluator{ ppCluster_[i]->GetLink()->GetScene()->GetAnimationEvaluator() };
+		FbxMatrix mCurrent{ evaluator->GetNodeGlobalTransform(ppCluster_[i]->GetLink(), _time) };
+
+		// Fbx to DirectX matrix
+		XMFLOAT4X4 pose{};
+		for (DWORD x = 0; x < 4; x++)
+		{
+			for (DWORD y = 0; y < 4; y++)
+			{
+				pose(x, y) = static_cast<float>(mCurrent.Get(x, y));
+			}
+		}
+
+		XMFLOAT4X4 mat{};
+		XMMATRIX mMirror{ XMMatrixIdentity() };
+		XMStoreFloat4x4(&mat, mMirror);
+		mat.m[2][2] = -1.0f;
+
+		mMirror = XMLoadFloat4x4(&mat);
+
+		pBones_[i].newPose = XMLoadFloat4x4(&pose) * mMirror;
+		pBones_[i].diffPose = XMMatrixInverse(nullptr, pBones_[i].bindPose * mMirror);
+		pBones_[i].diffPose = pBones_[i].diffPose * pBones_[i].newPose;
+	}
+
+	for (DWORD i = 0; i < vertexCount_; i++)
+	{
+		Matrix4x4 matrix{};
+		for (int m = 0; m < boneCount_; m++)
+		{
+			if (pWeights_[i].pBoneIndex[m] < 0)
+			{
+				break;
+			}
+			matrix += pBones_[pWeights_[i].pBoneIndex[m]].diffPose * pWeights_[i].pBoneWeight[m];
+		}
+
+		XMVECTOR position{ XMLoadFloat3(&pWeights_[i].posOrigin) };
+		XMVECTOR normal{ XMLoadFloat3(&pWeights_[i].normalOrigin) };
+
+		XMStoreFloat3(&pVertexes_[i].position, XMVector3TransformCoord(position, matrix));
+		XMFLOAT3X3 mat{};
+		XMStoreFloat3x3(&mat, matrix);
+		XMMATRIX matrix{ XMLoadFloat3x3(&mat) };
+		XMStoreFloat3(&pVertexes_[i].normal, XMVector3TransformCoord(normal, matrix));
+	}
+
+	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
+	//DirectX11Draw::
+}
+
+bool mtgb::FbxParts::TryGetBonePosition(const std::string& _boneName, Vector3* _pPosition)
+{
+	for (int i = 0; i < boneCount_; i++)
+	{
+		// Œ©‚Â‚©‚Á‚½I
+		if (_boneName == ppCluster_[i]->GetLink()->GetName())
+		{
+			FbxAMatrix m{};
+			ppCluster_[i]->GetTransformLinkMatrix(m);
+
+			_pPosition->x = static_cast<float>(m[3][0]);
+			_pPosition->y = static_cast<float>(m[3][1]);
+			_pPosition->z = static_cast<float>(m[3][2]);
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool mtgb::FbxParts::TryGetBonePositionAtNow(const std::string& _boneName, Vector3* _pPosition)
+{
+	auto itr{ boneNamePair_.find(_boneName) };
+	if (itr != boneNamePair_.end())  // end ‚¶‚á‚È‚¢‚È‚çŒ©‚Â‚©‚Á‚½
+	{
+		Matrix4x4 m{};
+		DirectX::XMStoreFloat4x4(&m, itr->second->newPose);
+		_pPosition->x = m.r[3].m128_f32[0];
+		_pPosition->y = m.r[3].m128_f32[1];
+		_pPosition->z = m.r[3].m128_f32[2];
+
+		return true;
+	}
+	return false;
 }
 
 void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
