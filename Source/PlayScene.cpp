@@ -4,6 +4,11 @@
 
 using namespace mtgb;
 
+namespace
+{
+	
+}
+
 PlayScene::PlayScene()
 {
 }

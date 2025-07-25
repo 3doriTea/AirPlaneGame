@@ -10,6 +10,9 @@ public:
 	void Update() override;
 	void Draw() const override;
 private:
+	std::string str;
+	int test1;
+	float test2;
 	Transform* pTransform_;
 	AudioPlayer* pAudioPlayer_;
 	ImageHandle hImage_;

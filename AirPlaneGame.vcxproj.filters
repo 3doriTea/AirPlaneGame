@@ -309,6 +309,12 @@
     <ClCompile Include="mtgb\Text.cpp">
       <Filter>mtgb\System\Text</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\MTImGui.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\registerRefl.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -553,6 +559,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\Fbx.h">
       <Filter>mtgb\System\Draw\Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTImGui.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

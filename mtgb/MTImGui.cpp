@@ -93,3 +93,13 @@ void mtgb::MTImGui::Release()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
+
+void mtgb::MTImGui::Show(const char* name, int* val)
+{
+	ImGui::InputInt(name, val);
+}
+
+void mtgb::MTImGui::Show(const char* name, float* val)
+{
+	ImGui::InputFloat(name, val);
+}
