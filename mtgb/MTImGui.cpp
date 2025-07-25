@@ -3,12 +3,17 @@
 #include "MainWindow.h"
 #include "DirectX11Draw.h"
 
+mtgb::MTImGui::~MTImGui()
+{
+	Release();
+}
+
 void mtgb::MTImGui::Initialize()
 {
 	IMGUI_CHECKVERSION();
 
 	ImGui::CreateContext();
-	io = ImGui::GetIO();(void)io;
+	ImGuiIO& io = ImGui::GetIO();(void)io;
 
 	io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;
 	io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
@@ -31,9 +36,10 @@ void mtgb::MTImGui::Initialize()
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 
-	MainWindow mainWindow = Game::System<MainWindow>();
-	
+	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 
+	MainWindow& mainWindow = Game::System<MainWindow>();
+	
 	ImGui_ImplWin32_Init(mainWindow.GetHWND());
 	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_, mtgb::DirectX11Draw::pContext_);
 	BeginFrame();
@@ -48,10 +54,19 @@ void mtgb::MTImGui::Update()
 
 void mtgb::MTImGui::BeginFrame()
 {
+	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("a");
+	/*if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::Text("This is some useful text.");
+	}
+	else
+	{
+		ImGui::Text("This is.");
+	}*/
 }
 
 void mtgb::MTImGui::EndFrame()
@@ -60,11 +75,17 @@ void mtgb::MTImGui::EndFrame()
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 	{
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 	}
+	//BeginFrame()
+	
+	//EndDraw
+	//BeginDraw
+	//EndFrame
+	//BeginFrame()
 }
 
 void mtgb::MTImGui::Release()
