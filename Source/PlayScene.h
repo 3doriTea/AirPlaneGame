@@ -1,5 +1,6 @@
 #pragma once
 #include "GameScene.h"
+#include "TextBox.h"
 
 class PlayScene : public mtgb::GameScene
 {
@@ -11,4 +12,7 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void End() override;
+
+private:
+	TextBox* tBox_;
 };
