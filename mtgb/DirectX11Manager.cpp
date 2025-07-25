@@ -5,6 +5,7 @@
 #include <d3d11.h>
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
+#include "MTImGui.h"
 #include "MainWindow.h"
 #include "Screen.h"
 #include "Vector3.h"
@@ -221,7 +222,9 @@ void mtgb::DirectX11Manager::Initialize()
 
 void mtgb::DirectX11Manager::Update()
 {
+	Game::System<MTImGui>().EndFrame();
 	DirectX11Draw::End();
+	Game::System<MTImGui>().BeginFrame();
 	DirectX11Draw::Begin();
 }
 

@@ -47,26 +47,25 @@ void mtgb::MTImGui::Initialize()
 
 void mtgb::MTImGui::Update()
 {
-	EndFrame();
-	BeginFrame();
+	//EndFrame();
+	//BeginFrame();
 	//ImGui::ShowDemoWindow();
 }
 
 void mtgb::MTImGui::BeginFrame()
 {
+	mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(true);
+	//pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 	ImGui::Begin("a");
-	/*if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		ImGui::Text("This is some useful text.");
-	}
-	else
-	{
-		ImGui::Text("This is.");
-	}*/
+}
+
+void mtgb::MTImGui::Draw()
+{
+
 }
 
 void mtgb::MTImGui::EndFrame()

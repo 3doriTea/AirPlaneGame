@@ -23,6 +23,7 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
+		void Draw();
 		void EndFrame();
 		void Release();
 	private:
