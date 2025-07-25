@@ -23,15 +23,15 @@ void mtgb::MTImGui::Initialize()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-	ImGui_ImplWin32_EnableDpiAwareness();
-	float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
-	// Setup scaling
-	ImGuiStyle& style = ImGui::GetStyle();
-	style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
-	style.FontScaleDpi = main_scale;        // Set initial font scale. (using 
+	//ImGui_ImplWin32_EnableDpiAwareness();
+	//float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
+	//// Setup scaling
+	//ImGuiStyle& style = ImGui::GetStyle();
+	//style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
+	//style.FontScaleDpi = main_scale;        // Set initial font scale. (using 
 
-	io.ConfigDpiScaleFonts = true;
-	io.ConfigDpiScaleViewports = true;
+	//io.ConfigDpiScaleFonts = true;
+	//io.ConfigDpiScaleViewports = true;
 	
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
