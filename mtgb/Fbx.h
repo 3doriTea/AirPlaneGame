@@ -40,9 +40,9 @@ namespace mtgb
 		/// <summary>
 		/// Fbxモデルを描画する
 		/// </summary>
-		/// <param name="_pTransform">座標系</param>
+		/// <param name="_transfrom">座標系</param>
 		/// <param name="_frame">アニメーションフレーム</param>
-		void Draw(Transform* _pTransform, int _frame) override;
+		void Draw(const Transform& _transfrom, int _frame) override;
 		/// <summary>
 		/// 解放処理
 		/// </summary>
