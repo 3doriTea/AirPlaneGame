@@ -93,6 +93,4 @@ void Player::Draw() const
 	//Draw::Image(hImage_, pTransform_);
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	//Draw::Text(hText, mousePos);
-	
-	//testme(Naohiro)
 }
