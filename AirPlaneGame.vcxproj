@@ -42,8 +42,14 @@
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
-    <ClCompile Include="mtgb\Fbx.cpp" />
-    <ClCompile Include="mtgb\FbxParts.cpp" />
+    <ClCompile Include="mtgb\Fbx.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\FbxParts.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="mtgb\Figure.cpp" />
     <ClCompile Include="mtgb\Game.cpp" />
     <ClCompile Include="mtgb\GameObject.cpp" />
@@ -114,8 +120,14 @@
     <ClInclude Include="mtgb\DirectX11Manager.h" />
     <ClInclude Include="mtgb\Draw.h" />
     <ClInclude Include="mtgb\Entity.h" />
-    <ClInclude Include="mtgb\Fbx.h" />
-    <ClInclude Include="mtgb\FbxParts.h" />
+    <ClInclude Include="mtgb\Fbx.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\FbxParts.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="mtgb\Figure.h" />
     <ClInclude Include="mtgb\Game.h" />
     <ClInclude Include="mtgb\GameObject.h" />
