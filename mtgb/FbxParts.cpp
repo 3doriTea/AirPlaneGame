@@ -22,7 +22,19 @@ void mtgb::FbxParts::Initialize()
 	IShader::Initialize();
 }
 
-void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
+void mtgb::FbxParts::Draw(const Transform& _transfrom)
+{
+	// •`‰æî•ñ‚ðƒVƒF[ƒ_‚É“n‚·
+	UINT stride{ sizeof(Vertex) };
+	UINT offset{ 0 };
+	//DirectX11Draw::
+}
+
+void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _time)
+{
+}
+
+void mtgb::FbxParts::DrawSkinAnimation(const std::string& _takeName, const Transform& _transform, FbxTime _time)
 {
 	using namespace DirectX;
 
@@ -71,12 +83,17 @@ void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _tim
 		XMStoreFloat3(&pVertexes_[i].position, XMVector3TransformCoord(position, matrix));
 		XMFLOAT3X3 mat{};
 		XMStoreFloat3x3(&mat, matrix);
-		XMMATRIX matrix{ XMLoadFloat3x3(&mat) };
+		matrix = XMLoadFloat3x3(&mat);
 		XMStoreFloat3(&pVertexes_[i].normal, XMVector3TransformCoord(normal, matrix));
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
 	//DirectX11Draw::
+}
+
+void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
+{
+	
 }
 
 bool mtgb::FbxParts::TryGetBonePosition(const std::string& _boneName, Vector3* _pPosition)
@@ -106,7 +123,7 @@ bool mtgb::FbxParts::TryGetBonePositionAtNow(const std::string& _boneName, Vecto
 	if (itr != boneNamePair_.end())  // end ‚¶‚á‚È‚¢‚È‚çŒ©‚Â‚©‚Á‚½
 	{
 		Matrix4x4 m{};
-		DirectX::XMStoreFloat4x4(&m, itr->second->newPose);
+		//DirectX::XMStoreFloat4x4(&m, itr->second->newPose);
 		_pPosition->x = m.r[3].m128_f32[0];
 		_pPosition->y = m.r[3].m128_f32[1];
 		_pPosition->z = m.r[3].m128_f32[2];

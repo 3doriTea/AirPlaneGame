@@ -56,6 +56,7 @@ void mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(const bool _enabled)
 
 void mtgb::DirectX11Draw::Begin()
 {
+
 	pContext_->ClearRenderTargetView(pRenderTargetView_, backgroundColor_.f);
 
 	pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1, 0U);

@@ -23,9 +23,9 @@ namespace mtgb
 		/// <summary>
 		/// 3Dモデルを描画する
 		/// </summary>
-		/// <param name="_pTransform">座標系</param>
+		/// <param name="_transfrom">座標系</param>
 		/// <param name="_frame">アニメーションフレーム</param>
-		virtual void Draw(Transform* _pTransform, int _frame) = 0;
+		virtual void Draw(const Transform& _transfrom, int _frame) = 0;
 		/// <summary>
 		/// 解放処理
 		/// </summary>

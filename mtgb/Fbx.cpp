@@ -17,7 +17,7 @@ void mtgb::Fbx::Load(const std::string& _fileName)
 {
 }
 
-void mtgb::Fbx::Draw(Transform* _pTransform, int _frame)
+void mtgb::Fbx::Draw(const Transform& _transfrom, int _frame)
 {
 	DirectX11Draw::SetBlendMode(BlendMode::Default);
 
@@ -27,7 +27,15 @@ void mtgb::Fbx::Draw(Transform* _pTransform, int _frame)
 		FbxTime time;
 		time.SetTime(0, 0, 0, _frame, 0, 0, frameRate_);
 
-		if (pParts_[i]->GetSkin())
+		// ボーンがあるスキンアニメーション
+		if (pParts_[i]->GetSkin() != nullptr)
+		{
+			pParts_[i]->DrawSkinAnimation(_transfrom, time);
+		}
+		else  // メッシュアニメーション
+		{
+			pParts_[i]->DrawMeshAnimation(_transfrom, time);
+		}
 	}
 }
 
