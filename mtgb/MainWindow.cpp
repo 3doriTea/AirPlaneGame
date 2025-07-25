@@ -4,6 +4,9 @@
 #include "MTAssert.h"
 #include "Screen.h"
 #include "Input.h"
+#include "MTImGui.h"
+
+#define IMGUI 1
 
 using namespace mtgb;
 
@@ -16,6 +19,9 @@ using namespace mtgb;
 /// <param name="lParam">パラメータ</param>
 /// <returns>結果</returns>
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+
+
 
 mtgb::MainWindow::MainWindow() :
 	hWnd_{ nullptr },
@@ -124,8 +130,13 @@ void mtgb::MainWindow::GenerateWndClassEx(WNDCLASSEX* _pWndClassEx)
 	_pWndClassEx->hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  // 背景色 白
 }
 
+
+
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+
+	
+
 	switch (message)
 	{
 	case WM_DESTROY:  // ウィンドウを閉じた

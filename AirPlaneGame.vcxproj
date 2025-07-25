@@ -19,6 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\imgui_demo.cpp" />
+    <ClCompile Include="ImGui\imgui_draw.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="ImGui\imgui_tables.cpp" />
+    <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="mtgb\AssetsManager.cpp" />
     <ClCompile Include="mtgb\Audio.cpp" />
     <ClCompile Include="mtgb\AudioClip.cpp" />
@@ -53,6 +60,7 @@
     <ClCompile Include="mtgb\Model.cpp" />
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
+    <ClCompile Include="mtgb\MTImGui.cpp" />
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
@@ -78,6 +86,14 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ImGui\imconfig.h" />
+    <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="ImGui\imgui_internal.h" />
+    <ClInclude Include="ImGui\imstb_rectpack.h" />
+    <ClInclude Include="ImGui\imstb_textedit.h" />
+    <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="mtgb\AssetsManager.h" />
     <ClInclude Include="mtgb\Audio.h" />
     <ClInclude Include="mtgb\AudioClip.h" />
@@ -121,6 +137,7 @@
     <ClInclude Include="mtgb\MTBin\Common.h" />
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
+    <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\MTStringUtility.h" />
     <ClInclude Include="mtgb\OBJ.h" />
     <ClInclude Include="mtgb\PathUtility.h" />
