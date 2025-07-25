@@ -92,6 +92,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
+    <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SampleGame.h" />
+    <ClInclude Include="Source\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md">

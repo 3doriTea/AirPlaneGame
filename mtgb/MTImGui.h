@@ -19,12 +19,14 @@ namespace mtgb
 	class MTImGui final : public ISystem
 	{
 	public:
+		~MTImGui();
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
+		void Draw();
 		void EndFrame();
 		void Release();
 	private:
-		ImGuiIO io;
+		//ImGuiIO io;
 	};
 }
