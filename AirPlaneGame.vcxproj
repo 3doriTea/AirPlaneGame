@@ -47,7 +47,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="mtgb\FbxParts.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="mtgb\Figure.cpp" />
@@ -93,6 +93,7 @@
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\registerRefl.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
+    <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -122,11 +123,11 @@
     <ClInclude Include="mtgb\Draw.h" />
     <ClInclude Include="mtgb\Entity.h" />
     <ClInclude Include="mtgb\Fbx.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="mtgb\FbxParts.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="mtgb\Figure.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SampleGame.h" />
+    <ClInclude Include="Source\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md">
