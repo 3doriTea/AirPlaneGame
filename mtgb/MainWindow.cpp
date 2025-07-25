@@ -148,9 +148,10 @@ void mtgb::MainWindow::GenerateWndClassEx(WNDCLASSEX* _pWndClassEx)
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
-	
-
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+	{
+		return true;
+	}
 	switch (message)
 	{
 	case WM_DESTROY:  // ウィンドウを閉じた
@@ -188,10 +189,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 		break;
 	}
 
-	/*if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
-	{
-		return true;
-	}*/
 
 	// NOTE: これが抜けているとウィンドウ表示されないし、エラーは出ないしで苦労する(した)
 	return DefWindowProc(hWnd, message, wParam, lParam);
