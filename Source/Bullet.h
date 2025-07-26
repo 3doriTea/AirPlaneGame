@@ -1,7 +1,6 @@
 #pragma once
 #include <mtgb.h>
 
-
 class Bullet : public mtgb::GameObject
 {
 public:
@@ -12,7 +11,8 @@ public:
 	void Draw() const override;
 
 private:
-	ImageHandle hImage_;
-	Transform* pTransform_;
-	RigidBody* pRb_;
+	ImageHandle    hImage_;
+	Transform*     pTransform_;
+	RigidBody*     pRb_;
+	OBJModelHandle hModel_;
 };
