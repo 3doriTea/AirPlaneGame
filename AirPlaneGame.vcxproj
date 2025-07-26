@@ -81,6 +81,7 @@
     <ClCompile Include="mtgb\Timer.cpp" />
     <ClCompile Include="mtgb\Transform.cpp" />
     <ClCompile Include="mtgb\TransformCP.cpp" />
+    <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="mtgb\Vector2.cpp" />
     <ClCompile Include="mtgb\Vector2Int.cpp" />
     <ClCompile Include="mtgb\Vector3.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="mtgb\Timer.h" />
     <ClInclude Include="mtgb\Transform.h" />
     <ClInclude Include="mtgb\TransformCP.h" />
+    <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\Vector2.h" />
     <ClInclude Include="mtgb\Vector2Int.h" />
     <ClInclude Include="mtgb\Vector3.h" />
@@ -246,11 +248,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;$(ProjectDir)mtgb;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;$(ProjectDir)mtgb;$(ProjectDir)refl-cpp;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;$(ProjectDir)mtgb;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;$(ProjectDir)mtgb;$(ProjectDir)refl-cpp;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

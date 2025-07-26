@@ -315,6 +315,12 @@
     <ClCompile Include="Source\registerRefl.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TextBox.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TypeRegistry.cpp">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -562,6 +568,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\MTImGui.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TextBox.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TypeRegistry.h">
+      <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
