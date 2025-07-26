@@ -70,6 +70,9 @@ namespace mtnet
 		/// <returns>åãâ ÉRÅ[Éh</returns>
 		inline ResultCode GetResultCode() const { return result_; }
 
+	public:
+		const IPEndPoint LOCAL_IP_END_POINT;
+
 	protected:
 		ResultCode result_;
 
@@ -77,6 +80,5 @@ namespace mtnet
 		WSADATA wsaData_;
 		SOCKADDR_IN addr_;
 		SOCKET connectingSocket_;
-		const IPEndPoint LOCAL_IP_END_POINT;
 	};
 }
