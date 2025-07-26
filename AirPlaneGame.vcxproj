@@ -69,6 +69,10 @@
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
     <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\MTNet\EndPoint.cpp" />
+    <ClCompile Include="mtgb\MTNet\Socket.cpp" />
+    <ClCompile Include="mtgb\MTNet\TcpClient.cpp" />
+    <ClCompile Include="mtgb\MTNet\TcpListener.cpp" />
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
@@ -157,6 +161,12 @@
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\MTNet\Common.h" />
+    <ClInclude Include="mtgb\MTNet\EndPoint.h" />
+    <ClInclude Include="mtgb\MTNet\Socket.h" />
+    <ClInclude Include="mtgb\MTNet\TcpClient.h" />
+    <ClInclude Include="mtgb\MTNet\TcpListener.h" />
+    <ClInclude Include="mtgb\MTNet\TcpLobby.h" />
     <ClInclude Include="mtgb\MTStringUtility.h" />
     <ClInclude Include="mtgb\OBJ.h" />
     <ClInclude Include="mtgb\PathUtility.h" />
