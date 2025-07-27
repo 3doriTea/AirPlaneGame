@@ -1,7 +1,7 @@
 #include "BinaryWriter.h"
 
 mtnet::BinaryWriter::BinaryWriter(
-	mtnet::Byte* _pWriteBuffer,
+	mtbin::Byte* _pWriteBuffer,
 	const size_t& _bufferSize) :
 	MemoryStream{ _pWriteBuffer, _bufferSize }
 {

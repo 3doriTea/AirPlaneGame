@@ -1,8 +1,10 @@
 #pragma once
-#include "MemoryStream.h"
+#include "../MTBin/MemoryStream.h"
 
 namespace mtnet
 {
+	using mtbin::MemoryStream;
+
 	/// <summary>
 	/// MemoryStream‚Ì“Ç‚İæ‚èê—p”Å
 	/// </summary>
@@ -10,7 +12,7 @@ namespace mtnet
 	{
 	public:
 		BinaryReader(
-			mtnet::Byte* _pReadBuffer,
+			mtbin::Byte* _pReadBuffer,
 			const size_t& _bufferSize);
 		~BinaryReader();
 

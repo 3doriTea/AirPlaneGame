@@ -74,7 +74,6 @@
     <ClCompile Include="mtgb\MTNet\EndPoint.cpp" />
     <ClCompile Include="mtgb\MTNet\LobbyCommon.cpp" />
     <ClCompile Include="mtgb\MTNet\Log.cpp" />
-    <ClCompile Include="mtgb\MTNet\MemoryStream.cpp" />
     <ClCompile Include="mtgb\MTNet\Socket.cpp" />
     <ClCompile Include="mtgb\MTNet\TcpClient.cpp" />
     <ClCompile Include="mtgb\MTNet\TcpJoiner.cpp" />
@@ -175,7 +174,6 @@
     <ClInclude Include="mtgb\MTNet\EndPoint.h" />
     <ClInclude Include="mtgb\MTNet\LobbyCommon.h" />
     <ClInclude Include="mtgb\MTNet\Log.h" />
-    <ClInclude Include="mtgb\MTNet\MemoryStream.h" />
     <ClInclude Include="mtgb\MTNet\Socket.h" />
     <ClInclude Include="mtgb\MTNet\TcpClient.h" />
     <ClInclude Include="mtgb\MTNet\TcpJoiner.h" />

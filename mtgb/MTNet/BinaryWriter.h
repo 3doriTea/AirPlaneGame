@@ -1,8 +1,10 @@
 #pragma once
-#include "MemoryStream.h"
+#include "../MTBin/MemoryStream.h"
 
 namespace mtnet
 {
+	using mtbin::MemoryStream;
+
 	/// <summary>
 	/// MemoryStream‚Ì‘‚«‚İê—p”Å
 	/// </summary>
@@ -10,7 +12,7 @@ namespace mtnet
 	{
 	public:
 		BinaryWriter(
-			mtnet::Byte* _pWriteBuffer,
+			mtbin::Byte* _pWriteBuffer,
 			const size_t& _bufferSize);
 		~BinaryWriter();
 
