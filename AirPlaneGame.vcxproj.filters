@@ -67,9 +67,6 @@
     <Filter Include="mtgb\System\Input">
       <UniqueIdentifier>{f6d14fe5-adb7-4235-bb45-a457ff688961}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mtgb\System\MainWindow">
-      <UniqueIdentifier>{0f6f38b7-d1c1-4df9-a568-8cbe2248c417}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mtgb\System\Scene">
       <UniqueIdentifier>{9521518b-b099-4765-9803-cab32aa6d99e}</UniqueIdentifier>
     </Filter>
@@ -105,6 +102,21 @@
     </Filter>
     <Filter Include="mtgb\System\Text">
       <UniqueIdentifier>{4920500e-d02e-4512-b366-1f4818977216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{a41016de-2540-42af-8009-7cc1b8623695}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Collider">
+      <UniqueIdentifier>{93594e0d-8abd-42b9-878f-3a8c01fae598}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Window">
+      <UniqueIdentifier>{712b342c-f58d-48b1-afcf-0ea75a95c244}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Window\MainWindow">
+      <UniqueIdentifier>{0f6f38b7-d1c1-4df9-a568-8cbe2248c417}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\Window\SubWindow">
+      <UniqueIdentifier>{9264510d-5991-4196-b945-e70ed22eb59f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,7 +268,7 @@
       <Filter>mtgb\System\Time</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MainWindow.cpp">
-      <Filter>mtgb\System\MainWindow</Filter>
+      <Filter>mtgb\System\Window\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Transform.cpp">
       <Filter>mtgb\Component</Filter>
@@ -320,6 +332,18 @@
     </ClCompile>
     <ClCompile Include="mtgb\TypeRegistry.cpp">
       <Filter>mtgb\System\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowRenderContext.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DoubleWindow.cpp">
+      <Filter>mtgb\System\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -510,7 +534,7 @@
       <Filter>mtgb\System\Time</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MainWindow.h">
-      <Filter>mtgb\System\MainWindow</Filter>
+      <Filter>mtgb\System\Window\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Transform.h">
       <Filter>mtgb\Component</Filter>
@@ -575,8 +599,43 @@
     <ClInclude Include="mtgb\TypeRegistry.h">
       <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Enemy.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\SubWindow.h">
+      <Filter>mtgb\System\Window\SubWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowRenderContext.h">
+      <Filter>mtgb\System\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowManager.h">
+      <Filter>mtgb\System\Window</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DoubleWindow.h">
+      <Filter>mtgb\System\Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md" />
+    <None Include="Assets\Shader\2DCommon.hlsli">
+      <Filter>Assets</Filter>
+    </None>
+    <None Include="Assets\Shader\3DCommon.hlsli">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shader\FbxParts.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Figure.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Geometry.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sprite.hlsl">
+      <Filter>Assets</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

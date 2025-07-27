@@ -7,6 +7,7 @@
 
 struct D3D11_INPUT_ELEMENT_DESC;
 struct CD3D11_RASTERIZER_DESC;
+class  WindowRenderContext;
 
 namespace mtgb
 {
@@ -21,6 +22,10 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 
+		void InitializeCommonResources();
+		void InitializeWindowContext(WindowRenderContext& context, bool isMultiMonitor);
+
+		void ChangeRenderContext(WindowRenderContext& context);
 	private:
 		/// <summary>
 		/// シェーダバンドルを初期化する

@@ -40,6 +40,7 @@
     <ClCompile Include="mtgb\DirectWrite.cpp" />
     <ClCompile Include="mtgb\DirectX11Draw.cpp" />
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
+    <ClCompile Include="mtgb\DoubleWindow.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
     <ClCompile Include="mtgb\Fbx.cpp">
@@ -87,9 +88,12 @@
     <ClCompile Include="mtgb\Vector3.cpp" />
     <ClCompile Include="mtgb\Vector4.cpp" />
     <ClCompile Include="mtgb\WaveData.cpp" />
+    <ClCompile Include="mtgb\WindowManager.cpp" />
+    <ClCompile Include="mtgb\WindowRenderContext.cpp" />
     <ClCompile Include="mtgb\World.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\registerRefl.cpp" />
@@ -121,6 +125,7 @@
     <ClInclude Include="mtgb\DirectWrite.h" />
     <ClInclude Include="mtgb\DirectX11Draw.h" />
     <ClInclude Include="mtgb\DirectX11Manager.h" />
+    <ClInclude Include="mtgb\DoubleWindow.h" />
     <ClInclude Include="mtgb\Draw.h" />
     <ClInclude Include="mtgb\Entity.h" />
     <ClInclude Include="mtgb\Fbx.h">
@@ -168,6 +173,7 @@
     <ClInclude Include="mtgb\SceneSystem.h" />
     <ClInclude Include="mtgb\Screen.h" />
     <ClInclude Include="mtgb\Sprite.h" />
+    <ClInclude Include="mtgb\SubWindow.h" />
     <ClInclude Include="mtgb\Text.h" />
     <ClInclude Include="mtgb\Texture2D.h" />
     <ClInclude Include="mtgb\Timer.h" />
@@ -180,20 +186,43 @@
     <ClInclude Include="mtgb\Vector3Ref.h" />
     <ClInclude Include="mtgb\Vector4.h" />
     <ClInclude Include="mtgb\WaveData.h" />
+    <ClInclude Include="mtgb\WindowManager.h" />
+    <ClInclude Include="mtgb\WindowRenderContext.h" />
     <ClInclude Include="mtgb\World.h" />
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="Source\TextBox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\2DCommon.hlsli" />
+    <None Include="Assets\Shader\3DCommon.hlsli" />
     <None Include="Other\History\log20250720.md">
       <SubType>
       </SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shader\FbxParts.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Figure.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Geometry.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Sprite.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

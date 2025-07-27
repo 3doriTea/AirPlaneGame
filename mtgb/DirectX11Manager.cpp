@@ -3,6 +3,7 @@
 #include "MTAssert.h"
 #include <Windows.h>
 #include <d3d11.h>
+#include <dxgi1_2.h>
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
 #include "MTImGui.h"
@@ -11,6 +12,7 @@
 #include "Vector3.h"
 #include <d3dcompiler.h>
 #include "HLSLInclude.h"
+#include "WindowRenderContext.h"
 
 mtgb::DirectX11Manager::DirectX11Manager()
 {
@@ -224,8 +226,236 @@ void mtgb::DirectX11Manager::Update()
 {
 	Game::System<MTImGui>().EndFrame();
 	DirectX11Draw::End();
+	
+
 	Game::System<MTImGui>().BeginFrame();
 	DirectX11Draw::Begin();
+}
+
+void mtgb::DirectX11Manager::InitializeCommonResources()
+{
+	HRESULT hResult{};
+
+	STARTUPINFO startupInfo{};
+	GetStartupInfo(&startupInfo);
+	int nCmdShow = startupInfo.wShowWindow;
+
+	
+	D3D_FEATURE_LEVEL level{};
+
+	hResult = D3D11CreateDevice(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		nullptr,
+		0,
+		D3D11_SDK_VERSION,
+		&DirectX11Draw::pDevice_,
+		&level,
+		&DirectX11Draw::pContext_
+	);
+	massert(SUCCEEDED(hResult)
+	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)&(DirectX11Draw::pDXGIDevice_));
+
+	massert(SUCCEEDED(hResult)
+		&& "QueryInterfaceに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	hResult = DirectX11Draw::pDXGIDevice_->GetAdapter(&(DirectX11Draw::pDXGIAdapter_));
+	massert(SUCCEEDED(hResult)
+		&& "GetAdapterに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	hResult = DirectX11Draw::pDXGIAdapter_->GetParent(__uuidof(IDXGIFactory2), (void**)&(DirectX11Draw::pDXGIFactory_));
+	massert(SUCCEEDED(hResult)
+		&& "GetParentに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	InitializeShaderBundle();  // シェーダバンドルの初期化
+
+	// 深度ステンシルの
+	const D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
+	{
+		.DepthEnable = TRUE,
+		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO,
+		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
+		.StencilEnable = TRUE,
+		.StencilReadMask = {},
+		.StencilWriteMask = {},
+		.FrontFace
+		{
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
+			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+		},
+		.BackFace
+		{
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
+			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+		}
+	};
+
+	hResult = DirectX11Draw::pDevice_->CreateDepthStencilState(
+		&DEPTH_STENCIL_DESC,
+		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)]);
+
+	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
+		&& "深度ステンシルステートの作成に失敗");
+
+#pragma region ブレンドステート作成
+	const D3D11_BLEND_DESC BLEND_DESC
+	{
+		.AlphaToCoverageEnable = FALSE,
+		.IndependentBlendEnable = FALSE,
+		.RenderTarget
+		{
+			D3D11_RENDER_TARGET_BLEND_DESC
+			{
+				.BlendEnable = TRUE,
+				.SrcBlend = D3D11_BLEND_SRC_ALPHA,
+				.DestBlend = D3D11_BLEND_INV_SRC_ALPHA,
+				.BlendOp = D3D11_BLEND_OP_ADD,
+				.SrcBlendAlpha = D3D11_BLEND_ONE,
+				.DestBlendAlpha = D3D11_BLEND_ZERO,
+				.BlendOpAlpha = D3D11_BLEND_OP_ADD,
+				.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL,
+			},
+		},
+	};
+
+	hResult = DirectX11Draw::pDevice_->CreateBlendState(
+		&BLEND_DESC,
+		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)]);
+
+	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
+		&& "ブレンドステート作成に失敗");
+#pragma endregion
+	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+}
+
+void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& context, bool isMultiMonitor)
+{
+	HRESULT hResult{};
+
+	STARTUPINFO startupInfo{};
+	GetStartupInfo(&startupInfo);
+	int nCmdShow = startupInfo.wShowWindow;
+
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	HWND hWindow{ context.hWnd_ };
+	DXGI_SWAP_CHAIN_DESC1 desc
+	{
+		.Width = 0,//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
+		.Height = 0,//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
+		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,  // 使える色数
+		.Stereo = FALSE,//ステレオ(3D立体視)表示を有効にするか
+		.SampleDesc
+		{
+			.Count = 1,
+			.Quality = 0,
+		},
+		.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+		.BufferCount = 1,  // 裏画面の枚数
+		.Scaling = DXGI_SCALING_STRETCH,
+		.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
+		.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
+		.Flags = 0
+	};
+
+	if (isMultiMonitor)
+	{
+		context.outputIndex_ = WindowRenderContext::outputCount++;
+		DirectX11Draw::pDXGIAdapter_->EnumOutputs(context.outputIndex_, &context.pOutput_);
+		massert(SUCCEEDED(hResult)
+			&& "EnumOutputsに失敗 @DirectX11Manager::InitializeWindowContext");
+	}
+	else
+	{
+		context.pOutput_ = nullptr;
+	}
+	
+	hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
+					DirectX11Draw::pDevice_,
+					context.hWnd_,
+					&desc,
+					nullptr,//フルスクリーンの設定
+					context.pOutput_,//出力
+					&context.pSwapChain_
+				);
+	massert(SUCCEEDED(hResult)
+		&& "CreateSwapChainForHwndに失敗 @DirectX11Manager::InitializeWindowContext");
+
+	ID3D11Texture2D* pBackBuffer{ nullptr };
+	hResult = context.pSwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	massert(SUCCEEDED(hResult) 
+		&& "GetBufferに失敗 @DirectX11Manager::InitializeWindowContext");
+
+	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, &context.pRenderTargetView_);
+	massert(SUCCEEDED(hResult)
+		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::InitializeWindowContext");
+
+	pBackBuffer->Release();  // バックバッファは使わないため解放する
+
+	context.viewport_ =
+	{
+		.TopLeftX = 0,
+		.TopLeftY = 0,
+		.Width = static_cast<float>(SCREEN_SIZE.x),
+		.Height = static_cast<float>(SCREEN_SIZE.y),
+		.MinDepth = 0,
+		.MaxDepth = 1,
+	};
+	
+#pragma region 深度バッファ作成
+	// 深度バッファの設定
+	const D3D11_TEXTURE2D_DESC DEPTH_TEXTURE2D_DESC
+	{
+		.Width = static_cast<UINT>(SCREEN_SIZE.x),
+		.Height = static_cast<UINT>(SCREEN_SIZE.y),
+		.MipLevels = 1,
+		.ArraySize = 1,
+		.Format = DXGI_FORMAT_D32_FLOAT,
+		.SampleDesc
+		{
+			.Count = 1,
+			.Quality = 0
+		},
+		.Usage = D3D11_USAGE_DEFAULT,
+		.BindFlags = D3D11_BIND_DEPTH_STENCIL,
+		.CPUAccessFlags = 0,
+		.MiscFlags = 0,
+	};
+
+	hResult = DirectX11Draw::pDevice_->CreateTexture2D(
+		&DEPTH_TEXTURE2D_DESC,
+		nullptr,
+		&context.pDepthStencil_);
+
+	massert(SUCCEEDED(hResult)  // 深度ステンシルバッファの作成に失敗
+		&& "深度ステンシルバッファの作成に失敗");
+
+	hResult = DirectX11Draw::pDevice_->CreateDepthStencilView(
+		context.pDepthStencil_,
+		nullptr,
+		&context.pDepthStencilView_);
+
+	massert(SUCCEEDED(hResult)  // 深度ステンシルビュの作成に成功
+		&& "深度ステンシルビューの作成に失敗");
+#pragma endregion
+	//深度ステンシル、ブレンドステートは共通とする
+}
+
+void mtgb::DirectX11Manager::ChangeRenderContext(WindowRenderContext& context)
+{
+	DirectX11Draw::pRenderTargetView_ = context.pRenderTargetView_;
+	DirectX11Draw::pDepthStencilView_ = context.pDepthStencilView_;
+
+	DirectX11Draw::pContext_->OMSetRenderTargets(1,&context.pRenderTargetView_,context.pDepthStencilView_);
+	DirectX11Draw::pContext_->RSSetViewports(1, &context.viewport_);
 }
 
 void mtgb::DirectX11Manager::InitializeShaderBundle()

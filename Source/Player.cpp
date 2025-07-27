@@ -58,9 +58,6 @@ void Player::Update()
 	if (InputData::GetKey(KeyCode::W))
 	{
 		pTransform_->position_ += pTransform_->Forward() * PLAYER_SPEED;
-		//pTransform_->position_ += pTransform_->Up() * PLAYER_SPEED;
-		//pTransform_->position_ += pTransform_->Up() + 
-		//LOGF("y=%f\n", pTransform_->position_.y);
 	}
 	if (InputData::GetKey(KeyCode::S))
 	{

@@ -38,6 +38,7 @@ namespace mtgb
 
 		static void Show(const char* name, int* val);
 		static void Show(const char* name, float* val);
+		//static void Show(const char* name, b)
 	private:
 		//ImGuiIO io;
 	};

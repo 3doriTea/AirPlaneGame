@@ -3,7 +3,6 @@
 
 
 
-struct IDXGIDevice;
 struct ID2D1Factory;
 struct IDXGISurface;
 struct ID2D1SolidColorBrush;
@@ -21,7 +20,6 @@ namespace mtgb
 		void Release();
 
 	private:
-		static IDXGIDevice* pDXGIDevice_;
 		static ID2D1Factory* pD2DFactory_;
 		static IDXGISurface* pDXGISurface_;
 		static ID2D1SolidColorBrush* pD2DBrush_;

@@ -15,7 +15,6 @@
 //#pragma comment(lib,"dwrite.lib")
 #pragma comment(lib,"d2d1.lib")
 
-IDXGIDevice* mtgb::Direct2D::pDXGIDevice_{ nullptr };
 ID2D1Factory* mtgb::Direct2D::pD2DFactory_{ nullptr };
 IDXGISurface* mtgb::Direct2D::pDXGISurface_{ nullptr };
 ID2D1SolidColorBrush* mtgb::Direct2D::pD2DBrush_{ nullptr };
@@ -86,7 +85,6 @@ void mtgb::Direct2D::Draw()
 
 void mtgb::Direct2D::Release()
 {
-	SAFE_RELEASE(pDXGIDevice_);
 	SAFE_RELEASE(pD2DFactory_);
 	SAFE_RELEASE(pDXGISurface_);
 	SAFE_RELEASE(pD2DBrush_);

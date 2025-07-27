@@ -5,10 +5,15 @@
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
+struct IDXGIDevice1;
+struct IDXGIAdapter;
+struct IDXGIFactory2;
+
 struct IDXGISwapChain;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
 struct ID3D11DepthStencilState;
+struct D3D11_VIEWPORT;
 struct ID3D11BlendState;
 
 struct ID3D11InputLayout;
@@ -127,6 +132,10 @@ namespace mtgb
 	private:
 		static ID3D11Device* pDevice_;                                                             // 描画を行うための環境、リソースの作成に使う
 		static ID3D11DeviceContext* pContext_;                                                     // GPUに命令出すやつ
+		static IDXGIDevice1* pDXGIDevice_;
+		static IDXGIAdapter* pDXGIAdapter_;
+		static IDXGIFactory2* pDXGIFactory_;
+
 		static IDXGISwapChain* pSwapChain_;                                                        // ダブルバッファリングするやつ
 		static ID3D11RenderTargetView* pRenderTargetView_;                                         // 描画先
 		static ID3D11DepthStencilView* pDepthStencilView_;                                         // 深度バッファ

@@ -1,5 +1,6 @@
 #include "DirectX11Draw.h"
 #include <d3d11.h>
+#include <dxgi1_2.h>
 #include <DirectXMath.h>
 #include "Texture2D.h"
 #include "ReleaseUtility.h"
@@ -9,7 +10,11 @@
 
 
 ID3D11Device* mtgb::DirectX11Draw::pDevice_{ nullptr };                                                    // 描画を行うための環境、リソースの作成に使う
-ID3D11DeviceContext* mtgb::DirectX11Draw::pContext_{ nullptr };                                            // GPUに命令出すやつ
+ID3D11DeviceContext* mtgb::DirectX11Draw::pContext_{ nullptr };   
+IDXGIDevice1* mtgb::DirectX11Draw::pDXGIDevice_{ nullptr };
+IDXGIAdapter* mtgb::DirectX11Draw::pDXGIAdapter_{ nullptr };
+IDXGIFactory2* mtgb::DirectX11Draw::pDXGIFactory_{ nullptr };
+
 IDXGISwapChain* mtgb::DirectX11Draw::pSwapChain_{ nullptr };                                               // ダブルバッファリングするやつ
 ID3D11RenderTargetView* mtgb::DirectX11Draw::pRenderTargetView_{ nullptr };                                // 描画先
 ID3D11DepthStencilView* mtgb::DirectX11Draw::pDepthStencilView_{ nullptr };                                // 深度バッファ
@@ -71,6 +76,9 @@ void mtgb::DirectX11Draw::Release()
 {
 	SAFE_RELEASE(pDepthStencilView_);
 	SAFE_RELEASE(pRenderTargetView_);
+	SAFE_RELEASE(pDXGIDevice_);
+	SAFE_RELEASE(pDXGIAdapter_);
+	SAFE_RELEASE(pDXGIFactory_);
 	SAFE_RELEASE(pSwapChain_);
 	SAFE_RELEASE(pContext_);
 	SAFE_RELEASE(pDevice_);

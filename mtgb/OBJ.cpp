@@ -253,7 +253,7 @@ void mtgb::OBJ::InitMesh(const std::string& fileName, SimpleMesh* mesh)
 		//フェイス（ポリゴン） 読み込み
 		if (strcmp(key, "f") == 0)
 		{
-			fscanf_s(fp, "%d// %d// %d//", &v1, &v2, &v3);
+			fscanf_s(fp, "%d %d %d", &v1, &v2, &v3);
 			pIndexBuffer[faceCount * 3] = v1 - 1;
 			pIndexBuffer[faceCount * 3 + 1] = v2 - 1;
 			pIndexBuffer[faceCount * 3 + 2] = v3 - 1;

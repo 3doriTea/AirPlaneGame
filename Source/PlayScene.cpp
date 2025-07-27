@@ -1,5 +1,6 @@
 #include "PlayScene.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Camera.h"
 
 using namespace mtgb;
@@ -23,6 +24,7 @@ void PlayScene::Initialize()
 	SetCameraGameObject(Instantiate<Camera>());
 
 	Instantiate<Player>();
+	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);
