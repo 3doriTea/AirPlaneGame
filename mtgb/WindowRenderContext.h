@@ -27,7 +27,7 @@ public:
 	void Release();
 	HWND hWnd_;
 	MSG* pPeekedMessage_;
-	WNDCLASSEXW windowClass_;
+	WNDCLASSEX windowClass_;
 	RECT windowRect_;
 	IDXGISwapChain1* pSwapChain_;
 	IDXGIOutput* pOutput_;
@@ -35,8 +35,8 @@ public:
 	ID3D11Texture2D* pDepthStencil_;
 	ID3D11DepthStencilView* pDepthStencilView_;
 	D3D11_VIEWPORT viewport_;
-	std::wstring windowTitle_;
-	std::wstring windowClassName_;
+	std::string windowTitle_;
+	std::string windowClassName_;
 	bool isActive_;
 
 	int outputIndex_;

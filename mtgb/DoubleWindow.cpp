@@ -22,8 +22,8 @@ void mtgb::DoubleWindow::Initialize()
 
 	WindowConfig config1 =
 	{
-		.title = L"tlayer1",
-		.className = L"Player1WindowClass",
+		.title = "tlayer1",
+		.className = "Player1WindowClass",
 		.width = SCREEN_SIZE.x,
 		.height = SCREEN_SIZE.y,
 		.x = CW_USEDEFAULT,
@@ -32,8 +32,8 @@ void mtgb::DoubleWindow::Initialize()
 
 	WindowConfig config2 =
 	{
-		.title = L"Jlayer2",
-		.className = L"Player2WindowClass",
+		.title = "Jlayer2",
+		.className = "Player2WindowClass",
 		.width = SCREEN_SIZE.x,
 		.height = SCREEN_SIZE.y,
 		.x = CW_USEDEFAULT,

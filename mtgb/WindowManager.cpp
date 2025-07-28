@@ -2,6 +2,7 @@
 #include "WindowRenderContext.h"
 #include <Windows.h>
 #include "MTAssert.h"
+#include "MTStringUtility.h"
 
 namespace
 {
@@ -40,7 +41,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 	(*ppContext)->windowClass_.cbWndExtra = 0;
 	(*ppContext)->windowClass_.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  // 背景色 白
 
-	massert(RegisterClassExW(&(*ppContext)->windowClass_) != 0  // ウィンドウクラスの登録に成功
+	massert(RegisterClassEx(&(*ppContext)->windowClass_) != 0  // ウィンドウクラスの登録に成功
 		&& "RegisterClassExWに失敗 @WindowManager::CreateWindowRenderContext");
 
 	RECT windowRect{ 0, 0, config.width, config.height };
@@ -58,8 +59,8 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 
 	{  // windowの作成
 		DWORD     exWindowStyle{ 0 };
-		LPCWSTR    className{ (*ppContext)->windowClassName_.c_str() };
-		LPCWSTR    windowName{ (*ppContext)->windowTitle_.c_str() };
+		LPCSTR    className{ (*ppContext)->windowClassName_.c_str() };
+		LPCSTR    windowName{ (*ppContext)->windowTitle_.c_str() };
 		DWORD     windowStyle{ WS_OVERLAPPEDWINDOW };//& ~WS_THICKFRAME };
 		int       windowPositionX{ CW_USEDEFAULT };
 		int       windowPositionY{ CW_USEDEFAULT };
@@ -73,7 +74,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 		LPVOID    param{ *ppContext };
 
 
-		(*ppContext)->hWnd_ = CreateWindowExW(
+		(*ppContext)->hWnd_ = CreateWindowEx(
 			exWindowStyle,
 			(*ppContext)->windowClassName_.c_str(),
 			(*ppContext)->windowTitle_.c_str(),
@@ -93,7 +94,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 		massert(IsWindow((*ppContext)->hWnd_)  // ウィンドウハンドルが正しく作成されている
 			&& "Windowではないハンドルが作られてしまった");
 
-		massert(SetWindowTextW((*ppContext)->hWnd_, (*ppContext)->windowTitle_.c_str())
+		massert(SetWindowText((*ppContext)->hWnd_, (*ppContext)->windowTitle_.c_str())
 			&& "SetWindowTextWに失敗");
 
 		// NOTE: ShowWindowの戻り値に注意
