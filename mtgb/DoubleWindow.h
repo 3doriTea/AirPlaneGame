@@ -2,7 +2,7 @@
 #include "ISystem.h"
 typedef struct HWND__* HWND;
 
-class WindowRenderContext;
+class WindowContext;
 namespace mtgb
 {
 	class DoubleWindow : public ISystem
@@ -15,9 +15,11 @@ namespace mtgb
 		void Update() override;
 
 		const HWND GetHWND();
+		void ChangeFirstWindow();
+		void ChangeSecondWindow();
 
 	private:
-		WindowRenderContext* context1_;
-		WindowRenderContext* context2_;
+		WindowContext* context1_;
+		WindowContext* context2_;
 	};
 }

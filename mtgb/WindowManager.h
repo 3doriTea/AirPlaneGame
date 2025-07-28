@@ -2,7 +2,7 @@
 #include "ISystem.h"
 #include <vector>
 #include <string>
-class WindowRenderContext;
+class WindowContext;
 typedef struct tagMSG MSG;
 typedef struct HWND__* HWND;
 
@@ -23,7 +23,7 @@ namespace mtgb
 		WindowManager();
 		~WindowManager();
 
-		static void CreateWindowRenderContext(const WindowConfig& config, WindowRenderContext ** ppContext);
+		static void CreateWindowRenderContext(const WindowConfig& config, WindowContext ** ppContext);
 		void Initialize() override;
 		void Update() override;
 		void Release();

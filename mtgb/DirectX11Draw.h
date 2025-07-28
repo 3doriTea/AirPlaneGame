@@ -29,6 +29,7 @@ namespace mtgb
 	class Figure;
 	class IShader;
 	class MTImGui;
+	class SceneSystem;
 
 	/// <summary>
 	/// シェーダタイプ
@@ -94,6 +95,7 @@ namespace mtgb
 		friend class OBJ;
 		friend class MTImGui;
 		friend class DoubleWindow;
+		friend class SceneSystem;
 	public:
 		/// <summary>
 		/// 描画するシェーダをセットする

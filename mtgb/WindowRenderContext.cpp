@@ -8,7 +8,7 @@
 
 using namespace mtgb;
 
-int WindowRenderContext::outputCount{ 0 };
+int WindowContext::outputCount{ 0 };
 
 /// <summary>
 /// ウィンドウからのメッセージを受信してImGuiの入力やイベントを有効にするためのコールバック関数
@@ -28,13 +28,13 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg
 /// <param name="wParam"></param>
 /// <param name="lParam">インスタンスを取得するために、CreateWindowのlpParamにthisを渡す必要がある</param>
 /// <returns></returns>
-LRESULT WindowRenderContext::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WindowContext::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	WindowRenderContext* pThis;
+	WindowContext* pThis;
 	if (msg == WM_NCCREATE)
 	{
 		//作成時のパラメータからthisを取得、キャスト
-		pThis = static_cast<WindowRenderContext*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
+		pThis = static_cast<WindowContext*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
 		//thisのUSERDATAにthisを紐付ける
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));
 		pThis->hWnd_ = hWnd;
@@ -42,7 +42,7 @@ LRESULT WindowRenderContext::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 	else
 	{
 		//hWndにthisを紐づけておいたので取得
-		pThis = reinterpret_cast<WindowRenderContext*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+		pThis = reinterpret_cast<WindowContext*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	}
 	if (pThis)
 	{
@@ -52,7 +52,7 @@ LRESULT WindowRenderContext::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 
 }
 
-LRESULT WindowRenderContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT WindowContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	
 	switch (msg)
@@ -97,7 +97,7 @@ LRESULT WindowRenderContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wPa
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-WindowRenderContext::WindowRenderContext()  
+WindowContext::WindowContext()  
    : hWnd_(nullptr),  
      pPeekedMessage_(nullptr),  
      pSwapChain_(nullptr),  
@@ -113,7 +113,7 @@ WindowRenderContext::WindowRenderContext()
 {  
 }
 
-void WindowRenderContext::Initialize(HWND windowHandle)
+void WindowContext::Initialize(HWND windowHandle)
 {
 
 }

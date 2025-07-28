@@ -53,17 +53,27 @@ void mtgb::DoubleWindow::Initialize()
 void mtgb::DoubleWindow::Update()
 {
 	//一旦context1を従来のウィンドウにして、context2は何も表示しない
-	DirectX11Draw::End();
+	/*DirectX11Draw::End();
 
 	Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
 	DirectX11Draw::Begin();
 	DirectX11Draw::End();
 
 	Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
-	DirectX11Draw::Begin();
+	DirectX11Draw::Begin();*/
 }
 
 const HWND mtgb::DoubleWindow::GetHWND()
 {
 	return context1_->hWnd_;
+}
+
+void mtgb::DoubleWindow::ChangeFirstWindow()
+{
+	Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
+}
+
+void mtgb::DoubleWindow::ChangeSecondWindow()
+{
+	Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
 }

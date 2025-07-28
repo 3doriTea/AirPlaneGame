@@ -16,13 +16,13 @@
 
 
 
-class WindowRenderContext
+class WindowContext
 {
 public:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	WindowRenderContext();
+	WindowContext();
 	void Initialize(HWND windowHandle);
 	void Release();
 	HWND hWnd_;

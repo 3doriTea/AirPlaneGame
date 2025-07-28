@@ -1,5 +1,9 @@
 #include "SceneSystem.h"
 #include "GameObject.h"
+#include "DoubleWindow.h"
+#include "DirectX11Manager.h"
+#include "DirectX11Draw.h"
+
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -38,11 +42,25 @@ void mtgb::SceneSystem::Update()
 	}
 
 	// •`‰æˆ—
+
+
+	Game::System<DoubleWindow>().ChangeFirstWindow();
+	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
 		gameObject->Draw();
 	}
+	DirectX11Draw::End();
+
+	Game::System<DoubleWindow>().ChangeSecondWindow();
+	DirectX11Draw::Begin();
+	currentScene.Draw();
+	for (auto&& gameObject : currentScene.pGameObjects_)
+	{
+		gameObject->Draw();
+	}
+	DirectX11Draw::End();
 
 	// íœˆ—
 	for (auto&& itr = currentScene.pGameObjects_.begin();

@@ -237,6 +237,8 @@
     <ClInclude Include="mtgb\Quaternion.h" />
     <ClInclude Include="mtgb\RectInt.h" />
     <ClInclude Include="mtgb\ReleaseUtility.h" />
+    <ClInclude Include="mtgb\RenderResource.h" />
+    <ClInclude Include="mtgb\RenderResourceManager.h" />
     <ClInclude Include="mtgb\RigidBody.h" />
     <ClInclude Include="mtgb\RigidBodyCP.h" />
     <ClInclude Include="mtgb\SceneSystem.h" />

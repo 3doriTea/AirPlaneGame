@@ -18,9 +18,9 @@ mtgb::WindowManager::~WindowManager()
 {
 	delete pPeekedMessage_;
 }
-void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, WindowRenderContext ** ppContext)
+void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, WindowContext ** ppContext)
 {
-	*ppContext = new WindowRenderContext();
+	*ppContext = new WindowContext();
 	(*ppContext)->windowTitle_ = config.title;
 	(*ppContext)->windowClassName_ = config.className;
 	//(*ppContext)->windowClass_ = windowClass;
@@ -30,7 +30,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 	(*ppContext)->windowClass_.hInstance = GetModuleHandle(NULL);           // インスタンスハンドル
 	//(*ppContext)->windowClass_.lpszClassName = szWindowClass;        // ウィンドウクラス名
 	(*ppContext)->windowClass_.lpszClassName = (*ppContext)->windowClassName_.c_str();        // ウィンドウクラス名
-	(*ppContext)->windowClass_.lpfnWndProc =  WindowRenderContext::WndProc;                       // メッセージを受け取るコールバック関数
+	(*ppContext)->windowClass_.lpfnWndProc =  WindowContext::WndProc;                       // メッセージを受け取るコールバック関数
 	(*ppContext)->windowClass_.style = CS_VREDRAW | CS_HREDRAW;             // スタイル
 	(*ppContext)->windowClass_.hIcon = LoadIcon(nullptr, IDI_APPLICATION);  // アイコン
 	(*ppContext)->windowClass_.hIconSm = LoadIcon(nullptr, IDI_WINLOGO);    // 小さいアイコン

@@ -340,7 +340,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 }
 
-void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& context, bool isMultiMonitor)
+void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, bool isMultiMonitor)
 {
 	HRESULT hResult{};
 
@@ -371,7 +371,7 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& contex
 
 	if (isMultiMonitor)
 	{
-		context.outputIndex_ = WindowRenderContext::outputCount++;
+		context.outputIndex_ = WindowContext::outputCount++;
 		DirectX11Draw::pDXGIAdapter_->EnumOutputs(context.outputIndex_, &context.pOutput_);
 		massert(SUCCEEDED(hResult)
 			&& "EnumOutputsに失敗 @DirectX11Manager::InitializeWindowContext");
@@ -452,7 +452,7 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& contex
 	//深度ステンシル、ブレンドステートは共通とする
 }
 
-void mtgb::DirectX11Manager::ChangeRenderContext(WindowRenderContext& context)
+void mtgb::DirectX11Manager::ChangeRenderContext(WindowContext& context)
 {
 	DirectX11Draw::pRenderTargetView_ = context.pRenderTargetView_;
 	DirectX11Draw::pDepthStencilView_ = context.pDepthStencilView_;
