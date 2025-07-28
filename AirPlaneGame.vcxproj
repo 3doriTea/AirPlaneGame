@@ -70,17 +70,39 @@
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
     <ClCompile Include="mtgb\MTImGui.cpp" />
-    <ClCompile Include="mtgb\MTNet\BinaryReader.cpp" />
-    <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp" />
-    <ClCompile Include="mtgb\MTNet\EndPoint.cpp" />
-    <ClCompile Include="mtgb\MTNet\LobbyCommon.cpp" />
-    <ClCompile Include="mtgb\MTNet\Log.cpp" />
-    <ClCompile Include="mtgb\MTNet\Socket.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpClient.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpJoiner.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpListener.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpLobby.cpp" />
-    <ClCompile Include="mtgb\MTNet\Utility.cpp" />
+    <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\EndPoint.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\LobbyCommon.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Log.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Socket.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpClient.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpJoiner.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpListener.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpLobby.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Utility.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
@@ -173,18 +195,42 @@
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
-    <ClInclude Include="mtgb\MTNet\BinaryReader.h" />
-    <ClInclude Include="mtgb\MTNet\BinaryWriter.h" />
-    <ClInclude Include="mtgb\MTNet\Common.h" />
-    <ClInclude Include="mtgb\MTNet\EndPoint.h" />
-    <ClInclude Include="mtgb\MTNet\LobbyCommon.h" />
-    <ClInclude Include="mtgb\MTNet\Log.h" />
-    <ClInclude Include="mtgb\MTNet\Socket.h" />
-    <ClInclude Include="mtgb\MTNet\TcpClient.h" />
-    <ClInclude Include="mtgb\MTNet\TcpJoiner.h" />
-    <ClInclude Include="mtgb\MTNet\TcpListener.h" />
-    <ClInclude Include="mtgb\MTNet\TcpLobby.h" />
-    <ClInclude Include="mtgb\MTNet\Utility.h" />
+    <ClInclude Include="mtgb\MTNet\BinaryReader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\BinaryWriter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\Common.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\EndPoint.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\LobbyCommon.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\Log.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\Socket.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\TcpClient.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\TcpJoiner.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\TcpListener.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\TcpLobby.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\Utility.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="mtgb\MTStringUtility.h" />
     <ClInclude Include="mtgb\OBJ.h" />
     <ClInclude Include="mtgb\PathUtility.h" />

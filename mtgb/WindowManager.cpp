@@ -41,6 +41,9 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 			WS_EX_OVERLAPPEDWINDOW) != FALSE  // スクリーンボーダを考慮したウィンドウサイズの取得に成功
 		&& "AdjustWindowRectExに失敗 @WindowManager::CreateWindowRenderContext");
 
+	*ppContext = new WindowRenderContext();
+
+
 	{  // windowの作成
 		DWORD     exWindowStyle{ WS_EX_OVERLAPPEDWINDOW };
 		LPCWSTR    className{ config.title.c_str() };
@@ -55,7 +58,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 		HINSTANCE hInstance{ GetModuleHandle(NULL) };
 		massert(hInstance != NULL  // モジュールハンドルの取得に成功
 			&& "モジュールハンドルの取得に失敗");
-		LPVOID    param{ nullptr };
+		LPVOID    param{ *ppContext };
 
 
 		HWND hWnd = CreateWindowExW(
@@ -81,13 +84,16 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 		// NOTE: ShowWindowの戻り値に注意
 	//  REF: https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
 		ShowWindow(hWnd, SW_SHOWDEFAULT);  // ウィンドウを表示
-
-		*ppContext = new WindowRenderContext();
+		auto tmp = *ppContext;
+		(*ppContext)->hWnd_ = hWnd;
 		(*ppContext)->windowClass_ = windowClass;
 		(*ppContext)->windowTitle_ = config.title;
 		(*ppContext)->windowRect_ = windowRect;
-		(*ppContext)->hWnd_ = hWnd;
 	}
+}
+
+void mtgb::WindowManager::Initialize()
+{
 }
 
 void mtgb::WindowManager::Update()
@@ -107,6 +113,11 @@ void mtgb::WindowManager::Update()
 		return;
 	}
 }
+
+//const HWND mtgb::WindowManager::GetHWND()
+//{
+//	return 
+//}
 
 //void mtgb::WindowManager::GenerateWndClassEx(const WindowConfig& config, WNDCLASSEX* _pWndClassEx)
 //{

@@ -3,8 +3,9 @@
 #include <vector>
 #include <string>
 class WindowRenderContext;
-struct WNDCLASSEX;
 typedef struct tagMSG MSG;
+typedef struct HWND__* HWND;
+
 namespace mtgb
 {
 
@@ -15,13 +16,15 @@ namespace mtgb
 		int x, y;
 	};
 
-	class WindowManager
+	class WindowManager : public ISystem
 	{
 	public:
 		WindowManager();
 		~WindowManager();
+
 		static void CreateWindowRenderContext(const WindowConfig& config, WindowRenderContext ** ppContext);
-		void Update();
+		void Initialize() override;
+		void Update() override;
 		void Release();
 	private:
 		static MSG* pPeekedMessage_;

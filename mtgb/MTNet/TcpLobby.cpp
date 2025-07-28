@@ -3,7 +3,7 @@
 #include "Log.h"
 #include "TcpClient.h"
 #include "Common.h"
-#include "MemoryStream.h"
+#include "MTBin/MemoryStream.h"
 #include "BinaryWriter.h"
 
 namespace

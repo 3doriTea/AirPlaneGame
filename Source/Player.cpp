@@ -94,6 +94,6 @@ void Player::Draw() const
 	//Draw::Image(hImage_, pTransform_);
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
-	MTImGui::ShowInspector(this, "player");
+	//MTImGui::ShowInspector(this, "player");
 	//Draw::Text(hText, mousePos);
 }

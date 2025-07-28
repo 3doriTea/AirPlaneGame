@@ -100,6 +100,22 @@ LRESULT WindowRenderContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wPa
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+WindowRenderContext::WindowRenderContext()  
+   : hWnd_(nullptr),  
+     pPeekedMessage_(nullptr),  
+     pSwapChain_(nullptr),  
+     pOutput_(nullptr),  
+     pRenderTargetView_(nullptr),  
+     pDepthStencil_(nullptr),  
+     pDepthStencilView_(nullptr),  
+     isActive_(false),  
+     outputIndex_(0),  
+     viewport_({0}),  
+     windowClass_({0}),  
+     windowRect_({0})  
+{  
+}
+
 void WindowRenderContext::Initialize(HWND windowHandle)
 {
 

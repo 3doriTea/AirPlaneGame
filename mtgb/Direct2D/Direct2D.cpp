@@ -30,7 +30,7 @@ void mtgb::Direct2D::Initialize()
 
 	//バックバッファ受け取る
 	ID3D11Texture2D* pBackBuffer = nullptr;
-	hResult = DirectX11Draw::pSwapChain_->GetBuffer(0, _uuidof(ID3D11Texture2D),
+	hResult = DirectX11Draw::pSwapChain1_->GetBuffer(0, _uuidof(ID3D11Texture2D),
 		(LPVOID*)&pBackBuffer);
 
 	massert(SUCCEEDED(hResult)

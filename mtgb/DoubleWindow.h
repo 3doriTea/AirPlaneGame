@@ -1,5 +1,6 @@
 #pragma once
 #include "ISystem.h"
+typedef struct HWND__* HWND;
 
 class WindowRenderContext;
 namespace mtgb
@@ -12,6 +13,9 @@ namespace mtgb
 
 		void Initialize() override;
 		void Update() override;
+
+		const HWND GetHWND();
+
 	private:
 		WindowRenderContext* context1_;
 		WindowRenderContext* context2_;

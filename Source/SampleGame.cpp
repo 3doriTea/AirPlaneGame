@@ -20,12 +20,14 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<AssetsManager>(SystemUpdateType::DontCallMe);
 
 	_register.Set<Screen>(SystemUpdateType::DontCallMe);
-	_register.Set<MainWindow>(SystemUpdateType::Cycle);
+	//_register.Set<MainWindow>(SystemUpdateType::Cycle);
+	_register.Set<WindowManager>(SystemUpdateType::Cycle);
 
 	_register.Set<DirectX11Manager>(SystemUpdateType::Frame);
+	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<Direct2D>(SystemUpdateType::Frame);
 	_register.Set<DirectWrite>(SystemUpdateType::Frame);
-	_register.Set<MTImGui>(SystemUpdateType::Frame);
+	//_register.Set<MTImGui>(SystemUpdateType::Frame);
 
 	_register.Set<Input>(SystemUpdateType::Frame);
 

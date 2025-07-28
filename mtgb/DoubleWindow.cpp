@@ -5,6 +5,7 @@
 #include "Game.h"
 #include "Screen.h"
 #include "DirectX11Manager.h"
+#include "DirectX11Draw.h"
 mtgb::DoubleWindow::DoubleWindow()
 {
 	context1_ = nullptr;
@@ -43,8 +44,24 @@ void mtgb::DoubleWindow::Initialize()
 	//一旦DirectXリソースの初期化もここで行う
 	Game::System<DirectX11Manager>().InitializeWindowContext(*context1_, false);
 	Game::System<DirectX11Manager>().InitializeWindowContext(*context2_, false);
+
+	Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
 }
 
 void mtgb::DoubleWindow::Update()
 {
+	//一旦context1を従来のウィンドウにして、context2は何も表示しない
+	DirectX11Draw::End();
+
+	Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
+	DirectX11Draw::Begin();
+	DirectX11Draw::End();
+
+	Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
+	DirectX11Draw::Begin();
+}
+
+const HWND mtgb::DoubleWindow::GetHWND()
+{
+	return context1_->hWnd_;
 }

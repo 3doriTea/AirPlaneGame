@@ -5,7 +5,7 @@
 #include "ReleaseUtility.h"
 #include "MTAssert.h"
 #include "MainWindow.h"
-
+#include "DoubleWindow.h"
 
 namespace
 {
@@ -30,7 +30,8 @@ void mtgb::Input::Initialize()
 {
 	HRESULT hResult{};
 
-	const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
+	//const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
+	const HWND hWnd{ Game::System<DoubleWindow>().GetHWND() };
 
 	// DirectInput8のデバイス作成
 	hResult = DirectInput8Create(

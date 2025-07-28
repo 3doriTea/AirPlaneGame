@@ -24,6 +24,7 @@ mtgb::DirectX11Manager::~DirectX11Manager()
 
 void mtgb::DirectX11Manager::Initialize()
 {
+#if 0
 	HRESULT hResult{};
 
 	STARTUPINFO startupInfo{};
@@ -220,16 +221,18 @@ void mtgb::DirectX11Manager::Initialize()
 		1,
 		&DirectX11Draw::pRenderTargetView_,
 		DirectX11Draw::pDepthStencilView_);
+#endif
+	InitializeCommonResources();
 }
 
 void mtgb::DirectX11Manager::Update()
 {
-	Game::System<MTImGui>().EndFrame();
-	DirectX11Draw::End();
+	//Game::System<MTImGui>().EndFrame();
+	//DirectX11Draw::End();
 	
 
-	Game::System<MTImGui>().BeginFrame();
-	DirectX11Draw::Begin();
+	//Game::System<MTImGui>().BeginFrame();
+	//DirectX11Draw::Begin();
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()
@@ -349,8 +352,8 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& contex
 	HWND hWindow{ context.hWnd_ };
 	DXGI_SWAP_CHAIN_DESC1 desc
 	{
-		.Width = 0,//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
-		.Height = 0,//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
+		.Width = static_cast<UINT>(SCREEN_SIZE.x),//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
+		.Height = static_cast<UINT>(SCREEN_SIZE.y),//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
 		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,  // 使える色数
 		.Stereo = FALSE,//ステレオ(3D立体視)表示を有効にするか
 		.SampleDesc
@@ -359,7 +362,7 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& contex
 			.Quality = 0,
 		},
 		.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-		.BufferCount = 1,  // 裏画面の枚数
+		.BufferCount = 2,  // 裏画面の枚数
 		.Scaling = DXGI_SCALING_STRETCH,
 		.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
 		.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
@@ -453,6 +456,7 @@ void mtgb::DirectX11Manager::ChangeRenderContext(WindowRenderContext& context)
 {
 	DirectX11Draw::pRenderTargetView_ = context.pRenderTargetView_;
 	DirectX11Draw::pDepthStencilView_ = context.pDepthStencilView_;
+	DirectX11Draw::pSwapChain1_ = context.pSwapChain_;
 
 	DirectX11Draw::pContext_->OMSetRenderTargets(1,&context.pRenderTargetView_,context.pDepthStencilView_);
 	DirectX11Draw::pContext_->RSSetViewports(1, &context.viewport_);

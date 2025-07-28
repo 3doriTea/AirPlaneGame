@@ -16,6 +16,7 @@
 
 #include "AssetsManager.h"
 #include "MainWindow.h"
+#include "WindowManager.h"
 #include "Screen.h"
 #include "DirectX11Manager.h"
 #include "Direct2D/Direct2D.h"
@@ -33,6 +34,7 @@
 #include "OBJ.h"
 #include "MTImGui.h"
 #include "Text.h"
+#include "DoubleWindow.h"
 
 #pragma endregion
 
