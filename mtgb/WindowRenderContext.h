@@ -36,6 +36,7 @@ public:
 	ID3D11DepthStencilView* pDepthStencilView_;
 	D3D11_VIEWPORT viewport_;
 	std::wstring windowTitle_;
+	std::wstring windowClassName_;
 	bool isActive_;
 
 	int outputIndex_;

@@ -3,6 +3,11 @@
 #include <Windows.h>
 #include "MTAssert.h"
 
+namespace
+{
+	
+}
+
 MSG* mtgb::WindowManager::pPeekedMessage_{ nullptr };
 
 mtgb::WindowManager::WindowManager() 
@@ -15,21 +20,27 @@ mtgb::WindowManager::~WindowManager()
 }
 void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, WindowRenderContext ** ppContext)
 {
-	WNDCLASSEXW windowClass{};
-	windowClass.cbSize = sizeof(WNDCLASSEX);                 // 構造体のサイズ
-	windowClass.hInstance = GetModuleHandle(NULL);           // インスタンスハンドル
-	windowClass.lpszClassName = config.title.c_str();        // ウィンドウクラス名
-	windowClass.lpfnWndProc =  WindowRenderContext::WndProc;                       // メッセージを受け取るコールバック関数
-	windowClass.style = CS_VREDRAW | CS_HREDRAW;             // スタイル
-	windowClass.hIcon = LoadIcon(nullptr, IDI_APPLICATION);  // アイコン
-	windowClass.hIconSm = LoadIcon(nullptr, IDI_WINLOGO);    // 小さいアイコン
-	windowClass.hCursor = LoadCursor(nullptr, IDC_ARROW);    // マウスカーソル
-	windowClass.lpszMenuName = nullptr;                      // メニュー
-	windowClass.cbClsExtra = 0;
-	windowClass.cbWndExtra = 0;
-	windowClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  // 背景色 白
+	*ppContext = new WindowRenderContext();
+	(*ppContext)->windowTitle_ = config.title;
+	(*ppContext)->windowClassName_ = config.className;
+	//(*ppContext)->windowClass_ = windowClass;
 
-	massert(RegisterClassExW(&windowClass) != 0  // ウィンドウクラスの登録に成功
+	//WNDCLASSEXW windowClass{};
+	(*ppContext)->windowClass_.cbSize = sizeof(WNDCLASSEXW);                 // 構造体のサイズ
+	(*ppContext)->windowClass_.hInstance = GetModuleHandle(NULL);           // インスタンスハンドル
+	//(*ppContext)->windowClass_.lpszClassName = szWindowClass;        // ウィンドウクラス名
+	(*ppContext)->windowClass_.lpszClassName = (*ppContext)->windowClassName_.c_str();        // ウィンドウクラス名
+	(*ppContext)->windowClass_.lpfnWndProc =  WindowRenderContext::WndProc;                       // メッセージを受け取るコールバック関数
+	(*ppContext)->windowClass_.style = CS_VREDRAW | CS_HREDRAW;             // スタイル
+	(*ppContext)->windowClass_.hIcon = LoadIcon(nullptr, IDI_APPLICATION);  // アイコン
+	(*ppContext)->windowClass_.hIconSm = LoadIcon(nullptr, IDI_WINLOGO);    // 小さいアイコン
+	(*ppContext)->windowClass_.hCursor = LoadCursor(nullptr, IDC_ARROW);    // マウスカーソル
+	(*ppContext)->windowClass_.lpszMenuName = nullptr;                      // メニュー
+	(*ppContext)->windowClass_.cbClsExtra = 0;
+	(*ppContext)->windowClass_.cbWndExtra = 0;
+	(*ppContext)->windowClass_.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  // 背景色 白
+
+	massert(RegisterClassExW(&(*ppContext)->windowClass_) != 0  // ウィンドウクラスの登録に成功
 		&& "RegisterClassExWに失敗 @WindowManager::CreateWindowRenderContext");
 
 	RECT windowRect{ 0, 0, config.width, config.height };
@@ -40,14 +51,15 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 			FALSE,
 			WS_EX_OVERLAPPEDWINDOW) != FALSE  // スクリーンボーダを考慮したウィンドウサイズの取得に成功
 		&& "AdjustWindowRectExに失敗 @WindowManager::CreateWindowRenderContext");
+	
+	
 
-	*ppContext = new WindowRenderContext();
-
+	//WCHAR
 
 	{  // windowの作成
-		DWORD     exWindowStyle{ WS_EX_OVERLAPPEDWINDOW };
-		LPCWSTR    className{ config.title.c_str() };
-		LPCWSTR    windowName{ config.title.c_str() };
+		DWORD     exWindowStyle{ 0 };
+		LPCWSTR    className{ (*ppContext)->windowClassName_.c_str() };
+		LPCWSTR    windowName{ (*ppContext)->windowTitle_.c_str() };
 		DWORD     windowStyle{ WS_OVERLAPPEDWINDOW };//& ~WS_THICKFRAME };
 		int       windowPositionX{ CW_USEDEFAULT };
 		int       windowPositionY{ CW_USEDEFAULT };
@@ -61,10 +73,10 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 		LPVOID    param{ *ppContext };
 
 
-		HWND hWnd = CreateWindowExW(
+		(*ppContext)->hWnd_ = CreateWindowExW(
 			exWindowStyle,
-			className,
-			windowName,
+			(*ppContext)->windowClassName_.c_str(),
+			(*ppContext)->windowTitle_.c_str(),
 			windowStyle,
 			windowPositionX,
 			windowPositionY,
@@ -75,19 +87,19 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 			hInstance,
 			param);
 
-		massert(hWnd != NULL  // ウィンドウの作成に成功している
+		massert((*ppContext)->hWnd_ != NULL  // ウィンドウの作成に成功している
 			&& "ウィンドウの作成に失敗");
 
-		massert(IsWindow(hWnd)  // ウィンドウハンドルが正しく作成されている
+		massert(IsWindow((*ppContext)->hWnd_)  // ウィンドウハンドルが正しく作成されている
 			&& "Windowではないハンドルが作られてしまった");
+
+		massert(SetWindowTextW((*ppContext)->hWnd_, (*ppContext)->windowTitle_.c_str())
+			&& "SetWindowTextWに失敗");
 
 		// NOTE: ShowWindowの戻り値に注意
 	//  REF: https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
-		ShowWindow(hWnd, SW_SHOWDEFAULT);  // ウィンドウを表示
-		auto tmp = *ppContext;
-		(*ppContext)->hWnd_ = hWnd;
-		(*ppContext)->windowClass_ = windowClass;
-		(*ppContext)->windowTitle_ = config.title;
+		ShowWindow((*ppContext)->hWnd_, SW_SHOW);  // ウィンドウを表示
+
 		(*ppContext)->windowRect_ = windowRect;
 	}
 }

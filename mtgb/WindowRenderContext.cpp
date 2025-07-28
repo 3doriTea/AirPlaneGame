@@ -54,10 +54,7 @@ LRESULT WindowRenderContext::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 
 LRESULT WindowRenderContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
-	{
-		return true;
-	}
+	
 	switch (msg)
 	{
 	case WM_DESTROY:  // ウィンドウを閉じた

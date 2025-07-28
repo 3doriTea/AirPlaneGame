@@ -12,6 +12,7 @@ namespace mtgb
 	struct WindowConfig
 	{
 		std::wstring title;
+		std::wstring className;
 		int width, height;
 		int x, y;
 	};
