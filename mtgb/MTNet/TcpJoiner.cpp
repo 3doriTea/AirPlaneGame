@@ -1,5 +1,6 @@
 #include "TcpJoiner.h"
 #include "Log.h"
+#include "MTBin/Common.h"
 #include <chrono>
 
 namespace
@@ -39,7 +40,7 @@ void mtnet::TcpJoiner::Connect(const IPEndPoint& _remote)
 	{
 		[&, this]()
 		{
-			using mtnet::Byte;
+			using mtbin::Byte;
 			using SeekDir = mtnet::MemoryStream::SeekDir;
 
 			Byte* receiveBuffer = new Byte[CLIENT_BUFFER_SIZE];  // 受信用のバッファ
@@ -54,16 +55,16 @@ void mtnet::TcpJoiner::Connect(const IPEndPoint& _remote)
 				{
 					ZeroMemory(sendBuffer, CLIENT_BUFFER_SIZE);
 					std::memcpy(sendBuffer, string, std::strlen(string));
-					client_.Send(sendBuffer, CLIENT_BUFFER_SIZE);
+					client_.Send((mtnet::Byte*)sendBuffer, CLIENT_BUFFER_SIZE);
 				};
 
 			// 受信した文字列の先頭だけ比較する (一致:true / false)
 			auto ReceiveComparePrefix = [&, this](const char* string) -> bool
 				{
 					ZeroMemory(receiveBuffer, CLIENT_BUFFER_SIZE);
-					receivedLength = client_.Receive(receiveBuffer, CLIENT_BUFFER_SIZE);
+					receivedLength = client_.Receive((mtnet::Byte*)receiveBuffer, CLIENT_BUFFER_SIZE);
 
-					if (std::strlen(string) > std::strlen(receiveBuffer))
+					if (std::strlen(string) > std::strlen((mtnet::Byte*)receiveBuffer))
 					{
 						return false;  // 文字数不一致
 					}
@@ -125,7 +126,7 @@ void mtnet::TcpJoiner::Connect(const IPEndPoint& _remote)
 
 				ZeroMemory(receiveBuffer, CLIENT_BUFFER_SIZE);
 				receiveBufferMS.Seek(SeekDir::Head);
-				receivedLength = client_.Receive(receiveBuffer, CLIENT_BUFFER_SIZE);
+				receivedLength = client_.Receive((mtnet::Byte*)receiveBuffer, CLIENT_BUFFER_SIZE);
 
 				if (receivedLength <= 0)
 				{
@@ -133,7 +134,7 @@ void mtnet::TcpJoiner::Connect(const IPEndPoint& _remote)
 					break;
 				}
 
-				if (std::string{ receiveBuffer } == std::string{ EMPTY_MESSAGE })
+				if (std::string{ (mtnet::Byte*)receiveBuffer } == std::string{ EMPTY_MESSAGE })
 				{
 					// 空メッセージなら無視
 				}
@@ -172,7 +173,7 @@ void mtnet::TcpJoiner::Send(const WriteSendBufferCallback& _callback)
 	// MEMO: 送信次第解放してくれるよ
 	Byte* writeBuffer{ new Byte[CLIENT_BUFFER_SIZE]{} };  // 送る内容バッファ
 
-	MemoryStream ms{ writeBuffer, CLIENT_BUFFER_SIZE };
+	MemoryStream ms{ (mtbin::Byte*)writeBuffer, CLIENT_BUFFER_SIZE };
 	_callback(static_cast<BinaryWriter*>(&ms));  // 送信内容を書いてもらう 
 
 	//Log::Write(writeBuffer, CLIENT_BUFFER_SIZE);
