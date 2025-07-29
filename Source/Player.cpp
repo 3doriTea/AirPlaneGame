@@ -26,7 +26,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 	str = "Hello,World!";
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
-	hModel_ = OBJ::Load("Model/airplane.obj");
+	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
+	fModel_ = Fbx::Load("Model/GS_MotionSet.fbx");
 	hText = Text::Load(str,36);
 	pTransform_->position_.z = 1.0f;
 	pTransform_->scale_ = Vector3(100, 100, 100);
@@ -89,6 +90,7 @@ void Player::Draw() const
 	draw.size = Image::GetSize(hImage_);
 	
 	Draw::OBJModel(hModel_, pTransform_);
+	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);

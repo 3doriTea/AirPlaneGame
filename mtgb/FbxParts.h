@@ -18,6 +18,7 @@ namespace fbxsdk
 
 namespace mtgb
 {
+	class Fbx;
 	class Transform;
 
 	class FbxParts : public IShader
@@ -79,7 +80,7 @@ namespace mtgb
 		};
 
 	public:
-		FbxParts(FbxNode* _pNode);
+		FbxParts(FbxNode* _parent);
 		~FbxParts();
 
 		void Initialize() override;

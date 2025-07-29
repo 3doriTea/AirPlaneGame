@@ -3,7 +3,8 @@
 #include "Log.h"
 #include "TcpClient.h"
 #include "Common.h"
-#include "MemoryStream.h"
+#include "MTBin/Common.h"
+#include "MTBin/MemoryStream.h"
 #include "BinaryWriter.h"
 
 namespace
@@ -116,7 +117,7 @@ void mtnet::TcpLobby::SendToBroadcast(const WriteSendBufferCallback& _callback)
 	// 送る内容書き込ませバッファ
 	Byte buffer[CLIENT_BUFFER_SIZE]{};
 
-	MemoryStream ms{ buffer, CLIENT_BUFFER_SIZE};
+	MemoryStream ms{ (mtbin::Byte*)buffer, CLIENT_BUFFER_SIZE};
 	_callback(static_cast<BinaryWriter*>(&ms));
 
 	for (auto&& clientSendQueue : clientSendQueue_)
@@ -138,7 +139,7 @@ void mtnet::TcpLobby::SendToSession(PlayerId _sessionId, const WriteSendBufferCa
 	// MEMO: 送信次第解放してくれるよ
 	Byte* writeBuffer{ new Byte[CLIENT_BUFFER_SIZE] };  // 送る内容バッファ
 
-	MemoryStream ms{ writeBuffer, CLIENT_BUFFER_SIZE };
+	MemoryStream ms{ (mtbin::Byte*)writeBuffer, CLIENT_BUFFER_SIZE };
 	_callback(static_cast<BinaryWriter*>(&ms));  // 送信内容を書いてもらう
 
 	// 送信Queueに追加(あとは待つだけ)
@@ -169,8 +170,8 @@ void mtnet::TcpLobby::StartSession(TcpClient* _client, PlayerId _sessionId)
 	Byte* sendBuffer = new Byte[CLIENT_BUFFER_SIZE];  // 送信用のバッファ
 	mtnet::ReceivedLength receivedLength{};  // 受け取ったバイト数
 
-	MemoryStream sendBufferMS{ sendBuffer, CLIENT_BUFFER_SIZE };
-	MemoryStream receiveBufferMS{ receiveBuffer, CLIENT_BUFFER_SIZE };
+	MemoryStream sendBufferMS{ (mtbin::Byte*)sendBuffer, CLIENT_BUFFER_SIZE };
+	MemoryStream receiveBufferMS{ (mtbin::Byte*)receiveBuffer, CLIENT_BUFFER_SIZE };
 
 	// 文字列を送信する
 	auto SendString = [&, this](const char* string) -> void

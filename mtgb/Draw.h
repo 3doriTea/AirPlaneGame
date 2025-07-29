@@ -57,6 +57,11 @@ namespace mtgb
 			const OBJModelHandle _hOBJModel,
 			const Transform* _pTransform);
 
+		static void FBXModel(
+			const FBXModelHandle _hFBXModel,
+			const Transform& _pTransform,
+			const int _frame);
+
 		//static void TextBox();
 		static void Text(
 			const TextHandle _hText, 
@@ -74,6 +79,7 @@ namespace mtgb
 			float y,
 			int size
 		);
+
 
 	public:
 		Draw();

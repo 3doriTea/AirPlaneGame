@@ -17,7 +17,7 @@ Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRb_{ Component<RigidBody>() }
 {
-	hImage_ = Image::Load("Image/bullet.png");
+	//hImage_ = Image::Load("Image/bullet.png");
 	hModel_ = OBJ::Load("Model/OBJ/Bullet.obj");
 	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
 }
@@ -41,6 +41,6 @@ void Bullet::Update()
 
 void Bullet::Draw() const
 {
-	Draw::Image(hImage_, pTransform_);
+	//Draw::Image(hImage_, pTransform_);
 	Draw::OBJModel(hModel_, pTransform_);
 }
