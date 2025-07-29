@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 class WindowRenderContext;
-struct WNDCLASSEX;
+//typedef struct WNDCLASSEXA WNDCLASSEX;
 typedef struct tagMSG MSG;
 namespace mtgb
 {
