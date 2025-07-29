@@ -18,4 +18,5 @@ private:
 	ImageHandle hImage_;
 	AudioHandle hMnow_;
 	OBJModelHandle hModel_;
+	FBXModelHandle fModel_;
 };

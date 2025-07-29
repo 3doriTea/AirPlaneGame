@@ -33,6 +33,7 @@
 #include "OBJ.h"
 #include "MTImGui.h"
 #include "Text.h"
+#include "Fbx.h"
 
 #pragma endregion
 
@@ -50,6 +51,7 @@
 using mtgb::ImageHandle;
 using mtgb::AudioHandle;
 using mtgb::OBJModelHandle;
+using mtgb::FBXModelHandle;
 
 using mtgb::Vector3;
 using mtgb::Vector2;

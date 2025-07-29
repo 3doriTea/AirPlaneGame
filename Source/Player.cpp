@@ -27,6 +27,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
+	fModel_ = Fbx::Load("Model/test.fbx");
 	hText = Text::Load(str,36);
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
@@ -88,6 +89,7 @@ void Player::Draw() const
 	draw.size = Image::GetSize(hImage_);
 	
 	Draw::OBJModel(hModel_, pTransform_);
+	Draw::FBXModel(*pTransform_, 1200);
 	static int speed = 0;
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);

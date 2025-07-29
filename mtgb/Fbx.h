@@ -1,25 +1,30 @@
 #pragma once
 #include <vector>
 #include <fbxsdk.h>
+#include "Vector3.h"
 #include "IModelPack.h"
+#include "ISystem.h"
 
 #pragma comment(lib, "LibFbxSDK-MT.lib")
 #pragma comment(lib, "LibXml2-MT.lib")
 #pragma comment(lib, "zlib-MT.lib")
 
-
 namespace mtgb
 {
+	class FbxParts;
 	/// <summary>
 	/// 3DモデルのFbxを読み込みするクラス
 	/// </summary>
-	class Fbx : public IModelPack
+	class Fbx : public ISystem
 	{
 		friend class FbxParts;
 
 	public:
 		Fbx();
 		~Fbx();
+
+		void Initialize() override;
+		void Update() override;
 
 		/// <summary>
 		/// FbxManagerを取得する
@@ -36,17 +41,28 @@ namespace mtgb
 		/// Fbxファイルを読み込みする
 		/// </summary>
 		/// <param name="_fileName">3Dモデルのファイル名</param>
-		void Load(const std::string& _fileName) override;
+		static int Load(const std::string& _fileName);
 		/// <summary>
 		/// Fbxモデルを描画する
 		/// </summary>
 		/// <param name="_transfrom">座標系</param>
 		/// <param name="_frame">アニメーションフレーム</param>
-		void Draw(const Transform& _transfrom, int _frame) override;
+		void Draw(const Transform& _transfrom, int _frame);
 		/// <summary>
 		/// 解放処理
 		/// </summary>
-		void Release() override;
+		void Release();
+
+		/// <summary>
+		/// 任意のボーンの位置を取得
+		/// </summary>
+		/// <param name="_boneName">ボーンの名前</param>
+		Vector3 GetBonePosition(std::string _boneName);
+		/// <summary>
+		/// スキンメッシュアニメ中の現在の任意のボーンの位置を取得
+		/// </summary>
+		/// <param name="_boneName">ボーンの名前</param>
+		Vector3 GetAnimBonePosition(std::string _boneName);
 
 	private:
 		std::vector<FbxParts*> pParts_;  // 複数あるかもしれないパーツ

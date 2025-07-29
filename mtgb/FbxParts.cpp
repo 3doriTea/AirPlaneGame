@@ -7,10 +7,14 @@
 #include "Debug.h"
 #include "MTStringUtility.h"
 
-
-mtgb::FbxParts::FbxParts(FbxNode* _pNode) :
-	pNode_{ _pNode }
+mtgb::FbxParts::FbxParts(FbxNode* parent): pMesh_(nullptr)
 {
+	if (parent != nullptr)
+	{
+		pMesh_ = parent->GetMesh();
+	}
+
+	massert(pMesh_ != nullptr && "FbxParts: pMesh_ is null");
 }
 
 mtgb::FbxParts::~FbxParts()
@@ -93,7 +97,7 @@ void mtgb::FbxParts::DrawSkinAnimation(const std::string& _takeName, const Trans
 
 void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
 {
-	
+	Draw(_transform);
 }
 
 bool mtgb::FbxParts::TryGetBonePosition(const std::string& _boneName, Vector3* _pPosition)

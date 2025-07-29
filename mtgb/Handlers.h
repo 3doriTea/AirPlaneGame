@@ -22,6 +22,10 @@ namespace mtgb
 	/// OBJモデルのハンドル
 	/// </summary>
 	using OBJModelHandle = int32_t;
+	/// <summary>
+	/// FBXモデルのハンドル
+	/// </summary>
+	using FBXModelHandle = int32_t;
 
 	/// <summary>
 	/// テキストのハンドル

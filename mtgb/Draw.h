@@ -57,6 +57,10 @@ namespace mtgb
 			const OBJModelHandle _hOBJModel,
 			const Transform* _pTransform);
 
+		static void FBXModel(
+			const Transform& _pTransform,
+			const int _frame);
+
 		//static void TextBox();
 		static void Text(
 			const TextHandle _hText, 
