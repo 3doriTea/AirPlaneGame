@@ -121,6 +121,9 @@
     <Filter Include="mtgb\System\Resource">
       <UniqueIdentifier>{f4f1e396-72c4-4006-8ee0-eaf25832b419}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mtgb\System\Resource\Resources">
+      <UniqueIdentifier>{7807dafe-ffc5-4044-9a56-23f20b8faa6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -379,6 +382,18 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\Utility.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RenderResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DXGIResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Direct3DResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Direct2DResource.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -641,7 +656,7 @@
     <ClInclude Include="mtgb\SubWindow.h">
       <Filter>mtgb\System\Window\SubWindow</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\WindowRenderContext.h">
+    <ClInclude Include="mtgb\WindowContext.h">
       <Filter>mtgb\System\Window</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\WindowManager.h">
@@ -690,7 +705,16 @@
       <Filter>mtgb\System\Resource</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\RenderResource.h">
-      <Filter>mtgb\System\Resource</Filter>
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Direct3DResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Direct2DResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DXGIResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

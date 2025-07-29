@@ -36,12 +36,15 @@
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
+    <ClCompile Include="mtgb\Direct2DResource.cpp" />
     <ClCompile Include="mtgb\Direct2D\Direct2D.cpp" />
+    <ClCompile Include="mtgb\Direct3DResource.cpp" />
     <ClCompile Include="mtgb\DirectWrite.cpp" />
     <ClCompile Include="mtgb\DirectX11Draw.cpp" />
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
     <ClCompile Include="mtgb\DoubleWindow.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
+    <ClCompile Include="mtgb\DXGIResource.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
     <ClCompile Include="mtgb\Fbx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -105,6 +108,7 @@
     </ClCompile>
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
+    <ClCompile Include="mtgb\RenderResource.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
     <ClCompile Include="mtgb\RigidBodyCP.cpp" />
     <ClCompile Include="mtgb\SceneSystem.cpp" />
@@ -154,12 +158,15 @@
     <ClInclude Include="mtgb\Color.h" />
     <ClInclude Include="mtgb\ComponentPool.h" />
     <ClInclude Include="mtgb\Debug.h" />
+    <ClInclude Include="mtgb\Direct2DResource.h" />
     <ClInclude Include="mtgb\Direct2D\Direct2D.h" />
+    <ClInclude Include="mtgb\Direct3DResource.h" />
     <ClInclude Include="mtgb\DirectWrite.h" />
     <ClInclude Include="mtgb\DirectX11Draw.h" />
     <ClInclude Include="mtgb\DirectX11Manager.h" />
     <ClInclude Include="mtgb\DoubleWindow.h" />
     <ClInclude Include="mtgb\Draw.h" />
+    <ClInclude Include="mtgb\DXGIResource.h" />
     <ClInclude Include="mtgb\Entity.h" />
     <ClInclude Include="mtgb\Fbx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -258,7 +265,7 @@
     <ClInclude Include="mtgb\Vector4.h" />
     <ClInclude Include="mtgb\WaveData.h" />
     <ClInclude Include="mtgb\WindowManager.h" />
-    <ClInclude Include="mtgb\WindowRenderContext.h" />
+    <ClInclude Include="mtgb\WindowContext.h" />
     <ClInclude Include="mtgb\World.h" />
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />

@@ -1,7 +1,7 @@
 #include "Game.h"
 #include "Input.h"
 
-#include "WindowRenderContext.h"
+#include "WindowContext.h"
 #include "../ImGui/imgui.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui_impl_dx11.h"

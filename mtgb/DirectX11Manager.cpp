@@ -3,7 +3,7 @@
 #include "MTAssert.h"
 #include <Windows.h>
 #include <d3d11.h>
-#include <dxgi1_2.h>
+#include <dxgi1_2.h> 
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
 #include "MTImGui.h"
@@ -12,7 +12,8 @@
 #include "Vector3.h"
 #include <d3dcompiler.h>
 #include "HLSLInclude.h"
-#include "WindowRenderContext.h"
+#include "WindowContext.h"
+#include "ReleaseUtility.h"
 
 mtgb::DirectX11Manager::DirectX11Manager()
 {
@@ -340,16 +341,40 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 }
 
-void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, bool isMultiMonitor)
+void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDXGISurface** ppDXGISurface)
 {
 	HRESULT hResult{};
+	
+	//バックバッファ受け取る
+	ID3D11Texture2D* pBackBuffer = nullptr;
+	hResult = DirectX11Draw::pSwapChain1_->GetBuffer(0, _uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	massert(SUCCEEDED(hResult)
+		&& "GetBufferに失敗 @DirectX11Manager::CreateDXGISurface");
 
-	STARTUPINFO startupInfo{};
-	GetStartupInfo(&startupInfo);
-	int nCmdShow = startupInfo.wShowWindow;
+	//バックバッファからIDXGISurfaceインターフェースを取り出す
+	hResult = pBackBuffer->QueryInterface(IID_PPV_ARGS(ppDXGISurface));
 
+	SAFE_RELEASE(pBackBuffer);
+
+	massert(SUCCEEDED(hResult)
+		&& "QueryInterfaceに失敗 @DirectX11Manager::CreateDXGISurface");
+}
+
+void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
+{
+	HRESULT hResult{};
+	
+	hResult = DirectX11Draw::pDXGIAdapter_->EnumOutputs(index, ppOutput);
+	massert(SUCCEEDED(hResult)
+		&& "EnumOutputsに失敗 @DirectX11Manager::CreateOutput");
+}
+
+void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1)
+{
+	HRESULT hResult{};
+	
 	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	HWND hWindow{ context.hWnd_ };
+	
 	DXGI_SWAP_CHAIN_DESC1 desc
 	{
 		.Width = static_cast<UINT>(SCREEN_SIZE.x),//解像度(ピクセル数)。0ならウィンドウのサイズに合わせる
@@ -369,41 +394,39 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, boo
 		.Flags = 0
 	};
 
-	if (isMultiMonitor)
-	{
-		context.outputIndex_ = WindowContext::outputCount++;
-		DirectX11Draw::pDXGIAdapter_->EnumOutputs(context.outputIndex_, &context.pOutput_);
-		massert(SUCCEEDED(hResult)
-			&& "EnumOutputsに失敗 @DirectX11Manager::InitializeWindowContext");
-	}
-	else
-	{
-		context.pOutput_ = nullptr;
-	}
-	
 	hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
-					DirectX11Draw::pDevice_,
-					context.hWnd_,
-					&desc,
-					nullptr,//フルスクリーンの設定
-					context.pOutput_,//出力
-					&context.pSwapChain_
-				);
+		DirectX11Draw::pDevice_,
+		hWnd,
+		&desc,
+		nullptr,//フルスクリーンの設定
+		pOutput,//出力
+		ppSwapChain1
+	);
 	massert(SUCCEEDED(hResult)
-		&& "CreateSwapChainForHwndに失敗 @DirectX11Manager::InitializeWindowContext");
+		&& "CreateSwapChainForHwndに失敗 @DirectX11Manager::CreateSwapChain");
+}
 
+void mtgb::DirectX11Manager::CreateRenderTargetView(IDXGISwapChain1* pSwapChain1, ID3D11RenderTargetView** ppRenderTargetView)
+{
+	HRESULT hResult{};
+	
 	ID3D11Texture2D* pBackBuffer{ nullptr };
-	hResult = context.pSwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	hResult = pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
 	massert(SUCCEEDED(hResult) 
-		&& "GetBufferに失敗 @DirectX11Manager::InitializeWindowContext");
+		&& "GetBufferに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, &context.pRenderTargetView_);
+	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, ppRenderTargetView);
 	massert(SUCCEEDED(hResult)
-		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::InitializeWindowContext");
+		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::CreateRenderTargetView");
 
 	pBackBuffer->Release();  // バックバッファは使わないため解放する
+}
 
-	context.viewport_ =
+void mtgb::DirectX11Manager::CreateViewport(D3D11_VIEWPORT& viewport)
+{
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	
+	viewport =
 	{
 		.TopLeftX = 0,
 		.TopLeftY = 0,
@@ -412,8 +435,14 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, boo
 		.MinDepth = 0,
 		.MaxDepth = 1,
 	};
+}
+
+void mtgb::DirectX11Manager::CreateDepthStencilAndDepthStencilView(ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView)
+{
+	HRESULT hResult{};
 	
-#pragma region 深度バッファ作成
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	
 	// 深度バッファの設定
 	const D3D11_TEXTURE2D_DESC DEPTH_TEXTURE2D_DESC
 	{
@@ -436,20 +465,42 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, boo
 	hResult = DirectX11Draw::pDevice_->CreateTexture2D(
 		&DEPTH_TEXTURE2D_DESC,
 		nullptr,
-		&context.pDepthStencil_);
+		ppDepthStencil);
 
 	massert(SUCCEEDED(hResult)  // 深度ステンシルバッファの作成に失敗
 		&& "深度ステンシルバッファの作成に失敗");
 
 	hResult = DirectX11Draw::pDevice_->CreateDepthStencilView(
-		context.pDepthStencil_,
+		*ppDepthStencil,
 		nullptr,
-		&context.pDepthStencilView_);
+		ppDepthStencilView);
 
 	massert(SUCCEEDED(hResult)  // 深度ステンシルビュの作成に成功
 		&& "深度ステンシルビューの作成に失敗");
-#pragma endregion
-	//深度ステンシル、ブレンドステートは共通とする
+}
+
+void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, bool isMultiMonitor)
+{
+	HRESULT hResult{};
+
+	STARTUPINFO startupInfo{};
+	GetStartupInfo(&startupInfo);
+	int nCmdShow = startupInfo.wShowWindow;
+
+	context.outputIndex_ = 0;
+	if (isMultiMonitor)
+	{
+		CreateOutput(context.outputIndex_, &context.pOutput_);
+	}
+	else
+	{
+		context.pOutput_ = nullptr;
+	}
+
+	CreateSwapChain(context.hWnd_, context.pOutput_, &context.pSwapChain_);
+	CreateRenderTargetView(context.pSwapChain_, &context.pRenderTargetView_);
+	CreateViewport(context.viewport_);
+	CreateDepthStencilAndDepthStencilView(&context.pDepthStencil_, &context.pDepthStencilView_);
 }
 
 void mtgb::DirectX11Manager::ChangeRenderContext(WindowContext& context)
@@ -460,6 +511,24 @@ void mtgb::DirectX11Manager::ChangeRenderContext(WindowContext& context)
 
 	DirectX11Draw::pContext_->OMSetRenderTargets(1,&context.pRenderTargetView_,context.pDepthStencilView_);
 	DirectX11Draw::pContext_->RSSetViewports(1, &context.viewport_);
+}
+
+void mtgb::DirectX11Manager::ChangeViewport(const D3D11_VIEWPORT& viewport)
+{
+	DirectX11Draw::pContext_->RSSetViewports(1, &viewport);
+}
+
+void mtgb::DirectX11Manager::ChangeRenderTargets(ID3D11RenderTargetView* pRenderTargetView, ID3D11DepthStencilView* pDepthStencilView)
+{
+	DirectX11Draw::pRenderTargetView_ = pRenderTargetView;
+	DirectX11Draw::pDepthStencilView_ = pDepthStencilView;
+
+	DirectX11Draw::pContext_->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+}
+
+void mtgb::DirectX11Manager::ChangeSwapChain(IDXGISwapChain1* pSwapChain1)
+{
+	DirectX11Draw::pSwapChain1_ = pSwapChain1;
 }
 
 void mtgb::DirectX11Manager::InitializeShaderBundle()

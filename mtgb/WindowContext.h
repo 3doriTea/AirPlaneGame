@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include <dxgi.h>
 #include <Dxgi1_2.h>
+#include "RenderResourceManager.h"
 //typedef struct tagWNDCLASSEXA WNDCLASSEX;
 //typedef struct HWND__* HWND;
 //typedef struct tagMSG MSG;
@@ -14,7 +15,7 @@
 //struct ID3D11DepthStencilView;
 //struct D3D11_VIEWPORT;
 
-
+//WindowContext
 
 class WindowContext
 {
@@ -29,15 +30,18 @@ public:
 	MSG* pPeekedMessage_;
 	WNDCLASSEXW windowClass_;
 	RECT windowRect_;
+	std::wstring windowTitle_;
+	std::wstring windowClassName_;
+	bool isActive_;
+
 	IDXGISwapChain1* pSwapChain_;
 	IDXGIOutput* pOutput_;
 	ID3D11RenderTargetView* pRenderTargetView_;
 	ID3D11Texture2D* pDepthStencil_;
 	ID3D11DepthStencilView* pDepthStencilView_;
 	D3D11_VIEWPORT viewport_;
-	std::wstring windowTitle_;
-	std::wstring windowClassName_;
-	bool isActive_;
+
+	int resourceHandle_;
 
 	int outputIndex_;
 	static int outputCount;

@@ -1,5 +1,5 @@
 #include "DoubleWindow.h"
-#include "WindowRenderContext.h"
+#include "WindowContext.h"
 #include "WindowManager.h"
 #include "string"
 #include "Game.h"
@@ -40,8 +40,8 @@ void mtgb::DoubleWindow::Initialize()
 		.y = CW_USEDEFAULT
 	};
 
-	mtgb::WindowManager::CreateWindowRenderContext(config1, &context1_);
-	mtgb::WindowManager::CreateWindowRenderContext(config2, &context2_);
+	mtgb::WindowManager::CreateWindowContext(config1, &context1_);
+	mtgb::WindowManager::CreateWindowContext(config2, &context2_);
 
 	//一旦DirectXリソースの初期化もここで行う
 	Game::System<DirectX11Manager>().InitializeWindowContext(*context1_, false);

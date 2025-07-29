@@ -1,5 +1,5 @@
 #include "WindowManager.h"
-#include "WindowRenderContext.h"
+#include "WindowContext.h"
 #include <Windows.h>
 #include "MTAssert.h"
 
@@ -18,7 +18,7 @@ mtgb::WindowManager::~WindowManager()
 {
 	delete pPeekedMessage_;
 }
-void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, WindowContext ** ppContext)
+void mtgb::WindowManager::CreateWindowContext(const WindowConfig& config, WindowContext ** ppContext)
 {
 	*ppContext = new WindowContext();
 	(*ppContext)->windowTitle_ = config.title;
@@ -41,7 +41,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 	(*ppContext)->windowClass_.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);  // 背景色 白
 
 	massert(RegisterClassExW(&(*ppContext)->windowClass_) != 0  // ウィンドウクラスの登録に成功
-		&& "RegisterClassExWに失敗 @WindowManager::CreateWindowRenderContext");
+		&& "RegisterClassExWに失敗 @WindowManager::CreateWindowContext");
 
 	RECT windowRect{ 0, 0, config.width, config.height };
 	massert(
@@ -50,7 +50,7 @@ void mtgb::WindowManager::CreateWindowRenderContext(const WindowConfig& config, 
 			WS_OVERLAPPEDWINDOW,
 			FALSE,
 			WS_EX_OVERLAPPEDWINDOW) != FALSE  // スクリーンボーダを考慮したウィンドウサイズの取得に成功
-		&& "AdjustWindowRectExに失敗 @WindowManager::CreateWindowRenderContext");
+		&& "AdjustWindowRectExに失敗 @WindowManager::CreateWindowContext");
 	
 	
 

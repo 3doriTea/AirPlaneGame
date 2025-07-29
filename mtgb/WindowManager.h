@@ -23,13 +23,13 @@ namespace mtgb
 		WindowManager();
 		~WindowManager();
 
-		static void CreateWindowRenderContext(const WindowConfig& config, WindowContext ** ppContext);
+		static void CreateWindowContext(const WindowConfig& config, WindowContext ** ppContext);
 		void Initialize() override;
 		void Update() override;
 		void Release();
 	private:
 		static MSG* pPeekedMessage_;
-		//std::vector<WindowRenderContext*> windows_;
+		//std::vector<WindowContext*> windows_;
 		//void GenerateWndClassEx(const WindowConfig& config, WNDCLASSEX* _pWndClassEx);
 	};
 }

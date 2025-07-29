@@ -1,25 +1,26 @@
 #pragma once
-class RenderResource
-{
-public:
-	virtual void Initialize();
-	virtual void SetResource();
-};
+#include <tuple>
+#include <d3d11.h>
 
-class DXGIResource : public RenderResource
-{
-	void Initialize() override;
-	void SetResource() override;
-};
+struct IDXGISwapChain1;
+struct ID3D11RenderTargetView;
+struct ID3D11DepthStencilView;
+struct ID2D1RenderTarget;
 
-class Direct3DResource : public RenderResource
+namespace mtgb
 {
-	void Initialize() override;
-	void SetResource() override;
-};
+	class RenderResource
+	{
+	public:
+		template<typename... Args>
+		void Initialize(std::tuple<Args*...>& _resourceTuple);
+		virtual void SetResource() = 0;
+	};
+}
 
-class Direct2DResource : public RenderResource
-{
-	void Initialize() override;
-	void SetResource() override;
-};
+
+
+
+
+
+
