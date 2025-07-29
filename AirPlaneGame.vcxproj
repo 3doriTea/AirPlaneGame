@@ -73,14 +73,10 @@
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp" />
     <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp" />
     <ClCompile Include="mtgb\MTNet\EndPoint.cpp" />
-    <ClCompile Include="mtgb\MTNet\LobbyCommon.cpp" />
     <ClCompile Include="mtgb\MTNet\Log.cpp" />
     <ClCompile Include="mtgb\MTNet\Socket.cpp" />
     <ClCompile Include="mtgb\MTNet\TcpClient.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpJoiner.cpp" />
     <ClCompile Include="mtgb\MTNet\TcpListener.cpp" />
-    <ClCompile Include="mtgb\MTNet\TcpLobby.cpp" />
-    <ClCompile Include="mtgb\MTNet\Utility.cpp" />
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
@@ -105,6 +101,9 @@
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\Network\PIIO.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\registerRefl.cpp" />
@@ -177,14 +176,10 @@
     <ClInclude Include="mtgb\MTNet\BinaryWriter.h" />
     <ClInclude Include="mtgb\MTNet\Common.h" />
     <ClInclude Include="mtgb\MTNet\EndPoint.h" />
-    <ClInclude Include="mtgb\MTNet\LobbyCommon.h" />
     <ClInclude Include="mtgb\MTNet\Log.h" />
     <ClInclude Include="mtgb\MTNet\Socket.h" />
     <ClInclude Include="mtgb\MTNet\TcpClient.h" />
-    <ClInclude Include="mtgb\MTNet\TcpJoiner.h" />
     <ClInclude Include="mtgb\MTNet\TcpListener.h" />
-    <ClInclude Include="mtgb\MTNet\TcpLobby.h" />
-    <ClInclude Include="mtgb\MTNet\Utility.h" />
     <ClInclude Include="mtgb\MTStringUtility.h" />
     <ClInclude Include="mtgb\OBJ.h" />
     <ClInclude Include="mtgb\PathUtility.h" />
@@ -217,7 +212,9 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\JsonUtility.h" />
-    <ClInclude Include="Source\Network\PIIO.h" />
+    <ClInclude Include="Source\Network\PIIO.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SampleGame.h" />

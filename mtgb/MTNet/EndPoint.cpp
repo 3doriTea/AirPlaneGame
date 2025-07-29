@@ -1,4 +1,6 @@
 #include "EndPoint.h"
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 
 mtnet::IPEndPoint::IPEndPoint(const IPAddress& _ipAddress, PortNumber _portNumber) :
 	addressInfo_{},

@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <sstream>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+//#include <WinSock2.h>
+//#include <WS2tcpip.h>
 #include <cassert>
+#include "MTBin/Common.h"
 
-#pragma comment(lib, "ws2_32.lib")
+//#pragma comment(lib, "ws2_32.lib")
 
 namespace mtnet
 {
@@ -17,6 +18,4 @@ namespace mtnet
 	using ResultCode = int;
 	// ó‚¯æ‚Á‚½ƒoƒCƒg”
 	using ReceivedLength = int;
-	// 1byte‚ÌŒ^
-	using Byte = char;
 }

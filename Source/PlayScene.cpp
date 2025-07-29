@@ -2,17 +2,22 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Camera.h"
+#include "Network/PIIO.h"
+
 
 using namespace mtgb;
+using Network::PIIO;
 
 namespace
 {
-	
+	static const mtnet::IPEndPoint LOCAL_IPEP{ "192.168.42.183", 60349 };
+	static const mtnet::IPEndPoint SERVER_IPEP{ "192.168.42.62", 60349 };
 }
 
 PlayScene::PlayScene()
 {
 	tBox_ = new TextBox();
+	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
 
 PlayScene::~PlayScene()
@@ -38,6 +43,11 @@ void PlayScene::Update()
 		Game::Exit();
 	}
 	//LOGF("ƒeƒXƒg");
+
+	if (InputData::GetKeyDown(KeyCode::F))
+	{
+		//ppiio_->Start(SERVER_IPEP);
+	}
 }
 
 void PlayScene::Draw() const

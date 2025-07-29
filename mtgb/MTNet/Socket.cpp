@@ -1,4 +1,6 @@
 ﻿#include "Socket.h"
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 
 mtnet::Socket::Socket(const IPEndPoint& _local) :
 	wsaData_{},
@@ -114,10 +116,10 @@ mtnet::ReceivedLength mtnet::Socket::Receive(Byte* buffer, const int& bufferLeng
 		Close(true);
 		return false;
 	}
-	return recv(connectingSocket_, buffer, bufferLength, 0);
+	return recv(connectingSocket_, reinterpret_cast<char*>(buffer), bufferLength, 0);
 }
 
-bool mtnet::Socket::TrySend(const Byte* buffer, const int& bufferLength)
+bool mtnet::Socket::TrySend(Byte* buffer, const int& bufferLength)
 {
 	if (connectingSocket_ == INVALID_SOCKET)
 	{
@@ -125,7 +127,7 @@ bool mtnet::Socket::TrySend(const Byte* buffer, const int& bufferLength)
 		return false;
 	}
 
-	result_ = send(connectingSocket_, buffer, bufferLength, 0);
+	result_ = send(connectingSocket_, reinterpret_cast<char*>(buffer), bufferLength, 0);
 	/*if (result_ == SOCKET_ERROR)
 	{
 		Close(true);
