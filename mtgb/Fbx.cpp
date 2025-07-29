@@ -66,10 +66,10 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 		pParts->Initialize();
 		instance.pParts_.push_back(pParts);
 	}
-	return (int)instance.pParts_.size() - 1;
+	return 0;
 }
 
-void mtgb::Fbx::Draw(const Transform& _transfrom, int _frame)
+void mtgb::Fbx::Draw(int _hModel, const Transform& _transfrom, int _frame)
 {
 	DirectX11Draw::SetBlendMode(BlendMode::Default);
 

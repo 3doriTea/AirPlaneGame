@@ -69,9 +69,9 @@ void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTr
 	Game::System<mtgb::OBJ>().Draw((int)_hOBJModel, _pTransform);
 }
 
-void mtgb::Draw::FBXModel(const Transform& _pTransform, const int _frame)
+void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame)
 {
-	Game::System<mtgb::Fbx>().Draw(_pTransform, _frame);
+	Game::System<mtgb::Fbx>().Draw((int)_hFBXModel, _pTransform, _frame);
 }
 
 mtgb::Draw::Draw() :

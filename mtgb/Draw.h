@@ -58,6 +58,7 @@ namespace mtgb
 			const Transform* _pTransform);
 
 		static void FBXModel(
+			const FBXModelHandle _hFBXModel,
 			const Transform& _pTransform,
 			const int _frame);
 
@@ -78,6 +79,7 @@ namespace mtgb
 			float y,
 			int size
 		);
+
 
 	public:
 		Draw();
