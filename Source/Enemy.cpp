@@ -24,5 +24,5 @@ void Enemy::Update()
 
 void Enemy::Draw() const
 {
-	Draw::OBJModel(hModel_, pTransform_);
+	//Draw::OBJModel(hModel_, pTransform_);
 }

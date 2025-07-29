@@ -47,7 +47,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_transfrom">座標系</param>
 		/// <param name="_frame">アニメーションフレーム</param>
-		void Draw(const Transform& _transfrom, int _frame);
+		void Draw(int _hModel, const Transform& _transfrom, int _frame);
 		/// <summary>
 		/// 解放処理
 		/// </summary>
