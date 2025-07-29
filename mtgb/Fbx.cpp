@@ -30,6 +30,13 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 	FbxString fileName{ _fileName.c_str() };
 	FbxImporter* fbxImporter{ FbxImporter::Create(instance.pFbxManager_, "imp") };
 
+	if (!fbxImporter->Initialize(fileName.Buffer(), -1)) {
+		MessageBoxA(NULL, fbxImporter->GetStatus().GetErrorString(), "FBX Import Error", MB_OK);
+		// ‚à‚µ‚­‚ÍƒƒOo—Í
+	}
+	//none of the registered readers can process the file
+	/*massert(fbxImporter->Initialize(fileName.Buffer(), -1)
+		&& "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");*/
 	massert(fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings())
 		&& "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");
 
