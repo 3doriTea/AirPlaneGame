@@ -216,6 +216,7 @@
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\Network\FanCon.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\SampleGame.h" />
