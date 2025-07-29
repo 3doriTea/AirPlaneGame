@@ -163,7 +163,7 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 			{
 				static_cast<float>(position[0]),
 				static_cast<float>(position[1]),
-				static_cast<float>(position[2]),
+				-static_cast<float>(position[2]),
 			};
 
 			// í∏ì_ÇÃñ@ê¸
