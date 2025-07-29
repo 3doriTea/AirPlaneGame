@@ -13,7 +13,7 @@ struct IDXGIOutput;
 struct ID3D11RenderTargetView;
 struct ID3D11Texture2D;
 struct ID3D11DepthStencilView;
-class  WindowContext;
+//class  WindowContext;
 typedef struct HWND__* HWND;
 
 namespace mtgb
@@ -37,9 +37,9 @@ namespace mtgb
 		void CreateRenderTargetView(IDXGISwapChain1* pSwapChain1, ID3D11RenderTargetView** ppRenderTargetView);
 		void CreateViewport(D3D11_VIEWPORT& viewport);
 		void CreateDepthStencilAndDepthStencilView(ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
-		void InitializeWindowContext(WindowContext& context, bool isMultiMonitor);
+		//void InitializeWindowContext(WindowContext& context, bool isMultiMonitor);
 
-		void ChangeRenderContext(WindowContext& context);
+		//void ChangeRenderContext(WindowContext& context);
 		void ChangeViewport(const D3D11_VIEWPORT& viewport);
 		void ChangeRenderTargets(ID3D11RenderTargetView* pRenderTargetView, ID3D11DepthStencilView* pDepthStencilView);
 		void ChangeSwapChain(IDXGISwapChain1* pSwapChain1);

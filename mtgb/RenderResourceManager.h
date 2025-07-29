@@ -3,6 +3,7 @@
 #include <vector>
 #include <functional>
 #include <type_traits>
+#include <map>
 #include "RenderResource.h"
 typedef struct HWND__* HWND;
 
@@ -13,7 +14,7 @@ public:
 	using ResourceTuple = std::tuple<Args*...>;
 	RenderResourceManager();
 
-	int CreateRenderResource(HWND _hWnd);
+	void CreateRenderResource(HWND _hWnd);
 	template<std::size_t I>
 	void InitializeResource(ResourceTuple& tuple, HWND _hWnd);
 	template<std::size_t... Is>
@@ -22,7 +23,7 @@ public:
 		(InitializeResource<Is>(_tuple, _hWnd), ...);
 	}
 private:
-	std::vector<ResourceTuple> resources_;
+	std::map<HWND,ResourceTuple> resources_;
 };
 
 template<class ...Args>
@@ -37,12 +38,11 @@ inline RenderResourceManager<Args...>::RenderResourceManager()
 }
 
 template<class ...Args>
-inline int RenderResourceManager<Args...>::CreateRenderResource(HWND _hWnd)
+inline void RenderResourceManager<Args...>::CreateRenderResource(HWND _hWnd)
 {
 	ResourceTuple tuple{};
 	InitializeSequentially(tuple, _hWnd, std::index_sequence_for<Args...>{});
-	resources_.push_back(std::move(tuple));
-	return resources_.size() - 1;
+	resources_.insert(std::make_pair(_hWnd,std::move(tuple));
 }
 
 template<class ...Args>

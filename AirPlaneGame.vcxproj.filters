@@ -342,12 +342,6 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\WindowRenderContext.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\WindowManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\DoubleWindow.cpp">
       <Filter>mtgb\System\Window</Filter>
     </ClCompile>
@@ -395,6 +389,12 @@
     </ClCompile>
     <ClCompile Include="mtgb\Direct2DResource.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowManager.cpp">
+      <Filter>mtgb\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowContext.cpp">
+      <Filter>mtgb\System\Window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

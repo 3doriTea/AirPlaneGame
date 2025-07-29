@@ -34,14 +34,12 @@ public:
 	std::wstring windowClassName_;
 	bool isActive_;
 
-	IDXGISwapChain1* pSwapChain_;
+	/*IDXGISwapChain1* pSwapChain_;
 	IDXGIOutput* pOutput_;
 	ID3D11RenderTargetView* pRenderTargetView_;
 	ID3D11Texture2D* pDepthStencil_;
 	ID3D11DepthStencilView* pDepthStencilView_;
-	D3D11_VIEWPORT viewport_;
-
-	int resourceHandle_;
+	D3D11_VIEWPORT viewport_;*/
 
 	int outputIndex_;
 	static int outputCount;
