@@ -707,4 +707,7 @@
       <Filter>Assets</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Object Include="Assets\Model\Test.obj" />
+  </ItemGroup>
 </Project>

@@ -248,7 +248,9 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Object Include="Assets\Test.obj" />
+    <Object Include="Assets\Model\Test.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

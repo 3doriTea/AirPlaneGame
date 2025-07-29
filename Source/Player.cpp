@@ -88,7 +88,7 @@ void Player::Draw() const
 	draw.point = mousePos;
 	draw.size = Image::GetSize(hImage_);
 	
-	//Draw::OBJModel(hModel_, pTransform_);
+	Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
 	//MTImGui::ShowInspector(&speed, "speed");
