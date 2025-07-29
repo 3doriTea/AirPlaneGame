@@ -16,7 +16,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.SetName("player")
 		.SetPosition(Vector3(0, 0, 0))
 		.SetRotate(Quaternion::Identity())
-		.SetScale(Vector3::One())
+		.SetScale(Vector3(100,100,100))
 		.Build()),
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() }
@@ -26,9 +26,10 @@ Player::Player() : GameObject(GameObjectBuilder()
 	str = "Hello,World!";
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
-	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
+	hModel_ = OBJ::Load("Model/airplane.obj");
 	hText = Text::Load(str,36);
-	pTransform_->position_.z = 5.0f;
+	pTransform_->position_.z = 1.0f;
+	pTransform_->scale_ = Vector3(100, 100, 100);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01, [this]() {timer += 10; });
