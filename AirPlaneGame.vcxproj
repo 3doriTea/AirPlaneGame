@@ -44,7 +44,7 @@
     <ClCompile Include="mtgb\Draw.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
     <ClCompile Include="mtgb\Fbx.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="mtgb\FbxParts.cpp">

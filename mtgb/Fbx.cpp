@@ -2,6 +2,7 @@
 #include "ReleaseUtility.h"
 #include "FbxParts.h"
 #include "DirectX11Draw.h"
+#include "MTAssert.h"
 
 
 mtgb::Fbx::Fbx()
@@ -15,6 +16,39 @@ mtgb::Fbx::~Fbx()
 
 void mtgb::Fbx::Load(const std::string& _fileName)
 {
+	pFbxManager_ = FbxManager::Create();
+	pFbxScene_ = FbxScene::Create(pFbxManager_, "fbxscene");
+	FbxString fileName{ _fileName.c_str() };
+	FbxImporter* fbxImporter{ FbxImporter::Create(pFbxManager_, "imp") };
+
+	massert(fbxImporter->Initialize(fileName.Buffer(), -1, pFbxManager_->GetIOSettings())
+		&& "fbxImporterの初期化に失敗した @Fbx::Load");
+
+	fbxImporter->Import(pFbxScene_);
+	SAFE_DESTROY(fbxImporter);
+
+	FbxGeometryConverter geometryConverter{ pFbxManager_ };
+
+	// アニメーションタイムモードの取得
+	frameRate_ = pFbxScene_->GetGlobalSettings().GetTimeMode();
+
+	// 現在のカレントディレクトリを取得
+	char defaultCurrentDirectory[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, defaultCurrentDirectory);
+
+	// カレントディレクトリを移動
+	char directory[MAX_PATH]{};
+	_splitpath_s(_fileName.c_str(), nullptr, 0, directory, MAX_PATH, nullptr, 0, nullptr, 0);
+	SetCurrentDirectory(directory);
+
+	int meshCount{ pFbxScene_->GetSrcObjectCount<FbxMesh>() };
+	for (int i = 0; i < meshCount; i++)
+	{
+		// すべてのメッシュデータを取得できるらしい
+		FbxMesh* pMesh{ pFbxScene_->GetSrcObject<FbxMesh>() };
+
+		FbxParts* pParts{ new FbxParts{} };
+	}
 }
 
 void mtgb::Fbx::Draw(const Transform& _transfrom, int _frame)
