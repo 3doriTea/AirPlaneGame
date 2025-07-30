@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
 #include <sstream>
-//#include <WinSock2.h>
-//#include <WS2tcpip.h>
 #include <cassert>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 #include "MTBin/Common.h"
 
-//#pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 namespace mtnet
 {

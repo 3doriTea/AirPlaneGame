@@ -1,6 +1,5 @@
 ﻿#include "Socket.h"
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+
 
 mtnet::Socket::Socket(const IPEndPoint& _local) :
 	wsaData_{},

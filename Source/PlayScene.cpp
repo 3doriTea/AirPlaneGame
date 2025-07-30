@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Camera.h"
 #include "Network/PIIO.h"
+//#include "MTNet/Common.h"
 
 
 using namespace mtgb;
@@ -46,7 +47,7 @@ void PlayScene::Update()
 
 	if (InputData::GetKeyDown(KeyCode::F))
 	{
-		//ppiio_->Start(SERVER_IPEP);
+		ppiio_->Start(SERVER_IPEP);
 	}
 }
 

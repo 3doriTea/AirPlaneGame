@@ -1,5 +1,6 @@
 #include "PIIO.h"
 #include "MTBin/MemoryStream.h"
+#include "Debug.h"
 
 #define LOCK(m) std::lock_guard<std::mutex> lock(m)
 
@@ -25,61 +26,66 @@ Network::PIIO::~PIIO()
 
 void Network::PIIO::Start(const mtnet::IPEndPoint& _serverIPEP)
 {
-
 	sessionThread_ = std::thread
 	{
 		[&, this]() -> void
 		{
-			using mtbin::Byte;
-			using SeekDir = mtbin::MemoryStream::SeekDir;
-			using mtbin::MemoryStream;
-
-			isRunning_ = true;
-
-			// Ç¢Ç¥ê⁄ë±
-			client_.Connect(_serverIPEP);
-
-			Byte* pSendBuffer{ new Byte[BUFFER_SIZE]{} };
-
-			MemoryStream sendMS{ pSendBuffer, BUFFER_SIZE };
-
-			auto SendString
+			try
 			{
-				[&, this](const char* _string) -> void
+				using mtbin::Byte;
+				using SeekDir = mtbin::MemoryStream::SeekDir;
+				using mtbin::MemoryStream;
+
+				isRunning_ = true;
+
+				// Ç¢Ç¥ê⁄ë±
+				client_.Connect(_serverIPEP);
+
+				Byte* pSendBuffer{ new Byte[BUFFER_SIZE]{} };
+
+				MemoryStream sendMS{ pSendBuffer, BUFFER_SIZE };
+
+				auto SendString
 				{
-					ZeroMemory(pSendBuffer, BUFFER_SIZE);
-					std::memcpy(pSendBuffer, _string, std::strlen(_string));
-					client_.Send(pSendBuffer, BUFFER_SIZE);
-				}
-			};
-
-			while (true)
-			{
-				{  // îrëºêßå‰
-					LOCK(isStoppedMutex_);
-					if (isStopped_)
+					[&, this](const char* _string) -> void
 					{
-						break;
+						ZeroMemory(pSendBuffer, BUFFER_SIZE);
+						std::memcpy(pSendBuffer, _string, std::strlen(_string));
+						client_.Send(pSendBuffer, BUFFER_SIZE);
 					}
-				}
+				};
 
-				if (IsEmptySendQueue())  // ëóêMÇ∑ÇÈÇ‡ÇÃÇ™Ç»Ç…Ç‡Ç»Ç¢
-				{
-					std::this_thread::sleep_for(  // è≠Çµë“Ç¬
-						std::chrono::milliseconds(EMPTY_SLEEP_TIME_MILLSEC));
-				}
-				else
+				while (true)
 				{
 					{  // îrëºêßå‰
-						LOCK(sendQueueMutex_);
+						LOCK(isStoppedMutex_);
+						if (isStopped_)
+						{
+							break;
+						}
+					}
 
-						SendString(sendQueue_.back().c_str());
+					if (IsEmptySendQueue())  // ëóêMÇ∑ÇÈÇ‡ÇÃÇ™Ç»Ç…Ç‡Ç»Ç¢
+					{
+						std::this_thread::sleep_for(  // è≠Çµë“Ç¬
+							std::chrono::milliseconds(EMPTY_SLEEP_TIME_MILLSEC));
+					}
+					else
+					{
+						{  // îrëºêßå‰
+							LOCK(sendQueueMutex_);
 
-						sendQueue_.pop();  // Dequeue
+							SendString(sendQueue_.back().c_str());
+
+							sendQueue_.pop();  // Dequeue
+						}
 					}
 				}
 			}
-
+			catch (const char* message)
+			{
+				LOGF("%s\n", message);
+			}
 			isRunning_ = false;
 		}
 	};
