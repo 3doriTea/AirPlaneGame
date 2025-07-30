@@ -37,7 +37,7 @@ float4 PS(VS_OUT inData) : SV_Target
         diffuse = g_diffuseColor;
     }
     
-    float4 specuer = float4(0, 0, 0, 0);
+    float4 specuer = float4(255, 0, 0, 0);
     if (g_speculerColor.a != 0)
     {
         float4 r = reflect(lightDir, inData.normal);

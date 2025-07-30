@@ -325,6 +325,12 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 			// ’¸“_‚Ì–@ü
 			FbxVector4 normal;
 			pMesh_->GetPolygonVertexNormal(poly, vertex, normal);
+			pVertexes_[index].normal =
+			{
+				static_cast<float>(normal[0]),
+				static_cast<float>(normal[1]),
+				-static_cast<float>(normal[2]),
+			};
 		}
 	}
 
