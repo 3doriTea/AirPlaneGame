@@ -351,9 +351,6 @@
     <ClCompile Include="mtgb\MTNet\EndPoint.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\MTNet\LobbyCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\MTNet\Log.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -363,20 +360,14 @@
     <ClCompile Include="mtgb\MTNet\TcpClient.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\MTNet\TcpJoiner.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\MTNet\TcpListener.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\TcpLobby.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\Utility.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Fbx.cpp">
       <Filter>mtgb\System\Draw\Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Network\PIIO.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -659,9 +650,6 @@
     <ClInclude Include="mtgb\MTNet\EndPoint.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTNet\LobbyCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\MTNet\Log.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -671,16 +659,16 @@
     <ClInclude Include="mtgb\MTNet\TcpClient.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTNet\TcpJoiner.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\MTNet\TcpListener.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTNet\TcpLobby.h">
+    <ClInclude Include="mtgb\IncludingWindows.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTNet\Utility.h">
+    <ClInclude Include="Source\JsonUtility.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Network\PIIO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -692,6 +680,8 @@
     <None Include="Assets\Shader\3DCommon.hlsli">
       <Filter>Assets</Filter>
     </None>
+    <None Include="packages.config" />
+    <None Include="通信体系.txt" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">

@@ -105,7 +105,7 @@ void mtgb::DirectX11Manager::Initialize()
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+	DirectX11Draw::SetShader(ShaderType::FbxParts);
 
 #pragma region 深度バッファ作成
 	// 深度バッファの設定
@@ -214,6 +214,20 @@ void mtgb::DirectX11Manager::Initialize()
 		blendFactor,
 		0xffffffffU);
 #pragma endregion
+
+	//デフォルトのサンプラー
+	D3D11_SAMPLER_DESC desc = {};
+	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	desc.MinLOD = 0;
+	desc.MaxLOD = D3D11_FLOAT32_MAX;
+	DirectX11Draw::pDevice_->CreateSamplerState(&desc, &DirectX11Draw::pDefaultSamplerState_);
+
+	// テクスチャがない場合でも
+	DirectX11Draw::pContext_->PSSetSamplers(0, 1, &DirectX11Draw::pDefaultSamplerState_);
 
 	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	DirectX11Draw::pContext_->OMSetRenderTargets(
@@ -623,10 +637,10 @@ void mtgb::DirectX11Manager::CompileShader(
 	HRESULT hResult{};
 
 #pragma region 頂点シェーダ
-	// 頂点シェーダのインタフェース
+	// 項点シェーダのインタフェース
 	ID3DBlob* pCompileVS{ nullptr };
 
-	// 頂点シェーダのコンパイル
+	// 項点シェーダのコンパイル
 	hResult = D3DCompileFromFile(
 		_fileName.c_str(),  // ファイルパス
 		nullptr,            // シェーダマクロの配列

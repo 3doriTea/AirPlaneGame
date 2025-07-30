@@ -123,6 +123,7 @@ void mtgb::OBJ::Update()
 
 void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 {
+
 	//DirectX::XMMATRIX mWorld;
 	Matrix4x4* mWorld = new Matrix4x4();
 	transform->GenerateWorldMatrix(mWorld);

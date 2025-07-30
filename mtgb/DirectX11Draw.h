@@ -20,7 +20,7 @@ struct ID3D11InputLayout;
 struct ID3D11VertexShader;
 struct ID3D11PixelShader;
 struct ID3D11RasterizerState;
-
+struct ID3D11SamplerState;
 struct ID3D11Texture2D;
 
 namespace mtgb
@@ -145,5 +145,6 @@ namespace mtgb
 		static ID3D11BlendState* pBlendState_[static_cast<int8_t>(BlendMode::Max)];                // ブレンドの情報
 		static ShaderBundle shaderBundle_[static_cast<int8_t>(ShaderType::Max)];                   // シェーダのバンドル
 		static Vector4 backgroundColor_;
+		static ID3D11SamplerState* pDefaultSamplerState_;
 	};
 }

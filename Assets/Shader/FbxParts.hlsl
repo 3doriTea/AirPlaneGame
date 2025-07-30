@@ -27,7 +27,7 @@ float4 PS(VS_OUT inData) : SV_Target
     shade.a = 1;  // 透明度は操作したくないため、強制的にアルファ値1
     
     float4 diffuse;
-    if (g_hasTexture)
+    if (g_hasTexture == true)
     {
         diffuse = g_texture.Sample(g_sampler, inData.uv);
     }

@@ -19,6 +19,6 @@ struct VS_OUT
 {
     float4 position : SV_POSITION;  // 位置
     float4 normal : NORMAL0;  // 法線
-    float2 uv : TEXCCOR;  // uv座標
+    float2 uv : TEXCOORD; // uv座標
     float4 eye : NORMAL1;
 };

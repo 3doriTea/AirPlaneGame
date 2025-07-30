@@ -45,6 +45,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	using namespace DirectX;
 
 	DirectX11Draw::SetShader(ShaderType::FbxParts);
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };
@@ -109,7 +110,16 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 			DirectX11Draw::pContext_->PSSetSamplers(0, 1, &pSampler);
 
 			ID3D11ShaderResourceView* pShaderResourceView = pMaterial_[i].pTexture->GetShaderResourceView();
-			DirectX11Draw::pContext_->CSSetShaderResources(0, 1, &pShaderResourceView);
+			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pShaderResourceView);
+		}
+		else
+		{
+			// テクスチャがない場合でもデフォルトサンプラーを設定
+			ID3D11SamplerState* pDefaultSampler = nullptr;
+			DirectX11Draw::pContext_->PSSetSamplers(0, 1, &DirectX11Draw::pDefaultSamplerState_);
+			
+			ID3D11ShaderResourceView* pNullSRV = nullptr;
+			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pNullSRV);
 		}
 		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
 
@@ -120,6 +130,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 			0
 		);
 	}
+
 }
 
 void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _time)

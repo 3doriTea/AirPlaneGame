@@ -20,7 +20,8 @@ ID3D11RenderTargetView* mtgb::DirectX11Draw::pRenderTargetView_{ nullptr };     
 ID3D11DepthStencilView* mtgb::DirectX11Draw::pDepthStencilView_{ nullptr };                                // 深度バッファ
 ID3D11DepthStencilState* mtgb::DirectX11Draw::pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドによる深度バッファへの書き込み情報
 ID3D11Texture2D* mtgb::DirectX11Draw::pDepthStencil_{ nullptr };                                           // ブレンドの情報
-ID3D11BlendState* mtgb::DirectX11Draw::pBlendState_[static_cast<int8_t>(BlendMode::Max)]{};                // ブレンドの情報
+ID3D11BlendState* mtgb::DirectX11Draw::pBlendState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドの情報
+ID3D11SamplerState* mtgb::DirectX11Draw::pDefaultSamplerState_{ nullptr };
 mtgb::ShaderBundle mtgb::DirectX11Draw::shaderBundle_[static_cast<int8_t>(ShaderType::Max)]{};             // シェーダのバンドル
 mtgb::Vector4 mtgb::DirectX11Draw::backgroundColor_{ 0, 0, 0, 1 };
 
@@ -65,6 +66,7 @@ void mtgb::DirectX11Draw::Begin()
 	pContext_->ClearRenderTargetView(pRenderTargetView_, backgroundColor_.f);
 
 	pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1, 0U);
+
 }
 
 void mtgb::DirectX11Draw::End()
