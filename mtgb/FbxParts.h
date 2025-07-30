@@ -20,9 +20,11 @@ namespace mtgb
 {
 	class Fbx;
 	class Transform;
+	class DirectX11Draw;
 
 	class FbxParts : public IShader
 	{
+		friend DirectX11Draw;
 	public:
 		struct Vertex
 		{
@@ -40,6 +42,7 @@ namespace mtgb
 			Vector4 g_diffuse;  // 光があたったときへの拡散反射光(マテリアル色)
 			Vector4 g_ambient;  // 全体的な環境光 (光が当たらない場所にも明るく)
 			Vector4 g_speculer;  // 鏡面反射 (Lambertの場合は0)
+			Vector4 g_cameraPosition; // カメラの位置（ハイライトの計算に必要）
 			float g_shininess;     // スペキュラの強さ
 			bool g_isTexture;  // テクスチャの有無
 		};
@@ -89,7 +92,7 @@ namespace mtgb
 		/// モデルを描画する
 		/// </summary>
 		/// <param name="_transform">座標系</param>
-		void Draw(const Transform& _transfrom);
+		void Draw(const Transform& _transform);
 		/// <summary>
 		/// ボーンありでモデルを描画する
 		/// </summary>
@@ -175,6 +178,9 @@ namespace mtgb
 		std::unordered_map<std::string, Bone*> boneNamePair_;  // 関節名とのペア
 		Weight* pWeights_;  // ウェイト情報 (頂点に対する関節の影響度合い)
 		Vertex* pVertexes_;  // 頂点情報
+		DWORD** ppIndexData_;  // インデックス情報
+
+		ID3D11Buffer** ppIndexBuffer_;
 	};
 
 }
