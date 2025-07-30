@@ -1,6 +1,8 @@
 #include "Text.h"
 #include "DirectWrite.h"
 #include "MTStringUtility.h"
+#include "DirectX11Draw.h"
+
 int mtgb::Text::currentDefaultFontSize_{ 72 };
 int mtgb::Text::nextHandle_{ 0 };
 const wchar_t* mtgb::Text::DEFAULT_FONT_FAMILY_NAME{ L"Noto Sans JP" };
@@ -61,6 +63,8 @@ int mtgb::Text::Load(const std::string& str, int size)
 
 void mtgb::Text::Draw(int handle, float x, float y)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+
 	auto& handle_index = textLayoutDatas_->get<handle_order>();
 	auto it = handle_index.find(handle);
 

@@ -10,15 +10,15 @@ cbuffer global
     float4 g_diffuseColor;  // マテリアルの色
     float4 g_ambientColor;  // 影の色
     float4 g_speculerColor;  // スペキュラーからの色
+    float4 g_cameraPosition;  // 視点 (カメラの座標)
     float g_shuniness;  // ハイライトの強さ
     bool g_hasTexture;  // テクスチャを持っているか
-    float4 g_cameraPosition;  // 視点 (カメラの座標)
 };
 
 struct VS_OUT
 {
     float4 position : SV_POSITION;  // 位置
     float4 normal : NORMAL0;  // 法線
-    float2 uv : TEXCCOR;  // uv座標
+    float2 uv : TEXCOOR;  // uv座標
     float4 eye : NORMAL1;
 };

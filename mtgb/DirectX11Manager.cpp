@@ -105,7 +105,7 @@ void mtgb::DirectX11Manager::Initialize()
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+	DirectX11Draw::SetShader(ShaderType::FbxParts);
 
 #pragma region 深度バッファ作成
 	// 深度バッファの設定

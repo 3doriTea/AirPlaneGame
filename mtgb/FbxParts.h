@@ -43,8 +43,8 @@ namespace mtgb
 			Vector4 g_ambient;  // 全体的な環境光 (光が当たらない場所にも明るく)
 			Vector4 g_speculer;  // 鏡面反射 (Lambertの場合は0)
 			Vector4 g_cameraPosition; // カメラの位置（ハイライトの計算に必要）
-			float g_shininess;     // スペキュラの強さ
-			bool g_isTexture;  // テクスチャの有無
+			FLOAT g_shininess;     // スペキュラの強さ
+			BOOL g_isTexture;  // テクスチャの有無
 		};
 
 		/// <summary>

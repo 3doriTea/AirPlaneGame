@@ -20,7 +20,7 @@ VS_OUT VS(float4 position : POSITION, float4 normal : NORMAL, float2 uv : TEXCOO
 float4 PS(VS_OUT inData) : SV_Target
 {
     float4 lightDir = normalize(g_lightDir);
-    
+
     inData.normal = normalize(inData.normal);
     
     float4 shade = saturate(dot(inData.normal, -lightDir));
@@ -29,6 +29,7 @@ float4 PS(VS_OUT inData) : SV_Target
     float4 diffuse;
     if (g_hasTexture)
     {
+        //diffuse = g_diffuseColor;
         diffuse = g_texture.Sample(g_sampler, inData.uv);
     }
     else
@@ -43,6 +44,10 @@ float4 PS(VS_OUT inData) : SV_Target
         specuer = pow(saturate(dot(r, inData.eye)), g_shuniness) * g_speculerColor;
     }
     
-    //return float4(1, 1, 1, 1);
-    return diffuse * shade + diffuse * g_ambientColor + specuer;
+    //return float4(1, 0, 0, 1);
+    //return diffuse * shade + diffuse * g_ambientColor + specuer;
+    float4 color = diffuse * shade + diffuse * g_ambientColor + specuer;
+    color.a = 1;
+    return color;
+
 }

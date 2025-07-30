@@ -42,5 +42,5 @@ void Bullet::Update()
 void Bullet::Draw() const
 {
 	//Draw::Image(hImage_, pTransform_);
-	Draw::OBJModel(hModel_, pTransform_);
+	//Draw::OBJModel(hModel_, pTransform_);
 }
