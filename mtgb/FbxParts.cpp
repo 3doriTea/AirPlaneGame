@@ -32,8 +32,10 @@ void mtgb::FbxParts::Initialize()
 	vertexCount_ = pMesh_->GetControlPointsCount();			//頂点の数
 	polygonCount_ = pMesh_->GetPolygonCount();				//ポリゴンの数
 	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();	//ポリゴン頂点インデックス数 
-	IShader::Initialize();
 	InitializeMaterial();
+	InitializeVertexBuffer(DirectX11Draw::pDevice_);
+	InitializeIndexBuffer(DirectX11Draw::pDevice_);
+	InitializeConstantBuffer(DirectX11Draw::pDevice_);
 	InitializeSkelton();
 	//InitializeVertexBuffer();
 }
@@ -351,8 +353,8 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 
 void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 {
-	ID3D11Buffer** ppIndexBuffer{ new ID3D11Buffer* [materialCount_] };
-	DWORD** ppIndexData{ new DWORD* [materialCount_] };
+	ppIndexBuffer_ = new ID3D11Buffer* [materialCount_] ;
+	ppIndexData_ = new DWORD* [materialCount_] ;
 
 	int count{ 0 };
 	for (DWORD i = 0; i < materialCount_; i++)
@@ -367,7 +369,7 @@ void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 			{
 				for (DWORD k = 0; k < 3; k++)
 				{
-					pIndex[count + k] = pMesh_->GetPolygonVertex(j, k);
+					pIndex[count + k] = pMesh_->GetPolygonVertex(j, 2-k);
 				}
 				count += 3;
 			}
@@ -393,14 +395,14 @@ void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 		};
 
 		HRESULT hResult{};
-		hResult = _pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, &ppIndexBuffer[i]);
+		hResult = _pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, &ppIndexBuffer_[i]);
 
 		massert(SUCCEEDED(hResult)
 			&& "インデックスバッファの作成に失敗");
 
 		pMaterial_[i].polygonCount = count / 3;
-		ppIndexData[i] = new DWORD[count];
-		memcpy(ppIndexData[i], pIndex, sizeof(DWORD) * count);
+		ppIndexData_[i] = new DWORD[count];
+		memcpy(ppIndexData_[i], pIndex, sizeof(DWORD) * count);
 		SAFE_DELETE_ARRAY(pIndex);
 	}
 }
