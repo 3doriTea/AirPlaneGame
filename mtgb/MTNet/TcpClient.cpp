@@ -29,7 +29,7 @@ namespace mtnet
 		return Socket::Receive(_buffer, _bufferLength);
 	}
 
-	ReceivedLength mtnet::TcpClient::Send(const Byte* _buffer, const int& _bufferLength)
+	ReceivedLength mtnet::TcpClient::Send(Byte* _buffer, const int& _bufferLength)
 	{
 		if (TrySend(_buffer, _bufferLength) == true)
 		{

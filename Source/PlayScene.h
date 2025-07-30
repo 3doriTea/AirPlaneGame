@@ -2,6 +2,11 @@
 #include "GameScene.h"
 #include "TextBox.h"
 
+namespace Network
+{
+	class PIIO;
+}
+
 class PlayScene : public mtgb::GameScene
 {
 public:
@@ -15,4 +20,6 @@ public:
 
 private:
 	TextBox* tBox_;
+	Network::PIIO* ppiio_;
+	int val_;
 };

@@ -1,12 +1,12 @@
 #pragma once
 #include "ISystem.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <string>
 
 #ifdef _DEBUG
 
 #define LOGF(format, ...) \
-	Debug::LogF(format, __VA_ARGS__);
+	mtgb::Debug::LogF(format, __VA_ARGS__);
 
 #else
 

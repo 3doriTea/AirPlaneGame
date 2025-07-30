@@ -1,7 +1,7 @@
 #pragma once
 #include "string"
 #include <d3d11.h>
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <dxgi.h>
 #include <Dxgi1_2.h>
 //typedef struct tagWNDCLASSEXA WNDCLASSEX;

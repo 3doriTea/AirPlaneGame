@@ -1,5 +1,5 @@
 #include "Input.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <dinput.h>
 #include "InputData.h"
 #include "ReleaseUtility.h"

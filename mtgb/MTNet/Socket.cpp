@@ -1,5 +1,6 @@
 ﻿#include "Socket.h"
 
+
 mtnet::Socket::Socket(const IPEndPoint& _local) :
 	wsaData_{},
 	connectingSocket_{ INVALID_SOCKET },
@@ -100,6 +101,8 @@ bool mtnet::Socket::TryConnect(const IPEndPoint& _remote)
 		sizeof(remoteAddr));
 	if (result_ == SOCKET_ERROR)
 	{
+		int errorCode = WSAGetLastError();
+
 		Close(true);
 		return false;
 	}
@@ -114,10 +117,10 @@ mtnet::ReceivedLength mtnet::Socket::Receive(Byte* buffer, const int& bufferLeng
 		Close(true);
 		return false;
 	}
-	return recv(connectingSocket_, buffer, bufferLength, 0);
+	return recv(connectingSocket_, reinterpret_cast<char*>(buffer), bufferLength, 0);
 }
 
-bool mtnet::Socket::TrySend(const Byte* buffer, const int& bufferLength)
+bool mtnet::Socket::TrySend(Byte* buffer, const int& bufferLength)
 {
 	if (connectingSocket_ == INVALID_SOCKET)
 	{
@@ -125,7 +128,7 @@ bool mtnet::Socket::TrySend(const Byte* buffer, const int& bufferLength)
 		return false;
 	}
 
-	result_ = send(connectingSocket_, buffer, bufferLength, 0);
+	result_ = send(connectingSocket_, reinterpret_cast<char*>(buffer), bufferLength, 0);
 	/*if (result_ == SOCKET_ERROR)
 	{
 		Close(true);

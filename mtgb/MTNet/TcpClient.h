@@ -23,6 +23,6 @@ namespace mtnet
 		void Connect(const IPEndPoint& _remote);
 
 		ReceivedLength Receive(Byte* _buffer, const int& _bufferLength);
-		ReceivedLength Send(const Byte* _buffer, const int& _bufferLength);
+		ReceivedLength Send(Byte* _buffer, const int& _bufferLength);
 	};
 }

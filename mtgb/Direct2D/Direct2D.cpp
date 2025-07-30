@@ -7,7 +7,7 @@
 
 #include <d3d11.h>
 #include <d2d1.h>
-#include <Windows.h>
+#include "IncludingWindows.h"
 //#include <dwrite.h>  // direct write ‚Ì‚â‚Â
 
 #pragma comment(lib,"d3d11.lib")

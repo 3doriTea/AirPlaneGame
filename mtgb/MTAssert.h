@@ -1,6 +1,6 @@
 #pragma once
 #include <assert.h>
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <string>
 #include "Game.h"
 
