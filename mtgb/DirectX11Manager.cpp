@@ -584,19 +584,28 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.InstanceDataStepRate = 0,
 			},
 			{
+				.SemanticName = "NORMAL",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 1,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
 				.SemanticName = "TEXCOORD",
 				.SemanticIndex = 0,
 				.Format = DXGI_FORMAT_R32G32_FLOAT,
 				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
+				.AlignedByteOffset = vectorSize * 2,
 				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
 				.InstanceDataStepRate = 0,
 			},
 		};
 
 		CompileShader(
-			L"Shader/Sprite.hlsl",
-			ShaderType::Sprite2D,
+			L"Shader/FbxParts.hlsl",
+			ShaderType::FbxParts,
 			inputElementDesc,
 			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);

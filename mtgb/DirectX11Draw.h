@@ -36,7 +36,7 @@ namespace mtgb
 	{
 		Figure,
 		Sprite2D,
-
+		FbxParts,
 		Max,
 	};
 
