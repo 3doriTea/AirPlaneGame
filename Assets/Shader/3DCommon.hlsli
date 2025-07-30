@@ -10,9 +10,9 @@ cbuffer global
     float4 g_diffuseColor;  // マテリアルの色
     float4 g_ambientColor;  // 影の色
     float4 g_speculerColor;  // スペキュラーからの色
+    float4 g_cameraPosition;  // 視点 (カメラの座標)
     float g_shuniness;  // ハイライトの強さ
     bool g_hasTexture;  // テクスチャを持っているか
-    float4 g_cameraPosition;  // 視点 (カメラの座標)
 };
 
 struct VS_OUT

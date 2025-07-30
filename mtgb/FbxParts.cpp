@@ -44,6 +44,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 {
 	using namespace DirectX;
 
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	DirectX11Draw::SetShader(ShaderType::FbxParts);
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	// •`‰æî•ñ‚ðƒVƒF[ƒ_‚É“n‚·
@@ -102,7 +103,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_isTexture = pMaterial_[i].pTexture != nullptr;
 
 		DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata_);
-		memcpy_s(pdata_.pData, pdata_.RowPitch, (void*)(&cb), sizeof(cb));
+		memcpy_s(pdata_.pData, pdata_.RowPitch, reinterpret_cast<void*>(&cb), sizeof(ConstantBuffer));
 
 		if (cb.g_isTexture)
 		{
@@ -333,12 +334,12 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 	{
 		for (int i = 0; i < uvCount; i++)
 		{
-			FbxVector2 uv{ pUV->GetDirectArray().GetAt(i) };
+			fbxsdk::FbxVector2 uv{ pUV->GetDirectArray().GetAt(i) };
 			pVertexes_[i].uv =
 			{
 				static_cast<float>(uv.mData[0]),
-				1.0f - static_cast<float>(uv.mData[1]),
-				0.0f
+				static_cast<float>(1.0 - uv.mData[1]),
+				static_cast<float>(0.0)
 			};
 		}
 	}
