@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Sprite.h"
 #include "OBJ.h"
+#include "Fbx.h"
 #include "Text.h"
 #include "Model.h"
 #include "Transform.h"
@@ -66,6 +67,11 @@ void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int si
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)
 {
 	Game::System<mtgb::OBJ>().Draw((int)_hOBJModel, _pTransform);
+}
+
+void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame)
+{
+	Game::System<mtgb::Fbx>().Draw((int)_hFBXModel, _pTransform, _frame);
 }
 
 mtgb::Draw::Draw() :

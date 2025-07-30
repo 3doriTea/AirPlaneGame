@@ -6,11 +6,17 @@
 #include "Transform.h"
 #include "Debug.h"
 #include "MTStringUtility.h"
+#include "DirectX11Draw.h"
 
-
-mtgb::FbxParts::FbxParts(FbxNode* _pNode) :
-	pNode_{ _pNode }
+mtgb::FbxParts::FbxParts(FbxNode* parent): pMesh_(nullptr)
 {
+	if (parent != nullptr)
+	{
+		pNode_ = parent;
+		pMesh_ = parent->GetMesh();
+	}
+
+	massert(pMesh_ != nullptr && "FbxParts: pMesh_ is null");
 }
 
 mtgb::FbxParts::~FbxParts()
@@ -19,7 +25,15 @@ mtgb::FbxParts::~FbxParts()
 
 void mtgb::FbxParts::Initialize()
 {
+	pMesh_->SplitPoints(FbxLayerElement::eTextureDiffuse);
+	//各情報の個数を取得
+	vertexCount_ = pMesh_->GetControlPointsCount();			//頂点の数
+	polygonCount_ = pMesh_->GetPolygonCount();				//ポリゴンの数
+	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();	//ポリゴン頂点インデックス数 
 	IShader::Initialize();
+	InitializeMaterial();
+	InitializeSkelton();
+	//InitializeVertexBuffer()
 }
 
 void mtgb::FbxParts::Draw(const Transform& _transfrom)
@@ -27,7 +41,7 @@ void mtgb::FbxParts::Draw(const Transform& _transfrom)
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };
-	//DirectX11Draw::
+	//DirectX11Draw::pContext_->Map
 }
 
 void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _time)
@@ -93,7 +107,7 @@ void mtgb::FbxParts::DrawSkinAnimation(const std::string& _takeName, const Trans
 
 void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
 {
-	
+	Draw(_transform);
 }
 
 bool mtgb::FbxParts::TryGetBonePosition(const std::string& _boneName, Vector3* _pPosition)
@@ -149,7 +163,7 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 			{
 				static_cast<float>(position[0]),
 				static_cast<float>(position[1]),
-				static_cast<float>(position[2]),
+				-static_cast<float>(position[2]),
 			};
 
 			// 頂点の法線

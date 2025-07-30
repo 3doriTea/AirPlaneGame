@@ -202,10 +202,10 @@ void mtgb::OBJ::InitMesh(const std::string& fileName, SimpleMesh* mesh)
 	fopen_s(&fp, fileName.c_str(), "rt");
 	
 	// ファイルオープンの確認
-	if (fp == NULL) {
+	/*if (fp == NULL) {
 		massert(false && "OBJファイルのオープンに失敗 @OBJ::InitMesh");
 		return;
-	}
+	}*/
 
 	// 初期化
 	mesh->numVert = 0;

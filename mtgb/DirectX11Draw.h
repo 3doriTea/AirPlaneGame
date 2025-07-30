@@ -28,7 +28,7 @@ namespace mtgb
 	class Figure;
 	class IShader;
 	class MTImGui;
-
+	class FbxParts;
 	/// <summary>
 	/// シェーダタイプ
 	/// </summary>
@@ -92,6 +92,7 @@ namespace mtgb
 		friend class Direct2D;
 		friend class OBJ;
 		friend class MTImGui;
+		friend class FbxParts;
 
 	public:
 		/// <summary>

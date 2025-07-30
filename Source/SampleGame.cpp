@@ -43,6 +43,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<Image>(SystemUpdateType::DontCallMe);
 	_register.Set<Audio>(SystemUpdateType::Frame);
 	_register.Set<OBJ>(SystemUpdateType::Frame);
+	_register.Set<Fbx>(SystemUpdateType::Frame);
 	_register.Set<Text>(SystemUpdateType::Frame);
 
 	_register.Set<Draw>(SystemUpdateType::DontCallMe);
