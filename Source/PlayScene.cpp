@@ -60,6 +60,27 @@ void PlayScene::Update()
 	{
 		ppiio_->SendLED(LED_STATUS::LEDS_CLEAR);
 	}
+
+	if (InputData::GetKeyDown(KeyCode::Q))
+	{
+		val_ += 10;
+		if (val_ > 100)
+		{
+			val_ = 100;
+		}
+
+		ppiio_->SendFan(static_cast<float>(val_) / 100.0f);
+	}
+	if (InputData::GetKeyDown(KeyCode::E))
+	{
+		val_ -= 10;
+		if (val_ < 0)
+		{
+			val_ = 0;
+		}
+
+		ppiio_->SendFan(static_cast<float>(val_) / 100.0f);
+	}
 }
 
 void PlayScene::Draw() const
