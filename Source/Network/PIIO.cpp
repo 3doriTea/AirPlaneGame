@@ -51,7 +51,7 @@ void Network::PIIO::Start(const mtnet::IPEndPoint& _serverIPEP)
 					{
 						ZeroMemory(pSendBuffer, BUFFER_SIZE);
 						std::memcpy(pSendBuffer, _string, std::strlen(_string));
-						client_.Send(pSendBuffer, BUFFER_SIZE);
+						client_.Send(pSendBuffer, std::strlen(_string));
 					}
 				};
 
@@ -104,7 +104,7 @@ void Network::PIIO::SendLED(const LED_STATUS _status)
 {
 	json data{};
 	data["type"] = "ledset";
-	data["rate"] = _status;
+	data["stat"] = _status;
 
 	SendJson(data);
 }

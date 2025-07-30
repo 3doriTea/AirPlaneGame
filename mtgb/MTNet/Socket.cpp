@@ -101,6 +101,8 @@ bool mtnet::Socket::TryConnect(const IPEndPoint& _remote)
 		sizeof(remoteAddr));
 	if (result_ == SOCKET_ERROR)
 	{
+		int errorCode = WSAGetLastError();
+
 		Close(true);
 		return false;
 	}

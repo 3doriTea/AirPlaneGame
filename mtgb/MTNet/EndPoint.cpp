@@ -24,7 +24,7 @@ bool mtnet::IPEndPoint::TryGenerateSockAddrIn(SOCKADDR_IN* _addr) const
 	std::string pickString{};
 
 	_addr->sin_family = AF_INET;
-	_addr->sin_port = portNumber_;
+	_addr->sin_port = htons(portNumber_);
 
 	if (!std::getline(addressString, pickString, '.'))
 	{
