@@ -4,6 +4,8 @@
 
 namespace mtnet
 {
+	using mtbin::Byte;
+
 	class Socket
 	{
 	public:
@@ -62,7 +64,7 @@ namespace mtnet
 		/// <param name="buffer">送信バッファ</param>
 		/// <param name="bufferLength">バッファの長さ</param>
 		/// <returns>送信できた true / false</returns>
-		bool TrySend(const Byte* buffer, const int& bufferLength);
+		bool TrySend(Byte* buffer, const int& bufferLength);
 
 		/// <summary>
 		/// 現在の結果コードを取得する

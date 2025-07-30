@@ -1,5 +1,5 @@
 #include "MainWindow.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include "Game.h"
 #include "MTAssert.h"
 #include "Screen.h"

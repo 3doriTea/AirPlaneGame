@@ -1,6 +1,8 @@
 #pragma once
 #include "Common.h"
 
+
+//typedef struct SOCKADDR_IN* PSOCKADDR_IN;
 // エンドポイント: クライアントとサービスひっくるめて
 
 namespace mtnet

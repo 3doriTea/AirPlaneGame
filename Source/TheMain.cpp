@@ -1,4 +1,4 @@
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <mtgb.h>
 #include "SampleGame.h"
 

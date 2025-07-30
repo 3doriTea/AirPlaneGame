@@ -1,6 +1,6 @@
 #include "WindowManager.h"
 #include "WindowRenderContext.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include "MTAssert.h"
 
 MSG* mtgb::WindowManager::pPeekedMessage_{ nullptr };

@@ -1,5 +1,5 @@
 #include "GameTime.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include "Game.h"
 
 #pragma comment(lib, "Winmm.lib")

@@ -1,7 +1,7 @@
 #include "DirectX11Manager.h"
 #include "Game.h"
 #include "MTAssert.h"
-#include <Windows.h>
+#include "IncludingWindows.h"
 #include <d3d11.h>
 #include <dxgi1_2.h>
 #include <DirectXMath.h>
