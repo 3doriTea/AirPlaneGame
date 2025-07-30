@@ -378,23 +378,26 @@
     <ClCompile Include="mtgb\MTNet\Utility.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\RenderResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\DXGIResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\Direct3DResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\Direct2DResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\WindowManager.cpp">
       <Filter>mtgb\System\Window</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\WindowContext.cpp">
       <Filter>mtgb\System\Window</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\DXGIResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Direct2DResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Direct3DResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RenderResourceManager.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RenderResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

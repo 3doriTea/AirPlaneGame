@@ -35,11 +35,21 @@
 #include "MTImGui.h"
 #include "Text.h"
 #include "DoubleWindow.h"
+#include "RenderResourceManager.h"
 
 #pragma endregion
 
 #include "GameObjectBuilder.h"
 #include "GameObject.h"
+
+#pragma region Resource
+
+#include "RenderResource.h"
+#include "DXGIResource.h"
+#include "Direct3DResource.h"
+#include "Direct2DResource.h"
+
+#pragma endregion
 
 #pragma region Data
 

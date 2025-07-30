@@ -1,59 +1,109 @@
 #pragma once
-#include <tuple>
-#include <vector>
 #include <functional>
-#include <type_traits>
 #include <map>
+#include "ISystem.h"
 #include "RenderResource.h"
+
 typedef struct HWND__* HWND;
 
-template <class... Args>
-class RenderResourceManager
+namespace mtgb
 {
-public:
-	using ResourceTuple = std::tuple<Args*...>;
-	RenderResourceManager();
+    // 型を隠蔽するための基底クラス
+    class IRenderResourceCollection
+    {
+    public:
+        virtual ~IRenderResourceCollection() = default;
+        virtual void CreateResource(HWND hWnd) = 0;
+        virtual void ChangeResource(HWND hWnd) = 0;
+    };
 
-	void CreateRenderResource(HWND _hWnd);
-	template<std::size_t I>
-	void InitializeResource(ResourceTuple& tuple, HWND _hWnd);
-	template<std::size_t... Is>
-	void InitializeSequentially(ResourceTuple& _tuple, HWND _hWnd, std::index_sequence<Is...>)
-	{
-		(InitializeResource<Is>(_tuple, _hWnd), ...);
-	}
-private:
-	std::map<HWND,ResourceTuple> resources_;
-};
+    // テンプレート実装
+    template<class... Args>
+    class RenderResourceCollection : public IRenderResourceCollection
+    {
+    public:
 
-template<class ...Args>
-inline RenderResourceManager<Args...>::RenderResourceManager()
-{
-	static constexpr bool allAreBaseOfRenderResource =
-		(std::is_base_of_v<RenderResource, Args> && ...);
+        RenderResourceCollection()
+        {
+			static constexpr bool allAreBaseOfRenderResource =
+				(std::is_base_of_v<RenderResource, Args> && ...);
 
-	static_assert(allAreBaseOfRenderResource
-		&& "RenderResourceクラスを継承していないクラスはインスタンスできません。");
+			static_assert(allAreBaseOfRenderResource, "Args...はRenderResourceの派生型である必要があります");
+		}
 
-}
+        ~RenderResourceCollection() 
+        {
+            resources_.clear(); 
+        }
 
-template<class ...Args>
-inline void RenderResourceManager<Args...>::CreateRenderResource(HWND _hWnd)
-{
-	ResourceTuple tuple{};
-	InitializeSequentially(tuple, _hWnd, std::index_sequence_for<Args...>{});
-	resources_.insert(std::make_pair(_hWnd,std::move(tuple));
-}
+        using ResourceTuple = std::tuple<Args*...>;
+        
+        void CreateResource(HWND hWnd) override
+        {
+            ResourceTuple tuple{};
+            InitializeSequentially(tuple, hWnd, std::index_sequence_for<Args...>{});
+            resources_[hWnd] = std::move(tuple);
+        }
 
-template<class ...Args>
-template<std::size_t I>
-inline void RenderResourceManager<Args...>::InitializeResource(ResourceTuple& tuple, HWND _hWnd)
-{
-	//I番目の型を取得
-	using ResourceType = std::tuple_element_t<I, std::tuple<Args...>>;
+        void ChangeResource(HWND hWnd) override
+        {
+            std::apply([this](auto*... _resource)
+                {
+                    (_resource->SetResource(),...);
+                }, resources_[hWnd]);
+        }
+    private:
+        /// <summary>
+        /// ウィンドウに固有のリソース達
+        /// </summary>
+        std::map<HWND, ResourceTuple> resources_;
+        
+        template<std::size_t... Is>
+        void InitializeSequentially(ResourceTuple& tuple, HWND hWnd, std::index_sequence<Is...>)
+        {
+            (InitializeResource<Is>(tuple, hWnd), ...);
+        }
+        
+        template<std::size_t I>
+        void InitializeResource(ResourceTuple& tuple, HWND hWnd)
+        {
+            using ResourceType = std::tuple_element_t<I, std::tuple<Args...>>;
+            std::get<I>(tuple) = new ResourceType;
+            std::get<I>(tuple)->Initialize(tuple, hWnd);
+        }
+    };
 
-	//newで作成
-	std::get<I>(tuple) = new ResourceType;
+    class RenderResourceManager : public ISystem
+    {
+    public:
+        RenderResourceManager();
+        void Initialize() override;
+        void Update() override;
+        
+        void Release();
+        /// <summary>
+        /// 型を指定して登録する関数
+        /// </summary>
+        /// <typeparam name="...Args">指定した順番に初期化される</typeparam>
+        template<class... Args>
+        void RegisterResourceTypes()
+        {
+            pCollection_ = new RenderResourceCollection<Args...>();
+        }
+        /// <summary>
+        /// 描画に必要なリソースを作成
+        /// </summary>
+        /// <param name="hWnd">作成するウィンドウのハンドル</param>
+        void CreateRenderResource(HWND hWnd);
 
-	std::get<I>(tuple)->Initialize(tuple, _hWnd);
+        /// <summary>
+        /// 描画リソースを切り替える
+        /// </summary>
+        /// <param name="hWnd">切り替えるウィンドウのハンドル</param>
+        void ChangeRenderResource(HWND hWnd);
+        
+    private:
+        IRenderResourceCollection* pCollection_;
+    };
+    
 }

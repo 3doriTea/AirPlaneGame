@@ -124,8 +124,8 @@ void mtgb::OBJ::Update()
 void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 {
 	//DirectX::XMMATRIX mWorld;
-	Matrix4x4* mWorld = new Matrix4x4();
-	transform->GenerateWorldMatrix(mWorld);
+	Matrix4x4 mWorld;
+	transform->GenerateWorldMatrix(&mWorld);
 
 	DirectX::XMMATRIX mView;
 	// ビュートランスフォーム（視点座標変換）
@@ -156,7 +156,7 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 		&& "Mapに失敗 @OBJ::Draw");
 	if (SUCCEEDED(hResult))
 	{
-		DirectX::XMMATRIX mWVP = (*mWorld) * mView * mProj;
+		DirectX::XMMATRIX mWVP = (mWorld) * mView * mProj;
 		//cb.mWVP = DirectX::XMMatrixTranspose(*mWorld);
 		cb.mWVP = DirectX::XMMatrixTranspose(mWVP);
 
@@ -186,7 +186,6 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 		//DirectX11Draw::End();
 	}
 
-	delete mWorld;
 }
 
 

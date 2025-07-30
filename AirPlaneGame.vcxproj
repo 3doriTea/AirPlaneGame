@@ -109,6 +109,7 @@
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
     <ClCompile Include="mtgb\RenderResource.cpp" />
+    <ClCompile Include="mtgb\RenderResourceManager.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
     <ClCompile Include="mtgb\RigidBodyCP.cpp" />
     <ClCompile Include="mtgb\SceneSystem.cpp" />

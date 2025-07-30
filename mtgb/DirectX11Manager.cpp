@@ -347,7 +347,7 @@ void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDX
 	
 	//バックバッファ受け取る
 	ID3D11Texture2D* pBackBuffer = nullptr;
-	hResult = DirectX11Draw::pSwapChain1_->GetBuffer(0, _uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	hResult = pSwapChain1->GetBuffer(0, _uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
 	massert(SUCCEEDED(hResult)
 		&& "GetBufferに失敗 @DirectX11Manager::CreateDXGISurface");
 

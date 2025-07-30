@@ -100,14 +100,8 @@ LRESULT WindowContext::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, L
 WindowContext::WindowContext()  
    : hWnd_(nullptr),  
      pPeekedMessage_(nullptr),  
-     pSwapChain_(nullptr),  
-     pOutput_(nullptr),  
-     pRenderTargetView_(nullptr),  
-     pDepthStencil_(nullptr),  
-     pDepthStencilView_(nullptr),  
      isActive_(false),  
      outputIndex_(0),  
-     viewport_({0}),  
      windowClass_({0}),  
      windowRect_({0})  
 {  

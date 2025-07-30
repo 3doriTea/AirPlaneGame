@@ -41,7 +41,7 @@ namespace mtgb
 		// Direct2D‚Ì‰Šú‰»ˆ—
 		Direct2D& direct2D = Game::System<Direct2D>();
 
-		direct2D->CreateD2DRenderTarget(dxgiResource->pDXGISurface_, &pRenderTarget_);
-		direct2D->CreateSolidColorBrush(D2D1::ColorF::White, pRenderTarget_, &pD2DBrush_);
+		direct2D.CreateD2DRenderTarget(dxgiResource->pDXGISurface_, &pRenderTarget_);
+		direct2D.CreateSolidColorBrush(D2D1::ColorF::White, pRenderTarget_, &pD2DBrush_);
 	}
 }

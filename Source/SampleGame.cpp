@@ -24,13 +24,20 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<WindowManager>(SystemUpdateType::Cycle);
 
 	_register.Set<DirectX11Manager>(SystemUpdateType::Frame);
-	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<Direct2D>(SystemUpdateType::Frame);
 	_register.Set<DirectWrite>(SystemUpdateType::Frame);
 	//_register.Set<MTImGui>(SystemUpdateType::Frame);
 
-	_register.Set<Input>(SystemUpdateType::Frame);
 
+	_register.Set<RenderResourceManager>(SystemUpdateType::DontCallMe);
+	Game::System<RenderResourceManager>().RegisterResourceTypes<
+		DXGIResource,
+		Direct3DResource,
+		Direct2DResource
+	>();
+
+	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
+	_register.Set<Input>(SystemUpdateType::Frame);
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
 	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);

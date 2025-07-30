@@ -9,6 +9,7 @@ struct D3D11_INPUT_ELEMENT_DESC;
 struct CD3D11_RASTERIZER_DESC;
 struct D3D11_VIEWPORT;
 struct IDXGISwapChain1;
+struct IDXGISurface;
 struct IDXGIOutput;
 struct ID3D11RenderTargetView;
 struct ID3D11Texture2D;

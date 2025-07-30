@@ -33,7 +33,7 @@ namespace mtgb
 		}
 
 		// レンダーターゲットビューを作成
-		dx11Manager.CreateRenderTargetView(dxgi->GetSwapChain(), &pRenderTargetView_);
+		dx11Manager.CreateRenderTargetView(dxgi->pSwapChain1_, &pRenderTargetView_);
 
 		// ビューポートを作成
 		dx11Manager.CreateViewport(viewPort_);

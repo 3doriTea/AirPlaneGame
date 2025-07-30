@@ -30,8 +30,8 @@ namespace mtgb
 
 	private:
 		static ID2D1Factory* pD2DFactory_;
-		static IDXGISurface* pDXGISurface_;
-		static ID2D1SolidColorBrush* pD2DBrush_;
-		static ID2D1RenderTarget* pRenderTarget_;
+		static IDXGISurface* pDefDXGISurface_;
+		static ID2D1SolidColorBrush* pDefD2DBrush_;
+		static ID2D1RenderTarget* pDefRenderTarget_;
 	};
 }
