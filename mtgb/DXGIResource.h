@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderResource.h"
+#include "WindowContextResource.h"
 #include "Game.h"
 #include "ISystem.h"
 #include "DirectX11Manager.h"
@@ -10,7 +10,7 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
-	class DXGIResource : public RenderResource
+	class DXGIResource : public WindowContextResource
 	{
 	public:
 		template<typename... Args>

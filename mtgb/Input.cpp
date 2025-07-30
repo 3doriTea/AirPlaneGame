@@ -6,6 +6,7 @@
 #include "MTAssert.h"
 #include "MainWindow.h"
 #include "DoubleWindow.h"
+#include "InputResource.h"
 
 namespace
 {
@@ -143,4 +144,57 @@ void mtgb::Input::UpdateMousePositionData(
 {
 	InputData::mousePosition_.x = _x;
 	InputData::mousePosition_.y = _y;
+}
+
+void mtgb::Input::CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice)
+{
+	HRESULT hResult{};
+
+	hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, _ppKeyDevice, nullptr);
+	massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
+		&& "キーボードデバイスの作成に失敗 @Input::CreateKeyDevice");
+
+	// キーボード用にフォーマット
+	hResult = (*_ppKeyDevice)->SetDataFormat(&c_dfDIKeyboard);
+
+	massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
+		&& "キーボードフォーマットに失敗 @Input::CreateDevice");
+
+	// キーボードのアプリ間共有レベルを設定
+	//  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
+	hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
+	massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
+		&& "キーボードアプリ間共有レベル設定に失敗 @Input::CreateDevice");
+}
+
+void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDevice)
+{
+	HRESULT hResult{};
+
+	hResult = pDirectInput_->CreateDevice(GUID_SysMouse, _ppMouseDevice, nullptr);
+	massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
+		&& "マウスデバイスの作成に失敗 @Input::CreateMouseDevice");
+
+	// マウス用にフォーマット
+	hResult = (*_ppMouseDevice)->SetDataFormat(&c_dfDIMouse);
+
+	massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
+		&& "マウスフォーマットに失敗 @Input::CreateMouseDevice");
+
+	// マウスのアプリ間共有レベルの設定
+	hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
+	massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
+		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");
+}
+
+void mtgb::Input::ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice)
+{
+	pKeyDevice_ = _pKeyDevice;
+}
+
+void mtgb::Input::ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice)
+{
+	pMouseDevice_ = _pMouseDevice;
 }

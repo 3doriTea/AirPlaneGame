@@ -2,36 +2,36 @@
 #include <functional>
 #include <map>
 #include "ISystem.h"
-#include "RenderResource.h"
+#include "WindowContextResource.h"
 
 typedef struct HWND__* HWND;
 
 namespace mtgb
 {
     // 型を隠蔽するための基底クラス
-    class IRenderResourceCollection
+    class IWindowContextResourceCollection
     {
     public:
-        virtual ~IRenderResourceCollection() = default;
+        virtual ~IWindowContextResourceCollection() = default;
         virtual void CreateResource(HWND hWnd) = 0;
         virtual void ChangeResource(HWND hWnd) = 0;
     };
 
     // テンプレート実装
     template<class... Args>
-    class RenderResourceCollection : public IRenderResourceCollection
+    class WindowContextResourceCollection : public IWindowContextResourceCollection
     {
     public:
 
-        RenderResourceCollection()
+        WindowContextResourceCollection()
         {
-			static constexpr bool allAreBaseOfRenderResource =
-				(std::is_base_of_v<RenderResource, Args> && ...);
+			static constexpr bool allAreBaseOfWindowContextResource =
+				(std::is_base_of_v<WindowContextResource, Args> && ...);
 
-			static_assert(allAreBaseOfRenderResource, "Args...はRenderResourceの派生型である必要があります");
+			static_assert(allAreBaseOfWindowContextResource, "Args...はWindowContextResourceの派生型である必要があります");
 		}
 
-        ~RenderResourceCollection() 
+        ~WindowContextResourceCollection() 
         {
             resources_.clear(); 
         }
@@ -73,10 +73,10 @@ namespace mtgb
         }
     };
 
-    class RenderResourceManager : public ISystem
+    class WindowContextResourceManager : public ISystem
     {
     public:
-        RenderResourceManager();
+        WindowContextResourceManager();
         void Initialize() override;
         void Update() override;
         
@@ -88,22 +88,22 @@ namespace mtgb
         template<class... Args>
         void RegisterResourceTypes()
         {
-            pCollection_ = new RenderResourceCollection<Args...>();
+            pCollection_ = new WindowContextResourceCollection<Args...>();
         }
         /// <summary>
-        /// 描画に必要なリソースを作成
+        /// ウィンドウごとに必要なリソースを作成
         /// </summary>
         /// <param name="hWnd">作成するウィンドウのハンドル</param>
-        void CreateRenderResource(HWND hWnd);
+        void CreateResource(HWND hWnd);
 
         /// <summary>
-        /// 描画リソースを切り替える
+        /// リソースを切り替える
         /// </summary>
         /// <param name="hWnd">切り替えるウィンドウのハンドル</param>
-        void ChangeRenderResource(HWND hWnd);
+        void ChangeResource(HWND hWnd);
         
     private:
-        IRenderResourceCollection* pCollection_;
+        IWindowContextResourceCollection* pCollection_;
     };
     
 }

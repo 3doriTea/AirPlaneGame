@@ -65,6 +65,7 @@
     <ClCompile Include="mtgb\Image.cpp" />
     <ClCompile Include="mtgb\Input.cpp" />
     <ClCompile Include="mtgb\InputData.cpp" />
+    <ClCompile Include="mtgb\InputResource.cpp" />
     <ClCompile Include="mtgb\IShader.cpp" />
     <ClCompile Include="mtgb\ISystem.cpp" />
     <ClCompile Include="mtgb\MainWindow.cpp" />
@@ -108,8 +109,8 @@
     </ClCompile>
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
-    <ClCompile Include="mtgb\RenderResource.cpp" />
-    <ClCompile Include="mtgb\RenderResourceManager.cpp" />
+    <ClCompile Include="mtgb\WindowContextResource.cpp" />
+    <ClCompile Include="mtgb\WindowContextResourceManager.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
     <ClCompile Include="mtgb\RigidBodyCP.cpp" />
     <ClCompile Include="mtgb\SceneSystem.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="mtgb\InputData.h" />
     <ClInclude Include="mtgb\InputKeyCode.h" />
     <ClInclude Include="mtgb\InputMouseCode.h" />
+    <ClInclude Include="mtgb\InputResource.h" />
     <ClInclude Include="mtgb\IShader.h" />
     <ClInclude Include="mtgb\ISystem.h" />
     <ClInclude Include="mtgb\MainWindow.h" />
@@ -245,8 +247,8 @@
     <ClInclude Include="mtgb\Quaternion.h" />
     <ClInclude Include="mtgb\RectInt.h" />
     <ClInclude Include="mtgb\ReleaseUtility.h" />
-    <ClInclude Include="mtgb\RenderResource.h" />
-    <ClInclude Include="mtgb\RenderResourceManager.h" />
+    <ClInclude Include="mtgb\WindowContextResource.h" />
+    <ClInclude Include="mtgb\WindowContextResourceManager.h" />
     <ClInclude Include="mtgb\RigidBody.h" />
     <ClInclude Include="mtgb\RigidBodyCP.h" />
     <ClInclude Include="mtgb\SceneSystem.h" />

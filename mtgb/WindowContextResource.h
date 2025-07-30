@@ -9,7 +9,7 @@ struct ID2D1RenderTarget;
 
 namespace mtgb
 {
-	class RenderResource
+	class WindowContextResource
 	{
 	public:
 		template<typename... Args>

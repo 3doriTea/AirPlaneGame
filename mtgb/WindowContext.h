@@ -4,7 +4,7 @@
 #include <Windows.h>
 #include <dxgi.h>
 #include <Dxgi1_2.h>
-#include "RenderResourceManager.h"
+#include "WindowContextResourceManager.h"
 //typedef struct tagWNDCLASSEXA WNDCLASSEX;
 //typedef struct HWND__* HWND;
 //typedef struct tagMSG MSG;

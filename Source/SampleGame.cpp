@@ -29,8 +29,8 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	//_register.Set<MTImGui>(SystemUpdateType::Frame);
 
 
-	_register.Set<RenderResourceManager>(SystemUpdateType::DontCallMe);
-	Game::System<RenderResourceManager>().RegisterResourceTypes<
+	_register.Set<WindowContextResourceManager>(SystemUpdateType::DontCallMe);
+	Game::System<WindowContextResourceManager>().RegisterResourceTypes<
 		DXGIResource,
 		Direct3DResource,
 		Direct2DResource

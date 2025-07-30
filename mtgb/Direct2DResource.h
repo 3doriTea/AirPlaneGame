@@ -1,5 +1,5 @@
 #pragma once
-#include "RenderResource.h"
+#include "WindowContextResource.h"
 #include "Direct3DResource.h"
 #include "MTAssert.h"
 #include "Direct2D/Direct2D.h"
@@ -11,7 +11,7 @@ typedef struct HWND__* HWND;
 namespace mtgb
 {
 
-	class Direct2DResource : public RenderResource
+	class Direct2DResource : public WindowContextResource
 	{
 	public:
 		template<typename... Args>

@@ -393,11 +393,14 @@
     <ClCompile Include="mtgb\Direct3DResource.cpp">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\RenderResourceManager.cpp">
+    <ClCompile Include="mtgb\WindowContextResource.cpp">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\RenderResource.cpp">
-      <Filter>mtgb\System\Resource\Resources</Filter>
+    <ClCompile Include="mtgb\InputResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowContextResourceManager.cpp">
+      <Filter>mtgb\System\Resource</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -704,10 +707,10 @@
     <ClInclude Include="mtgb\MTNet\Utility.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\RenderResourceManager.h">
+    <ClInclude Include="mtgb\WindowContextResourceManager.h">
       <Filter>mtgb\System\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\RenderResource.h">
+    <ClInclude Include="mtgb\WindowContextResource.h">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Direct3DResource.h">
@@ -717,6 +720,9 @@
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\DXGIResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputResource.h">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
   </ItemGroup>

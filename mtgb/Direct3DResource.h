@@ -1,11 +1,11 @@
 #pragma once
-#include "RenderResource.h"
+#include "WindowContextResource.h"
 #include "DXGIResource.h"
 #include "MTAssert.h"
 
 namespace mtgb
 {
-	class Direct3DResource : public RenderResource
+	class Direct3DResource : public WindowContextResource
 	{
 	public:
 		template<typename... Args>
