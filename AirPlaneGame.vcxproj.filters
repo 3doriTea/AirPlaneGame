@@ -82,9 +82,6 @@
     <Filter Include="mtgb\Utility">
       <UniqueIdentifier>{ec9d819b-14e0-40a8-9257-ba8c79a2b7a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mtgb\Library\MTBin">
-      <UniqueIdentifier>{905f02dc-6a07-490c-8eeb-93c923dcc0a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mtgb\System\Direct11Manager">
       <UniqueIdentifier>{412ee36a-f0e3-4d5c-a7a9-42e6ff14167b}</UniqueIdentifier>
     </Filter>
@@ -117,6 +114,9 @@
     </Filter>
     <Filter Include="mtgb\System\Window\SubWindow">
       <UniqueIdentifier>{9264510d-5991-4196-b945-e70ed22eb59f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\MTNet">
+      <UniqueIdentifier>{4dd2f2f8-47cc-44d1-9cd0-60c409db6cc7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -343,31 +343,31 @@
       <Filter>mtgb\System\Window</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\EndPoint.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\Log.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\Socket.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\TcpClient.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\TcpListener.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Fbx.cpp">
       <Filter>mtgb\System\Draw\Fbx</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\PIIO.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -639,28 +639,28 @@
       <Filter>mtgb\System\Window</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\BinaryReader.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\BinaryWriter.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\Common.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\EndPoint.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\Log.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\Socket.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\TcpClient.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTNet\TcpListener.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>mtgb\MTNet</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\IncludingWindows.h">
       <Filter>ヘッダー ファイル</Filter>
