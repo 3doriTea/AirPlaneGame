@@ -9,8 +9,26 @@
 #include "DirectX11Draw.h"
 #include "Game.h"
 #include "SceneSystem.h"
-
-mtgb::FbxParts::FbxParts(FbxNode* _parent): pMesh_(nullptr), ppIndexBuffer_(NULL)
+#include <cmath>
+#include <algorithm>
+// FbxParts コンストラクタの初期化リストを拡張して、全メンバー変数を初期化
+mtgb::FbxParts::FbxParts(FbxNode* _parent)
+	: vertexCount_(0)
+	, polygonCount_(0)
+	, indexCount_(0)
+	, materialCount_(0)
+	, polygonVertexCount_(0)
+	, pNode_(nullptr)
+	, pMaterial_(nullptr)
+	, pMesh_(nullptr)
+	, pSkin_(nullptr)
+	, ppCluster_(nullptr)
+	, boneCount_(0)
+	, pBones_(nullptr)
+	, pWeights_(nullptr)
+	, pVertexes_(nullptr)
+	, ppIndexData_(nullptr)
+	, ppIndexBuffer_(nullptr)
 {
 	if (_parent != nullptr)
 	{
@@ -32,8 +50,8 @@ void mtgb::FbxParts::Initialize()
 	vertexCount_ = pMesh_->GetControlPointsCount();			//頂点の数
 	polygonCount_ = pMesh_->GetPolygonCount();				//ポリゴンの数
 	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();	//ポリゴン頂点インデックス数 
-	InitializeMaterial();
 	InitializeVertexBuffer(DirectX11Draw::pDevice_);
+	InitializeMaterial();
 	InitializeIndexBuffer(DirectX11Draw::pDevice_);
 	InitializeConstantBuffer(DirectX11Draw::pDevice_);
 	InitializeSkelton();
@@ -46,7 +64,6 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	DirectX11Draw::SetShader(ShaderType::FbxParts);
-	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };
@@ -88,7 +105,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		rotateX_ = XMMatrixRotationX(XMConvertToRadians(_transform.rotate_.f[0]));
 		rotateY_ = XMMatrixRotationY(XMConvertToRadians(_transform.rotate_.f[1]));
 		rotateZ_ = XMMatrixRotationZ(XMConvertToRadians(_transform.rotate_.f[2]));
-		matRotate_ = rotateX_ * rotateY_ * rotateZ_;
+		matRotate_ = rotateZ_ * rotateY_ * rotateX_   ;
 		
 		XMMATRIX matScale_ = XMMatrixScaling(_transform.scale_.x, _transform.scale_.y, _transform.scale_.z);
 
@@ -99,11 +116,11 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_shininess = pMaterial_[i].shininess;
 		Vector4 cameraPosition{ 0.0f, 0.0f, -10.0f, 0.0f };
 		cb.g_cameraPosition = cameraPosition;
-		cb.g_lightDirection = Vector4{ -1.0f, -1.0f, -1.0f, 0.0f }; // ライトの向き
+		cb.g_lightDirection = Vector4{ 0.0f, 0.0f, 1.0f, 0.0f }; // ライトの向き
 		cb.g_isTexture = pMaterial_[i].pTexture != nullptr;
 
 		DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata_);
-		memcpy_s(pdata_.pData, pdata_.RowPitch, reinterpret_cast<void*>(&cb), sizeof(ConstantBuffer));
+		memcpy_s(pdata_.pData, pdata_.RowPitch, (void*)(&cb), sizeof(cb));
 
 		if (cb.g_isTexture)
 		{
@@ -305,6 +322,7 @@ bool mtgb::FbxParts::TryGetBonePositionAtNow(const std::string& _boneName, Vecto
 
 void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 {
+	vertexCount_ = pMesh_->GetControlPointsCount();
 	pVertexes_ = new Vertex[vertexCount_]{};
 
 	for (uint32_t poly = 0; poly < polygonCount_; poly++)
@@ -313,13 +331,20 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 		{
 			int index{ pMesh_->GetPolygonVertex(poly, vertex) };
 
+			// インデックスが範囲内かチェック
+			if (index < 0 || index >= static_cast<int>(vertexCount_))
+			{
+				massert(false && "Vertex index out of range in FbxParts::InitializeVertexBuffer");
+				continue;
+			}
+
 			// 頂点の座標
 			FbxVector4 position = pMesh_->GetControlPointAt(index);
 			pVertexes_[index].position =
 			{
 				static_cast<float>(position[0]),
 				static_cast<float>(position[1]),
-				static_cast<float>(position[2]),
+				-static_cast<float>(position[2]),
 			};
 
 			// 頂点の法線
@@ -334,11 +359,14 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 		}
 	}
 
+	// UV座標の処理
+
 	int uvCount{ pMesh_->GetTextureUVCount() };
 	FbxLayerElementUV* pUV{ pMesh_->GetLayer(0)->GetUVs() };
 	if (uvCount > 0 && pUV->GetMappingMode() == FbxLayerElement::eByControlPoint)
 	{
-		for (int i = 0; i < uvCount; i++)
+		int writeCount = (std::min)(uvCount, static_cast<int>(vertexCount_));
+		for (int i = 0; i < writeCount; i++)
 		{
 			fbxsdk::FbxVector2 uv{ pUV->GetDirectArray().GetAt(i) };
 			pVertexes_[i].uv =
@@ -349,10 +377,11 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 			};
 		}
 	}
+	
 
 	const D3D11_BUFFER_DESC BUFFER_DESC
 	{
-		.ByteWidth = sizeof(Vertex) * pMesh_->GetControlPointsCount(),
+		.ByteWidth = sizeof(Vertex) * vertexCount_,
 		.Usage = D3D11_USAGE_DYNAMIC,  // MEMO: 途中で書き換えるため dynamic
 		.BindFlags = D3D11_BIND_VERTEX_BUFFER,
 		.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,  // 途中で書き換えるから
@@ -388,7 +417,7 @@ void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 			{
 				for (DWORD k = 0; k < 3; k++)
 				{
-					pIndex[count + k] = pMesh_->GetPolygonVertex(polygonCount_ - j - 1, 2 - k);
+					pIndex[count + k] = pMesh_->GetPolygonVertex(j, k);
 				}
 				count += 3;
 			}
@@ -481,7 +510,7 @@ void mtgb::FbxParts::InitializeMaterial()
 			diffuse = pPhong->Diffuse;
 		}
 		// MEMO: 内部でtypedef double FbxDouble されているためfloatにキャスト
-		pMaterial_[i].specular = { (float)ambient[0], (float)ambient[1], (float)ambient[2], 1.0f };
+		pMaterial_[i].ambient = { (float)ambient[0], (float)ambient[1], (float)ambient[2], 1.0f };
 		pMaterial_[i].diffuse = { (float)diffuse[0], (float)diffuse[1], (float)diffuse[2], 1.0f };
 		pMaterial_[i].specular = { 0, 0, 0, 0 };
 		pMaterial_[i].shininess = 0;
