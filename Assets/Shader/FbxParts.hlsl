@@ -37,6 +37,8 @@ float4 PS(VS_OUT inData) : SV_Target
         diffuse = g_diffuseColor;
     }
     
+    float4 ambient = g_ambientColor;
+    
     float4 specuer = float4(0, 0, 0, 0);
     //g_speculerColor //float4(255, 0, 0, 0);
     if (g_speculerColor.a != 0)
@@ -47,8 +49,10 @@ float4 PS(VS_OUT inData) : SV_Target
     
     //return float4(1, 0, 0, 1);
     //return diffuse * shade + diffuse * g_ambientColor + specuer;
-    float4 color = diffuse * shade + g_ambientColor + specuer;
-    color.a = 1;
+    //float4 color = diffuse * shade + g_ambientColor + specuer;
+    //color.a = 1;
+    
+    float4 color = diffuse * shade + diffuse * ambient + specuer;
     return color;
 
 }

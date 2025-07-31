@@ -369,6 +369,9 @@
     <ClCompile Include="Source\Network\PIIO.cpp">
       <Filter>game</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Background.cpp">
+      <Filter>Game\PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -670,6 +673,9 @@
     </ClInclude>
     <ClInclude Include="Source\Network\PIIO.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Background.h">
+      <Filter>Game\PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

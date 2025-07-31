@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include "Camera.h"
 #include "Network/PIIO.h"
+#include "Background.h"
 //#include "MTNet/Common.h"
 
 
@@ -17,6 +18,7 @@ namespace
 
 PlayScene::PlayScene()
 {
+	new Background();
 	tBox_ = new TextBox();
 	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
