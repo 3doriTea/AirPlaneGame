@@ -19,6 +19,22 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+	if (InputData::GetKey(KeyCode::Up))
+	{
+		pTransform_->position_.z += 1.0f;
+	}
+	if (InputData::GetKey(KeyCode::Down))
+	{
+		pTransform_->position_.z -= -1.0f;
+	}
+	if (InputData::GetKey(KeyCode::Left))
+	{
+		pTransform_->position_.x -= -1.0f;
+	}
+	if (InputData::GetKey(KeyCode::Right))
+	{
+		pTransform_->position_.x += -1.0f;
+	}
 }
 
 void Camera::Draw() const

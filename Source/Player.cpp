@@ -27,7 +27,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	//hModel_ = OBJ::Load("Model/OBJ/cube.obj");
-	fModel_ = Fbx::Load("Model/fCube.fbx");
+	fModel_ = Fbx::Load("Model/tCube.fbx");
 	hText = Text::Load(str,36);
 	pTransform_->position_.z = 5.0f;
 	pTransform_->scale_ = Vector3(10, 10, 10);
