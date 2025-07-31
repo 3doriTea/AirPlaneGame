@@ -31,6 +31,7 @@ float4 PS(VS_OUT inData) : SV_Target
     {
         //diffuse = g_diffuseColor;
         diffuse = g_texture.Sample(g_sampler, inData.uv);
+
     }
     else
     {
@@ -47,7 +48,7 @@ float4 PS(VS_OUT inData) : SV_Target
     
     //return float4(1, 0, 0, 1);
     //return diffuse * shade + diffuse * g_ambientColor + specuer;
-    float4 color = diffuse * shade + g_ambientColor + specuer;
+    float4 color = diffuse * shade +  diffuse * g_ambientColor + specuer;
     color.a = 1;
     return color;
 
