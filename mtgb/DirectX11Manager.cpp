@@ -373,7 +373,7 @@ void mtgb::DirectX11Manager::InitializeWindowContext(WindowRenderContext& contex
 			.Quality = 0,
 		},
 		.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-		.BufferCount = 1,  // 裏画面の枚数
+		.BufferCount = 2,  // 裏画面の枚数
 		.Scaling = DXGI_SCALING_STRETCH,
 		.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
 		.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
@@ -575,7 +575,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
 				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_NONE,  // カリング: 陰面消去
+				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},

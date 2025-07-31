@@ -319,7 +319,7 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 			{
 				static_cast<float>(position[0]),
 				static_cast<float>(position[1]),
-				-static_cast<float>(position[2]),
+				static_cast<float>(position[2]),
 			};
 
 			// í∏ì_ÇÃñ@ê¸
@@ -388,7 +388,7 @@ void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 			{
 				for (DWORD k = 0; k < 3; k++)
 				{
-					pIndex[count + k] = pMesh_->GetPolygonVertex(j, 2-k);
+					pIndex[count + k] = pMesh_->GetPolygonVertex(polygonCount_ - j - 1, 2 - k);
 				}
 				count += 3;
 			}
