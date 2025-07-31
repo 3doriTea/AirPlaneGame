@@ -1,6 +1,8 @@
 #pragma once
 #include <mtgb.h>
 
+typedef struct HWND__* HWND;
+
 class Player : public GameObject
 {
 public:
@@ -18,4 +20,5 @@ private:
 	ImageHandle hImage_;
 	AudioHandle hMnow_;
 	OBJModelHandle hModel_;
+	HWND hWnd_;
 };

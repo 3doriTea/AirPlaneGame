@@ -21,12 +21,17 @@ void mtgb::WindowContextResourceManager::Release()
 	}
 }
 
-void mtgb::WindowContextResourceManager::CreateResource(HWND hWnd)
+void mtgb::WindowContextResourceManager::CreateResource(WindowContext windowContext)
 {
-	pCollection_->CreateResource(hWnd);
+	pCollection_->CreateResource(windowContext);
 }
 
-void mtgb::WindowContextResourceManager::ChangeResource(HWND hWnd)
+void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowContext)
 {
-	pCollection_->ChangeResource(hWnd);
+	pCollection_->ChangeResource(windowContext);
+}
+
+HWND mtgb::WindowContextResourceManager::GetHWND(WindowContext windowContext)
+{
+	return pCollection_->GetHWND(windowContext);
 }

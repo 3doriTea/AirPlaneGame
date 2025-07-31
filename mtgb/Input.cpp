@@ -32,7 +32,7 @@ void mtgb::Input::Initialize()
 	HRESULT hResult{};
 
 	//const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
-	const HWND hWnd{ Game::System<DoubleWindow>().GetHWND() };
+	const HWND hWnd{ Game::System<DoubleWindow>().GetFirstWindowHandle() };
 
 	// DirectInput8のデバイス作成
 	hResult = DirectInput8Create(
@@ -105,13 +105,13 @@ void mtgb::Input::Update()
 
 	static BYTE keyBuffer[KEY_BUFFER_SIZE]{};  // キー状態取得用バッファ
 
-	InputData::keyStatePrevious_ = InputData::keyStateCurrent_;
+	pInputData_->keyStatePrevious_ = pInputData_->keyStateCurrent_;
 	pKeyDevice_->GetDeviceState(KEY_BUFFER_SIZE, keyBuffer);
 
 	// TODO: forで回すのはコスパよくない
 	for (int i = 0; i < KEY_BUFFER_SIZE; i++)
 	{
-		InputData::keyStateCurrent_[i] = keyBuffer[i];
+		pInputData_->keyStateCurrent_[i] = keyBuffer[i];
 	}
 #pragma endregion
 
@@ -128,13 +128,13 @@ void mtgb::Input::Update()
 		&& "マウス操作の許可取得に失敗 @Input::Update");
 
 	memcpy(
-		&InputData::mouseStatePrevious_,
-		&InputData::mouseStateCurrent_,
+		&pInputData_->mouseStatePrevious_,
+		&pInputData_->mouseStateCurrent_,
 		sizeof(_DIMOUSESTATE));
 
 	pMouseDevice_->GetDeviceState(
 		sizeof(_DIMOUSESTATE),
-		&InputData::mouseStateCurrent_);
+		&pInputData_->mouseStateCurrent_);
 #pragma endregion
 }
 
@@ -142,8 +142,8 @@ void mtgb::Input::UpdateMousePositionData(
 	const int32_t _x,
 	const int32_t _y)
 {
-	InputData::mousePosition_.x = _x;
-	InputData::mousePosition_.y = _y;
+	pInputData_->mousePosition_.x = _x;
+	pInputData_->mousePosition_.y = _y;
 }
 
 void mtgb::Input::CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice)

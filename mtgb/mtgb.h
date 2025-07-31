@@ -16,7 +16,6 @@
 
 #include "AssetsManager.h"
 #include "MainWindow.h"
-#include "WindowManager.h"
 #include "Screen.h"
 #include "DirectX11Manager.h"
 #include "Direct2D/Direct2D.h"
@@ -34,8 +33,10 @@
 #include "OBJ.h"
 #include "MTImGui.h"
 #include "Text.h"
-#include "DoubleWindow.h"
+#include "Fbx.h"
 #include "WindowContextResourceManager.h"
+#include "WindowManager.h"
+#include "DoubleWindow.h"
 
 #pragma endregion
 
@@ -48,9 +49,9 @@
 #include "DXGIResource.h"
 #include "Direct3DResource.h"
 #include "Direct2DResource.h"
+#include "Input.h"
 
 #pragma endregion
-
 #pragma region Data
 
 #include "InputData.h"
@@ -62,6 +63,7 @@
 using mtgb::ImageHandle;
 using mtgb::AudioHandle;
 using mtgb::OBJModelHandle;
+//using mtgb::FBXModelHandle;
 
 using mtgb::Vector3;
 using mtgb::Vector2;

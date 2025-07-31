@@ -5,7 +5,7 @@
 #include "DirectX11Manager.h"
 #include "MTAssert.h"
 #include <dxgi1_2.h>
-
+#include "WindowContext.h"
 typedef struct HWND__* HWND;
 
 namespace mtgb
@@ -14,19 +14,22 @@ namespace mtgb
 	{
 	public:
 		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd);
+		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
 		void SetResource() override;
-
 
 		IDXGISwapChain1* pSwapChain1_;
 		IDXGIOutput* pOutput_;
 		IDXGISurface* pDXGISurface_;
 	};
+	
 	template<typename ...Args>
-	inline void DXGIResource::Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd)
+	inline void DXGIResource::Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext)
 	{
 		// DirectX11Managerにアクセスしてリソースを作成
 		auto& dx11Manager = Game::System<DirectX11Manager>();
+
+		// WindowContextResourceManagerからHWNDを取得
+		HWND hWnd = Game::System<WindowContextResourceManager>().GetHWND(_windowContext);
 
 		// 依存関係は特にない（DXGIResourceは最初に初期化される）
 		// マルチモニター対応は今回false固定
@@ -42,11 +45,9 @@ namespace mtgb
 		}
 
 		// スワップチェーンを作成
-		dx11Manager.CreateSwapChain(_hWnd, pOutput_, &pSwapChain1_);
+		dx11Manager.CreateSwapChain(hWnd, pOutput_, &pSwapChain1_);
 
 		//サーフェスとやらを作成
 		dx11Manager.CreateDXGISurface(pSwapChain1_, &pDXGISurface_);
 	}
-
-
 }

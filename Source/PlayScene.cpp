@@ -33,7 +33,7 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
-	if (InputData::GetKeyDown(KeyCode::Escape))
+	if (InputUtil::GetKeyDown(KeyCode::Escape))
 	{
 		Game::Exit();
 	}

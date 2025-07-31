@@ -21,21 +21,20 @@ namespace mtgb
 	class Input;
 	class InputUtil final
 	{
-		static const bool GetKey(const KeyCode _keyCode);
-		static const bool GetKeyDown(const KeyCode _keyCode);
-		static const bool GetKeyUp(const KeyCode _keyCode);
+	public:
+		static const bool GetKey(const KeyCode _keyCode,HWND _hWnd);
+		static const bool GetKeyDown(const KeyCode _keyCode,HWND _hWnd);
+		static const bool GetKeyUp(const KeyCode _keyCode,HWND _hWnd);
+		static const bool GetMouse(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetMouseDown(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetMouseUp(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetGamePad(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetGamePadDown(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetGamePadUp(const MouseCode _mouseCode,HWND _hWnd);
 
-		static const bool GetMouse(const MouseCode _mouseCode);
-		static const bool GetMouseDown(const MouseCode _mouseCode);
-		static const bool GetMouseUp(const MouseCode _mouseCode);
 
-		static const bool GetGamePad(const MouseCode _mouseCode);
-		static const bool GetGamePadDown(const MouseCode _mouseCode);
-		static const bool GetGamePadUp(const MouseCode _mouseCode);
-
-
-		static const Vector2Int GetMousePosition();
-		static const Vector3 GetMouseMove();
+		static const Vector2Int GetMousePosition(HWND _hWnd);
+		static const Vector3 GetMouseMove(HWND _hWnd);
 
 	private:  // Utilities
 		static const size_t KEY_COUNT{ 256 };             // キーの数
@@ -44,14 +43,11 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_keyCode">キーコード</param>
 		/// <returns>0: 差無し, 1: 差有り</returns>
-		static inline const int KeyXOR(const KeyCode _keyCode,const std::bitset<KEY_COUNT>& _keyStateCurrent, _DIMOUSESTATE _keyStatePrevious)
+		static inline const int KeyXOR(const KeyCode _keyCode,const std::bitset<KEY_COUNT>& _keyStateCurrent, const std::bitset<KEY_COUNT>& _keyStatePrevious)
 		{
 			return _keyStateCurrent[Index(_keyCode)] ^ _keyStatePrevious[Index(_keyCode)];
 		}
-		static inline const int KeyXOR(const KeyCode _keyCode, HWND _hWnd)
-		{
-			//HWNDのような識別子だけで取得してえな
-		}
+		
 		/// <summary>
 		/// キーコード構造体列挙型をインデックスに変換
 		/// </summary>
@@ -61,6 +57,8 @@ namespace mtgb
 		{
 			return static_cast<size_t>(_keyCode);
 		}
+
+		static const InputData& InputData(HWND _hWnd);
 	};
 	class InputData final
 	{

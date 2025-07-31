@@ -402,6 +402,9 @@
     <ClCompile Include="mtgb\WindowContextResourceManager.cpp">
       <Filter>mtgb\System\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\WindowResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -723,6 +726,9 @@
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\InputResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowResource.h">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
   </ItemGroup>

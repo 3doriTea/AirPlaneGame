@@ -3,7 +3,7 @@
 #include "DoubleWindow.h"
 #include "DirectX11Manager.h"
 #include "DirectX11Draw.h"
-
+#include "Input.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -30,6 +30,12 @@ void mtgb::SceneSystem::Update()
 	{
 		return;  // シーンがないなら回帰
 	}
+
+	Game::System<DoubleWindow>().ChangeFirstWindow();
+	Game::System<Input>().Update();
+
+	Game::System<DoubleWindow>().ChangeSecondWindow();
+	Game::System<Input>().Update();
 
 	// 現在のシーン
 	GameScene& currentScene{ *GameScene::pInstance_ };

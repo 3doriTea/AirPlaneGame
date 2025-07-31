@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "ISystem.h"
 #include "Input.h"
+#include "WindowContext.h"
 #include <dinput.h>
 
 #pragma comment(lib, "dxguid.lib")
@@ -19,7 +20,7 @@ namespace mtgb
 	{
 	public:
 		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd);
+		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
 		void SetResource() override;
 	private:
 		LPDIRECTINPUTDEVICE8 pKeyDevice_;    // キーデバイス
@@ -28,9 +29,12 @@ namespace mtgb
 	};
 
 	template<typename... Args>
-	inline void InputResource::Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd)
+	inline void InputResource::Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext)
 	{
-		Game::System<Input>().CreateKeyDevice(_hWnd, &pKeyDevice_);
-		Game::System<Input>().CreateMouseDevice(_hWnd, &pMouseDevice_);
+		// WindowContextResourceManagerからHWNDを取得
+		HWND hWnd = Game::System<WindowContextResourceManager>().GetHWND(_windowContext);
+		
+		Game::System<Input>().CreateKeyDevice(hWnd, &pKeyDevice_);
+		Game::System<Input>().CreateMouseDevice(hWnd, &pMouseDevice_);
 	}
 }

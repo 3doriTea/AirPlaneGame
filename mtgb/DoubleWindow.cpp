@@ -41,8 +41,8 @@ void mtgb::DoubleWindow::Initialize()
 		.y = CW_USEDEFAULT
 	};
 
-	mtgb::WindowManager::CreateWindowContext(config1, &context1_);
-	mtgb::WindowManager::CreateWindowContext(config2, &context2_);
+	//mtgb::WindowManager::CreateWindowContext(config1, &context1_);
+	//mtgb::WindowManager::CreateWindowContext(config2, &context2_);
 
 	//一旦DirectXリソースの初期化もここで行う
 	//Game::System<WindowContextResourceManager>().
@@ -65,9 +65,14 @@ void mtgb::DoubleWindow::Update()
 	DirectX11Draw::Begin();*/
 }
 
-const HWND mtgb::DoubleWindow::GetHWND()
+const HWND mtgb::DoubleWindow::GetFirstWindowHandle()
 {
 	return context1_->hWnd_;
+}
+
+const HWND mtgb::DoubleWindow::GetSecondWindowHandle()
+{
+	return context2_->hWnd_;
 }
 
 void mtgb::DoubleWindow::ChangeFirstWindow()

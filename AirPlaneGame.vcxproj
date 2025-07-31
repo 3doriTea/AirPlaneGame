@@ -129,6 +129,7 @@
     <ClCompile Include="mtgb\WaveData.cpp" />
     <ClCompile Include="mtgb\WindowManager.cpp" />
     <ClCompile Include="mtgb\WindowContext.cpp" />
+    <ClCompile Include="mtgb\WindowResource.cpp" />
     <ClCompile Include="mtgb\World.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -269,6 +270,7 @@
     <ClInclude Include="mtgb\WaveData.h" />
     <ClInclude Include="mtgb\WindowManager.h" />
     <ClInclude Include="mtgb\WindowContext.h" />
+    <ClInclude Include="mtgb\WindowResource.h" />
     <ClInclude Include="mtgb\World.h" />
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />

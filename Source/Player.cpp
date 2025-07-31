@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "../mtgb/DirectX11Draw.h"
-
+#include "DoubleWindow.h"
 using namespace mtgb;
 
 namespace
@@ -28,6 +28,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	hText = Text::Load(str,36);
+	hWnd_ = Game::System<DoubleWindow>().GetFirstWindowHandle();
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
@@ -44,32 +45,32 @@ void Player::Update()
 	{
 		timer = 0;
 	}
-	if (InputData::GetKeyDown(KeyCode::C))
+	if (InputUtil::GetKeyDown(KeyCode::C,hWnd_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
 		
 	}
 
-	if (InputData::GetKeyDown(KeyCode::F))
+	if (InputUtil::GetKeyDown(KeyCode::F,hWnd_))
 	{
 		
 	}
 
-	if (InputData::GetKey(KeyCode::W))
+	if (InputUtil::GetKey(KeyCode::W,hWnd_))
 	{
 		pTransform_->position_ += pTransform_->Forward() * PLAYER_SPEED;
 	}
-	if (InputData::GetKey(KeyCode::S))
+	if (InputUtil::GetKey(KeyCode::S,hWnd_))
 	{
 		pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
 	}
 
-	if (InputData::GetKey(KeyCode::A))
+	if (InputUtil::GetKey(KeyCode::A,hWnd_))
 	{
 		pTransform_->rotate_.f[2] += 1;
 		//pTransform_->scale_.z -= 0.01f;
 	}
-	if (InputData::GetKey(KeyCode::D))
+	if (InputUtil::GetKey(KeyCode::D,hWnd_))
 	{
 		pTransform_->rotate_.f[2] -= 1;
 		//pTransform_->scale_.z += 0.01f;
@@ -79,7 +80,7 @@ void Player::Update()
 void Player::Draw() const
 {
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	Vector2Int mousePos = InputData::GetMousePosition();
+	Vector2Int mousePos = InputUtil::GetMousePosition(hWnd_);
 	
 	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
 

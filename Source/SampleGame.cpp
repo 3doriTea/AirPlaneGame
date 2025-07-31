@@ -33,11 +33,12 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	Game::System<WindowContextResourceManager>().RegisterResourceTypes<
 		DXGIResource,
 		Direct3DResource,
-		Direct2DResource
+		Direct2DResource,
+		InputResource
 	>();
 
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
-	_register.Set<Input>(SystemUpdateType::Frame);
+	_register.Set<Input>(SystemUpdateType::DontCallMe);
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
 	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);

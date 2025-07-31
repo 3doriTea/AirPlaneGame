@@ -14,7 +14,8 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 
-		const HWND GetHWND();
+		const HWND GetFirstWindowHandle();
+		const HWND GetSecondWindowHandle();
 		void ChangeFirstWindow();
 		void ChangeSecondWindow();
 

@@ -2,6 +2,7 @@
 #include "WindowContextResource.h"
 #include "DXGIResource.h"
 #include "MTAssert.h"
+#include "WindowContext.h"
 
 namespace mtgb
 {
@@ -9,7 +10,7 @@ namespace mtgb
 	{
 	public:
 		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd);
+		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
 		void SetResource() override;
 	private:
 		D3D11_VIEWPORT viewPort_;
@@ -18,9 +19,8 @@ namespace mtgb
 		ID3D11DepthStencilView* pDepthStencilView_;
 	};
 
-
 	template<typename ...Args>
-	inline void Direct3DResource::Initialize(std::tuple<Args*...>& _resourceTuple, HWND _hWnd)
+	inline void Direct3DResource::Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext)
 	{
 		// DirectX11Managerにアクセス
 		auto& dx11Manager = Game::System<DirectX11Manager>();
@@ -41,7 +41,4 @@ namespace mtgb
 		// 深度ステンシルと深度ステンシルビューを作成
 		dx11Manager.CreateDepthStencilAndDepthStencilView(&pDepthStencil_, &pDepthStencilView_);
 	}
-
-	
-
 }

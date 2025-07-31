@@ -16,31 +16,39 @@
 //struct D3D11_VIEWPORT;
 
 //WindowContext
-
-class WindowContext
+namespace mtgb
 {
-public:
-	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	LRESULT HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
-	WindowContext();
-	void Initialize(HWND windowHandle);
-	void Release();
-	HWND hWnd_;
-	MSG* pPeekedMessage_;
-	WNDCLASSEXW windowClass_;
-	RECT windowRect_;
-	std::wstring windowTitle_;
-	std::wstring windowClassName_;
-	bool isActive_;
-
-	/*IDXGISwapChain1* pSwapChain_;
-	IDXGIOutput* pOutput_;
-	ID3D11RenderTargetView* pRenderTargetView_;
-	ID3D11Texture2D* pDepthStencil_;
-	ID3D11DepthStencilView* pDepthStencilView_;
-	D3D11_VIEWPORT viewport_;*/
-
-	int outputIndex_;
-	static int outputCount;
-};
+	enum class WindowContext
+	{
+		First,
+		Second,
+		Both
+	};
+}
+//class WindowContext
+//{
+//public:
+//	static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//	LRESULT HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//
+//	WindowContext();
+//	void Initialize(HWND windowHandle);
+//	void Release();
+//	HWND hWnd_;
+//	MSG* pPeekedMessage_;
+//	WNDCLASSEXW windowClass_;
+//	RECT windowRect_;
+//	std::wstring windowTitle_;
+//	std::wstring windowClassName_;
+//	bool isActive_;
+//
+//	/*IDXGISwapChain1* pSwapChain_;
+//	IDXGIOutput* pOutput_;
+//	ID3D11RenderTargetView* pRenderTargetView_;
+//	ID3D11Texture2D* pDepthStencil_;
+//	ID3D11DepthStencilView* pDepthStencilView_;
+//	D3D11_VIEWPORT viewport_;*/
+//
+//	int outputIndex_;
+//	static int outputCount;
+//};
