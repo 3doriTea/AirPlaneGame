@@ -70,6 +70,10 @@ const bool mtgb::InputUtil::GetGamePadUp(const MouseCode _mouseCode, WindowConte
 }
 const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 {
+	if (_context == WindowContext::Both)
+	{
+		return *(Game::System<WindowContextResourceManager>().Get<InputResource>(WindowContext::First).GetInput());
+	}
 	return *(Game::System<WindowContextResourceManager>().Get<InputResource>(_context).GetInput());
 }
 
@@ -77,7 +81,9 @@ const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 
 const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
 {
+	
 	return InputUtil::GetInput(_context).mousePosition_;
+	
 }
 
 const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)

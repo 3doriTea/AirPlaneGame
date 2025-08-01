@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
+#include <string>
 #include "ISystem.h"
 #include "WindowContext.h"
 
@@ -12,8 +13,8 @@ namespace mtgb
 	class WindowResource;
 	struct WindowConfig
 	{
-		const wchar_t* title;
-		const wchar_t* className;
+		std::string title;
+		std::string className;
 		int width;
 		int height;
 		int x;

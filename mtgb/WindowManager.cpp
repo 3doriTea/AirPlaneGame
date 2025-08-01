@@ -6,10 +6,8 @@
 #include "WindowResource.h"
 #include "Game.h"
 #include "ISystem.h"
-namespace
-{
-	
-}
+#include "MTStringUtility.h"
+
 
 MSG* mtgb::WindowManager::pPeekedMessage_{ nullptr };
 std::map<mtgb::WindowContext, mtgb::WindowConfig> mtgb::WindowManager::windowConfigMap_;
@@ -28,10 +26,10 @@ HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 {
 	WindowConfig config = WindowManager::GetWindowConfig(context);
 	// ウィンドウ作成処理
-	WNDCLASSEXW windowClass{};
-	windowClass.cbSize = sizeof(WNDCLASSEXW);
+	WNDCLASSEX windowClass{};
+	windowClass.cbSize = sizeof(WNDCLASSEX);
 	windowClass.hInstance = GetModuleHandle(NULL);
-	windowClass.lpszClassName = config.className;
+	windowClass.lpszClassName = config.className.c_str();
 	windowClass.lpfnWndProc = mtgb::WindowResource::WndProc; // 仮のプロシージャ
 	windowClass.style = CS_VREDRAW | CS_HREDRAW;
 	windowClass.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
@@ -42,8 +40,8 @@ HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 	windowClass.cbWndExtra = 0;
 	windowClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 
-	massert(RegisterClassExW(&windowClass) != 0
-		&& "RegisterClassExWに失敗 @WindowManager::CreateWindowContext");
+	massert(RegisterClassEx(&windowClass) != 0
+		&& "RegisterClassExに失敗 @WindowManager::CreateWindowContext");
 
 	RECT windowRect{ 0, 0, config.width, config.height };
 	massert(
@@ -56,10 +54,10 @@ HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 
 	WindowResource& windowResource = WindowManager::GetWindowResource(context);
 
-	HWND hWnd = CreateWindowExW(
+	HWND hWnd = CreateWindowEx(
 		0,
-		config.className,
-		config.title,
+		config.className.c_str(),
+		config.title.c_str(),
 		WS_OVERLAPPEDWINDOW,
 		config.x,
 		config.y,
@@ -73,6 +71,8 @@ HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 
 	massert(hWnd != NULL
 		&& "ウィンドウの作成に失敗");
+	massert(SetWindowText(hWnd, config.title.c_str())
+		&& "SetWindowTextに失敗");
 
 	ShowWindow(hWnd, SW_SHOW);
 	
