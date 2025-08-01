@@ -114,8 +114,8 @@ WindowResource* mtgb::WindowResource::Clone() const
 	return new WindowResource(*this);
 }
 
-
-mtgb::WindowResource::WindowResource(const HWND& hWnd_, bool isActive_, int outputIndex_)
-	: hWnd_(hWnd_), isActive_(isActive_), outputIndex_(outputIndex_)
+mtgb::WindowResource::WindowResource()
 {
 }
+
+

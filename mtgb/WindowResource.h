@@ -34,7 +34,7 @@ namespace mtgb
 
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		WindowResource* Clone() const override;
-		WindowResource(const HWND& hWnd_, bool isActive_, int outputIndex_)
-			: hWnd_(hWnd_), isActive_(isActive_), outputIndex_(outputIndex_);
+		WindowResource();
+		
 	};
 }
