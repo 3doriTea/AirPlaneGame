@@ -2,6 +2,8 @@
 #define DIRECTINPUT_VERSION 0x0800
 
 #include <array>
+#include <Xinput.h>
+#include <dinput.h>
 #include <bitset>
 
 #include "Vector3.h"
@@ -10,11 +12,11 @@
 #include "InputKeyCode.h"
 #include "InputMouseCode.h"
 #include "cmtgb.h"
+#include "WindowContext.h"
 
 #include "Input.h"
 
-struct _DIMOUSESTATE;
-struct _XINPUT_STATE;
+
 typedef struct HWND__* HWND;
 namespace mtgb
 {
@@ -22,19 +24,19 @@ namespace mtgb
 	class InputUtil final
 	{
 	public:
-		static const bool GetKey(const KeyCode _keyCode,HWND _hWnd);
-		static const bool GetKeyDown(const KeyCode _keyCode,HWND _hWnd);
-		static const bool GetKeyUp(const KeyCode _keyCode,HWND _hWnd);
-		static const bool GetMouse(const MouseCode _mouseCode,HWND _hWnd);
-		static const bool GetMouseDown(const MouseCode _mouseCode,HWND _hWnd);
-		static const bool GetMouseUp(const MouseCode _mouseCode,HWND _hWnd);
-		static const bool GetGamePad(const MouseCode _mouseCode,HWND _hWnd);
-		static const bool GetGamePadDown(const MouseCode _mouseCode,HWND _hWnd);
-		static const bool GetGamePadUp(const MouseCode _mouseCode,HWND _hWnd);
+		static const bool GetKey(const KeyCode _keyCode,WindowContext _context);
+		static const bool GetKeyDown(const KeyCode _keyCode,WindowContext _context);
+		static const bool GetKeyUp(const KeyCode _keyCode,WindowContext _context);
+		static const bool GetMouse(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetMouseDown(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetMouseUp(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetGamePad(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetGamePadDown(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetGamePadUp(const MouseCode _mouseCode,WindowContext _context);
 
 
-		static const Vector2Int GetMousePosition(HWND _hWnd);
-		static const Vector3 GetMouseMove(HWND _hWnd);
+		static const Vector2Int GetMousePosition(WindowContext _context);
+		static const Vector3 GetMouseMove(WindowContext _context);
 
 	private:  // Utilities
 		static const size_t KEY_COUNT{ 256 };             // キーの数
@@ -58,7 +60,7 @@ namespace mtgb
 			return static_cast<size_t>(_keyCode);
 		}
 
-		static const InputData& InputData(HWND _hWnd);
+		static const InputData& GetInput(WindowContext _context);
 	};
 	class InputData final
 	{
@@ -77,8 +79,8 @@ namespace mtgb
 		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStateCurrent_;   // ゲームパッドの状態現在
 		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStatePrevious_;  // ゲームパッドの状態前回
 
-	private:
-		InputData() = delete;
-		~InputData() = delete;
+	public:
+		//InputData();
+		//~InputData();
 	};
 }

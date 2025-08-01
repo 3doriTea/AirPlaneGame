@@ -9,8 +9,8 @@
 #include "WindowContextResourceManager.h"
 mtgb::DoubleWindow::DoubleWindow()
 {
-	context1_ = nullptr;
-	context2_ = nullptr;
+	context1_ = WindowContext::First;
+	context2_ = WindowContext::Second;
 }
 
 mtgb::DoubleWindow::~DoubleWindow()
@@ -45,9 +45,12 @@ void mtgb::DoubleWindow::Initialize()
 	//mtgb::WindowManager::CreateWindowContext(config2, &context2_);
 
 	//一旦DirectXリソースの初期化もここで行う
-	//Game::System<WindowContextResourceManager>().
-	Game::System<WindowContextResourceManager>().CreateResource(context1_->hWnd_);
-	Game::System<WindowContextResourceManager>().CreateResource(context2_->hWnd_);
+	Game::System<WindowManager>().RegisterWindowConfig(context1_,config1);
+	Game::System<WindowManager>().RegisterWindowConfig(context2_,config2);
+	
+
+	Game::System<WindowContextResourceManager>().CreateResource(context1_);
+	Game::System<WindowContextResourceManager>().CreateResource(context2_);
 
 	ChangeFirstWindow();
 }
@@ -67,22 +70,22 @@ void mtgb::DoubleWindow::Update()
 
 const HWND mtgb::DoubleWindow::GetFirstWindowHandle()
 {
-	return context1_->hWnd_;
+	return Game::System<WindowContextResourceManager>().GetHWND(context1_);
 }
 
 const HWND mtgb::DoubleWindow::GetSecondWindowHandle()
 {
-	return context2_->hWnd_;
+ 	return Game::System<WindowContextResourceManager>().GetHWND(context2_);
 }
 
 void mtgb::DoubleWindow::ChangeFirstWindow()
 {
 	//Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
-	Game::System<WindowContextResourceManager>().ChangeResource(context1_->hWnd_);
+	Game::System<WindowContextResourceManager>().ChangeResource(context1_);
 }
 
 void mtgb::DoubleWindow::ChangeSecondWindow()
 {
 	//Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
-	Game::System<WindowContextResourceManager>().ChangeResource(context2_->hWnd_);
+	Game::System<WindowContextResourceManager>().ChangeResource(context2_);
 }

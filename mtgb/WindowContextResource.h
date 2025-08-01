@@ -1,5 +1,7 @@
 #pragma once
 #include <tuple>
+#include <map>
+#include <typeindex>
 #include <d3d11.h>
 #include "WindowContext.h"
 
@@ -13,9 +15,9 @@ namespace mtgb
 	class WindowContextResource
 	{
 	public:
-		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
+		virtual void Initialize(WindowContext _windowContext) = 0;
 		virtual void SetResource() = 0;
+		virtual WindowContextResource* Clone() const= 0;
 	};
 }
 

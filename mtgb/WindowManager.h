@@ -9,6 +9,7 @@ typedef struct tagMSG MSG;
 
 namespace mtgb
 {
+	class WindowResource;
 	struct WindowConfig
 	{
 		const wchar_t* title;
@@ -25,7 +26,7 @@ namespace mtgb
 		WindowManager();
 		~WindowManager();
 
-		static HWND CreateWindowContext(const WindowConfig& config);
+		static HWND CreateWindowContext(WindowContext context);
 		void Initialize() override;
 		void Update() override;
 		void Release();
@@ -42,8 +43,11 @@ namespace mtgb
 		/// </summary>
 		/// <param name="windowContext">ウィンドウの識別子</param>
 		/// <returns>ウィンドウ設定</returns>
-		WindowConfig GetWindowConfig(WindowContext windowContext);
+		static WindowConfig GetWindowConfig(WindowContext windowContext);
 		
+
+		static WindowResource& GetWindowResource(WindowContext windowContext);
+
 	private:
 		static MSG* pPeekedMessage_;
 		static std::map<WindowContext, WindowConfig> windowConfigMap_;

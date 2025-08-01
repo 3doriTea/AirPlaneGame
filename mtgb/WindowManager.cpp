@@ -1,8 +1,11 @@
 #include "WindowManager.h"
+#include "WindowContextResourceManager.h"
 #include "WindowContext.h"
 #include <Windows.h>
 #include "MTAssert.h"
 #include "WindowResource.h"
+#include "Game.h"
+#include "ISystem.h"
 namespace
 {
 	
@@ -21,8 +24,9 @@ mtgb::WindowManager::~WindowManager()
 	delete pPeekedMessage_;
 }
 
-HWND mtgb::WindowManager::CreateWindowContext(const WindowConfig& config)
+HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 {
+	WindowConfig config = WindowManager::GetWindowConfig(context);
 	// ウィンドウ作成処理
 	WNDCLASSEXW windowClass{};
 	windowClass.cbSize = sizeof(WNDCLASSEXW);
@@ -50,6 +54,8 @@ HWND mtgb::WindowManager::CreateWindowContext(const WindowConfig& config)
 			WS_EX_OVERLAPPEDWINDOW) != FALSE
 		&& "AdjustWindowRectExに失敗 @WindowManager::CreateWindowContext");
 
+	WindowResource& windowResource = WindowManager::GetWindowResource(context);
+
 	HWND hWnd = CreateWindowExW(
 		0,
 		config.className,
@@ -62,7 +68,8 @@ HWND mtgb::WindowManager::CreateWindowContext(const WindowConfig& config)
 		nullptr,
 		nullptr,
 		GetModuleHandle(NULL),
-		nullptr);
+		reinterpret_cast<LPVOID>(&windowResource)
+	);
 
 	massert(hWnd != NULL
 		&& "ウィンドウの作成に失敗");
@@ -100,9 +107,17 @@ void mtgb::WindowManager::RegisterWindowConfig(WindowContext windowContext, cons
 	windowConfigMap_[windowContext] = config;
 }
 
+
+
+
 mtgb::WindowConfig mtgb::WindowManager::GetWindowConfig(WindowContext windowContext)
 {
 	auto itr = windowConfigMap_.find(windowContext);
 	massert(itr != windowConfigMap_.end() && "指定されたWindowContextのConfigが見つかりません");
 	return itr->second;
+}
+
+mtgb::WindowResource& mtgb::WindowManager::GetWindowResource(WindowContext windowContext)
+{
+	return Game::System<WindowContextResourceManager>().Get<WindowResource>(windowContext);
 }

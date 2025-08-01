@@ -1,44 +1,31 @@
 #pragma once
 #include "WindowContextResource.h"
+#include "WindowContextResourceManager.h"
 #include "DXGIResource.h"
 #include "MTAssert.h"
 #include "WindowContext.h"
+#include <map>
+#include <typeindex>
 
 namespace mtgb
 {
+
 	class Direct3DResource : public WindowContextResource
 	{
 	public:
-		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
+		Direct3DResource();
+		Direct3DResource(const Direct3DResource& other);
+		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 	private:
 		D3D11_VIEWPORT viewPort_;
 		ID3D11RenderTargetView* pRenderTargetView_;
 		ID3D11Texture2D* pDepthStencil_;
 		ID3D11DepthStencilView* pDepthStencilView_;
+
+
+		// WindowContextResource を介して継承されました
+		Direct3DResource* Clone() const override;
+
 	};
-
-	template<typename ...Args>
-	inline void Direct3DResource::Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext)
-	{
-		// DirectX11Managerにアクセス
-		auto& dx11Manager = Game::System<DirectX11Manager>();
-
-		// DXGIResourceから依存リソースを取得
-		DXGIResource* dxgi = std::get<DXGIResource*>(_resourceTuple);
-		if (!dxgi) {
-			massert(false && "DXGIResourceが見つかりません @Direct3DResource::Initialize");
-			return;
-		}
-
-		// レンダーターゲットビューを作成
-		dx11Manager.CreateRenderTargetView(dxgi->pSwapChain1_, &pRenderTargetView_);
-
-		// ビューポートを作成
-		dx11Manager.CreateViewport(viewPort_);
-
-		// 深度ステンシルと深度ステンシルビューを作成
-		dx11Manager.CreateDepthStencilAndDepthStencilView(&pDepthStencil_, &pDepthStencilView_);
-	}
 }

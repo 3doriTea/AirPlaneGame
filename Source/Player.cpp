@@ -28,7 +28,6 @@ Player::Player() : GameObject(GameObjectBuilder()
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	hText = Text::Load(str,36);
-	hWnd_ = Game::System<DoubleWindow>().GetFirstWindowHandle();
 	pTransform_->position_.z = 5.0f;
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
@@ -45,32 +44,32 @@ void Player::Update()
 	{
 		timer = 0;
 	}
-	if (InputUtil::GetKeyDown(KeyCode::C,hWnd_))
+	if (InputUtil::GetKeyDown(KeyCode::C,context_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
 		
 	}
 
-	if (InputUtil::GetKeyDown(KeyCode::F,hWnd_))
+	if (InputUtil::GetKeyDown(KeyCode::F,context_))
 	{
 		
 	}
 
-	if (InputUtil::GetKey(KeyCode::W,hWnd_))
+	if (InputUtil::GetKey(KeyCode::W,context_))
 	{
 		pTransform_->position_ += pTransform_->Forward() * PLAYER_SPEED;
 	}
-	if (InputUtil::GetKey(KeyCode::S,hWnd_))
+	if (InputUtil::GetKey(KeyCode::S,context_))
 	{
 		pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
 	}
 
-	if (InputUtil::GetKey(KeyCode::A,hWnd_))
+	if (InputUtil::GetKey(KeyCode::A,context_))
 	{
 		pTransform_->rotate_.f[2] += 1;
 		//pTransform_->scale_.z -= 0.01f;
 	}
-	if (InputUtil::GetKey(KeyCode::D,hWnd_))
+	if (InputUtil::GetKey(KeyCode::D,context_))
 	{
 		pTransform_->rotate_.f[2] -= 1;
 		//pTransform_->scale_.z += 0.01f;
@@ -80,7 +79,7 @@ void Player::Update()
 void Player::Draw() const
 {
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	Vector2Int mousePos = InputUtil::GetMousePosition(hWnd_);
+	Vector2Int mousePos = InputUtil::GetMousePosition(context_);
 	
 	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
 

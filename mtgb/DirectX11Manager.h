@@ -14,7 +14,6 @@ struct IDXGIOutput;
 struct ID3D11RenderTargetView;
 struct ID3D11Texture2D;
 struct ID3D11DepthStencilView;
-//class  WindowContext;
 typedef struct HWND__* HWND;
 
 namespace mtgb

@@ -34,6 +34,7 @@
 #include "MTImGui.h"
 #include "Text.h"
 #include "Fbx.h"
+#include "WindowContext.h"
 #include "WindowContextResourceManager.h"
 #include "WindowManager.h"
 #include "DoubleWindow.h"
@@ -49,6 +50,7 @@
 #include "DXGIResource.h"
 #include "Direct3DResource.h"
 #include "Direct2DResource.h"
+#include "InputResource.h"
 #include "Input.h"
 
 #pragma endregion

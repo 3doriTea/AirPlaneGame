@@ -9,11 +9,11 @@
 typedef struct IDirectInput8A* LPDIRECTINPUT8;
 typedef struct IDirectInputDevice8A* LPDIRECTINPUTDEVICE8;
 typedef struct HWND__* HWND;
-class InputResource;
-class InputData;
 
 namespace mtgb
 {
+	class InputResource;
+	class InputData;
 	class Input : public ISystem
 	{
 	public:
@@ -34,6 +34,7 @@ namespace mtgb
 		void CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDevice);
 		void ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice);
 		void ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice);
+		void ChangeInputData(InputData* _pInputData);
 	private:
 		InputData* pInputData_;				 // ì¸óÕÇÃèÛë‘
 		LPDIRECTINPUT8 pDirectInput_;        // Direct Input ñ{ëÃk

@@ -4,6 +4,8 @@
 #include "WindowResource.h"
 
 using namespace mtgb;
+int mtgb::WindowResource::outputCount = 0;
+
 /// <summary>
 /// 各ウィンドウに共通の処理を記述。これをWNDCLASSに渡す
 /// </summary>
@@ -27,6 +29,10 @@ LRESULT WindowResource::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 	{
 		//hWndにthisを紐づけておいたので取得
 		pThis = reinterpret_cast<WindowResource*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
+		if (pThis)
+		{
+			pThis->hWnd_ = hWnd;
+		}
 	}
 	if (pThis)
 	{
@@ -81,6 +87,35 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-void mtgb::WindowResource::SetResource()
+void WindowResource::Initialize(WindowContext _windowContext)
+{
+	hWnd_ = Game::System<WindowManager>().CreateWindowContext(_windowContext);
+
+	isActive_ = true;
+	outputIndex_ = outputCount++;
+}
+
+void WindowResource::SetResource()
+{
+
+}
+
+mtgb::WindowResource::WindowResource(const WindowResource& other)
+	:WindowContextResource(other)
+	,hWnd_(other.hWnd_)
+	,isActive_(other.isActive_)
+	,outputIndex_(other.outputIndex_)
+{
+
+}
+
+WindowResource* mtgb::WindowResource::Clone() const
+{
+	return new WindowResource(*this);
+}
+
+
+mtgb::WindowResource::WindowResource(const HWND& hWnd_, bool isActive_, int outputIndex_)
+	: hWnd_(hWnd_), isActive_(isActive_), outputIndex_(outputIndex_)
 {
 }

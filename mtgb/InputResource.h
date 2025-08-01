@@ -1,11 +1,14 @@
 #pragma once
 #include "WindowContextResource.h"
+#include "WindowContextResourceManager.h"
 #include "MTAssert.h"
 #include "Game.h"
 #include "ISystem.h"
 #include "Input.h"
 #include "WindowContext.h"
 #include <dinput.h>
+#include <map>
+#include <typeindex>
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -15,26 +18,23 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
+
 	class InputData;
 	class InputResource : public WindowContextResource
 	{
 	public:
-		template<typename... Args>
-		void Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext);
+		InputResource();
+		InputResource(const InputResource& other);
+		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
+		const InputData* GetInput(){ return pInputData_; }
+		InputData* pInputData_;
 	private:
 		LPDIRECTINPUTDEVICE8 pKeyDevice_;    // キーデバイス
-		LPDIRECTINPUTDEVICE8 pMouseDevice_;  // マウスデバイス
-		InputData* inputData_;
-	};
+		LPDIRECTINPUTDEVICE8 pMouseDevice_;
 
-	template<typename... Args>
-	inline void InputResource::Initialize(std::tuple<Args*...>& _resourceTuple, WindowContext _windowContext)
-	{
-		// WindowContextResourceManagerからHWNDを取得
-		HWND hWnd = Game::System<WindowContextResourceManager>().GetHWND(_windowContext);
-		
-		Game::System<Input>().CreateKeyDevice(hWnd, &pKeyDevice_);
-		Game::System<Input>().CreateMouseDevice(hWnd, &pMouseDevice_);
-	}
+		// WindowContextResource を介して継承されました
+		InputResource* Clone() const override;
+		// マウスデバイス
+	};
 }

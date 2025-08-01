@@ -1,8 +1,8 @@
 #pragma once
 #include "ISystem.h"
+#include "WindowContext.h"
 typedef struct HWND__* HWND;
 
-class WindowContext;
 namespace mtgb
 {
 	class DoubleWindow : public ISystem
@@ -20,7 +20,7 @@ namespace mtgb
 		void ChangeSecondWindow();
 
 	private:
-		WindowContext* context1_;
-		WindowContext* context2_;
+		WindowContext context1_;
+		WindowContext context2_;
 	};
 }

@@ -2,7 +2,6 @@
 
 mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {
-	pCollection_ = nullptr;
 }
 
 void mtgb::WindowContextResourceManager::Initialize()
@@ -15,23 +14,35 @@ void mtgb::WindowContextResourceManager::Update()
 
 void mtgb::WindowContextResourceManager::Release()
 {
-	if (pCollection_ != nullptr)
-	{
-		delete pCollection_;
-	}
+
 }
 
 void mtgb::WindowContextResourceManager::CreateResource(WindowContext windowContext)
 {
-	pCollection_->CreateResource(windowContext);
+	collectionMap_[windowContext] = defResource_.Clone();
+	collectionMap_[windowContext].ForEachInOrder(
+		[windowContext](const std::type_index&,WindowContextResource* resource)
+		{
+			if (resource)
+			{
+				resource->Initialize(windowContext);
+			}
+		}
+	);
 }
 
 void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowContext)
 {
-	pCollection_->ChangeResource(windowContext);
+	auto itr = collectionMap_.find(windowContext);
+	assert(itr != collectionMap_.end() && "指定されたWindowContextのリソースが見つかりません");
+
+	for (auto& collection : itr->second)
+	{
+		collection.second->SetResource();
+	}
 }
 
 HWND mtgb::WindowContextResourceManager::GetHWND(WindowContext windowContext)
 {
-	return pCollection_->GetHWND(windowContext);
+	return collectionMap_[windowContext].Get<WindowResource>().hWnd_;
 }

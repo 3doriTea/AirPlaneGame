@@ -27,10 +27,12 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<Direct2D>(SystemUpdateType::Frame);
 	_register.Set<DirectWrite>(SystemUpdateType::Frame);
 	//_register.Set<MTImGui>(SystemUpdateType::Frame);
+	_register.Set<Input>(SystemUpdateType::DontCallMe);
 
 
 	_register.Set<WindowContextResourceManager>(SystemUpdateType::DontCallMe);
 	Game::System<WindowContextResourceManager>().RegisterResourceTypes<
+		WindowResource,
 		DXGIResource,
 		Direct3DResource,
 		Direct2DResource,
@@ -38,7 +40,6 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	>();
 
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
-	_register.Set<Input>(SystemUpdateType::DontCallMe);
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
 	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
