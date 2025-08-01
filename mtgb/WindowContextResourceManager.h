@@ -212,7 +212,7 @@ namespace mtgb
         ResourceT& Get(WindowContext windowContext)
         {
             auto itr = collectionMap_.find(windowContext);
-            assert(itr != collectionMap_.end() && "指定されたWindowContextのリソースが見つかりません");
+            massert(itr != collectionMap_.end() && "指定されたWindowContextのリソースが見つかりません");
 
             static_assert(std::is_base_of_v<WindowContextResource, ResourceT>,
                 "WindowContextResourceを継承していないクラスのインスタンスは取得できません。");

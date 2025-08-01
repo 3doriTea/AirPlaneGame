@@ -32,6 +32,13 @@ Player::Player() : GameObject(GameObjectBuilder()
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01, [this]() {timer += 10; });
+	//context_ = WindowContext::First;
+}
+
+Player::Player(mtgb::WindowContext context)
+	:Player()
+{
+	context_ = context;
 }
 
 Player::~Player()

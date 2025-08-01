@@ -6,6 +6,7 @@ class Player : public GameObject
 {
 public:
 	Player();
+	Player(mtgb::WindowContext context);
 	~Player();
 
 	void Update() override;
