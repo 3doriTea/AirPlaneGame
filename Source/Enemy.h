@@ -11,8 +11,9 @@ public:
 	void Draw() const override;
 private:
 	int hp_;
-	int speed_;
+	float speed_;
 	Transform* pTransform_;
-	OBJModelHandle hModel_;
+	//OBJModelHandle hModel_;
+	FBXModelHandle hModel_;
 	float radius_;
 };

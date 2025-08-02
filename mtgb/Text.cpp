@@ -79,12 +79,12 @@ void mtgb::Text::Draw(int handle, float x, float y)
 
 
 
-void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y,int size)
+void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y, int size)
 {
 	// 指定サイズのフォーマットを取得または作成
 	auto formatData = GetOrCreateTextFormat(size);	
 	
-	instance.ImmediateDraw(text,formatData.first,formatData.second, x, y);
+	instance.ImmediateDraw(text,formatData.first,formatData.second, static_cast<int>(x), static_cast<int>(y));
 }
 
 void mtgb::Text::ImmediateDraw(const std::string& text, float x, float y, int size)

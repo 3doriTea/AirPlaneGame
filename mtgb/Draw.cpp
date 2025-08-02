@@ -51,7 +51,7 @@ void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
 
 void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
 {
-	Game::System<mtgb::Text>().Draw(_hText, origin.x, origin.y);
+	Game::System<mtgb::Text>().Draw(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y));
 }
 
 void mtgb::Draw::ImmediateText(const std::string& text, float x, float y)

@@ -4,7 +4,13 @@
 #include "DirectX11Draw.h"
 #include "MTAssert.h"
 
-mtgb::Fbx::Fbx()
+mtgb::Fbx::Fbx() :
+	animationSpeed_{ 1.0f },
+	startFrame_{ 0 },
+	endFrame_ { 0 },
+	frameRate_{ FbxTime::EMode::eFrames60 },
+	pFbxManager_{ nullptr },
+	pFbxScene_{ nullptr }
 {
 }
 
@@ -37,6 +43,10 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 	//none of the registered readers can process the file
 	/*massert(fbxImporter->Initialize(fileName.Buffer(), -1)
 		&& "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");*/
+
+	char str[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, str);
+
 	massert(fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings())
 		&& "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");
 
