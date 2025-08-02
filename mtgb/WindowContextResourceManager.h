@@ -179,6 +179,7 @@ namespace mtgb
     class WindowContextResourceManager : public ISystem
     {
     private:
+        static WindowContext currentContext_;
         ResourceCollection defResource_;
         std::vector<std::type_index> registeredTypes_;
         std::map<WindowContext, ResourceCollection> collectionMap_;
@@ -230,6 +231,11 @@ namespace mtgb
         /// </summary>
         /// <typeparam name="...Args">éwíËÇµÇΩèáî‘Ç…èâä˙âªÇ≥ÇÍÇÈ</typeparam>
         HWND GetHWND(WindowContext windowContext);
+
+        static WindowContext CurrCtx()
+        {
+            return currentContext_;
+        }
 
         template<class... Args>
         void RegisterResourceTypes()

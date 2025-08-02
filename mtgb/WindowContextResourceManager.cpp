@@ -1,4 +1,5 @@
 #include "WindowContextResourceManager.h"
+mtgb::WindowContext mtgb::WindowContextResourceManager::currentContext_{ WindowContext::None };
 
 mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {
@@ -40,6 +41,8 @@ void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowCont
 	{
 		collection.second->SetResource();
 	}
+
+	currentContext_ = windowContext;
 }
 
 HWND mtgb::WindowContextResourceManager::GetHWND(WindowContext windowContext)

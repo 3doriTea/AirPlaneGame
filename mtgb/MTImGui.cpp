@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "DoubleWindow.h"
 #include "DirectX11Draw.h"
-
 mtgb::MTImGui::~MTImGui()
 {
 	Release();
@@ -58,9 +57,12 @@ void mtgb::MTImGui::BeginFrame()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::Begin("a");
+	
 }
-
+void mtgb::MTImGui::Begin(std::string str)
+{
+	ImGui::Begin(str.c_str());
+}
 void mtgb::MTImGui::Draw()
 {
 
@@ -68,7 +70,6 @@ void mtgb::MTImGui::Draw()
 
 void mtgb::MTImGui::EndFrame()
 {
-	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -85,6 +86,10 @@ void mtgb::MTImGui::EndFrame()
 	//BeginFrame()
 }
 
+void mtgb::MTImGui::End()
+{
+	ImGui::End();
+}
 void mtgb::MTImGui::Release()
 {
 	ImGui_ImplDX11_Shutdown();

@@ -8,6 +8,10 @@
 #include <iostream>
 #include "../ImGui/imgui.h"
 #include <any>
+#include <Windows.h>
+#include "Game.h"
+#include "ISystem.h"
+#include "WindowContextResourceManager.h"
 template <typename T>
 struct Range : refl::attr::usage::member
 {
@@ -89,7 +93,7 @@ namespace TypeRegistry
 	void DefaultShow(T* value, const char* name);
 	std::unordered_map<std::type_index, ShowFuncType> showFunctions_;
 
-
+	static WindowContext mainWindow_ = WindowContext::First;
 };
 
 template<typename T>
@@ -98,7 +102,7 @@ void TypeRegistry::RegisterType()
 	std::type_index typeIdx(typeid(T));
 	showFunctions_[typeIdx] = [](std::any ptr, const char* name)
 		{
-			if constexpr (refl::is_reflectable<T>())
+			if constexpr (refl::is_reflectable<refl::trait::remove_qualifiers_t<T>>())
 			{
 				T* registerInstance = std::any_cast<T*>(ptr);
 				constexpr auto type = refl::reflect<T>();
@@ -160,6 +164,12 @@ void TypeRegistry::RegisterType()
 						});
 				}
 			}
+			else
+			{
+				
+				ImGui::Text("%s,not", name);
+					
+			}
 		};
 }
 
@@ -173,13 +183,20 @@ void TypeRegistry::RegisterFunc(ShowFuncType func)
 template<typename T>
 void TypeRegistry::ShowInspector(T* instance, const char* name)
 {
-	
+	if (WindowContextResourceManager::CurrCtx() != mainWindow_)
+	{
+		return;
+	}
 	std::type_index typeIdx(typeid(refl::trait::remove_qualifiers_t<T>));
 	auto it = showFunctions_.find(typeIdx);
 
 	if (it != showFunctions_.end())
 	{
 		it->second(std::any(instance), name);
+	}
+	else
+	{
+		ImGui::Text("%s,notReflectable", name);
 	}
 }
 
@@ -202,11 +219,14 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	if constexpr (std::is_same_v<T, int>) 
 	{
 		ImGui::InputInt(name, value);
+		OutputDebugString("int");
 		//std::cout << "Default int: " << name << " = " << *value << std::endl;
 	}
 	else if constexpr (std::is_same_v<T, float>) 
 	{
 		ImGui::InputFloat(name, value);
+		OutputDebugString("float");
+
 		//std::cout << "Default float: " << name << " = " << *value << std::endl;
 	}
 	else if constexpr (std::is_same_v<T, bool>)
@@ -215,6 +235,7 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else {
 		ImGui::Text("%s:Unknown",name );
+		OutputDebugString("Unknown");
 		//std::cout << "Default unknown type: " << name << std::endl;
 	}
 }

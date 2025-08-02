@@ -5,6 +5,7 @@
 #include <type_traits>
 #include <assert.h>
 #include <typeinfo>
+#include <string>
 #include "../ImGui/imgui.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui_impl_dx11.h"
@@ -29,7 +30,9 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
+		void Begin(std::string str);
 		void Draw();
+		void End();
 		void EndFrame();
 		void Release();
 		

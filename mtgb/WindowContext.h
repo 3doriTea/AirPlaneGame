@@ -11,6 +11,7 @@ namespace mtgb
 	{
 		First,
 		Second,
-		Both
+		Both,
+		None
 	};
 }
