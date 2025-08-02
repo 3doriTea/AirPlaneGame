@@ -33,6 +33,11 @@ namespace mtgb
 	using TextHandle = int32_t;
 
 	/// <summary>
+	/// シーン内で通用するカメラハンドル
+	/// </summary>
+	using CameraHandleInScene = int32_t;
+
+	/// <summary>
 	/// 無効なハンドル値
 	/// </summary>
 	static const int32_t INVALID_HANDLE{ -1 };

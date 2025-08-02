@@ -118,6 +118,9 @@
     <Filter Include="mtgb\MTNet">
       <UniqueIdentifier>{4dd2f2f8-47cc-44d1-9cd0-60c409db6cc7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mtgb\System\Camera">
+      <UniqueIdentifier>{c3026163-e52d-4f01-af5b-a01ed9efb2ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -371,6 +374,9 @@
     </ClCompile>
     <ClCompile Include="Source\Background.cpp">
       <Filter>Game\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\CameraSystem.cpp">
+      <Filter>mtgb\System\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -682,6 +688,9 @@
     </ClInclude>
     <ClInclude Include="minimp3_ex.h">
       <Filter>mtgb\System\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CameraSystem.h">
+      <Filter>mtgb\System\Camera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
