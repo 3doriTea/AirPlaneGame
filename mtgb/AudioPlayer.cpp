@@ -19,11 +19,13 @@ mtgb::AudioPlayer::~AudioPlayer()
 
 void mtgb::AudioPlayer::Initialize()
 {
+
 }
 
 void mtgb::AudioPlayer::SetAudio(const AudioHandle _hAudio)
 {
 	Audio& audio{ Game::System<Audio>() };
+	audio.Initialize();
 
 	pAudioClip_ = audio.GetAudioClip(_hAudio);
 

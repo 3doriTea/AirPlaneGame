@@ -127,6 +127,8 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="minimp3.h" />
+    <ClInclude Include="minimp3_ex.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />

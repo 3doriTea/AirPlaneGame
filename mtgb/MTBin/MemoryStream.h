@@ -70,6 +70,11 @@ namespace mtbin
 		/// <returns></returns>
 		inline size_t Current() const { return currentIndex; }
 
+		/// <summary>
+		/// 全データサイズを返す
+		/// </summary>
+		inline size_t GetLength() const { return BUFFER_SIZE; }
+
 	private:
 		const size_t BUFFER_SIZE;  // バッファ配列のサイズ
 		mtbin::Byte* pBuffer_;  // 読み書きするバッファ配列

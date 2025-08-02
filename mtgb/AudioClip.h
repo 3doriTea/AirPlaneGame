@@ -31,6 +31,20 @@ namespace mtgb
 		void Load(mtbin::MemoryStream& _ms);
 
 		/// <summary>
+		/// WAV読み込み
+		/// </summary>
+		/// <param name="_ms">WAVのメモリストリーム</param>
+		/// <param name="_first4"> 最初の4バイトの識別子</param>
+		void LoadWave(mtbin::MemoryStream& _ms, const byte* _first4);
+
+		/// <summary>
+		/// mp3読み込み
+		/// </summary>
+		/// <param name="_ms">mp3のメモリストリーム</param>
+		/// <param name="_first4">最初の4バイトの識別子</param>
+		void LoadMp3(mtbin::MemoryStream& _ms, const byte* _first4);
+
+		/// <summary>
 		/// 音声データの総再生時間(秒)を取得
 		/// </summary>
 		/// <returns></returns>
