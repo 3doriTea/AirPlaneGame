@@ -2,9 +2,22 @@
 #include "ISystem.h"
 #include "Input.h"
 #include "WindowResource.h"
+#include "../ImGui/imgui.h"
+#include "../ImGui/imgui_impl_win32.h"
+#include "../ImGui/imgui_impl_dx11.h"
 
 using namespace mtgb;
 int mtgb::WindowResource::outputCount = 0;
+
+/// <summary>
+/// ウィンドウからのメッセージを受信してImGuiの入力やイベントを有効にするためのコールバック関数
+/// </summary>
+/// <param name="hwnd">ウィンドウハンドル</param>
+/// <param name="msg">メッセージ</param>
+/// <param name="wParam">パラメータ</param>
+/// <param name="lParam">パラメータ</param>
+/// <returns></returns>
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 /// <summary>
 /// 各ウィンドウに共通の処理を記述。これをWNDCLASSに渡す
@@ -44,7 +57,10 @@ LRESULT WindowResource::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 
 LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
+		return true;
+	}
 	switch (msg)
 	{
 	case WM_DESTROY:  // ウィンドウを閉じた

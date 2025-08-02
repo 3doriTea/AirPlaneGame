@@ -1,6 +1,6 @@
 #include "MTImGui.h"
 #include "Game.h"
-#include "MainWindow.h"
+#include "DoubleWindow.h"
 #include "DirectX11Draw.h"
 
 mtgb::MTImGui::~MTImGui()
@@ -38,11 +38,10 @@ void mtgb::MTImGui::Initialize()
 
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 
-	MainWindow& mainWindow = Game::System<MainWindow>();
 	
-	ImGui_ImplWin32_Init(mainWindow.GetHWND());
+	
+	ImGui_ImplWin32_Init(Game::System<DoubleWindow>().GetFirstWindowHandle());
 	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_, mtgb::DirectX11Draw::pContext_);
-	BeginFrame();
 }
 
 void mtgb::MTImGui::Update()
@@ -55,7 +54,6 @@ void mtgb::MTImGui::Update()
 void mtgb::MTImGui::BeginFrame()
 {
 	mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(true);
-	//pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();

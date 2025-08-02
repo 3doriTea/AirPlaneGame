@@ -228,12 +228,12 @@ void mtgb::DirectX11Manager::Initialize()
 
 void mtgb::DirectX11Manager::Update()
 {
-	//Game::System<MTImGui>().EndFrame();
-	//DirectX11Draw::End();
+	/*Game::System<MTImGui>().EndFrame();
+	DirectX11Draw::End();
 	
 
-	//Game::System<MTImGui>().BeginFrame();
-	//DirectX11Draw::Begin();
+	Game::System<MTImGui>().BeginFrame();
+	DirectX11Draw::Begin();*/
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()

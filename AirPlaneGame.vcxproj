@@ -196,6 +196,7 @@
     <ClInclude Include="mtgb\InputKeyCode.h" />
     <ClInclude Include="mtgb\InputMouseCode.h" />
     <ClInclude Include="mtgb\InputResource.h" />
+    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\IShader.h" />
     <ClInclude Include="mtgb\ISystem.h" />
     <ClInclude Include="mtgb\MainWindow.h" />

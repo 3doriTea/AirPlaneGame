@@ -24,7 +24,7 @@ void PlayScene::Initialize()
 	SetCameraGameObject(Instantiate<Camera>());
 
 	Instantiate<Player>(WindowContext::First);
-	Instantiate<Player>(WindowContext::Second);
+	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始

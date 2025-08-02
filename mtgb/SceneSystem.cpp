@@ -4,6 +4,7 @@
 #include "DirectX11Manager.h"
 #include "DirectX11Draw.h"
 #include "Input.h"
+#include "MTImGui.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -51,15 +52,19 @@ void mtgb::SceneSystem::Update()
 
 
 	Game::System<DoubleWindow>().ChangeFirstWindow();
+	Game::System<MTImGui>().BeginFrame();
 	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
 		gameObject->Draw();
 	}
+	Game::System<MTImGui>().EndFrame();
 	DirectX11Draw::End();
 
+
 	Game::System<DoubleWindow>().ChangeSecondWindow();
+
 	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)

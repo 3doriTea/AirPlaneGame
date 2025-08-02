@@ -2,6 +2,7 @@
 #include "Bullet.h"
 #include "../mtgb/DirectX11Draw.h"
 #include "DoubleWindow.h"
+#include "Inspector.h"
 using namespace mtgb;
 
 namespace
@@ -101,6 +102,5 @@ void Player::Draw() const
 	//Draw::Image(hImage_, pTransform_);
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
-	//MTImGui::ShowInspector(this, "player");
-	//Draw::Text(hText, mousePos);
+	TypeRegistry::ShowInspector(this, "Player");
 }
