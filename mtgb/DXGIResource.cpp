@@ -1,10 +1,17 @@
 #include "DXGIResource.h"
-
+#include "ReleaseUtility.h"
 using namespace mtgb;
 
 mtgb::DXGIResource::DXGIResource()
 	:pSwapChain1_{nullptr}, pOutput_{nullptr}, pDXGISurface_{nullptr}
 {
+}
+
+mtgb::DXGIResource::~DXGIResource()
+{
+	SAFE_RELEASE(pSwapChain1_);
+	SAFE_RELEASE(pOutput_);
+	SAFE_RELEASE(pDXGISurface_);
 }
 
 mtgb::DXGIResource::DXGIResource(const DXGIResource& other)

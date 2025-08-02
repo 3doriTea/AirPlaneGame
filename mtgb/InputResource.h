@@ -24,6 +24,7 @@ namespace mtgb
 	{
 	public:
 		InputResource();
+		~InputResource();
 		InputResource(const InputResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;

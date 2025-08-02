@@ -4,6 +4,7 @@
 
 class Player : public GameObject
 {
+	//friend class TypeRegistry;
 public:
 	Player();
 	Player(mtgb::WindowContext context);
@@ -11,10 +12,10 @@ public:
 
 	void Update() override;
 	void Draw() const override;
-private:
-	std::string str;
 	int test1;
 	float test2;
+private:
+	std::string str;
 	Transform* pTransform_;
 	AudioPlayer* pAudioPlayer_;
 	ImageHandle hImage_;

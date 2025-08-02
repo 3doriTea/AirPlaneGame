@@ -1,11 +1,18 @@
 #include "Direct3DResource.h"
-
+#include "ReleaseUtility.h"
 using namespace mtgb;
 
 mtgb::Direct3DResource::Direct3DResource()
 	:pRenderTargetView_{nullptr},pDepthStencil_{nullptr},pDepthStencilView_{nullptr}
 {
 
+}
+
+mtgb::Direct3DResource::~Direct3DResource()
+{
+	SAFE_RELEASE(pRenderTargetView_);
+	SAFE_RELEASE(pDepthStencilView_);
+	SAFE_RELEASE(pDepthStencil_);
 }
 
 mtgb::Direct3DResource::Direct3DResource(const Direct3DResource& other)

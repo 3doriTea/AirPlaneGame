@@ -405,6 +405,12 @@
     <ClCompile Include="mtgb\WindowResource.cpp">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Inspector.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ResourceCollection.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -733,6 +739,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\Inspector.h">
       <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AccessibleMacro.h">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ResourceCollection.h">
+      <Filter>mtgb\System\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,18 @@
 #include "InputResource.h"
 #include "InputData.h"
+#include "ReleaseUtility.h"
 using namespace mtgb;
 
 mtgb::InputResource::InputResource()
 	:pInputData_{nullptr},pKeyDevice_{nullptr},pMouseDevice_{nullptr}
 {
+}
+
+mtgb::InputResource::~InputResource()
+{
+	SAFE_DELETE(pInputData_);
+	SAFE_RELEASE(pKeyDevice_);
+	SAFE_RELEASE(pMouseDevice_);
 }
 
 mtgb::InputResource::InputResource(const InputResource& other)

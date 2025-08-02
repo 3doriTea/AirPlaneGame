@@ -19,6 +19,7 @@ namespace mtgb
 	{
 	public:
 		DXGIResource();
+		~DXGIResource();
 		DXGIResource(const DXGIResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;

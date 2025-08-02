@@ -10,8 +10,9 @@
 #include <any>
 #include <Windows.h>
 #include "Game.h"
-#include "ISystem.h"
 #include "WindowContextResourceManager.h"
+#include "WindowContext.h"
+#include "MTAssert.h"
 template <typename T>
 struct Range : refl::attr::usage::member
 {
@@ -71,29 +72,36 @@ struct ReadOnly : refl::attr::usage::member
 	}
 };
 
+using ShowFuncType = std::function<void(std::any, const char*)>;
 
-
-namespace TypeRegistry
+class TypeRegistry
 {
+public:
+	
 	template<typename T>
-	void RegisterType();
+	static void RegisterType();
 
 
-	using ShowFuncType = std::function<void(std::any, const char*)>;
 	//using ShowFuncType = std::function<void(void*, const char*)>;
 
 	template<typename T>
-	void RegisterFunc(ShowFuncType func);
+	static void RegisterFunc(ShowFuncType func);
 
 	template<typename T>
-	void ShowInspector(T * instance, const char* name);
+	static void ShowInspector(T * instance, const char* name);
 	//std::type_info nowRegisteringType;
 
 	template<typename T>
-	void DefaultShow(T* value, const char* name);
-	std::unordered_map<std::type_index, ShowFuncType> showFunctions_;
+	static void DefaultShow(T* value, const char* name);
+	static std::unordered_map<std::type_index, ShowFuncType> showFunctions_;
 
-	static WindowContext mainWindow_ = WindowContext::First;
+	const static  mtgb::WindowContext mainWindow_ = mtgb::WindowContext::First;
+
+	static TypeRegistry instance;
+private:
+	TypeRegistry() = delete;
+	TypeRegistry(const TypeRegistry&) = delete;
+	TypeRegistry& operator=(const TypeRegistry&) = delete;
 };
 
 template<typename T>
@@ -102,10 +110,21 @@ void TypeRegistry::RegisterType()
 	std::type_index typeIdx(typeid(T));
 	showFunctions_[typeIdx] = [](std::any ptr, const char* name)
 		{
-			if constexpr (refl::is_reflectable<refl::trait::remove_qualifiers_t<T>>())
+			using Type = refl::trait::remove_qualifiers_t<T>;
+			if constexpr (refl::is_reflectable<Type>())
 			{
-				T* registerInstance = std::any_cast<T*>(ptr);
-				constexpr auto type = refl::reflect<T>();
+				T* registerInstance = nullptr;
+				if (ptr.type() == typeid(Type*))
+				{
+					registerInstance = std::any_cast<Type*>(ptr);
+				}
+				else if (ptr.type() == typeid(const Type*))
+				{
+					registerInstance = const_cast<Type*>(std::any_cast<const Type*>(ptr));
+				}
+				massert(registerInstance != nullptr
+					&& "RegisterType‚ÉŽ¸”s:ptr‚ªnullptr‚Å‚· @TypeRegistry::RegisterType");
+				constexpr auto type = refl::reflect<Type>();
 
 				// Check if ShowFunc is present and execute it
 				bool showFuncExecuted = false;
@@ -176,14 +195,15 @@ void TypeRegistry::RegisterType()
 template<typename T>
 void TypeRegistry::RegisterFunc(ShowFuncType func)
 {
-	std::type_index typeIdx(typeid(T));
+	using Type = refl::trait::remove_qualifiers_t<T>;
+	std::type_index typeIdx(typeid(Type));
 	showFunctions_[typeIdx] = func;
 }
 
 template<typename T>
 void TypeRegistry::ShowInspector(T* instance, const char* name)
 {
-	if (WindowContextResourceManager::CurrCtx() != mainWindow_)
+	if (mtgb::WindowContextResourceManager::CurrCtx() != mainWindow_)
 	{
 		return;
 	}
@@ -219,13 +239,11 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	if constexpr (std::is_same_v<T, int>) 
 	{
 		ImGui::InputInt(name, value);
-		OutputDebugString("int");
 		//std::cout << "Default int: " << name << " = " << *value << std::endl;
 	}
 	else if constexpr (std::is_same_v<T, float>) 
 	{
 		ImGui::InputFloat(name, value);
-		OutputDebugString("float");
 
 		//std::cout << "Default float: " << name << " = " << *value << std::endl;
 	}
@@ -235,7 +253,6 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else {
 		ImGui::Text("%s:Unknown",name );
-		OutputDebugString("Unknown");
 		//std::cout << "Default unknown type: " << name << std::endl;
 	}
 }
@@ -257,5 +274,6 @@ REFL_FUNC(MemberName,__VA_ARGS__)
 
 #define REGISTER_SHOW_FUNC()
 
-
+#define ACCESSIBLE_PRIVATE()\
+template<typename,typename,auto> friend struct refl::detail::member_descriptor;
 

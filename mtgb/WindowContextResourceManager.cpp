@@ -5,6 +5,11 @@ mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {
 }
 
+mtgb::WindowContextResourceManager::~WindowContextResourceManager()
+{
+	Release();
+}
+
 void mtgb::WindowContextResourceManager::Initialize()
 {
 }
@@ -15,12 +20,12 @@ void mtgb::WindowContextResourceManager::Update()
 
 void mtgb::WindowContextResourceManager::Release()
 {
-
+	collectionMap_.clear();
 }
 
 void mtgb::WindowContextResourceManager::CreateResource(WindowContext windowContext)
 {
-	collectionMap_[windowContext] = defResource_.Clone();
+	collectionMap_[windowContext] = defResource_;
 	collectionMap_[windowContext].ForEachInOrder(
 		[windowContext](const std::type_index&,WindowContextResource* resource)
 		{

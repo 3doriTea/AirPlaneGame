@@ -31,10 +31,9 @@ namespace mtgb
 
 		
 		WindowResource(const WindowResource& other);
-
 		// WindowContextResource ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
 		WindowResource* Clone() const override;
 		WindowResource();
-		
+		~WindowResource();
 	};
 }

@@ -1,11 +1,17 @@
 #include "Direct2DResource.h"
-
+#include "ReleaseUtility.h"
 using namespace mtgb;
 
 mtgb::Direct2DResource::Direct2DResource()
 	:pRenderTarget_{nullptr},pD2DBrush_{nullptr}
 {
 
+}
+
+mtgb::Direct2DResource::~Direct2DResource()
+{
+	SAFE_RELEASE(pRenderTarget_);
+	SAFE_RELEASE(pD2DBrush_);
 }
 
 mtgb::Direct2DResource::Direct2DResource(const Direct2DResource& other)

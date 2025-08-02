@@ -1,5 +1,7 @@
 #include <Windows.h>
 #include <mtgb.h>
+#include <refl.hpp>
+#include "TypeRegistry.h"
 #include "SampleGame.h"
 
 // エントリポイント

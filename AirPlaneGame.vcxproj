@@ -66,6 +66,7 @@
     <ClCompile Include="mtgb\Input.cpp" />
     <ClCompile Include="mtgb\InputData.cpp" />
     <ClCompile Include="mtgb\InputResource.cpp" />
+    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\IShader.cpp" />
     <ClCompile Include="mtgb\ISystem.cpp" />
     <ClCompile Include="mtgb\MainWindow.cpp" />
@@ -109,6 +110,7 @@
     </ClCompile>
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
+    <ClCompile Include="mtgb\ResourceCollection.cpp" />
     <ClCompile Include="mtgb\WindowContextResource.cpp" />
     <ClCompile Include="mtgb\WindowContextResourceManager.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
@@ -151,6 +153,7 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="mtgb\AccessibleMacro.h" />
     <ClInclude Include="mtgb\AssetsManager.h" />
     <ClInclude Include="mtgb\Audio.h" />
     <ClInclude Include="mtgb\AudioClip.h" />
@@ -249,6 +252,7 @@
     <ClInclude Include="mtgb\Quaternion.h" />
     <ClInclude Include="mtgb\RectInt.h" />
     <ClInclude Include="mtgb\ReleaseUtility.h" />
+    <ClInclude Include="mtgb\ResourceCollection.h" />
     <ClInclude Include="mtgb\WindowContextResource.h" />
     <ClInclude Include="mtgb\WindowContextResourceManager.h" />
     <ClInclude Include="mtgb\RigidBody.h" />

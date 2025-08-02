@@ -63,8 +63,10 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	}
 	switch (msg)
 	{
-	case WM_DESTROY:  // ウィンドウを閉じた
+	case WM_CLOSE:
 		Game::Exit();
+		return 0;
+	case WM_DESTROY:  // ウィンドウを閉じた
 		return S_OK;
 	case WM_MOUSEMOVE:  // マウスが動いた
 		Game::System<Input>().UpdateMousePositionData(LOWORD(lParam), HIWORD(lParam));
@@ -132,6 +134,11 @@ WindowResource* mtgb::WindowResource::Clone() const
 
 mtgb::WindowResource::WindowResource()
 {
+}
+
+mtgb::WindowResource::~WindowResource()
+{
+	DestroyWindow(hWnd_);
 }
 
 

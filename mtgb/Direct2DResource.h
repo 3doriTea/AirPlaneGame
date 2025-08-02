@@ -21,6 +21,7 @@ namespace mtgb
 	{
 	public:
 		Direct2DResource();
+		~Direct2DResource();
 		Direct2DResource(const Direct2DResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;

@@ -15,15 +15,9 @@ namespace mtgb
 	class WindowContextResource
 	{
 	public:
+		virtual ~WindowContextResource() {};
 		virtual void Initialize(WindowContext _windowContext) = 0;
 		virtual void SetResource() = 0;
 		virtual WindowContextResource* Clone() const= 0;
 	};
 }
-
-
-
-
-
-
-

@@ -64,12 +64,19 @@ void mtgb::Game::InitializeSystems(const std::list<ISystem*>& _uninitialized)
 	}
 }
 
-void mtgb::Game::ReleaseSystems(const std::list<ISystem*>& _runnings)
+void mtgb::Game::ReleaseSystems(std::list<ISystem*>& _runnings)
 {
-	for (auto&& pRegisterSystem : _runnings)
+	for (auto rit = _runnings.rbegin(); rit != _runnings.rend();)
+	{
+		auto it = std::next(rit).base();
+		delete *it;
+		it = _runnings.erase(it);
+		rit = std::make_reverse_iterator(it);
+	}
+	/*for (auto&& pRegisterSystem : _runnings)
 	{
 		delete pRegisterSystem;
-	}
+	}*/
 }
 
 void mtgb::Game::RunLoopGameCycle()
