@@ -87,12 +87,17 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		Matrix4x4 mWorld = Matrix4x4();
 		_transform.GenerateWorldMatrix(&mWorld);
 
+		const Transform& cameraTransform{ GetCameraTransfrom() };
+
 		XMMATRIX mView;
 		// ビュートランスフォーム（視点座標変換）
-		XMVECTOR vEyePt = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f); //カメラ（視点）位置
-		XMVECTOR vLookatPt = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);//注視位置
+		Vector4 vEyePt = cameraTransform.position_;//XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f); //カメラ（視点）位置
+		Vector4 vLookatPt = cameraTransform.Forward() + cameraTransform.position_;//XMVectorSet(0.0f, 0.0f, 10.0f, 0.0f);//注視位置
 		XMVECTOR vUpVec = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);//上方位置
 		mView = XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
+
+		LOGF("vEyePt = %f,%f,%f ---", vEyePt.f[0], vEyePt.f[1], vEyePt.f[2]);
+		LOGF("vLckPt = %f,%f,%f\n", vLookatPt.f[0], vLookatPt.f[1], vLookatPt.f[2]);
 
 		XMMATRIX mProj;
 		static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
@@ -115,7 +120,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_speculer = pMaterial_[i].specular;
 		cb.g_shininess = pMaterial_[i].shininess;
 		Vector4 cameraPosition{ 0.0f, 0.0f, -10.0f, 0.0f };
-		cb.g_cameraPosition = cameraPosition;
+		cb.g_cameraPosition = cameraTransform.position_;
 		cb.g_lightDirection = Vector4{ 0.0f, 0.0f, 1.0f, 0.0f }; // ライトの向き
 		cb.g_isTexture = pMaterial_[i].pTexture != nullptr;
 

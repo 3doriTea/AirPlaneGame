@@ -9,7 +9,9 @@ namespace mtgb
 	class Figure;
 	class Transform;
 	
-
+	/// <summary>
+	/// •`‰æ‚·‚éŒn
+	/// </summary>
 	class Draw final : public ISystem
 	{
 	public:

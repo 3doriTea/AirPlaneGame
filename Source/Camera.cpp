@@ -2,6 +2,11 @@
 
 using namespace mtgb;
 
+namespace
+{
+	static const float MOVE_SPEED{ 10.0f };
+}
+
 Camera::Camera() : GameObject(GameObjectBuilder()
 		.SetName("Main Camera")
 		.SetPosition(Vector3{ 0, 0, 0 })
@@ -19,21 +24,23 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
+
 	if (InputData::GetKey(KeyCode::Up))
 	{
-		pTransform_->position_.z += 1.0f;
+		pTransform_->position_.z += MOVE;
 	}
 	if (InputData::GetKey(KeyCode::Down))
 	{
-		pTransform_->position_.z -= -1.0f;
+		pTransform_->position_.z -= MOVE;
 	}
 	if (InputData::GetKey(KeyCode::Left))
 	{
-		pTransform_->position_.x -= -1.0f;
+		pTransform_->position_.x -= MOVE;
 	}
 	if (InputData::GetKey(KeyCode::Right))
 	{
-		pTransform_->position_.x += -1.0f;
+		pTransform_->position_.x += MOVE;
 	}
 }
 
