@@ -171,7 +171,7 @@ void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, int size, IDWr
 	rtSize.height = rtSize.height / dpiY * dip;
 
 	//IDWriteTextLayout* layout;
-	HRESULT hResult = pDWriteFactory_->CreateTextLayout(str.data(), str.size(), format, rtSize.width, rtSize.height, ppTextLayout);
+	HRESULT hResult = pDWriteFactory_->CreateTextLayout(str.data(), static_cast<uint32_t>(str.size()), format, rtSize.width, rtSize.height, ppTextLayout);
 
 	massert(SUCCEEDED(hResult)
 		&& "CreateTextLayout‚ÉŽ¸”s @DirectWrite::RegisterText");
@@ -204,7 +204,7 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y
 
 	mtgb::Direct2D::pRenderTarget_->DrawText(
 		text.c_str(),
-		text.length(),
+		static_cast<uint32_t>(text.length()),
 		pTextFormat_,
 		D2D1::RectF(x, y + pixelFontMetrics_.textTopOffset, rtSize.width, rtSize.height),
 		mtgb::Direct2D::pD2DBrush_
@@ -247,9 +247,11 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat
 
 	mtgb::Direct2D::pRenderTarget_->DrawText(
 		text.c_str(),
-		text.length(),
+		static_cast<uint32_t>(text.length()),
 		format,
-		D2D1::RectF(x, y + pixelFontMetrics.textTopOffset, rtSize.width, rtSize.height),
+		D2D1::RectF(
+			static_cast<float>(x),
+			y + pixelFontMetrics.textTopOffset, rtSize.width, rtSize.height),
 		mtgb::Direct2D::pD2DBrush_
 	);
 

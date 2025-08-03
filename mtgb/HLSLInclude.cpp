@@ -14,7 +14,7 @@ HRESULT mtgb::HLSLInclude::Open(
 
 	std::ifstream ifs{ headersDirectory + fileName, std::ios::binary };
 	ifs.seekg(0, std::ios::end);
-	*_pBytes = ifs.tellg();
+	*_pBytes = static_cast<UINT>(ifs.tellg());
 
 	*_ppData = new char[*_pBytes];
 
