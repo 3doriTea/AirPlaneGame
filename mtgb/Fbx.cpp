@@ -110,7 +110,7 @@ void mtgb::Fbx::Draw(int _hModel, const Transform& _transfrom, int _frame)
 
 void mtgb::Fbx::Release()
 {
-	SAFE_DELETE_CONTAINER(pParts_);
+	SAFE_CLEAR_CONTAINER_RELEASE(pParts_);
 	SAFE_DESTROY(pFbxScene_);
 	SAFE_DESTROY(pFbxManager_);
 }

@@ -109,4 +109,5 @@ void Player::Draw() const
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	MTImGui::ShowInspector(this, "player");
 	//Draw::Text(hText, mousePos);
+	LOGF("PlayerDraw\n");
 }

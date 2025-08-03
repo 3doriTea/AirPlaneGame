@@ -26,6 +26,8 @@ namespace mtgb
 		void InitializeWindowContext(WindowRenderContext& context, bool isMultiMonitor);
 
 		void ChangeRenderContext(WindowRenderContext& context);
+
+		void Release() override;
 	private:
 		/// <summary>
 		/// シェーダバンドルを初期化する

@@ -5,7 +5,6 @@
 
 mtgb::MTImGui::~MTImGui()
 {
-	Release();
 }
 
 void mtgb::MTImGui::Initialize()

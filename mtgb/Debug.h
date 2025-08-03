@@ -6,7 +6,7 @@
 #ifdef _DEBUG
 
 #define LOGF(format, ...) \
-	mtgb::Debug::LogF(format, __VA_ARGS__);
+	mtgb::Debug::LogF(format, __VA_ARGS__)
 
 #else
 

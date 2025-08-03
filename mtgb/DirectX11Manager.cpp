@@ -472,6 +472,11 @@ void mtgb::DirectX11Manager::ChangeRenderContext(WindowRenderContext& context)
 	DirectX11Draw::pContext_->RSSetViewports(1, &context.viewport_);
 }
 
+void mtgb::DirectX11Manager::Release()
+{
+	DirectX11Draw::Release();
+}
+
 void mtgb::DirectX11Manager::InitializeShaderBundle()
 {
 	DWORD vectorSize{ sizeof(Vector3) };

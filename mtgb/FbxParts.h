@@ -87,6 +87,7 @@ namespace mtgb
 		~FbxParts();
 
 		void Initialize() override;
+		void Release() override;
 
 		/// <summary>
 		/// ƒ‚ƒfƒ‹‚ð•`‰æ‚·‚é

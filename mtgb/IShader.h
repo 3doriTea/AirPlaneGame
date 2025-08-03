@@ -22,6 +22,7 @@ namespace mtgb
 		/// </summary>
 		virtual void Initialize();
 		//virtual void Draw() = 0;
+		virtual void Release();
 
 	protected:
 		/// <summary>

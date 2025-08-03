@@ -29,11 +29,11 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
-	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
+	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
 	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }));
 
 	Instantiate<Player>();
-	//Instantiate<Enemy>();
+	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);
@@ -101,6 +101,7 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
+	LOGF("Begin begin\n");
 	tBox_->Draw();
 }
 

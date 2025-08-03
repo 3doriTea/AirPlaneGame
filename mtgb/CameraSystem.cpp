@@ -54,13 +54,13 @@ mtgb::CameraHandleInScene mtgb::CameraSystem::RegisterDrawCamera(Transform* pCam
 	// 見つからなかった
 	if (itr == pTransforms_.end())
 	{
-		handle = pTransforms_.size();
+		handle = static_cast<CameraHandleInScene>(pTransforms_.size());
 		pTransforms_.push_back(pCameraTransform_);
 	}
 	else  // 既にある
 	{
 		// インデックスを返す
-		handle = itr - pTransforms_.begin();
+		handle = static_cast<CameraHandleInScene>(itr - pTransforms_.begin());
 	}
 
 	return handle;

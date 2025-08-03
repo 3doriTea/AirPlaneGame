@@ -66,9 +66,10 @@ void mtgb::Game::InitializeSystems(const std::list<ISystem*>& _uninitialized)
 
 void mtgb::Game::ReleaseSystems(const std::list<ISystem*>& _runnings)
 {
-	for (auto&& pRegisterSystem : _runnings)
+	for (auto itr = _runnings.rbegin(); itr != _runnings.rend(); itr++)
 	{
-		delete pRegisterSystem;
+		(*itr)->Release();
+		delete (*itr);
 	}
 }
 

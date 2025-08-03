@@ -32,15 +32,26 @@ if (p != nullptr)       \
 	p = nullptr;           \
 }
 
-// コンテナを安全に解放するためのマクロ
+// コンテナの要素を安全にReleaseするためのマクロ
 // コンテナは std::vector や std::list などのこと
-#define SAFE_DELETE_CONTAINER(container)\
-{                                        \
-	for (auto& p : container)             \
-	{                                      \
-		delete p;                           \
-	}                                        \
-	container.clear();                        \
+#define SAFE_CLEAR_CONTAINER_RELEASE(container)\
+{                                                \
+	for (auto& p : container)                     \
+	{                                              \
+		SAFE_RELEASE(p);                            \
+	}                                                \
+	container.clear();                                \
+}
+
+// コンテナの要素を安全に解放するためのマクロ
+// コンテナは std::vector や std::list などのこと
+#define SAFE_CLEAR_CONTAINER_DELETE(container)\
+{                                               \
+	for (auto& p : container)                    \
+	{                                             \
+		SAFE_DELETE(p);                            \
+	}                                               \
+	container.clear();                               \
 }
 
 

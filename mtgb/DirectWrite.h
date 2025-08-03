@@ -111,7 +111,7 @@ namespace mtgb
 
 		void ChangeFormat(IDWriteTextFormat* format, mtgb::PixelFontMetrics& metrics);
 
-		void Release();
+		void Release() override;
 
 		
 

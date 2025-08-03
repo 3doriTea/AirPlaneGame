@@ -11,6 +11,7 @@
 #include "CameraSystem.h"
 #include <cmath>
 #include <algorithm>
+#include "ReleaseUtility.h"
 
 
 // FbxParts コンストラクタの初期化リストを拡張して、全メンバー変数を初期化
@@ -58,6 +59,36 @@ void mtgb::FbxParts::Initialize()
 	InitializeConstantBuffer(DirectX11Draw::pDevice_);
 	InitializeSkelton();
 	//InitializeVertexBuffer();
+}
+
+void mtgb::FbxParts::Release()
+{
+	SAFE_DELETE_ARRAY(pBones_);
+	SAFE_DELETE_ARRAY(ppCluster_);
+
+	if (pWeights_ != nullptr)
+	{
+		for (DWORD i = 0; i < vertexCount_; i++)
+		{
+			SAFE_DELETE_ARRAY(pWeights_[i].pBoneIndex);
+			SAFE_DELETE_ARRAY(pWeights_[i].pBoneWeight);
+		}
+		SAFE_DELETE_ARRAY(pWeights_);
+	}
+
+	SAFE_DELETE_ARRAY(pVertexes_);
+	for (DWORD i = 0; i < materialCount_; i++)
+	{
+		SAFE_RELEASE(ppIndexBuffer_[i]);
+		SAFE_DELETE(ppIndexData_[i]);
+		SAFE_DELETE(pMaterial_[i].pTexture);
+	}
+	SAFE_DELETE_ARRAY(ppIndexBuffer_);
+	SAFE_DELETE_ARRAY(ppIndexData_);
+	SAFE_DELETE_ARRAY(pMaterial_);
+
+	SAFE_RELEASE(pVertexBuffer_);
+	SAFE_RELEASE(pConstantBuffer_);
 }
 
 void mtgb::FbxParts::Draw(const Transform& _transform)
