@@ -74,7 +74,7 @@ void mtgb::Timer::Update()
 	auto itr = pTimerQueue_.begin();
 	while (true)
 	{
-		(*itr)->timeLeft -= Time::DeltaTime();
+		(*itr)->timeLeft -= Time::DeltaTimeF();
 
 		float diff{ (*itr)->timeLeft };  // ·•ª
 		if (diff > 0)  // ·•ª‚ª0‚æ‚è‘å‚«‚¢ = ‘Ò‹@’†

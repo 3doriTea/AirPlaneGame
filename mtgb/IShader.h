@@ -3,6 +3,7 @@
 #include <d3d11.h>
 #include "DirectX11Draw.h"
 #include "Screen.h"
+#include "Transform.h"
 
 
 struct ID3D11Buffer;
@@ -53,6 +54,12 @@ namespace mtgb
 		void Draw(
 			const std::function<void(ConstantBufferT* _pConstantBuffer)>& _makeConstantBufferCallback,
 			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback);
+
+		/// <summary>
+		/// カメラの座標系を取得
+		/// </summary>
+		/// <returns>カメラTransfromの参照ポインタ</returns>
+		const mtgb::Transform& GetCameraTransfrom();
 
 	protected:
 		ID3D11Buffer* pVertexBuffer_;    // 頂点の位置、色

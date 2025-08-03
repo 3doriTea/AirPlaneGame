@@ -11,3 +11,11 @@ mtgb::Vector4::Vector4(
 	f[2] = _z;
 	f[3] = _w;
 }
+
+mtgb::Vector4::Vector4(const Vector3& _vec3)
+{
+	f[0] = _vec3.x;
+	f[1] = _vec3.y;
+	f[2] = _vec3.z;
+	f[3] = 0.0f;
+}

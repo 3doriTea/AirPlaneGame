@@ -51,7 +51,7 @@ void Network::PIIO::Start(const mtnet::IPEndPoint& _serverIPEP)
 					{
 						ZeroMemory(pSendBuffer, BUFFER_SIZE);
 						std::memcpy(pSendBuffer, _string, std::strlen(_string));
-						client_.Send(pSendBuffer, std::strlen(_string));
+						client_.Send(pSendBuffer, static_cast<int>(std::strlen(_string)));
 					}
 				};
 

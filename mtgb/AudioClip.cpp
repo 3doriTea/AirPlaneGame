@@ -121,7 +121,7 @@ void mtgb::AudioClip::LoadMp3(mtbin::MemoryStream& _ms, const byte* _first4)
 	// MemoryStreamからmp3データを読み込む
 	size_t size = _ms.GetLength();
 	byte* mp3_data = new byte[size];
-	_ms.Read(mp3_data, size, size);
+	_ms.Read(mp3_data, static_cast<int>(size), static_cast<int>(size));
 
 	// drmp3のデコード初期化
 	drmp3 config;

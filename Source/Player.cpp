@@ -33,7 +33,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_->scale_ = Vector3(10, 10, 10);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
-	timerHandle = Timer::AddInterval(0.01, [this]() {timer += 10; });
+	timerHandle = Timer::AddInterval(0.01f, [this]() {timer += 10; });
 }
 
 Player::~Player()
