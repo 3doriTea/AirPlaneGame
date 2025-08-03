@@ -52,8 +52,9 @@ void mtgb::SceneSystem::Update()
 
 
 	Game::System<DoubleWindow>().ChangeFirstWindow();
+
 	Game::System<MTImGui>().BeginFrame();
-	Game::System<MTImGui>().Begin("First");
+	Game::System<MTImGui>().Begin("Window");
 	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
@@ -67,17 +68,15 @@ void mtgb::SceneSystem::Update()
 
 
 	Game::System<DoubleWindow>().ChangeSecondWindow();
-	//Game::System<MTImGui>().BeginFrame();
 
-	//Game::System<MTImGui>().Begin("Second");
 	DirectX11Draw::Begin();
+	
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
 		gameObject->Draw();
 	}
-	//Game::System<MTImGui>().End();
-	//Game::System<MTImGui>().EndFrame();
+	
 	DirectX11Draw::End();
 
 	// çÌèúèàóù

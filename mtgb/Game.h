@@ -232,7 +232,6 @@ namespace mtgb
 
 		ISystem* pSystem{ pInstance_->pRegisterSystems_[typeid(SystemT).name()] };
 
-		//massert(pSystem != nullptr);
 		assert(pSystem != nullptr);
 
 		// Šî’êƒNƒ‰ƒX‚ªISystem‚Å‚ ‚é‚©

@@ -16,17 +16,17 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
-    //using ResourceCollection = std::map<std::type_index, WindowContextResource*>;
 
     
-
+    /// <summary>
+    /// ウィンドウごとのリソースを管理するクラス
+    /// </summary>
     class WindowContextResourceManager : public ISystem
     {
     private:
-        static WindowContext currentContext_;
-        ResourceCollection defResource_;
-        std::vector<std::type_index> registeredTypes_;
-        std::map<WindowContext, ResourceCollection> collectionMap_;
+        static WindowContext currentContext_;//現在のウィンドウ
+        ResourceCollection defResource_;//複製用のリソース
+        std::map<WindowContext, ResourceCollection> collectionMap_;//ウィンドウごとのリソース
     public:
         WindowContextResourceManager();
         ~WindowContextResourceManager();
@@ -71,17 +71,21 @@ namespace mtgb
         /// </summary>
         /// <param name="windowContext">ウィンドウの識別子</param>
         /// <returns>HWND</returns>
-        /// <summary>
-        /// 型を指定して登録する関数
-        /// </summary>
-        /// <typeparam name="...Args">指定した順番に初期化される</typeparam>
         HWND GetHWND(WindowContext windowContext);
 
+        /// <summary>
+        /// 現在有効なウィンドウの識別子を返す
+        /// </summary>
+        /// <returns>現在のWindowContext</returns>
         static WindowContext CurrCtx()
         {
             return currentContext_;
         }
 
+        /// <summary>
+        /// 型を指定して登録する関数
+        /// </summary>
+        /// <typeparam name="...Args">指定した順番に初期化される</typeparam>
         template<class... Args>
         void RegisterResourceTypes()
         {

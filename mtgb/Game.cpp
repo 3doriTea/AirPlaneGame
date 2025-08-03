@@ -73,10 +73,6 @@ void mtgb::Game::ReleaseSystems(std::list<ISystem*>& _runnings)
 		it = _runnings.erase(it);
 		rit = std::make_reverse_iterator(it);
 	}
-	/*for (auto&& pRegisterSystem : _runnings)
-	{
-		delete pRegisterSystem;
-	}*/
 }
 
 void mtgb::Game::RunLoopGameCycle()

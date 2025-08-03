@@ -411,6 +411,9 @@
     <ClCompile Include="mtgb\ResourceCollection.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\CameraResource.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -745,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\ResourceCollection.h">
       <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CameraResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

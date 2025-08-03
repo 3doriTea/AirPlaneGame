@@ -13,6 +13,15 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 {
 }
 
+mtgb::GameObject::GameObject(const GameObject& _other)
+	:Entity()
+	,status_{_other.status_}
+	,componentsFlag_{_other.componentsFlag_}
+{
+}
+
+
+
 mtgb::GameObject::~GameObject()
 {
 }

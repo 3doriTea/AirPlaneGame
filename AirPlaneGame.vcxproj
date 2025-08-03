@@ -33,6 +33,7 @@
     <ClCompile Include="mtgb\AudioOneShot.cpp" />
     <ClCompile Include="mtgb\AudioPlayer.cpp" />
     <ClCompile Include="mtgb\AudioPlayerCP.cpp" />
+    <ClCompile Include="mtgb\CameraResource.cpp" />
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="mtgb\AudioOneShot.h" />
     <ClInclude Include="mtgb\AudioPlayer.h" />
     <ClInclude Include="mtgb\AudioPlayerCP.h" />
+    <ClInclude Include="mtgb\CameraResource.h" />
     <ClInclude Include="mtgb\cmtgb.h" />
     <ClInclude Include="mtgb\Color.h" />
     <ClInclude Include="mtgb\ComponentPool.h" />
@@ -414,7 +416,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(FBX)\lib\x64\debug;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -434,7 +436,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(FBX)\lib\x64\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

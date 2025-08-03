@@ -1,10 +1,12 @@
 #pragma once
 #include <mtgb.h>
+#include "AccessibleMacro.h"
 
-
+//REFL_FORWARD_DECLARATION
+REFL_FORWARD_DECLARATION()
 class Player : public GameObject
 {
-	//friend class TypeRegistry;
+	ACCESSIBLE_PRIVATE()
 public:
 	Player();
 	Player(mtgb::WindowContext context);

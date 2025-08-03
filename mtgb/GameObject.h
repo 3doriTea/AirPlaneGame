@@ -15,6 +15,7 @@ namespace mtgb
 	{
 	public:
 		GameObject(const GAME_OBJECT_DESC& _desc);
+		GameObject(const GameObject& _other);
 		virtual ~GameObject();
 
 		virtual inline void Initialize() {};
