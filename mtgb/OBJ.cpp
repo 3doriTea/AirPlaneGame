@@ -123,6 +123,7 @@ void mtgb::OBJ::Update()
 
 void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	//DirectX::XMMATRIX mWorld;
 	Matrix4x4 mWorld;
 	transform->GenerateWorldMatrix(&mWorld);
@@ -189,7 +190,6 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 		
 		//DirectX11Draw::End();
 	}
-
 }
 
 

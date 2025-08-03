@@ -25,7 +25,6 @@ Player::Player() : GameObject(GameObjectBuilder()
 	test1 = 10;
 	test2 = 20;
 	str = "Hello,World!";
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hImage_ = Image::Load("Image/player.png");
 	hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	hText = Text::Load(str,36);
@@ -95,12 +94,12 @@ void Player::Draw() const
 	draw.point = mousePos;
 	draw.size = Image::GetSize(hImage_);
 	
+	Draw::ImmediateText(std::to_string(timer),0,0);
 	Draw::OBJModel(hModel_, pTransform_);
 	static int speed = 0;
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
 	Game::System<Text>().ChangeFontSize(100);
-	Draw::ImmediateText(std::to_string(timer),0,0);
 	TypeRegistry::ShowInspector(this, "Player");
 }

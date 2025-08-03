@@ -9,7 +9,6 @@ Enemy::Enemy() : GameObject(GameObjectBuilder()
 	.Build()),
 	pTransform_{ Component<Transform>() }
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	hModel_ = OBJ::Load("Model/OBJ/enemy.obj");
 	pTransform_->position_.z = 6.0f;
 }

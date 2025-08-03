@@ -479,39 +479,7 @@ void mtgb::DirectX11Manager::CreateDepthStencilAndDepthStencilView(ID3D11Texture
 		&& "深度ステンシルビューの作成に失敗");
 }
 
-//void mtgb::DirectX11Manager::InitializeWindowContext(WindowContext& context, bool isMultiMonitor)
-//{
-//	HRESULT hResult{};
-//
-//	STARTUPINFO startupInfo{};
-//	GetStartupInfo(&startupInfo);
-//	int nCmdShow = startupInfo.wShowWindow;
-//
-//	context.outputIndex_ = 0;
-//	if (isMultiMonitor)
-//	{
-//		CreateOutput(context.outputIndex_, &context.pOutput_);
-//	}
-//	else
-//	{
-//		context.pOutput_ = nullptr;
-//	}
-//
-//	CreateSwapChain(context.hWnd_, context.pOutput_, &context.pSwapChain_);
-//	CreateRenderTargetView(context.pSwapChain_, &context.pRenderTargetView_);
-//	CreateViewport(context.viewport_);
-//	CreateDepthStencilAndDepthStencilView(&context.pDepthStencil_, &context.pDepthStencilView_);
-//}
 
-//void mtgb::DirectX11Manager::ChangeRenderContext(WindowContext& context)
-//{
-//	DirectX11Draw::pRenderTargetView_ = context.pRenderTargetView_;
-//	DirectX11Draw::pDepthStencilView_ = context.pDepthStencilView_;
-//	DirectX11Draw::pSwapChain1_ = context.pSwapChain_;
-//
-//	DirectX11Draw::pContext_->OMSetRenderTargets(1,&context.pRenderTargetView_,context.pDepthStencilView_);
-//	DirectX11Draw::pContext_->RSSetViewports(1, &context.viewport_);
-//}
 
 void mtgb::DirectX11Manager::ChangeViewport(const D3D11_VIEWPORT& viewport)
 {

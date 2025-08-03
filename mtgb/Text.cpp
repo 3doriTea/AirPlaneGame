@@ -1,4 +1,5 @@
 #include "Text.h"
+#include "DirectX11Draw.h"
 #include "DirectWrite.h"
 #include "MTStringUtility.h"
 int mtgb::Text::currentDefaultFontSize_{ 72 };
@@ -61,6 +62,7 @@ int mtgb::Text::Load(const std::string& str, int size)
 
 void mtgb::Text::Draw(int handle, float x, float y)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	auto& handle_index = textLayoutDatas_->get<handle_order>();
 	auto it = handle_index.find(handle);
 
@@ -73,16 +75,19 @@ void mtgb::Text::Draw(int handle, float x, float y)
 	PixelFontMetrics metrics = formatData.second;
 
 	instance.Draw(entry->layout, x, y + metrics.textTopOffset);
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 }
 
 
 
 void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y,int size)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	// 指定サイズのフォーマットを取得または作成
 	auto formatData = GetOrCreateTextFormat(size);	
 	
 	instance.ImmediateDraw(text,formatData.first,formatData.second, x, y);
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 }
 
 void mtgb::Text::ImmediateDraw(const std::string& text, float x, float y, int size)
