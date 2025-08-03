@@ -22,6 +22,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() }
 {
+	name_ = "Player:" + std::to_string(entityId_);
 	test1 = 10;
 	test2 = 20;
 	str = "Hello,World!";
@@ -102,5 +103,5 @@ void Player::Draw() const
 	//Draw::Image(hImage_, pTransform_);
 	
 	Game::System<Text>().ChangeFontSize(100);
-	TypeRegistry::ShowInspector(this, "Player");
+	TypeRegistry::ShowInspector(this, name_.c_str());
 }

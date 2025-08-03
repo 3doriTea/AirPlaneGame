@@ -18,6 +18,7 @@ public:
 	float test2;
 private:
 	std::string str;
+	std::string name_;
 	Transform* pTransform_;
 	AudioPlayer* pAudioPlayer_;
 	ImageHandle hImage_;

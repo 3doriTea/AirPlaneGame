@@ -151,36 +151,42 @@ void TypeRegistry::RegisterType()
 
 				if (!showFuncExecuted)
 				{
-					refl::util::for_each(type.members, [&](auto&& member)
-						{
-							auto memberPtr = &(member(*registerInstance));
+					if (ImGui::CollapsingHeader(name))
+					{
+						ImGui::PushID(registerInstance);
+						refl::util::for_each(type.members, [&](auto&& member)
+							{
+								auto memberPtr = &(member(*registerInstance));
 
-							// 属性をチェックして適切な表示方法を選択
-							bool hasCustomAttribute = false;
+								// 属性をチェックして適切な表示方法を選択
+								bool hasCustomAttribute = false;
 
-							// メンバーの属性を取得
-							auto memberAttributes = refl::descriptor::get_attributes(member);
+								// メンバーの属性を取得
+								auto memberAttributes = refl::descriptor::get_attributes(member);
 
-							std::apply([&](auto&&... attrs)
-								{
-									(
+								std::apply([&](auto&&... attrs)
+									{
 										(
-											[&] {
-												using AttrType = std::decay_t<decltype(attrs)>;
-												if constexpr (std::is_base_of_v<refl::attr::usage::member, AttrType>)
-												{
-													attrs(memberPtr, member.name.c_str());
-													hasCustomAttribute = true;
-												}
-											}()
-												), ...);
-								}, memberAttributes);
+											(
+												[&] {
+													using AttrType = std::decay_t<decltype(attrs)>;
+													if constexpr (std::is_base_of_v<refl::attr::usage::member, AttrType>)
+													{
+														attrs(memberPtr, member.name.c_str());
+														hasCustomAttribute = true;
+													}
+												}()
+													), ...);
+									}, memberAttributes);
 
-							// カスタム属性がない場合はデフォルト表示
-							if (!hasCustomAttribute) {
-								DefaultShow(memberPtr, member.name.c_str());
-							}
-						});
+								// カスタム属性がない場合はデフォルト表示
+								if (!hasCustomAttribute) {
+									DefaultShow(memberPtr, member.name.c_str());
+								}
+							});
+
+						ImGui::PopID();
+					}
 				}
 			}
 			else
