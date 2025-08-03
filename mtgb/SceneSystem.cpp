@@ -1,10 +1,12 @@
 #include "SceneSystem.h"
 #include "GameObject.h"
-#include "DoubleWindow.h"
+#include "WindowContextResourceManager.h"
 #include "DirectX11Manager.h"
 #include "DirectX11Draw.h"
 #include "Input.h"
 #include "MTImGui.h"
+#include "WindowContext.h"
+#include "WindowContextUtil.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -32,10 +34,10 @@ void mtgb::SceneSystem::Update()
 		return;  // シーンがないなら回帰
 	}
 
-	Game::System<DoubleWindow>().ChangeFirstWindow();
+	WinCtxRes::ChangeResource(WindowContext::First);
 	Game::System<Input>().Update();
 
-	Game::System<DoubleWindow>().ChangeSecondWindow();
+	WinCtxRes::ChangeResource(WindowContext::Second);
 	Game::System<Input>().Update();
 
 	// 現在のシーン
@@ -50,8 +52,7 @@ void mtgb::SceneSystem::Update()
 
 	// 描画処理
 
-
-	Game::System<DoubleWindow>().ChangeFirstWindow();
+	WinCtxRes::ChangeResource(WindowContext::First);
 
 	Game::System<MTImGui>().BeginFrame();
 	Game::System<MTImGui>().Begin("Window");
@@ -67,7 +68,8 @@ void mtgb::SceneSystem::Update()
 	DirectX11Draw::End();
 
 
-	Game::System<DoubleWindow>().ChangeSecondWindow();
+	WinCtxRes::ChangeResource(WindowContext::Second);
+
 
 	DirectX11Draw::Begin();
 	

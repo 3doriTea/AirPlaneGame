@@ -21,10 +21,13 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
-	SetCameraGameObject(Instantiate<Camera>());
+	//SetCameraGameObject(Instantiate<Camera>());
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
+
 
 	Instantiate<Player>(WindowContext::First);
-	//Instantiate<Player>(WindowContext::Second);
+	Instantiate<Player>(WindowContext::Second);
 	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始

@@ -20,14 +20,11 @@ namespace mtgb
 	public:
 		static LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		HWND GetHWND();
 
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 		
-		HWND hWnd_;
-		bool isActive_;
-		int outputIndex_;
-		static int outputCount;
 
 		
 		WindowResource(const WindowResource& other);
@@ -35,5 +32,11 @@ namespace mtgb
 		WindowResource* Clone() const override;
 		WindowResource();
 		~WindowResource();
+	private:
+		HWND hWnd_;
+		bool isActive_;
+		int outputIndex_;
+		static int outputCount;
+
 	};
 }

@@ -105,6 +105,11 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
+HWND mtgb::WindowResource::GetHWND()
+{
+	return hWnd_;
+}
+
 void WindowResource::Initialize(WindowContext _windowContext)
 {
 	hWnd_ = Game::System<WindowManager>().CreateWindowContext(_windowContext);

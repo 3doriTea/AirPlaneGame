@@ -14,11 +14,8 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 
-		const HWND GetFirstWindowHandle();
-		const HWND GetSecondWindowHandle();
-		void ChangeFirstWindow();
-		void ChangeSecondWindow();
-
+		
+		void RegisterFirstWindowCamera();
 	private:
 		WindowContext context1_;
 		WindowContext context2_;

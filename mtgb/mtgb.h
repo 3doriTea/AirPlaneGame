@@ -9,6 +9,7 @@
 #include "Vector2.h"
 #include "Vector2Int.h"
 #include "RectInt.h"
+#include "WindowContextUtil.h"
 
 #pragma endregion
 
@@ -52,6 +53,7 @@
 #include "Direct2DResource.h"
 #include "InputResource.h"
 #include "Input.h"
+#include "CameraResource.h"
 
 #pragma endregion
 #pragma region Data

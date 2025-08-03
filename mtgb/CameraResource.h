@@ -20,6 +20,8 @@ namespace mtgb
 		/// </summary>
 		void SetResource() override;
 		WindowContextResource* Clone() const override;
+
+		void SetCamera(GameObject* obj);
 	private:
 		GameObject* pCamera_;
 	};

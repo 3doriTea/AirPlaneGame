@@ -8,7 +8,6 @@
 #include <initializer_list>
 #include "ISystem.h"
 #include "WindowContext.h"
-#include "WindowResource.h"
 #include "WindowContextResource.h"
 #include "ReleaseUtility.h"
 #include "ResourceCollection.h"
@@ -58,7 +57,7 @@ namespace mtgb
         ResourceT& Get(WindowContext windowContext)
         {
             auto itr = collectionMap_.find(windowContext);
-            massert(itr != collectionMap_.end() && "指定されたWindowContextのリソースが見つかりません");
+            assert(itr != collectionMap_.end() && "指定されたWindowContextのリソースが見つかりません");
 
             static_assert(std::is_base_of_v<WindowContextResource, ResourceT>,
                 "WindowContextResourceを継承していないクラスのインスタンスは取得できません。");
@@ -66,12 +65,7 @@ namespace mtgb
             return itr->second.Get<ResourceT>();
         }
 
-        /// <summary>
-        /// WindowContextからHWNDを取得する
-        /// </summary>
-        /// <param name="windowContext">ウィンドウの識別子</param>
-        /// <returns>HWND</returns>
-        HWND GetHWND(WindowContext windowContext);
+        
 
         /// <summary>
         /// 現在有効なウィンドウの識別子を返す

@@ -1,6 +1,7 @@
 #include "MTImGui.h"
 #include "Game.h"
-#include "DoubleWindow.h"
+#include "WindowContextResourceManager.h"
+#include "WindowContextUtil.h"
 #include "DirectX11Draw.h"
 mtgb::MTImGui::~MTImGui()
 {
@@ -39,7 +40,7 @@ void mtgb::MTImGui::Initialize()
 
 	
 	
-	ImGui_ImplWin32_Init(Game::System<DoubleWindow>().GetFirstWindowHandle());
+	ImGui_ImplWin32_Init(WinCtxRes::GetHWND(WindowContext::First));
 	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_, mtgb::DirectX11Draw::pContext_);
 }
 

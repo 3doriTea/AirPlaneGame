@@ -5,6 +5,7 @@ class Camera : public GameObject
 {
 public:
 	Camera();
+	Camera(mtgb::WindowContext context);
 	~Camera();
 
 	void Update();
@@ -12,4 +13,5 @@ public:
 
 private:
 	Transform* pTransform_;
+	WindowContext context_;
 };

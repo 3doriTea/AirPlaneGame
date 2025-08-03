@@ -1,5 +1,6 @@
 #include "DXGIResource.h"
 #include "ReleaseUtility.h"
+#include "WindowContextUtil.h"
 using namespace mtgb;
 
 mtgb::DXGIResource::DXGIResource()
@@ -27,7 +28,7 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	// DirectX11Managerにアクセスしてリソースを作成
 	auto& dx11Manager = Game::System<DirectX11Manager>();
 
-	HWND hWnd = Game::System<WindowContextResourceManager>().GetHWND(_windowContext);
+	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
 	// マルチモニター対応は今回false固定
 	bool isMultiMonitor = false;

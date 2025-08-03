@@ -35,7 +35,8 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 		DXGIResource,
 		Direct3DResource,
 		Direct2DResource,
-		InputResource
+		InputResource,
+		CameraResource
 	>();
 
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);

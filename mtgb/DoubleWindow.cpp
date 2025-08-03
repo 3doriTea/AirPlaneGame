@@ -44,48 +44,26 @@ void mtgb::DoubleWindow::Initialize()
 	//mtgb::WindowManager::CreateWindowContext(config1, &context1_);
 	//mtgb::WindowManager::CreateWindowContext(config2, &context2_);
 
-	//一旦DirectXリソースの初期化もここで行う
-	Game::System<WindowManager>().RegisterWindowConfig(context1_,config1);
-	Game::System<WindowManager>().RegisterWindowConfig(context2_,config2);
+	//リソースの初期化もここで行う
+	Game::System<WindowManager>().RegisterWindowConfig(WindowContext::First,config1);
+	Game::System<WindowManager>().RegisterWindowConfig(WindowContext::Second,config2);
 	
 
-	Game::System<WindowContextResourceManager>().CreateResource(context1_);
-	Game::System<WindowContextResourceManager>().CreateResource(context2_);
+	Game::System<WindowContextResourceManager>().CreateResource(WindowContext::First);
+	Game::System<WindowContextResourceManager>().CreateResource(WindowContext::Second);
 
-	ChangeFirstWindow();
+	Game::System<WindowContextResourceManager>().ChangeResource(WindowContext::First);
 }
 
 void mtgb::DoubleWindow::Update()
 {
-	//一旦context1を従来のウィンドウにして、context2は何も表示しない
-	/*DirectX11Draw::End();
-
-	Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
-	DirectX11Draw::Begin();
-	DirectX11Draw::End();
-
-	Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
-	DirectX11Draw::Begin();*/
+	
 }
 
-const HWND mtgb::DoubleWindow::GetFirstWindowHandle()
+
+void mtgb::DoubleWindow::RegisterFirstWindowCamera()
 {
-	return Game::System<WindowContextResourceManager>().GetHWND(context1_);
+	
 }
 
-const HWND mtgb::DoubleWindow::GetSecondWindowHandle()
-{
- 	return Game::System<WindowContextResourceManager>().GetHWND(context2_);
-}
 
-void mtgb::DoubleWindow::ChangeFirstWindow()
-{
-	//Game::System<DirectX11Manager>().ChangeRenderContext(*context1_);
-	Game::System<WindowContextResourceManager>().ChangeResource(context1_);
-}
-
-void mtgb::DoubleWindow::ChangeSecondWindow()
-{
-	//Game::System<DirectX11Manager>().ChangeRenderContext(*context2_);
-	Game::System<WindowContextResourceManager>().ChangeResource(context2_);
-}

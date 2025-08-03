@@ -50,7 +50,3 @@ void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowCont
 	currentContext_ = windowContext;
 }
 
-HWND mtgb::WindowContextResourceManager::GetHWND(WindowContext windowContext)
-{
-	return collectionMap_[windowContext].Get<WindowResource>().hWnd_;
-}

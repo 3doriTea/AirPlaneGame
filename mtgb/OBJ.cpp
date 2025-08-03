@@ -7,12 +7,12 @@
 #include "Transform.h"
 #include "Vector2Int.h"
 #include "Screen.h"
-
+#include "ISystem.h"
+#include "SceneSystem.h"
 #include <stdio.h>
 #include <windows.h>
 #include <d3d11.h>
 #include <d3dCompiler.h>
-
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d3dCompiler.lib")
@@ -129,9 +129,13 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 
 	DirectX::XMMATRIX mView;
 	// ビュートランスフォーム（視点座標変換）
-	DirectX::XMVECTOR vEyePt = DirectX::XMVectorSet(0.0f, 0.0f, -10.0f,0.0f); //カメラ（視点）位置
-	DirectX::XMVECTOR vLookatPt = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f,0.0f);//注視位置
-	DirectX::XMVECTOR vUpVec = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f,0.0f);//上方位置
+	
+	Transform* pCameraTransform = Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
+	DirectX::XMVECTOR vEyePt = DirectX::XMLoadFloat3(&pCameraTransform->position_); //カメラ（視点）位置
+	Vector3 lookatPt = pCameraTransform->Forward();
+	DirectX::XMVECTOR vLookatPt = DirectX::XMLoadFloat3(&lookatPt);//注視位置
+	Vector3 upVec = pCameraTransform->Up();
+	DirectX::XMVECTOR vUpVec = DirectX::XMLoadFloat3(&upVec);//上方位置
 	mView = DirectX::XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
 
 	DirectX::XMMATRIX mProj;
