@@ -39,6 +39,12 @@ namespace mtgb
 		void Initialize() override;
 
 		void SetAudio(const AudioHandle _hAudio);
+
+		/// <summary>
+		/// Й╣Ч╩Т▓Ро
+		/// </summary>
+		void SetVolume(float volume);
+
 		void Play();
 
 	private:

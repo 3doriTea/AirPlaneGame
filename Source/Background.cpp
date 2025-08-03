@@ -8,6 +8,7 @@ Background::Background() : GameObject(GameObjectBuilder()
 	massert(hBGM_ >= 0 && "BGM‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 
 	pAudioPlayer_->SetAudio(hBGM_);
+	pAudioPlayer_->SetVolume(0.05f);
 	pAudioPlayer_->Play();
 }
 

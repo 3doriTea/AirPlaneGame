@@ -46,6 +46,11 @@ void mtgb::AudioPlayer::SetAudio(const AudioHandle _hAudio)
 		&& "SourceBuffer‚ÌƒZƒbƒg‚É¸”s @AudioPlayer::SetAudio");
 }
 
+void mtgb::AudioPlayer::SetVolume(float volume)
+{
+	pSourceVoice_->SetVolume(volume);
+}
+
 void mtgb::AudioPlayer::Play()
 {
 	pSourceVoice_->Start();
