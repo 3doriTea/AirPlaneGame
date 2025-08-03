@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "SceneSystem.h"
+#include "Transform.h"
 
 
 mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
@@ -11,6 +12,10 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 		.toDestory_ = FALSE,  // ç≈èâÇÕçÌèúÇµÇ»Ç¢
 	}
 {
+	Transform* pTransform_{ Component<Transform>() };
+	pTransform_->position_ = _desc.position;
+	pTransform_->rotate_ = _desc.rotate;
+	pTransform_->scale_ = _desc.scale;
 }
 
 mtgb::GameObject::~GameObject()

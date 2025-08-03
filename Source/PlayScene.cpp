@@ -33,7 +33,7 @@ void PlayScene::Initialize()
 	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }));
 
 	Instantiate<Player>();
-	Instantiate<Enemy>();
+	//Instantiate<Enemy>();
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);

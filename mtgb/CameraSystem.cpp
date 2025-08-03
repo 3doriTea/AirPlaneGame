@@ -90,8 +90,6 @@ const mtgb::Transform& mtgb::CameraSystem::GetTransform() const
 
 	Transform* pTransform{ pTransforms_[hCurrentCamera_] };
 
-	LOGF("pTrans = %p, (%f, %f, %f)\n", pTransform, pTransform->position_.x, pTransform->position_.y, pTransform->position_.z);
-
 	massert(pTransform != nullptr
 		&& "Šù‚É–³Œø‰»‚³‚ê‚½ƒJƒƒ‰‚ªQÆ‚³‚ê‚Ü‚µ‚½B");
 
