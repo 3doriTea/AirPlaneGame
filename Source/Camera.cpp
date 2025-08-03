@@ -31,23 +31,47 @@ Camera::~Camera()
 void Camera::Update()
 {
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
+	if (context_ == WindowContext::First)
+	{
 
-	if (InputUtil::GetKey(KeyCode::Up,context_))
-	{
-		pTransform_->position_.z += MOVE;
+		if (InputUtil::GetKey(KeyCode::Up, context_))
+		{
+			pTransform_->position_.z += MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Down, context_))
+		{
+			pTransform_->position_.z -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Left, context_))
+		{
+			pTransform_->position_.x -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Right, context_))
+		{
+			pTransform_->position_.x += MOVE;
+		}
 	}
-	if (InputUtil::GetKey(KeyCode::Down,context_))
+	else
 	{
-		pTransform_->position_.z -= MOVE;
+		if (InputUtil::GetKey(KeyCode::W, context_))
+		{
+			pTransform_->position_.z += MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::S, context_))
+		{
+			pTransform_->position_.z -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::A, context_))
+		{
+			pTransform_->position_.x -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::D, context_))
+		{
+			pTransform_->position_.x += MOVE;
+		}
 	}
-	if (InputUtil::GetKey(KeyCode::Left,context_))
-	{
-		pTransform_->position_.x -= MOVE;
-	}
-	if (InputUtil::GetKey(KeyCode::Right,context_))
-	{
-		pTransform_->position_.x += MOVE;
-	}
+
+
 }
 
 void Camera::Draw() const

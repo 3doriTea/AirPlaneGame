@@ -100,6 +100,7 @@ void Player::Draw() const
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
+	
 	Game::System<Text>().ChangeFontSize(100);
 	TypeRegistry::ShowInspector(this, "Player");
 }
