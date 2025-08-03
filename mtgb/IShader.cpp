@@ -16,8 +16,3 @@ void mtgb::IShader::Initialize()
 	InitializeIndexBuffer(DirectX11Draw::pDevice_);
 	InitializeConstantBuffer(DirectX11Draw::pDevice_);
 }
-
-const mtgb::Transform& mtgb::IShader::GetCameraTransfrom()
-{
-	return *Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
-}

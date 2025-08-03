@@ -2,9 +2,9 @@
 #include "SceneSystem.h"
 #include "GameObject.h"
 #include "Transform.h"
+#include "CameraSystem.h"
 
-mtgb::GameScene::GameScene() :
-	pCameraGameObject_{ nullptr }
+mtgb::GameScene::GameScene()
 {
 }
 
@@ -12,10 +12,10 @@ mtgb::GameScene::~GameScene()
 {
 }
 
-void mtgb::GameScene::SetCameraGameObject(GameObject* _pGameObject)
+mtgb::CameraHandleInScene mtgb::GameScene::RegisterCameraGameObject(GameObject* _pGameObject) const
 {
-	pCameraGameObject_ = _pGameObject;
-	pCameraTransform_ = &Transform::Get(_pGameObject->GetEntityId());
+	Transform* pTransform{ &Transform::Get(_pGameObject->GetEntityId()) };
+	return Game::System<CameraSystem>().RegisterDrawCamera(pTransform);
 }
 
 void mtgb::GameScene::Initialize()

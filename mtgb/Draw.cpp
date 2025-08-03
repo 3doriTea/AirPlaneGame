@@ -9,7 +9,7 @@
 #include "Text.h"
 #include "Model.h"
 #include "Transform.h"
-#include "SceneSystem.h"
+#include "CameraSystem.h"
 #include "DirectWrite.h"
 
 void mtgb::Draw::Box(
@@ -41,7 +41,7 @@ void mtgb::Draw::Image(
 {
 	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
 
-	Transform* pCameraTransform = Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
+	const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
 	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
 }
 

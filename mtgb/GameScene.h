@@ -1,17 +1,17 @@
 #pragma once
 //#include "World.h"
 #include <list>
+#include "Handlers.h"
 
 namespace mtgb
 {
-	class SceneSystem;
 	class GameObject;
 	class Transform;
 
 	//using GameScene = World;
 	class GameScene
 	{
-		friend SceneSystem;
+		friend class SceneSystem;
 	private:
 		static GameScene* pInstance_;
 
@@ -22,8 +22,12 @@ namespace mtgb
 		template<class GameObjectT, typename ...Args>
 		GameObjectT* Instantiate(Args... _args);
 
-		void SetCameraGameObject(GameObject* _pGameObject);
-		Transform* GetCameraTransform() { return pCameraTransform_; }
+		/// <summary>
+		/// カメラオブジェクトとして登録する
+		/// </summary>
+		/// <param name="_pGameObject">登録するゲームオブジェクトのポインタ</param>
+		/// <returns>登録されたカメラハンドル</returns>
+		CameraHandleInScene RegisterCameraGameObject(GameObject* _pGameObject) const;
 
 	protected:
 		virtual void Initialize();
@@ -32,8 +36,6 @@ namespace mtgb
 		virtual void End();
 
 	private:
-		GameObject* pCameraGameObject_;  // シーンにただ一つ存在するカメラ
-		Transform* pCameraTransform_;    // シーンにただ一つ存在するカメラの座標系
 		std::list<GameObject*> pGameObjects_;  // シーンに登場するゲームオブジェクト
 	};
 

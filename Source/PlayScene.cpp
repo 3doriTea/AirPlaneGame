@@ -29,7 +29,8 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
-	SetCameraGameObject(Instantiate<Camera>());
+	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
+	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }));
 
 	Instantiate<Player>();
 	Instantiate<Enemy>();
@@ -61,6 +62,19 @@ void PlayScene::Update()
 	if (InputData::GetKeyDown(KeyCode::Alpha3))
 	{
 		ppiio_->SendLED(LED_STATUS::LEDS_CLEAR);
+	}
+
+	if (InputData::GetKeyDown(KeyCode::P))
+	{
+		CameraSystem& CAMERA_SYS{ Game::System<CameraSystem>() };
+		if (CAMERA_SYS.GetDrawCamera() == hCamera1_)
+		{
+			CAMERA_SYS.SetDrawCamera(hCamera2_);
+		}
+		else
+		{
+			CAMERA_SYS.SetDrawCamera(hCamera1_);
+		}
 	}
 
 	if (InputData::GetKeyDown(KeyCode::Q))

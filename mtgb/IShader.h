@@ -59,7 +59,7 @@ namespace mtgb
 		/// カメラの座標系を取得
 		/// </summary>
 		/// <returns>カメラTransfromの参照ポインタ</returns>
-		const mtgb::Transform& GetCameraTransfrom();
+		//const mtgb::Transform& GetCameraTransfrom();
 
 	protected:
 		ID3D11Buffer* pVertexBuffer_;    // 頂点の位置、色

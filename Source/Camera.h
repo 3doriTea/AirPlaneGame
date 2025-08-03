@@ -4,7 +4,7 @@
 class Camera : public GameObject
 {
 public:
-	Camera();
+	Camera(const Vector3& _position);
 	~Camera();
 
 	void Update();

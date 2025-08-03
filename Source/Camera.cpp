@@ -7,9 +7,9 @@ namespace
 	static const float MOVE_SPEED{ 10.0f };
 }
 
-Camera::Camera() : GameObject(GameObjectBuilder()
+Camera::Camera(const Vector3& _position) : GameObject(GameObjectBuilder()
 		.SetName("Main Camera")
-		.SetPosition(Vector3{ 0, 0, 0 })
+		.SetPosition(_position)
 		.SetRotate(Quaternion::Identity())
 		.SetScale(Vector3::One())
 		.Build()),

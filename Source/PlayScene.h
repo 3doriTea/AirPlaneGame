@@ -22,4 +22,7 @@ private:
 	TextBox* tBox_;
 	Network::PIIO* ppiio_;
 	int val_;
+
+	CameraHandleInScene hCamera1_;
+	CameraHandleInScene hCamera2_;
 };
