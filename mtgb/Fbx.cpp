@@ -3,14 +3,11 @@
 #include "FbxParts.h"
 #include "DirectX11Draw.h"
 #include "MTAssert.h"
+#include "MTAssert.h"
+
 
 mtgb::Fbx::Fbx() :
-	animationSpeed_{ 1.0f },
-	startFrame_{ 0 },
-	endFrame_ { 0 },
-	frameRate_{ FbxTime::EMode::eFrames60 },
-	pFbxManager_{ nullptr },
-	pFbxScene_{ nullptr }
+	pFbxManager_{ nullptr }
 {
 }
 
@@ -21,154 +18,48 @@ mtgb::Fbx::~Fbx()
 
 void mtgb::Fbx::Initialize()
 {
+	pFbxManager_ = FbxManager::Create();
 }
 
 void mtgb::Fbx::Update()
 {
 }
 
-int mtgb::Fbx::Load(const std::string& _fileName)
+mtgb::FBXModelHandle mtgb::Fbx::Load(const std::string& _fileName)
 {
 	Fbx& instance{ Game::System<Fbx>() };
 
-	instance.pFbxManager_ = FbxManager::Create();
-	instance.pFbxScene_ = FbxScene::Create(instance.pFbxManager_, "fbxscene");
-	FbxString fileName{ _fileName.c_str() };
-	FbxImporter* fbxImporter{ FbxImporter::Create(instance.pFbxManager_, "imp") };
+	FbxModel* pFbxModel{ new FbxModel{} };
 
-	FbxIOSettings* ios = FbxIOSettings::Create(instance.pFbxManager_, IOSROOT);
-	instance.pFbxManager_->SetIOSettings(ios);
-	if (!fbxImporter->Initialize(fileName.Buffer(), -1, ios)) {
-		MessageBoxA(NULL, fbxImporter->GetStatus().GetErrorString(), "FBX Import Error", MB_OK);
-		// もしくはログ出力
-	}
-	//none of the registered readers can process the file
+	pFbxModel->Load(_fileName);
+	FBXModelHandle handle{ ++instance.handleCounter_ };
+	instance.pFbxModels_.insert({ handle, pFbxModel });
 
-
-	char str[MAX_PATH]{};
-	GetCurrentDirectory(MAX_PATH, str);
-
-	bool succeed{ false };
-	//succeed = fbxImporter->Initialize(fileName.Buffer(), -1);
-	//massert(succeed	&& "fbxImporterの初期化に失敗した @Fbx::Load");
-	succeed = fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings());
-	massert(succeed && "fbxImporterの初期化に失敗した @Fbx::Load");
-
-	succeed = fbxImporter->Import(instance.pFbxScene_);
-	massert(succeed && "読み込みに失敗した @Fbx::Load");
-
-	SAFE_DESTROY(fbxImporter);  // インポータは解放
-
-	// 3角ポリゴン
-	FbxGeometryConverter geometryConverter{ instance.pFbxManager_ };
-
-	// アニメーションタイムモードの取得
-	instance.frameRate_ = instance.pFbxScene_->GetGlobalSettings().GetTimeMode();
-
-	// 現在のカレントディレクトリを取得
-	char defaultCurrentDirectory[MAX_PATH]{};
-	GetCurrentDirectory(MAX_PATH, defaultCurrentDirectory);
-
-	// カレントディレクトリを移動
-	char directory[MAX_PATH]{};
-	_splitpath_s(_fileName.c_str(), nullptr, 0, directory, MAX_PATH, nullptr, 0, nullptr, 0);
-	SetCurrentDirectory(directory);
-
-	int meshCount{ instance.pFbxScene_->GetSrcObjectCount<FbxMesh>() };
-	for (int i = 0; i < meshCount; i++)
-	{
-		FbxMesh* pMesh = instance.pFbxScene_->GetSrcObject<FbxMesh>(i);
-		if (pMesh == nullptr) continue;
-
-		FbxNode* pNode = pMesh->GetNode();
-		if (pNode == nullptr) continue;
-
-		// 作成前にノードのメッシュ有無確認
-		if (pNode->GetMesh() == nullptr) continue;
-
-		FbxParts* pParts = new FbxParts(pNode);
-		pParts->Initialize();
-		instance.pParts_.push_back(pParts);
-	}
-	return 0;
+	
+	return handle;
 }
 
-void mtgb::Fbx::Draw(int _hModel, const Transform& _transfrom, int _frame)
+void mtgb::Fbx::Draw(const FBXModelHandle _hModel, const Transform& _transfrom, int _frame)
 {
 	DirectX11Draw::SetBlendMode(BlendMode::Default);
 
-	for (int i = 0; i < pParts_.size(); i++)
-	{
-		// アニメーションタイムの姿勢行列を取得する
-		FbxTime time;
-		time.SetTime(0, 0, 0, _frame, 0, 0, frameRate_);
+	massert((0 < _hModel) && (_hModel <= handleCounter_)
+		&& "無効なハンドラ @Fbx::Draw");
 
-		// ボーンがあるスキンアニメーション
-		if (pParts_[i]->GetSkin() != nullptr)
-		{
-			pParts_[i]->DrawSkinAnimation(_transfrom, time);
-		}
-		else  // メッシュアニメーション
-		{
-			pParts_[i]->DrawMeshAnimation(_transfrom, time);
-		}
-	}
+	massert(pFbxModels_.count(_hModel) != 0
+		&& "モデルが存在しない @Fbx::Draw");
+
+	pFbxModels_[_hModel]->Draw(_transfrom, _frame);
 }
 
 void mtgb::Fbx::Release()
 {
-	SAFE_CLEAR_CONTAINER_RELEASE(pParts_);
-	SAFE_DESTROY(pFbxScene_);
+	for (auto& pFbxModel : pFbxModels_)
+	{
+		pFbxModel.second->Release();
+	}
+	pFbxModels_.clear();
 	SAFE_DESTROY(pFbxManager_);
 }
 
 
-mtgb::Vector3 mtgb::Fbx::GetBonePosition(std::string _boneName)
-{
-	Vector3 position_ = Vector3(0, 0, 0);
-	for (int i = 0; i < pParts_.size(); i++)
-	{
-		if (pParts_[i]->TryGetBonePosition(_boneName, &position_))
-			break;
-	}
-	return position_;
-}
-
-mtgb::Vector3 mtgb::Fbx::GetAnimBonePosition(std::string _boneName)
-{
-	Vector3 position_ = Vector3(0, 0, 0);
-	for (int i = 0; i < pParts_.size(); i++)
-	{
-		if (pParts_[i]->TryGetBonePositionAtNow(_boneName, &position_))
-			break;
-	}
-	return position_;
-}
-
-void mtgb::Fbx::CheckNode(FbxNode* _pNode, std::vector<FbxParts*>& _pPartsList)
-{
-	// ノードの属性情報
-	FbxNodeAttribute* pNodeAttribute{ _pNode->GetNodeAttribute() };
-
-	if (pNodeAttribute == nullptr)
-	{
-		return;  // ノードが nullptr なら回帰
-	}
-
-	// メッシュの情報が入っているなら
-	if (pNodeAttribute->GetAttributeType() == FbxNodeAttribute::eMesh)
-	{
-		FbxParts* pParts = new FbxParts(_pNode);
-		pParts->Initialize();
-		_pPartsList.push_back(pParts);
-	}
-
-	// 子の数
-	int childCount{ _pNode->GetChildCount() };
-
-	// 1つずつチェック
-	for (int i = 0; i < childCount; i++)
-	{
-		CheckNode(_pNode->GetChild(i), _pPartsList);
-	}
-}
