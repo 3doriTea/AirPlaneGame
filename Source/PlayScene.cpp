@@ -53,27 +53,27 @@ void PlayScene::Initialize()
 void PlayScene::Update()
 {
 	using LED_STATUS = Network::PIIO::LED_STATUS;
-	//if (InputData::GetKeyDown(KeyCode::Escape))
-	if (InputUtil::GetKeyDown(KeyCode::Escape,mtgb::WindowContext::Both))
+	//if (InputUtil::GetKeyDown(KeyCode::Escape))
+	if (InputUtil::GetKeyDown(KeyCode::Escape, mtgb::WindowContext::Both))
 	{
 		Game::Exit();
 	}
 	//LOGF("ƒeƒXƒg");
 
-	if (InputData::GetKeyDown(KeyCode::Alpha1))
+	if (InputUtil::GetKeyDown(KeyCode::Alpha1))
 	{
 		ppiio_->SendLED(LED_STATUS::LEDS_WARNNING);
 	}
-	if (InputData::GetKeyDown(KeyCode::Alpha2))
+	if (InputUtil::GetKeyDown(KeyCode::Alpha2))
 	{
 		ppiio_->SendLED(LED_STATUS::LEDS_NORMAL);
 	}
-	if (InputData::GetKeyDown(KeyCode::Alpha3))
+	if (InputUtil::GetKeyDown(KeyCode::Alpha3))
 	{
 		ppiio_->SendLED(LED_STATUS::LEDS_CLEAR);
 	}
 
-	if (InputData::GetKeyDown(KeyCode::P))
+	if (InputUtil::GetKeyDown(KeyCode::P))
 	{
 		CameraSystem& CAMERA_SYS{ Game::System<CameraSystem>() };
 		if (CAMERA_SYS.GetDrawCamera() == hCamera1_)
@@ -86,7 +86,7 @@ void PlayScene::Update()
 		}
 	}
 
-	if (InputData::GetKeyDown(KeyCode::Q))
+	if (InputUtil::GetKeyDown(KeyCode::Q))
 	{
 		val_ += 10;
 		if (val_ > 100)
@@ -96,7 +96,7 @@ void PlayScene::Update()
 
 		ppiio_->SendFan(static_cast<float>(val_) / 100.0f);
 	}
-	if (InputData::GetKeyDown(KeyCode::E))
+	if (InputUtil::GetKeyDown(KeyCode::E))
 	{
 		val_ -= 10;
 		if (val_ < 0)

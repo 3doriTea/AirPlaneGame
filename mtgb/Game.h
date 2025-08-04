@@ -156,7 +156,7 @@ namespace mtgb
 		/// <summary>
 		/// システムの解放処理をする
 		/// </summary>
-		static void ReleaseSystems(std::list<ISystem*>& _runnings);
+		static void ReleaseSystems(const std::list<ISystem*>& _runnings);
 
 		/// <summary>
 		/// ゲームサイクルのループを開始

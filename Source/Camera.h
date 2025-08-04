@@ -4,9 +4,7 @@
 class Camera : public GameObject
 {
 public:
-	//Camera(const Vector3& _position);
-	//Camera();
-	Camera(const Vector3& _position, mtgb::WindowContext context);
+	Camera(const Vector3& _position, mtgb::WindowContext _context);
 	~Camera();
 
 	void Update();

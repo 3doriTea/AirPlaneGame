@@ -2,7 +2,7 @@
 #include "WindowContextResourceManager.h"
 #include "WindowContext.h"
 //#include <Windows.h>
-#include "WindowRenderContext.h"
+//#include "WindowRenderContext.h"
 #include "IncludingWindows.h"
 #include "MTAssert.h"
 #include "WindowResource.h"

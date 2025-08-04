@@ -84,12 +84,12 @@ void Player::Update()
 		pTransform_->rotate_.f[2] -= 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
-	if (InputData::GetKey(KeyCode::E))
+	if (InputUtil::GetKey(KeyCode::E))
 	{
 		pTransform_->rotate_.f[1] -= 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
-	if (InputData::GetKey(KeyCode::Q))
+	if (InputUtil::GetKey(KeyCode::Q))
 	{
 		pTransform_->rotate_.f[1] += 1;
 		//pTransform_->scale_.z += 0.01f;
@@ -116,7 +116,7 @@ void Player::Draw() const
 	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
-	MTImGui::ShowInspector(this, "player");
+	//MTImGui::ShowInspector(this, "player");
 	//Draw::Text(hText, mousePos);
 	LOGF("PlayerDraw\n");
 	TypeRegistry::ShowInspector(this, name_.c_str());

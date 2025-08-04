@@ -7,7 +7,7 @@ namespace
 	static const float MOVE_SPEED{ 10.0f };
 }
 
-Camera::Camera(const Vector3& _position) : GameObject(GameObjectBuilder()
+Camera::Camera(const Vector3& _position, mtgb::WindowContext _context) : GameObject(GameObjectBuilder()
 		.SetName("Main Camera")
 		.SetPosition(_position)
 		.SetRotate(Quaternion::Identity())
@@ -15,13 +15,7 @@ Camera::Camera(const Vector3& _position) : GameObject(GameObjectBuilder()
 		.Build()),
 	pTransform_{ Component<Transform>() }
 {
-
-}
-
-Camera::Camera(mtgb::WindowContext context)
-	:Camera()
-{
-	context_ = context;
+	context_ = _context;
 }
 
 Camera::~Camera()

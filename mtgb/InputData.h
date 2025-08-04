@@ -24,15 +24,15 @@ namespace mtgb
 	class InputUtil final
 	{
 	public:
-		static const bool GetKey(const KeyCode _keyCode,WindowContext _context);
-		static const bool GetKeyDown(const KeyCode _keyCode,WindowContext _context);
-		static const bool GetKeyUp(const KeyCode _keyCode,WindowContext _context);
-		static const bool GetMouse(const MouseCode _mouseCode,WindowContext _context);
-		static const bool GetMouseDown(const MouseCode _mouseCode,WindowContext _context);
-		static const bool GetMouseUp(const MouseCode _mouseCode,WindowContext _context);
-		static const bool GetGamePad(const MouseCode _mouseCode,WindowContext _context);
-		static const bool GetGamePadDown(const MouseCode _mouseCode,WindowContext _context);
-		static const bool GetGamePadUp(const MouseCode _mouseCode,WindowContext _context);
+		static const bool GetKey(const KeyCode _keyCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetKeyDown(const KeyCode _keyCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetKeyUp(const KeyCode _keyCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetMouse(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetMouseDown(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetMouseUp(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePad(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadDown(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadUp(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
 
 
 		static const Vector2Int GetMousePosition(WindowContext _context);
