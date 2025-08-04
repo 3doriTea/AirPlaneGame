@@ -1,5 +1,12 @@
 #include "SceneSystem.h"
 #include "GameObject.h"
+#include "WindowContextResourceManager.h"
+#include "DirectX11Manager.h"
+#include "DirectX11Draw.h"
+#include "Input.h"
+#include "MTImGui.h"
+#include "WindowContext.h"
+#include "WindowContextUtil.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -27,6 +34,12 @@ void mtgb::SceneSystem::Update()
 		return;  // シーンがないなら回帰
 	}
 
+	WinCtxRes::ChangeResource(WindowContext::First);
+	Game::System<Input>().Update();
+
+	WinCtxRes::ChangeResource(WindowContext::Second);
+	Game::System<Input>().Update();
+
 	// 現在のシーン
 	GameScene& currentScene{ *GameScene::pInstance_ };
 
@@ -38,11 +51,35 @@ void mtgb::SceneSystem::Update()
 	}
 
 	// 描画処理
+
+	WinCtxRes::ChangeResource(WindowContext::First);
+
+	Game::System<MTImGui>().BeginFrame();
+	Game::System<MTImGui>().Begin("Window");
+	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
 		gameObject->Draw();
 	}
+	Game::System<MTImGui>().End();
+	Game::System<MTImGui>().EndFrame();
+
+	DirectX11Draw::End();
+
+
+	WinCtxRes::ChangeResource(WindowContext::Second);
+
+
+	DirectX11Draw::Begin();
+	
+	currentScene.Draw();
+	for (auto&& gameObject : currentScene.pGameObjects_)
+	{
+		gameObject->Draw();
+	}
+	
+	DirectX11Draw::End();
 
 	// 削除処理
 	for (auto&& itr = currentScene.pGameObjects_.begin();

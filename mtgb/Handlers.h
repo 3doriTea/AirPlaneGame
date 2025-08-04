@@ -32,6 +32,8 @@ namespace mtgb
 	/// </summary>
 	using TextHandle = int32_t;
 
+	using CameraHandleInScene = int32_t;
+
 	/// <summary>
 	/// シーン内で通用するカメラハンドル
 	/// </summary>

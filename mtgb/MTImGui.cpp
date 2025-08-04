@@ -1,8 +1,8 @@
 #include "MTImGui.h"
 #include "Game.h"
-#include "MainWindow.h"
+#include "WindowContextResourceManager.h"
+#include "WindowContextUtil.h"
 #include "DirectX11Draw.h"
-
 mtgb::MTImGui::~MTImGui()
 {
 }
@@ -37,11 +37,10 @@ void mtgb::MTImGui::Initialize()
 
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 
-	MainWindow& mainWindow = Game::System<MainWindow>();
 	
-	ImGui_ImplWin32_Init(mainWindow.GetHWND());
+	
+	ImGui_ImplWin32_Init(WinCtxRes::GetHWND(WindowContext::First));
 	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_, mtgb::DirectX11Draw::pContext_);
-	BeginFrame();
 }
 
 void mtgb::MTImGui::Update()
@@ -54,14 +53,16 @@ void mtgb::MTImGui::Update()
 void mtgb::MTImGui::BeginFrame()
 {
 	mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(true);
-	//pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::Begin("a");
+	
 }
-
+void mtgb::MTImGui::Begin(std::string str)
+{
+	ImGui::Begin(str.c_str());
+}
 void mtgb::MTImGui::Draw()
 {
 
@@ -69,7 +70,6 @@ void mtgb::MTImGui::Draw()
 
 void mtgb::MTImGui::EndFrame()
 {
-	ImGui::End();
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
@@ -86,6 +86,10 @@ void mtgb::MTImGui::EndFrame()
 	//BeginFrame()
 }
 
+void mtgb::MTImGui::End()
+{
+	ImGui::End();
+}
 void mtgb::MTImGui::Release()
 {
 	ImGui_ImplDX11_Shutdown();
@@ -93,12 +97,3 @@ void mtgb::MTImGui::Release()
 	ImGui::DestroyContext();
 }
 
-void mtgb::MTImGui::Show(const char* name, int* val)
-{
-	ImGui::InputInt(name, val);
-}
-
-void mtgb::MTImGui::Show(const char* name, float* val)
-{
-	ImGui::InputFloat(name, val);
-}

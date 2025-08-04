@@ -1,75 +1,101 @@
 #include "InputData.h"
-#include <xinput.h>
+
 #include "Input.h"
+#include "WindowContextResourceManager.h"
+#include "InputResource.h"
+#include "Game.h"
+#include "ISystem.h"
 
-const bool mtgb::InputData::GetKey(const KeyCode _keyCode)
+
+const bool mtgb::InputUtil::GetKey(const KeyCode _keyCode, WindowContext _context)
 {
-	return keyStateCurrent_[Index(_keyCode)];
+	if (_context == WindowContext::Both)
+	{
+		return GetInput(WindowContext::First).keyStateCurrent_[Index(_keyCode)] || GetInput(WindowContext::Second).keyStateCurrent_[Index(_keyCode)];
+	}
+
+	return GetInput(_context).keyStateCurrent_[Index(_keyCode)];
+}
+const bool mtgb::InputUtil::GetKeyDown(const KeyCode _keyCode, WindowContext _context)
+{
+	if (_context == WindowContext::Both)
+	{
+		const InputData& inputFirstWnd = GetInput(WindowContext::First);
+		const InputData& inputSecondWnd = GetInput(WindowContext::Second);
+
+		return static_cast<bool>(KeyXOR(_keyCode, inputFirstWnd.keyStateCurrent_, inputFirstWnd.keyStatePrevious_) & static_cast<int>(inputFirstWnd.keyStateCurrent_[Index(_keyCode)]))
+			|| static_cast<bool>(KeyXOR(_keyCode, inputSecondWnd.keyStateCurrent_, inputSecondWnd.keyStatePrevious_) & static_cast<int>(inputSecondWnd.keyStateCurrent_[Index(_keyCode)]));
+	}
+
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & static_cast<int>(input.keyStateCurrent_[Index(_keyCode)]));
+}
+const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _context)
+{
+	if (_context == WindowContext::Both)
+	{
+		const InputData& inputFirstWnd = GetInput(WindowContext::First);
+		const InputData& inputSecondWnd = GetInput(WindowContext::Second);
+
+		return static_cast<bool>(KeyXOR(_keyCode, inputFirstWnd.keyStateCurrent_, inputFirstWnd.keyStatePrevious_) & static_cast<int>(inputFirstWnd.keyStatePrevious_[Index(_keyCode)]))
+			|| static_cast<bool>(KeyXOR(_keyCode, inputSecondWnd.keyStateCurrent_, inputSecondWnd.keyStatePrevious_) & static_cast<int>(inputSecondWnd.keyStatePrevious_[Index(_keyCode)]));
+	}
+
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & input.keyStatePrevious_[Index(_keyCode)]);
+}
+const bool mtgb::InputUtil::GetMouse(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const bool mtgb::InputUtil::GetMouseDown(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const bool mtgb::InputUtil::GetMouseUp(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const bool mtgb::InputUtil::GetGamePad(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const bool mtgb::InputUtil::GetGamePadDown(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const bool mtgb::InputUtil::GetGamePadUp(const MouseCode _mouseCode, WindowContext _context)
+{
+	return false;
+}
+const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
+{
+	if (_context == WindowContext::Both)
+	{
+		return *(Game::System<WindowContextResourceManager>().Get<InputResource>(WindowContext::First).GetInput());
+	}
+	return *(Game::System<WindowContextResourceManager>().Get<InputResource>(_context).GetInput());
 }
 
-const bool mtgb::InputData::GetKeyDown(const KeyCode _keyCode)
-{
-	return static_cast<bool>(KeyXOR(_keyCode) & keyStateCurrent_[Index(_keyCode)]);
-}
 
-const bool mtgb::InputData::GetKeyUp(const KeyCode _keyCode)
-{
-	return static_cast<bool>(KeyXOR(_keyCode) & keyStateCurrent_[Index(_keyCode)]);
-}
 
-const bool mtgb::InputData::GetMouse(const MouseCode _mouseCode)
+const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
 {
 	
-	return false;
+	return InputUtil::GetInput(_context).mousePosition_;
+	
 }
 
-const bool mtgb::InputData::GetMouseDown(const MouseCode _mouseCode)
-{
-	return false;
-}
-
-const bool mtgb::InputData::GetMouseUp(const MouseCode _mouseCode)
-{
-	return false;
-}
-
-const bool mtgb::InputData::GetGamePad(const MouseCode _mouseCode)
-{
-	return false;
-}
-
-const bool mtgb::InputData::GetGamePadDown(const MouseCode _mouseCode)
-{
-	return false;
-}
-
-const bool mtgb::InputData::GetGamePadUp(const MouseCode _mouseCode)
-{
-	return false;
-}
-
-const mtgb::Vector2Int mtgb::InputData::GetMousePosition()
-{
-	return mousePosition_;
-}
-
-const mtgb::Vector3 mtgb::InputData::GetMouseMove()
+const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
 {
 	return mtgb::Vector3
 	{
-		static_cast<float>(mouseStateCurrent_.lX),
-		static_cast<float>(mouseStateCurrent_.lY),
-		static_cast<float>(mouseStateCurrent_.lZ),
+		static_cast<float>(InputUtil::GetInput(_context).mouseStateCurrent_.lX),
+		static_cast<float>(InputUtil::GetInput(_context).mouseStateCurrent_.lY),
+		static_cast<float>(InputUtil::GetInput(_context).mouseStateCurrent_.lZ),
 	};
 }
 
-std::bitset<mtgb::InputData::KEY_COUNT> mtgb::InputData::keyStateCurrent_{};
-std::bitset<mtgb::InputData::KEY_COUNT> mtgb::InputData::keyStatePrevious_{};
 
-_DIMOUSESTATE mtgb::InputData::mouseStateCurrent_{};
-_DIMOUSESTATE mtgb::InputData::mouseStatePrevious_{};
 
-mtgb::Vector2Int mtgb::InputData::mousePosition_{};
 
-std::array<_XINPUT_STATE, mtgb::InputData::GAME_PAD_COUNT> mtgb::InputData::gamePadStateCurrent_{};
-std::array<_XINPUT_STATE, mtgb::InputData::GAME_PAD_COUNT> mtgb::InputData::gamePadStatePrevious_{};

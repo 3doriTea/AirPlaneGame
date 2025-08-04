@@ -1,7 +1,8 @@
 #include "Player.h"
 #include "Bullet.h"
 #include "../mtgb/DirectX11Draw.h"
-
+#include "DoubleWindow.h"
+#include "Inspector.h"
 using namespace mtgb;
 
 namespace
@@ -21,10 +22,11 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() }
 {
+	name_ = "Player:" + std::to_string(entityId_);
 	test1 = 10;
 	test2 = 20;
 	str = "Hello,World!";
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	//DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	//hImage_ = Image::Load("Image/player.png");
 	//hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	fModel_ = Fbx::Load("Model/tCube.fbx");
@@ -33,7 +35,13 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_->scale_ = Vector3(10, 10, 10);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
-	timerHandle = Timer::AddInterval(0.01f, [this]() {timer += 10; });
+	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
+}
+
+Player::Player(mtgb::WindowContext context)
+	:Player()
+{
+	context_ = context;
 }
 
 Player::~Player()
@@ -46,32 +54,32 @@ void Player::Update()
 	{
 		timer = 0;
 	}
-	if (InputData::GetKeyDown(KeyCode::C))
+	if (InputUtil::GetKeyDown(KeyCode::C,context_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
 		
 	}
 
-	if (InputData::GetKeyDown(KeyCode::F))
+	if (InputUtil::GetKeyDown(KeyCode::F,context_))
 	{
 		
 	}
 
-	if (InputData::GetKey(KeyCode::W))
+	if (InputUtil::GetKey(KeyCode::W,context_))
 	{
 		pTransform_->position_ += pTransform_->Forward() * PLAYER_SPEED;
 	}
-	if (InputData::GetKey(KeyCode::S))
+	if (InputUtil::GetKey(KeyCode::S,context_))
 	{
 		pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
 	}
 
-	if (InputData::GetKey(KeyCode::A))
+	if (InputUtil::GetKey(KeyCode::A,context_))
 	{
 		pTransform_->rotate_.f[2] += 1;
 		//pTransform_->scale_.z -= 0.01f;
 	}
-	if (InputData::GetKey(KeyCode::D))
+	if (InputUtil::GetKey(KeyCode::D,context_))
 	{
 		pTransform_->rotate_.f[2] -= 1;
 		//pTransform_->scale_.z += 0.01f;
@@ -91,7 +99,7 @@ void Player::Update()
 void Player::Draw() const
 {
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	Vector2Int mousePos = InputData::GetMousePosition();
+	Vector2Int mousePos = InputUtil::GetMousePosition(context_);
 	
 	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
 
@@ -105,9 +113,11 @@ void Player::Draw() const
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	//Draw::Image(hImage_, pTransform_);
+	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	MTImGui::ShowInspector(this, "player");
 	//Draw::Text(hText, mousePos);
 	LOGF("PlayerDraw\n");
+	TypeRegistry::ShowInspector(this, name_.c_str());
 }

@@ -10,6 +10,7 @@ struct IDXGIAdapter;
 struct IDXGIFactory2;
 
 struct IDXGISwapChain;
+struct IDXGISwapChain1;
 struct ID3D11RenderTargetView;
 struct ID3D11DepthStencilView;
 struct ID3D11DepthStencilState;
@@ -28,7 +29,6 @@ namespace mtgb
 	class Figure;
 	class IShader;
 	class MTImGui;
-	class FbxParts;
 	/// <summary>
 	/// シェーダタイプ
 	/// </summary>
@@ -95,6 +95,8 @@ namespace mtgb
 		friend class MTImGui;
 		friend class FbxParts;
 
+		friend class DoubleWindow;
+		friend class SceneSystem;
 	public:
 		/// <summary>
 		/// 描画するシェーダをセットする
@@ -139,6 +141,7 @@ namespace mtgb
 		static IDXGIFactory2* pDXGIFactory_;
 
 		static IDXGISwapChain* pSwapChain_;                                                        // ダブルバッファリングするやつ
+		static IDXGISwapChain1* pSwapChain1_;
 		static ID3D11RenderTargetView* pRenderTargetView_;                                         // 描画先
 		static ID3D11DepthStencilView* pDepthStencilView_;                                         // 深度バッファ
 		static ID3D11DepthStencilState* pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)];  // ブレンドによる深度バッファへの書き込み情報

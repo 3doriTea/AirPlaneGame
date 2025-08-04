@@ -17,6 +17,7 @@ IDXGIFactory2* mtgb::DirectX11Draw::pDXGIFactory_{ nullptr };
 
 IDXGISwapChain* mtgb::DirectX11Draw::pSwapChain_{ nullptr };                                               // ダブルバッファリングするやつ
 ID3D11RenderTargetView* mtgb::DirectX11Draw::pRenderTargetView_{ nullptr };                                // 描画先
+IDXGISwapChain1* mtgb::DirectX11Draw::pSwapChain1_{ nullptr };
 ID3D11DepthStencilView* mtgb::DirectX11Draw::pDepthStencilView_{ nullptr };                                // 深度バッファ
 ID3D11DepthStencilState* mtgb::DirectX11Draw::pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドによる深度バッファへの書き込み情報
 ID3D11Texture2D* mtgb::DirectX11Draw::pDepthStencil_{ nullptr };                                           // ブレンドの情報
@@ -73,7 +74,9 @@ void mtgb::DirectX11Draw::Begin()
 void mtgb::DirectX11Draw::End()
 {
 	// スワップして画面更新
-	pSwapChain_->Present(0U, 0U);
+	//pSwapChain_->Present(0U, 0U);
+	pSwapChain1_->Present(0U, 0U);
+	//pSwapChain_->Present(0U, 0U);
 }
 
 void mtgb::DirectX11Draw::Release()
@@ -84,6 +87,7 @@ void mtgb::DirectX11Draw::Release()
 	SAFE_RELEASE(pDXGIAdapter_);
 	SAFE_RELEASE(pDXGIFactory_);
 	SAFE_RELEASE(pSwapChain_);
+	SAFE_RELEASE(pSwapChain1_);
 	SAFE_RELEASE(pContext_);
 	SAFE_RELEASE(pDevice_);
 }

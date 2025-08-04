@@ -95,8 +95,6 @@ void mtgb::DirectWrite::CreateFontFormatData(const std::wstring& fileName, int f
 	//フォントのメトリクス取得
 	pDWriteFont_->GetMetrics(&fontMetrics_);
 
-	// デフォルトフォントフォーマットを作成
-	//FontFormatData* formatData = new FontFormatData();
 	// 新しいフォーマットを作成
 	IDWriteTextFormat* format = nullptr;
 	PixelFontMetrics metrics;
@@ -107,10 +105,6 @@ void mtgb::DirectWrite::CreateFontFormatData(const std::wstring& fileName, int f
 	//FontFormatData* data = new FontFormatData(fontSize, format, metrics);
 	*ppFontFormatData = new FontFormatData(fontSize, format, metrics);
 
-	//pTextFormat_ = data->format;
-	//pixelFontMetrics_ = data->pixelFontMetrics;
-
-	
 }
 
 void mtgb::DirectWrite::Update()
@@ -161,11 +155,11 @@ void mtgb::DirectWrite::CreateTextFormat(int size, IDWriteTextFormat** ppTextFor
 void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, int size, IDWriteTextFormat* format, IDWriteTextLayout** ppTextLayout)
 {
 	//テキストレイアウト作成
-	D2D1_SIZE_F rtSize = mtgb::Direct2D::pRenderTarget_->GetSize();
+	D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
 
 	static const float dip = 96.0f;
 	FLOAT dpiX, dpiY;
-	mtgb::Direct2D::pRenderTarget_->GetDpi(&dpiX, &dpiY);
+	mtgb::Direct2D::pDefRenderTarget_->GetDpi(&dpiX, &dpiY);
 	
 	rtSize.width = rtSize.width / dpiX * dip;
 	rtSize.height = rtSize.height / dpiY * dip;
@@ -191,61 +185,40 @@ void mtgb::DirectWrite::Draw(IDWriteTextLayout* textLayout, float x, float y)
 {
 	D2D1_POINT_2F origin = { x, y  };
 
-	mtgb::Direct2D::pRenderTarget_->BeginDraw();
-	mtgb::Direct2D::pRenderTarget_->DrawTextLayout(origin, textLayout, mtgb::Direct2D::pD2DBrush_);
-	mtgb::Direct2D::pRenderTarget_->EndDraw();
+	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
+	mtgb::Direct2D::pDefRenderTarget_->DrawTextLayout(origin, textLayout, mtgb::Direct2D::pDefD2DBrush_);
+	mtgb::Direct2D::pDefRenderTarget_->EndDraw();
 }
 
 void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y)
 {
-	D2D1_SIZE_F rtSize = mtgb::Direct2D::pRenderTarget_->GetSize();
+	/*D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
 
-	mtgb::Direct2D::pRenderTarget_->BeginDraw();
+	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
 
-	mtgb::Direct2D::pRenderTarget_->DrawText(
+	mtgb::Direct2D::pDefRenderTarget_->DrawText(
 		text.c_str(),
 		static_cast<uint32_t>(text.length()),
 		pTextFormat_,
 		D2D1::RectF(x, y + pixelFontMetrics_.textTopOffset, rtSize.width, rtSize.height),
-		mtgb::Direct2D::pD2DBrush_
+		mtgb::Direct2D::pDefD2DBrush_
 	);
 
-	mtgb::Direct2D::pRenderTarget_->EndDraw();
+	mtgb::Direct2D::pDefRenderTarget_->EndDraw();*/
+	ImmediateDraw(text, pTextFormat_, pixelFontMetrics_, x, y);
 }
 
 
 
-//void mtgb::DirectWrite::ImmediateDraw(const std::string& text, float x, float y, int size)
-//{
-//	std::wstring wText = StrToWStr(text);
-//	
-//	// 指定サイズのフォーマットを取得または作成
-//	auto formatData = GetOrCreateTextFormat(size);
-//	IDWriteTextFormat* textFormat = formatData.first;
-//	PixelFontMetrics metrics = formatData.second;
-//
-//	D2D1_SIZE_F rtSize = mtgb::Direct2D::pRenderTarget_->GetSize();
-//
-//	mtgb::Direct2D::pRenderTarget_->BeginDraw();
-//
-//	mtgb::Direct2D::pRenderTarget_->DrawText(
-//		wText.c_str(),
-//		wText.length(),
-//		textFormat,
-//		D2D1::RectF(x, y + metrics.textTopOffset, rtSize.width, rtSize.height),
-//		mtgb::Direct2D::pD2DBrush_
-//	);
-//
-//	mtgb::Direct2D::pRenderTarget_->EndDraw();
-//}
+
 
 void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, int x, int y)
 {
-	D2D1_SIZE_F rtSize = mtgb::Direct2D::pRenderTarget_->GetSize();
+	D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
 
-	mtgb::Direct2D::pRenderTarget_->BeginDraw();
+	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
 
-	mtgb::Direct2D::pRenderTarget_->DrawText(
+	mtgb::Direct2D::pDefRenderTarget_->DrawText(
 		text.c_str(),
 		static_cast<uint32_t>(text.length()),
 		format,
@@ -255,7 +228,7 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat
 		mtgb::Direct2D::pD2DBrush_
 	);
 
-	mtgb::Direct2D::pRenderTarget_->EndDraw();
+	mtgb::Direct2D::pDefRenderTarget_->EndDraw();
 }
 
 void mtgb::DirectWrite::Release()

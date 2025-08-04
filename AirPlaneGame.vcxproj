@@ -35,15 +35,20 @@
     <ClCompile Include="mtgb\AudioOneShot.cpp" />
     <ClCompile Include="mtgb\AudioPlayer.cpp" />
     <ClCompile Include="mtgb\AudioPlayerCP.cpp" />
+    <ClCompile Include="mtgb\CameraResource.cpp" />
+    <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
+    <ClCompile Include="mtgb\Direct2DResource.cpp" />
     <ClCompile Include="mtgb\Direct2D\Direct2D.cpp" />
+    <ClCompile Include="mtgb\Direct3DResource.cpp" />
     <ClCompile Include="mtgb\DirectWrite.cpp" />
     <ClCompile Include="mtgb\DirectX11Draw.cpp" />
     <ClCompile Include="mtgb\DirectX11Manager.cpp" />
     <ClCompile Include="mtgb\DoubleWindow.cpp" />
     <ClCompile Include="mtgb\Draw.cpp" />
+    <ClCompile Include="mtgb\DXGIResource.cpp" />
     <ClCompile Include="mtgb\Entity.cpp" />
     <ClCompile Include="mtgb\Fbx.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -64,6 +69,8 @@
     <ClCompile Include="mtgb\Image.cpp" />
     <ClCompile Include="mtgb\Input.cpp" />
     <ClCompile Include="mtgb\InputData.cpp" />
+    <ClCompile Include="mtgb\InputResource.cpp" />
+    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\IShader.cpp" />
     <ClCompile Include="mtgb\ISystem.cpp" />
     <ClCompile Include="mtgb\MainWindow.cpp" />
@@ -95,6 +102,9 @@
     </ClCompile>
     <ClCompile Include="mtgb\OBJ.cpp" />
     <ClCompile Include="mtgb\Quaternion.cpp" />
+    <ClCompile Include="mtgb\ResourceCollection.cpp" />
+    <ClCompile Include="mtgb\WindowContextResource.cpp" />
+    <ClCompile Include="mtgb\WindowContextResourceManager.cpp" />
     <ClCompile Include="mtgb\RigidBody.cpp" />
     <ClCompile Include="mtgb\RigidBodyCP.cpp" />
     <ClCompile Include="mtgb\SceneSystem.cpp" />
@@ -111,8 +121,10 @@
     <ClCompile Include="mtgb\Vector3.cpp" />
     <ClCompile Include="mtgb\Vector4.cpp" />
     <ClCompile Include="mtgb\WaveData.cpp" />
+    <ClCompile Include="mtgb\WindowContextUtil.cpp" />
     <ClCompile Include="mtgb\WindowManager.cpp" />
-    <ClCompile Include="mtgb\WindowRenderContext.cpp" />
+    <ClCompile Include="mtgb\WindowContext.cpp" />
+    <ClCompile Include="mtgb\WindowResource.cpp" />
     <ClCompile Include="mtgb\World.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
@@ -141,22 +153,28 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="mtgb\AccessibleMacro.h" />
     <ClInclude Include="mtgb\AssetsManager.h" />
     <ClInclude Include="mtgb\Audio.h" />
     <ClInclude Include="mtgb\AudioClip.h" />
     <ClInclude Include="mtgb\AudioOneShot.h" />
     <ClInclude Include="mtgb\AudioPlayer.h" />
     <ClInclude Include="mtgb\AudioPlayerCP.h" />
+    <ClInclude Include="mtgb\CameraResource.h" />
+    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\cmtgb.h" />
     <ClInclude Include="mtgb\Color.h" />
     <ClInclude Include="mtgb\ComponentPool.h" />
     <ClInclude Include="mtgb\Debug.h" />
+    <ClInclude Include="mtgb\Direct2DResource.h" />
     <ClInclude Include="mtgb\Direct2D\Direct2D.h" />
+    <ClInclude Include="mtgb\Direct3DResource.h" />
     <ClInclude Include="mtgb\DirectWrite.h" />
     <ClInclude Include="mtgb\DirectX11Draw.h" />
     <ClInclude Include="mtgb\DirectX11Manager.h" />
     <ClInclude Include="mtgb\DoubleWindow.h" />
     <ClInclude Include="mtgb\Draw.h" />
+    <ClInclude Include="mtgb\DXGIResource.h" />
     <ClInclude Include="mtgb\Entity.h" />
     <ClInclude Include="mtgb\Fbx.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -183,6 +201,8 @@
     <ClInclude Include="mtgb\InputData.h" />
     <ClInclude Include="mtgb\InputKeyCode.h" />
     <ClInclude Include="mtgb\InputMouseCode.h" />
+    <ClInclude Include="mtgb\InputResource.h" />
+    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\IShader.h" />
     <ClInclude Include="mtgb\ISystem.h" />
     <ClInclude Include="mtgb\MainWindow.h" />
@@ -222,6 +242,9 @@
     <ClInclude Include="mtgb\Quaternion.h" />
     <ClInclude Include="mtgb\RectInt.h" />
     <ClInclude Include="mtgb\ReleaseUtility.h" />
+    <ClInclude Include="mtgb\ResourceCollection.h" />
+    <ClInclude Include="mtgb\WindowContextResource.h" />
+    <ClInclude Include="mtgb\WindowContextResourceManager.h" />
     <ClInclude Include="mtgb\RigidBody.h" />
     <ClInclude Include="mtgb\RigidBodyCP.h" />
     <ClInclude Include="mtgb\SceneSystem.h" />
@@ -240,8 +263,10 @@
     <ClInclude Include="mtgb\Vector3Ref.h" />
     <ClInclude Include="mtgb\Vector4.h" />
     <ClInclude Include="mtgb\WaveData.h" />
+    <ClInclude Include="mtgb\WindowContextUtil.h" />
     <ClInclude Include="mtgb\WindowManager.h" />
-    <ClInclude Include="mtgb\WindowRenderContext.h" />
+    <ClInclude Include="mtgb\WindowContext.h" />
+    <ClInclude Include="mtgb\WindowResource.h" />
     <ClInclude Include="mtgb\World.h" />
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
@@ -387,7 +412,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions);_AMD64_</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(FBX)\include;C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;%(AdditionalIncludeDirectories);$(REFL_CPP)</AdditionalIncludeDirectories>
@@ -405,7 +430,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions);_AMD64_</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(FBX)\include;%(AdditionalIncludeDirectories);$(REFL_CPP)</AdditionalIncludeDirectories>

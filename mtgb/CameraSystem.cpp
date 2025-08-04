@@ -115,7 +115,7 @@ void mtgb::CameraSystem::GetProjMatrix(Matrix4x4* _pProj) const
 	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 	*_pProj = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(fov_), 
+		XMConvertToRadians(fov_),
 		static_cast<float>(SCREEN_SIZE.x) / static_cast<float>(SCREEN_SIZE.y),
 		near_,
 		far_);

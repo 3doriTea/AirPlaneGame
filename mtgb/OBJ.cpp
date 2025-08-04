@@ -7,12 +7,13 @@
 #include "Transform.h"
 #include "Vector2Int.h"
 #include "Screen.h"
-
+#include "ISystem.h"
+#include "SceneSystem.h"
+#include "CameraSystem.h"
 #include <stdio.h>
 #include "IncludingWindows.h"
 #include <d3d11.h>
 #include <d3dCompiler.h>
-
 
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib,"d3dCompiler.lib")
@@ -123,29 +124,24 @@ void mtgb::OBJ::Update()
 
 void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 {
-
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	//DirectX::XMMATRIX mWorld;
-	Matrix4x4* mWorld = new Matrix4x4();
-	transform->GenerateWorldMatrix(mWorld);
+	Matrix4x4 mWorld;
+	transform->GenerateWorldMatrix(&mWorld);
 
-	DirectX::XMMATRIX mView;
+	Matrix4x4 mView;
 	// ビュートランスフォーム（視点座標変換）
-	DirectX::XMVECTOR vEyePt = DirectX::XMVectorSet(0.0f, 0.0f, -10.0f,0.0f); //カメラ（視点）位置
-	DirectX::XMVECTOR vLookatPt = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f,0.0f);//注視位置
-	DirectX::XMVECTOR vUpVec = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f,0.0f);//上方位置
-	mView = DirectX::XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
+	
+	Transform cameraTransform = Game::System<CameraSystem>().GetTransform();
+	Game::System<CameraSystem>().GetViewMatrix(&mView);
 
-	DirectX::XMMATRIX mProj;
+	Matrix4x4 mProj;
+	Game::System<CameraSystem>().GetProjMatrix(&mProj);
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	mProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4, (FLOAT)SCREEN_SIZE.x/(FLOAT)SCREEN_SIZE.y, 0.1f,100.0f);
 
 	ID3D11DeviceContext* tmpContext = DirectX11Draw::pContext_;
-
 	tmpContext->VSSetShader(pVertexShader_, NULL, 0);
 	tmpContext->PSSetShader(pPixelShader_, NULL, 0);
-
-	//DirectX11Draw::Begin();
-
 
 	//シェーダーのコンスタントバッファーに各種データを渡す	
 	D3D11_MAPPED_SUBRESOURCE pData;
@@ -157,7 +153,7 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 		&& "Mapに失敗 @OBJ::Draw");
 	if (SUCCEEDED(hResult))
 	{
-		DirectX::XMMATRIX mWVP = (*mWorld) * mView * mProj;
+		DirectX::XMMATRIX mWVP = (mWorld) * mView * mProj;
 		//cb.mWVP = DirectX::XMMatrixTranspose(*mWorld);
 		cb.mWVP = DirectX::XMMatrixTranspose(mWVP);
 
@@ -186,8 +182,6 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 		
 		//DirectX11Draw::End();
 	}
-
-	delete mWorld;
 }
 
 

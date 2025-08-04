@@ -1,7 +1,8 @@
 #pragma once
 #include "ISystem.h"
+#include "WindowContext.h"
+typedef struct HWND__* HWND;
 
-class WindowRenderContext;
 namespace mtgb
 {
 	class DoubleWindow : public ISystem
@@ -12,8 +13,11 @@ namespace mtgb
 
 		void Initialize() override;
 		void Update() override;
+
+		
+		void RegisterFirstWindowCamera();
 	private:
-		WindowRenderContext* context1_;
-		WindowRenderContext* context2_;
+		WindowContext context1_;
+		WindowContext context2_;
 	};
 }

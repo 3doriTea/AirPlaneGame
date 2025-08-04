@@ -9,6 +9,7 @@
 #include "Vector2.h"
 #include "Vector2Int.h"
 #include "RectInt.h"
+#include "WindowContextUtil.h"
 
 #pragma endregion
 
@@ -35,12 +36,28 @@
 #include "MTImGui.h"
 #include "Text.h"
 #include "Fbx.h"
+#include "WindowContext.h"
+#include "WindowContextResourceManager.h"
+#include "WindowManager.h"
+#include "DoubleWindow.h"
+#include "CameraSystem.h"
 
 #pragma endregion
 
 #include "GameObjectBuilder.h"
 #include "GameObject.h"
 
+#pragma region Resource
+
+#include "WindowContextResource.h"
+#include "DXGIResource.h"
+#include "Direct3DResource.h"
+#include "Direct2DResource.h"
+#include "InputResource.h"
+#include "Input.h"
+#include "CameraResource.h"
+
+#pragma endregion
 #pragma region Data
 
 #include "InputData.h"

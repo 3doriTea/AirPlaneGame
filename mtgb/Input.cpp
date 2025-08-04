@@ -1,11 +1,13 @@
 #include "Input.h"
 #include "IncludingWindows.h"
 #include <dinput.h>
+#include <Xinput.h>
 #include "InputData.h"
 #include "ReleaseUtility.h"
 #include "MTAssert.h"
 #include "MainWindow.h"
-
+#include "DoubleWindow.h"
+#include "InputResource.h"
 
 namespace
 {
@@ -30,7 +32,8 @@ void mtgb::Input::Initialize()
 {
 	HRESULT hResult{};
 
-	const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
+	//const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
+	//const HWND hWnd{ Game::System<DoubleWindow>().GetFirstWindowHandle() };
 
 	// DirectInput8のデバイス作成
 	hResult = DirectInput8Create(
@@ -43,46 +46,46 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	#pragma region キーボード
-	// キーデバイス作成
-	hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, &pKeyDevice_, nullptr);
+	//#pragma region キーボード
+	//// キーデバイス作成
+	//hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, &pKeyDevice_, nullptr);
 
-	massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
-		&& "キーボードデバイスの作成に失敗 @Input::Initialize");
+	//massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
+	//	&& "キーボードデバイスの作成に失敗 @Input::Initialize");
 
-	// キーボード用にフォーマット
-	hResult = pKeyDevice_->SetDataFormat(&c_dfDIKeyboard);
+	//// キーボード用にフォーマット
+	//hResult = pKeyDevice_->SetDataFormat(&c_dfDIKeyboard);
 
-	massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
-		&& "キーボードフォーマットに失敗 @Input::Initialize");
+	//massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
+	//	&& "キーボードフォーマットに失敗 @Input::Initialize");
 
-	// キーボードのアプリ間共有レベルを設定
-	//  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
-	hResult = pKeyDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	
-	massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
-		&& "キーボードアプリ間共有レベル設定に失敗 @Input::Initialize");
-	#pragma endregion
+	//// キーボードのアプリ間共有レベルを設定
+	////  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
+	//hResult = pKeyDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//
+	//massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
+	//	&& "キーボードアプリ間共有レベル設定に失敗 @Input::Initialize");
+	//#pragma endregion
 
-	#pragma region マウス
-	// マウスデバイス作成
-	hResult = pDirectInput_->CreateDevice(GUID_SysMouse, &pMouseDevice_, nullptr);
+	//#pragma region マウス
+	//// マウスデバイス作成
+	//hResult = pDirectInput_->CreateDevice(GUID_SysMouse, &pMouseDevice_, nullptr);
 
-	massert(SUCCEEDED(hResult)  // マウスデバイスの作成に成功
-		&& "マウスデバイスの作成に失敗 @Input::Initialize");
+	//massert(SUCCEEDED(hResult)  // マウスデバイスの作成に成功
+	//	&& "マウスデバイスの作成に失敗 @Input::Initialize");
 
-	// マウス用にフォーマット
-	hResult = pMouseDevice_->SetDataFormat(&c_dfDIMouse);
+	//// マウス用にフォーマット
+	//hResult = pMouseDevice_->SetDataFormat(&c_dfDIMouse);
 
-	massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
-		&& "マウスフォーマットに失敗 @Input::Initialize");
+	//massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
+	//	&& "マウスフォーマットに失敗 @Input::Initialize");
 
-	// マウスのアプリ間共有レベルの設定
-	hResult = pMouseDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//// マウスのアプリ間共有レベルの設定
+	//hResult = pMouseDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
-	massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
-		&& "マウスアプリ間共有レベル設定に失敗 @Input::Initialize");
-	#pragma endregion
+	//massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
+	//	&& "マウスアプリ間共有レベル設定に失敗 @Input::Initialize");
+	//#pragma endregion
 }
 
 void mtgb::Input::Update()
@@ -103,13 +106,13 @@ void mtgb::Input::Update()
 
 	static BYTE keyBuffer[KEY_BUFFER_SIZE]{};  // キー状態取得用バッファ
 
-	InputData::keyStatePrevious_ = InputData::keyStateCurrent_;
+	pInputData_->keyStatePrevious_ = pInputData_->keyStateCurrent_;
 	pKeyDevice_->GetDeviceState(KEY_BUFFER_SIZE, keyBuffer);
 
 	// TODO: forで回すのはコスパよくない
 	for (int i = 0; i < KEY_BUFFER_SIZE; i++)
 	{
-		InputData::keyStateCurrent_[i] = keyBuffer[i];
+		pInputData_->keyStateCurrent_[i] = keyBuffer[i];
 	}
 #pragma endregion
 
@@ -126,13 +129,13 @@ void mtgb::Input::Update()
 		&& "マウス操作の許可取得に失敗 @Input::Update");
 
 	memcpy(
-		&InputData::mouseStatePrevious_,
-		&InputData::mouseStateCurrent_,
-		sizeof(_DIMOUSESTATE));
+		&pInputData_->mouseStatePrevious_,
+		&pInputData_->mouseStateCurrent_,
+		sizeof(DIMOUSESTATE));
 
 	pMouseDevice_->GetDeviceState(
-		sizeof(_DIMOUSESTATE),
-		&InputData::mouseStateCurrent_);
+		sizeof(DIMOUSESTATE),
+		&pInputData_->mouseStateCurrent_);
 #pragma endregion
 }
 
@@ -140,6 +143,68 @@ void mtgb::Input::UpdateMousePositionData(
 	const int32_t _x,
 	const int32_t _y)
 {
-	InputData::mousePosition_.x = _x;
-	InputData::mousePosition_.y = _y;
+	pInputData_->mousePosition_.x = _x;
+	pInputData_->mousePosition_.y = _y;
+}
+
+void mtgb::Input::CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice)
+{
+	HRESULT hResult{};
+
+	hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, _ppKeyDevice, nullptr);
+	massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
+		&& "キーボードデバイスの作成に失敗 @Input::CreateKeyDevice");
+
+	// キーボード用にフォーマット
+	hResult = (*_ppKeyDevice)->SetDataFormat(&c_dfDIKeyboard);
+
+	massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
+		&& "キーボードフォーマットに失敗 @Input::CreateDevice");
+
+	// キーボードのアプリ間共有レベルを設定
+	//  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
+	//hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//非アクティブなアプリも入力を受け付ける
+	hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+
+	massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
+		&& "キーボードアプリ間共有レベル設定に失敗 @Input::CreateDevice");
+}
+
+void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDevice)
+{
+	HRESULT hResult{};
+
+	hResult = pDirectInput_->CreateDevice(GUID_SysMouse, _ppMouseDevice, nullptr);
+	massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
+		&& "マウスデバイスの作成に失敗 @Input::CreateMouseDevice");
+
+	// マウス用にフォーマット
+	hResult = (*_ppMouseDevice)->SetDataFormat(&c_dfDIMouse);
+
+	massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
+		&& "マウスフォーマットに失敗 @Input::CreateMouseDevice");
+
+	// マウスのアプリ間共有レベルの設定
+	//hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//非アクティブなアプリも入力を受け付ける
+	hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+
+	massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
+		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");
+}
+
+void mtgb::Input::ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice)
+{
+	pKeyDevice_ = _pKeyDevice;
+}
+
+void mtgb::Input::ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice)
+{
+	pMouseDevice_ = _pMouseDevice;
+}
+
+void mtgb::Input::ChangeInputData(InputData* _pInputData)
+{
+	pInputData_ = _pInputData;
 }

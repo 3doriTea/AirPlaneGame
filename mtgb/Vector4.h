@@ -29,6 +29,7 @@ namespace mtgb
 
 		Vector4() :
 			Vector4{ 0.0f, 0.0f, 0.0f, 0.0f }
-		{}
+		{
+		}
 	};
 }

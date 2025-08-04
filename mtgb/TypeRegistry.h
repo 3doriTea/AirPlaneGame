@@ -1,46 +1,12 @@
 #pragma once
-#include "ISystem.h"
-#include <typeinfo>
-#include <unordered_map>
-#include <functional>
 #include <refl.hpp>
+#include "Inspector.h"
+#include "../Source/Player.h"
 
-#define REGISTER_REFL_TYPE(...) {\
-	RegisterType</*type(Point)*/>\
-	REFL_AUTO(__VA_ARGS__)\
-	RegisterFunc(/*func*/)\
-}\ 
 
-//#define REGISTER_REFL_TYPE(...) \
-//	REFL_AUTO(__VA_ARGS__)\ 
+// ShowFuncëÆê´ïtÇ´Ç≈TypeÇìoò^
 
-//REGISTER_REFL_TYPE(
-//	type(Point),
-//	field(x),
-//	field(y)
-//)
-
-//REFL_AUTO(
-//type(Point),
-//field(x),
-//field(y))
-
-class TypeRegistry
-{
-public:
-	
-	template<typename T>
-	void RegisterType()
-	{
-		
-	}
-	template<typename T>
-	void RegisterFunc(ShowFunc func)
-	{
-
-	}
-private:
-	using ShowFunc = std::function<void(void*, const char*)>;
-	std::unordered_map<std::type_info, ShowFunc> showFunctions_;
-
-};
+REGISTER_TYPE(Player)
+REGISTER_FIELD(test1)
+REGISTER_FIELD(test2)
+REGISTER_END

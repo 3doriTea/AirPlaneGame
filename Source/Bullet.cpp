@@ -30,10 +30,10 @@ void Bullet::Update()
 {
 	//static int timer = 0;
 	//timer += 1;
-	if (InputData::GetKeyDown(KeyCode::V) /*|| timer > 60 * 5*/)
-	{
-		DestoryMe();
-	}
+	//if (InputUtil::GetKeyDown(KeyCode::V) /*|| timer > 60 * 5*/)
+	//{
+	//	DestoryMe();
+	//}
 
 	//pTransform_->position_.z += 0.1f;
 	//LOGF("bullet‚¾‚æ imagehandle:%d\n", hImage_);

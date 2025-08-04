@@ -57,7 +57,7 @@ namespace mtgb
 		void GetPosition(Vector4* _pPosition) const;
 
 	private:
-		std::vector<Transform*> pTransforms_;	
+		std::vector<Transform*> pTransforms_;
 		float fov_;
 		float near_;
 		float far_;

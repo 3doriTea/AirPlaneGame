@@ -30,9 +30,17 @@ PlayScene::~PlayScene()
 void PlayScene::Initialize()
 {
 	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
-	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }));
+	//SetCameraGameObject(Instantiate<Camera>());
+	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
+	//WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
+	//hCamera1_ = Game::System<CameraSystem>().RegisterCamera()
+	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }, WindowContext::First));
+	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }, WindowContext::Second));
 
-	Instantiate<Player>();
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
+	Instantiate<Player>(WindowContext::First);
+	Instantiate<Player>(WindowContext::Second);
 	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始
@@ -45,7 +53,8 @@ void PlayScene::Initialize()
 void PlayScene::Update()
 {
 	using LED_STATUS = Network::PIIO::LED_STATUS;
-	if (InputData::GetKeyDown(KeyCode::Escape))
+	//if (InputData::GetKeyDown(KeyCode::Escape))
+	if (InputUtil::GetKeyDown(KeyCode::Escape,mtgb::WindowContext::Both))
 	{
 		Game::Exit();
 	}

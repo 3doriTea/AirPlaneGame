@@ -156,7 +156,7 @@ namespace mtgb
 		/// <summary>
 		/// システムの解放処理をする
 		/// </summary>
-		static void ReleaseSystems(const std::list<ISystem*>& _runnings);
+		static void ReleaseSystems(std::list<ISystem*>& _runnings);
 
 		/// <summary>
 		/// ゲームサイクルのループを開始
@@ -232,7 +232,6 @@ namespace mtgb
 
 		ISystem* pSystem{ pInstance_->pRegisterSystems_[typeid(SystemT).name()] };
 
-		//massert(pSystem != nullptr);
 		assert(pSystem != nullptr);
 
 		// 基底クラスがISystemであるか

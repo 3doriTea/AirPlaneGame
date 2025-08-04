@@ -15,7 +15,13 @@ Camera::Camera(const Vector3& _position) : GameObject(GameObjectBuilder()
 		.Build()),
 	pTransform_{ Component<Transform>() }
 {
-	
+
+}
+
+Camera::Camera(mtgb::WindowContext context)
+	:Camera()
+{
+	context_ = context;
 }
 
 Camera::~Camera()
@@ -25,23 +31,47 @@ Camera::~Camera()
 void Camera::Update()
 {
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
+	if (context_ == WindowContext::First)
+	{
 
-	if (InputData::GetKey(KeyCode::Up))
-	{
-		pTransform_->position_.z += MOVE;
+		if (InputUtil::GetKey(KeyCode::Up, context_))
+		{
+			pTransform_->position_.z += MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Down, context_))
+		{
+			pTransform_->position_.z -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Left, context_))
+		{
+			pTransform_->position_.x -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::Right, context_))
+		{
+			pTransform_->position_.x += MOVE;
+		}
 	}
-	if (InputData::GetKey(KeyCode::Down))
+	else
 	{
-		pTransform_->position_.z -= MOVE;
+		if (InputUtil::GetKey(KeyCode::W, context_))
+		{
+			pTransform_->position_.z += MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::S, context_))
+		{
+			pTransform_->position_.z -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::A, context_))
+		{
+			pTransform_->position_.x -= MOVE;
+		}
+		if (InputUtil::GetKey(KeyCode::D, context_))
+		{
+			pTransform_->position_.x += MOVE;
+		}
 	}
-	if (InputData::GetKey(KeyCode::Left))
-	{
-		pTransform_->position_.x -= MOVE;
-	}
-	if (InputData::GetKey(KeyCode::Right))
-	{
-		pTransform_->position_.x += MOVE;
-	}
+
+
 }
 
 void Camera::Draw() const
