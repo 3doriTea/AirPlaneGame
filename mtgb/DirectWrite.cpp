@@ -225,7 +225,7 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat
 		D2D1::RectF(
 			static_cast<float>(x),
 			y + pixelFontMetrics.textTopOffset, rtSize.width, rtSize.height),
-		mtgb::Direct2D::pD2DBrush_
+		mtgb::Direct2D::pDefD2DBrush_
 	);
 
 	mtgb::Direct2D::pDefRenderTarget_->EndDraw();

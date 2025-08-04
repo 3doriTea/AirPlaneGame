@@ -36,19 +36,21 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 	FbxString fileName{ _fileName.c_str() };
 	FbxImporter* fbxImporter{ FbxImporter::Create(instance.pFbxManager_, "imp") };
 
-	//if (!fbxImporter->Initialize(fileName.Buffer(), -1)) {
-	//	MessageBoxA(NULL, fbxImporter->GetStatus().GetErrorString(), "FBX Import Error", MB_OK);
-	//	// もしくはログ出力
-	//}
+	FbxIOSettings* ios = FbxIOSettings::Create(instance.pFbxManager_, IOSROOT);
+	instance.pFbxManager_->SetIOSettings(ios);
+	if (!fbxImporter->Initialize(fileName.Buffer(), -1, ios)) {
+		MessageBoxA(NULL, fbxImporter->GetStatus().GetErrorString(), "FBX Import Error", MB_OK);
+		// もしくはログ出力
+	}
 	//none of the registered readers can process the file
-	/*massert(fbxImporter->Initialize(fileName.Buffer(), -1)
-		&& "fbxImporterの初期化に失敗した @Fbx::Load");*/
+
 
 	/*char str[MAX_PATH]{};
 	GetCurrentDirectory(MAX_PATH, str);*/
 
 	bool succeed{ false };
-
+	succeed = fbxImporter->Initialize(fileName.Buffer(), -1);
+	//massert(succeed	&& "fbxImporterの初期化に失敗した @Fbx::Load");
 	succeed = fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings());
 	massert(succeed && "fbxImporterの初期化に失敗した @Fbx::Load");
 
