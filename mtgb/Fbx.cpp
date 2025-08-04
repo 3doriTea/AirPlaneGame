@@ -44,15 +44,20 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 	/*massert(fbxImporter->Initialize(fileName.Buffer(), -1)
 		&& "fbxImporterの初期化に失敗した @Fbx::Load");*/
 
-	char str[MAX_PATH]{};
-	GetCurrentDirectory(MAX_PATH, str);
+	/*char str[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, str);*/
 
-	massert(fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings())
-		&& "fbxImporterの初期化に失敗した @Fbx::Load");
+	bool succeed{ false };
 
-	fbxImporter->Import(instance.pFbxScene_);
-	SAFE_DESTROY(fbxImporter);
+	succeed = fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings());
+	massert(succeed && "fbxImporterの初期化に失敗した @Fbx::Load");
 
+	succeed = fbxImporter->Import(instance.pFbxScene_);
+	massert(succeed && "読み込みに失敗した @Fbx::Load");
+
+	SAFE_DESTROY(fbxImporter);  // インポータは解放
+
+	// 3角ポリゴン
 	FbxGeometryConverter geometryConverter{ instance.pFbxManager_ };
 
 	// アニメーションタイムモードの取得

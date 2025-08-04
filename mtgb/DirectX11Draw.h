@@ -85,6 +85,7 @@ namespace mtgb
 	/// </summary>
 	class DirectX11Draw final
 	{
+		// TODO: ‹É—Ífriend‚ÍŒ¸‚ç‚·
 		friend class DirectX11Manager;
 		friend class Texture2D;
 		friend class IShader;

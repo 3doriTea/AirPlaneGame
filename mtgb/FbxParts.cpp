@@ -50,15 +50,15 @@ void mtgb::FbxParts::Initialize()
 {
 	pMesh_->SplitPoints(FbxLayerElement::eTextureDiffuse);
 	//各情報の個数を取得
-	vertexCount_ = pMesh_->GetControlPointsCount();			//頂点の数
-	polygonCount_ = pMesh_->GetPolygonCount();				//ポリゴンの数
-	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();	//ポリゴン頂点インデックス数 
-	InitializeVertexBuffer(DirectX11Draw::pDevice_);
+	vertexCount_ = pMesh_->GetControlPointsCount();         // 頂点の数
+	polygonCount_ = pMesh_->GetPolygonCount();              // ポリゴンの数
+	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();  // ポリゴン頂点インデックス数 
 	InitializeMaterial();
-	InitializeIndexBuffer(DirectX11Draw::pDevice_);
-	InitializeConstantBuffer(DirectX11Draw::pDevice_);
+	IShader::Initialize();  // 頂点・インデックス・定数 バッファの初期化
+	//InitializeVertexBuffer(DirectX11Draw::pDevice_);
+	//InitializeIndexBuffer(DirectX11Draw::pDevice_);
+	//InitializeConstantBuffer(DirectX11Draw::pDevice_);
 	InitializeSkelton();
-	//InitializeVertexBuffer();
 }
 
 void mtgb::FbxParts::Release()
@@ -106,6 +106,9 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);
 	DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
 
+	// カメラシステムへのアクセス用
+	const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
+
 	// シェーダのコンスタントバッファーに各種データを渡す
 	for (DWORD i = 0; i < materialCount_; i++)
 	{
@@ -116,25 +119,13 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		// パラメータの受け渡し
 		D3D11_MAPPED_SUBRESOURCE pdata_;
 		ConstantBuffer cb{};
-		//DirectX::XMMATRIX mWorld;
-		Matrix4x4 mWorld = Matrix4x4();
+		Matrix4x4 mWorld{};
 		_transform.GenerateWorldMatrix(&mWorld);
 
-
-		const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
-
-		Matrix4x4 mView{};
-		//// ビュートランスフォーム（視点座標変換）
-		//Vector4 vEyePt = cameraTransform.position_;//XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f); //カメラ（視点）位置
-		//Vector4 vLookatPt = cameraTransform.Forward() + cameraTransform.position_;//XMVectorSet(0.0f, 0.0f, 10.0f, 0.0f);//注視位置
-		//XMVECTOR vUpVec = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);//上方位置
-		//mView = XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
-
+		Matrix4x4 mView{};  // ビュー行列
 		CAMERA.GetViewMatrix(&mView);
 
-		Matrix4x4 mProj{};
-		/*static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-		mProj = XMMatrixPerspectiveFovLH(XM_PI / 4, (FLOAT)SCREEN_SIZE.x / (FLOAT)SCREEN_SIZE.y, 0.1f, 100.0f);*/
+		Matrix4x4 mProj{};  // プロジェクション行列
 		CAMERA.GetProjMatrix(&mProj);
 
 		cb.g_matrixWorldViewProj = XMMatrixTranspose(mWorld * mView * mProj);
@@ -155,7 +146,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_shininess = pMaterial_[i].shininess;
 		CAMERA.GetPosition(&cb.g_cameraPosition);
 		cb.g_lightDirection = Vector4{ 0.0f, 0.0f, 1.0f, 0.0f }; // ライトの向き
-		cb.g_isTexture = pMaterial_[i].pTexture != nullptr;
+		cb.g_isTexture = (pMaterial_[i].pTexture != nullptr);
 
 		DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata_);
 		memcpy_s(pdata_.pData, pdata_.RowPitch, (void*)(&cb), sizeof(cb));

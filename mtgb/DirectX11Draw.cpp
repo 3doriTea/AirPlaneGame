@@ -62,15 +62,17 @@ void mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(const bool _enabled)
 
 void mtgb::DirectX11Draw::Begin()
 {
-
+	// 描画ビュークリア
 	pContext_->ClearRenderTargetView(pRenderTargetView_, backgroundColor_.f);
 
-	pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1, 0U);
+	// 深度バッファクリア
+	pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0U);
 
 }
 
 void mtgb::DirectX11Draw::End()
 {
+	// スワップして画面更新
 	pSwapChain_->Present(0U, 0U);
 }
 
