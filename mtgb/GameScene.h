@@ -1,9 +1,10 @@
 #pragma once
 //#include "World.h"
 #include <list>
-
+#include "Handlers.h"
 namespace mtgb
 {
+
 	class SceneSystem;
 	class GameObject;
 	class Transform;
@@ -22,7 +23,7 @@ namespace mtgb
 		template<class GameObjectT, typename ...Args>
 		GameObjectT* Instantiate(Args... _args);
 
-		void SetCameraGameObject(GameObject* _pGameObject);
+		CameraHandleInScene RegisterCameraGameObject(GameObject* _pGameObject);
 		Transform* GetCameraTransform() { return pCameraTransform_; }
 
 	protected:

@@ -2,7 +2,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Camera.h"
-
+#include "CameraSystem.h"
 using namespace mtgb;
 
 namespace
@@ -22,9 +22,14 @@ PlayScene::~PlayScene()
 void PlayScene::Initialize()
 {
 	//SetCameraGameObject(Instantiate<Camera>());
-	WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
-	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
+	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
+	//WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
+	//hCamera1_ = Game::System<CameraSystem>().RegisterCamera()
+	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(WindowContext::First));
+	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(WindowContext::Second));
 
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 
 	Instantiate<Player>(WindowContext::First);
 	Instantiate<Player>(WindowContext::Second);

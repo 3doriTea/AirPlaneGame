@@ -1,5 +1,6 @@
 #pragma once
 #include <DirectXMath.h>
+#include "Vector3.h"
 
 namespace mtgb
 {
@@ -20,9 +21,15 @@ namespace mtgb
 			const float _y,
 			const float _z,
 			const float _w);
+		/// <summary>
+		/// Vector3‚©‚çˆÃ–Ù“I‚È•ÏŠ·
+		/// </summary>
+		/// <param name="_vec3">•ÏŠ·Œ³</param>
+		Vector4(const Vector3& _vec3);
 
 		Vector4() :
 			Vector4{ 0.0f, 0.0f, 0.0f, 0.0f }
-		{}
+		{
+		}
 	};
 }

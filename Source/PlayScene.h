@@ -15,4 +15,6 @@ public:
 
 private:
 	TextBox* tBox_;
+	CameraHandleInScene hCamera1_;
+	CameraHandleInScene hCamera2_;
 };

@@ -1,6 +1,6 @@
 #pragma once
 #include "WindowContextResource.h"
-
+#include "Handlers.h"
 namespace mtgb
 {
 	class GameObject;
@@ -21,8 +21,10 @@ namespace mtgb
 		void SetResource() override;
 		WindowContextResource* Clone() const override;
 
-		void SetCamera(GameObject* obj);
+		void SetHCamera(CameraHandleInScene _hCamera);
+		//void SetCamera(GameObject* obj);
 	private:
-		GameObject* pCamera_;
+		//GameObject* pCamera_;
+		CameraHandleInScene hCamera_;
 	};
 }

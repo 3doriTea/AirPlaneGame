@@ -28,6 +28,8 @@ namespace mtgb
 	/// </summary>
 	using TextHandle = int32_t;
 
+	using CameraHandleInScene = int32_t;
+
 	/// <summary>
 	/// –³Œø‚Èƒnƒ“ƒhƒ‹’l
 	/// </summary>

@@ -39,6 +39,7 @@
 #include "WindowContextResourceManager.h"
 #include "WindowManager.h"
 #include "DoubleWindow.h"
+#include "CameraSystem.h"
 
 #pragma endregion
 

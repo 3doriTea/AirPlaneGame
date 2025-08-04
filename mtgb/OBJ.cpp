@@ -9,6 +9,7 @@
 #include "Screen.h"
 #include "ISystem.h"
 #include "SceneSystem.h"
+#include "CameraSystem.h"
 #include <stdio.h>
 #include <windows.h>
 #include <d3d11.h>
@@ -128,28 +129,19 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 	Matrix4x4 mWorld;
 	transform->GenerateWorldMatrix(&mWorld);
 
-	DirectX::XMMATRIX mView;
+	Matrix4x4 mView;
 	// ビュートランスフォーム（視点座標変換）
 	
-	Transform* pCameraTransform = Game::System<SceneSystem>().GetActiveScene()->GetCameraTransform();
-	DirectX::XMVECTOR vEyePt = DirectX::XMLoadFloat3(&pCameraTransform->position_); //カメラ（視点）位置
-	Vector3 lookatPt = pCameraTransform->Forward();
-	DirectX::XMVECTOR vLookatPt = DirectX::XMLoadFloat3(&lookatPt);//注視位置
-	Vector3 upVec = pCameraTransform->Up();
-	DirectX::XMVECTOR vUpVec = DirectX::XMLoadFloat3(&upVec);//上方位置
-	mView = DirectX::XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
+	Transform cameraTransform = Game::System<CameraSystem>().GetTransform();
+	Game::System<CameraSystem>().GetViewMatrix(&mView);
 
-	DirectX::XMMATRIX mProj;
+	Matrix4x4 mProj;
+	Game::System<CameraSystem>().GetProjMatrix(&mProj);
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	mProj = DirectX::XMMatrixPerspectiveFovLH(DirectX::XM_PI / 4, (FLOAT)SCREEN_SIZE.x/(FLOAT)SCREEN_SIZE.y, 0.1f,100.0f);
 
 	ID3D11DeviceContext* tmpContext = DirectX11Draw::pContext_;
-
 	tmpContext->VSSetShader(pVertexShader_, NULL, 0);
 	tmpContext->PSSetShader(pPixelShader_, NULL, 0);
-
-	//DirectX11Draw::Begin();
-
 
 	//シェーダーのコンスタントバッファーに各種データを渡す	
 	D3D11_MAPPED_SUBRESOURCE pData;
