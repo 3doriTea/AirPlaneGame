@@ -40,7 +40,7 @@ void PlayScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 	Instantiate<Player>(WindowContext::First);
-	Instantiate<Player>(WindowContext::Second);
+	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<Enemy>();
 
 	// 表示したいテキストを開始

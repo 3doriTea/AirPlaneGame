@@ -45,11 +45,11 @@ int mtgb::Fbx::Load(const std::string& _fileName)
 	//none of the registered readers can process the file
 
 
-	/*char str[MAX_PATH]{};
-	GetCurrentDirectory(MAX_PATH, str);*/
+	char str[MAX_PATH]{};
+	GetCurrentDirectory(MAX_PATH, str);
 
 	bool succeed{ false };
-	succeed = fbxImporter->Initialize(fileName.Buffer(), -1);
+	//succeed = fbxImporter->Initialize(fileName.Buffer(), -1);
 	//massert(succeed	&& "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");
 	succeed = fbxImporter->Initialize(fileName.Buffer(), -1, instance.pFbxManager_->GetIOSettings());
 	massert(succeed && "fbxImporter‚Ì‰Šú‰»‚É¸”s‚µ‚½ @Fbx::Load");
