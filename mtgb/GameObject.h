@@ -49,12 +49,12 @@ namespace mtgb
 		/// <summary>
 		/// このオブジェクトを削除する
 		/// </summary>
-		inline void DestoryMe() { status_.toDestory_ = TRUE; }
+		inline void DestroyMe() { status_.toDestory_ = TRUE; }
 		/// <summary>
 		/// このオブジェクトは削除予定か
 		/// </summary>
 		/// <returns>削除予定 true / false</returns>
-		inline const bool IsToDestory() const { return status_.toDestory_; }
+		inline const bool IsToDestroy() const { return status_.toDestory_; }
 		std::string GetName() { return name_; }
 
 	private:

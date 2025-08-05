@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="minimp3.h" />
     <ClInclude Include="minimp3_ex.h" />
+    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="Source\Background.h" />
