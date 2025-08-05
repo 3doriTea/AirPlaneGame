@@ -18,7 +18,7 @@ Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
 	pRb_{ Component<RigidBody>() }
 {
 	//hImage_ = Image::Load("Image/bullet.png");
-	hModel_ = OBJ::Load("Model/OBJ/Bullet.obj");
+	hModel_ = Fbx::Load("Model/gCube.fbx");
 	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
 }
 
