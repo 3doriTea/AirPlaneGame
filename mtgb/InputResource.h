@@ -9,7 +9,7 @@
 #include <dinput.h>
 #include <map>
 #include <typeindex>
-
+#include "JoystickProxy.h"
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
 #pragma comment(lib, "Xinput.lib")
@@ -33,6 +33,8 @@ namespace mtgb
 	private:
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
+		ComPtr<IDirectInputDevice8> pJoystickDevice_;
+		JoystickProxy 
 
 		// WindowContextResource を介して継承されました
 		InputResource* Clone() const override;

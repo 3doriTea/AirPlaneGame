@@ -24,6 +24,8 @@ namespace mtgb
 		/// ウィンドウを変更する際に固有のリソースをセットする
 		/// </summary>
 		virtual void SetResource() = 0;
+
+		
 		/// <summary>
 		/// リソースのコピーを作成、返す
 		/// </summary>

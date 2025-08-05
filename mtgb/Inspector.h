@@ -68,7 +68,7 @@ struct ReadOnly : refl::attr::usage::member
 {
 	template<typename FieldType>
 	void operator()(FieldType* instance, const char* name) const {
-		std::cout << "ReadOnly: " << name << " = " << *instance << std::endl;
+		
 	}
 };
 
@@ -226,38 +226,50 @@ void TypeRegistry::ShowInspector(T* instance, const char* name)
 	}
 }
 
-//template<typename T>
-//void TypeRegistry::ShowInspector(T* instance, const char* name)
-//{
-//	//refl::trait::remove_qualifiers_t<T>::type
-//	std::type_index typeIdx(typeid(T));
-//	auto it = showFunctions_.find(typeIdx);
-//
-//	if (it != showFunctions_.end())
-//	{
-//		it->second(instance, name);
-//	}
-//}
+
 
 template<typename T>
 void TypeRegistry::DefaultShow(T* value, const char* name)
 {
-	if constexpr (std::is_same_v<T, int>) 
+	if constexpr (std::is_array_v<T>)
 	{
-		ImGui::InputInt(name, value);
-		//std::cout << "Default int: " << name << " = " << *value << std::endl;
-	}
-	else if constexpr (std::is_same_v<T, float>) 
-	{
-		ImGui::InputFloat(name, value);
+		if (ImGui::CollapsingHeader(name))
+		{
+			ImGui::Indent();
 
-		//std::cout << "Default float: " << name << " = " << *value << std::endl;
+			//—v‘fŒ^æ“¾
+			using ElemType = std::remove_extent_t<T>;
+			//0ŸŒ³–Ú‚Ì—v‘f”æ“¾
+			constexpr size_t N = std::extent_v<T>;
+
+			//”z—ñ—v‘f‚²‚Æ‚ÉÄ‹A‚·‚é
+			for (size_t i = 0; i < N; ++i)
+			{
+				std::string elemName = std::string(name) + "[" + std::to_string(i) + "]";
+				DefaultShow(&(*value)[i], elemName.c_str());
+			}
+
+			ImGui::Unindent();
+		}
 	}
 	else if constexpr (std::is_same_v<T, bool>)
 	{
+		ImGui::InputInt(name, value);
+	}
+	else if constexpr (std::is_floating_point_v<T> ) 
+	{
+		ImGui::InputFloat(name, value);
+	}
+	else if constexpr (std::is_integral_v<T>)
+	{
 		ImGui::Checkbox(name, value);
 	}
-	else {
+	else if constexpr (std::is_enum_v<T>)
+	{
+
+	}
+	else
+	{
 		ImGui::Text("%s:Unknown",name );
 		//std::cout << "Default unknown type: " << name << std::endl;
 	}

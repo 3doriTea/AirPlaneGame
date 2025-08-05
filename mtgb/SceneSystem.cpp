@@ -7,6 +7,7 @@
 #include "MTImGui.h"
 #include "WindowContext.h"
 #include "WindowContextUtil.h"
+#include "ImGuiShowable.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr }
@@ -58,6 +59,9 @@ void mtgb::SceneSystem::Update()
 	Game::System<MTImGui>().Begin("Window");
 
 	DirectX11Draw::Begin();
+
+	ImGuiShowSystem::Instance().ShowAll();
+
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{

@@ -19,6 +19,8 @@ namespace mtgb
 {
 	class InputResource;
 	class InputData;
+	class InputConfig;
+
 	class Input : public ISystem
 	{
 	public:
@@ -43,12 +45,12 @@ namespace mtgb
 		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
 		/// <param name="_pJoystickDevice">切り替え対象のキーボードデバイス</param>
-		void ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice);
+		void ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice);
 		/// <summary>
 		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
 		/// <param name="_pJoystickDevice">切り替え対象のマウスデバイス</param>
-		void ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice);
+		void ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice);
 		/// <summary>
 		/// 入力状態を格納する対象を切り返す
 		/// </summary>
@@ -58,7 +60,7 @@ namespace mtgb
 		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
 		/// <param name="_pJoystickDevice">切り替え対象のジョイスティックデバイス</param>
-		void ChangeJoystickDevice(LPDIRECTINPUTDEVICE8 _pJoystickDevice);
+		void ChangeJoystickDevice(ComPtr<IDirectInputDevice8> _pJoystickDevice);
 
 		/// <summary>
 		/// 接続されているジョイスティックの列挙、予約デバイスへの割り当てを行う
@@ -70,13 +72,13 @@ namespace mtgb
 		/// 先着順で割り当てられます
 		/// </summary>
 		/// <param name="_pJoystickDevice">割り当て希望のデバイス</param>
-		void RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, LPDIRECTINPUTDEVICE8 _pJoystickDevice);
+		void RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8> _pJoystickDevice);
 
 		/// <summary>
 		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
 		/// </summary>
 		/// <param name="_pJoystickDevice"></param>
-		void AssignJoystick(LPDIRECTINPUTDEVICE8 _pJoystickDevice);
+		void AssignJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice);
 
 		/// <summary>
 		/// 割り当てられたジョイスティックのGUIDを登録する
@@ -91,14 +93,14 @@ namespace mtgb
 		bool IsNotSubscribed();
 
 	private:
-		void SetProperty(LPDIRECTINPUTDEVICE8 _pJoystickDevice, InputConfig _inputConfig);
+		void SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig);
 		InputData* pInputData_;				 // 入力の状態
 		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
-		LPDIRECTINPUTDEVICE8 pJoystickDevice_;  // ジョイスティックデバイス
+		ComPtr<IDirectInputDevice8> pJoystickDevice_;  // ジョイスティックデバイス
 		 
-		std::vector<std::tuple<HWND,InputConfig, LPDIRECTINPUTDEVICE8>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
+		std::vector<std::tuple<HWND,InputConfig, ComPtr<IDirectInputDevice8>>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
 	};
 }

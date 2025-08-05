@@ -16,6 +16,7 @@ void mtgb::WindowContextResourceManager::Initialize()
 
 void mtgb::WindowContextResourceManager::Update()
 {
+	
 }
 
 void mtgb::WindowContextResourceManager::Release()

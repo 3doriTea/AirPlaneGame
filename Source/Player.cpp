@@ -33,8 +33,6 @@ Player::Player() : GameObject(GameObjectBuilder()
 	hText = Text::Load(str,36);
 	pTransform_->position_.z = 5.0f;
 	pTransform_->scale_ = Vector3(1, 1, 1);
-	//hMnow_ = Audio::Load("Sound/Meow.wav");
-	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
 }
 
@@ -110,14 +108,9 @@ void Player::Draw() const
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
-	//MTImGui::ShowInspector(&speed, "speed");
-	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
-	//Draw::Image(hImage_, pTransform_);
 	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
-	//MTImGui::ShowInspector(this, "player");
-	//Draw::Text(hText, mousePos);
 	//LOGF("PlayerDraw\n");
 	TypeRegistry::ShowInspector(this, name_.c_str());
 }

@@ -111,7 +111,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="value">適用する値</param>
 		/// <returns>適用された値</returns>
-		float ApplyDeadZone(float value);
+		float ApplyDeadZone(const float value) const;
 	};
 
 	class InputData final
@@ -122,13 +122,13 @@ namespace mtgb
 		static const size_t KEY_COUNT{ 256 };             // キーの数
 		std::bitset<KEY_COUNT> keyStateCurrent_;   // キーの状態現在
 		std::bitset<KEY_COUNT> keyStatePrevious_;  // キーの状態前回
-
+		
 		_DIMOUSESTATE mouseStateCurrent_;   // マウスの状態現在
 		_DIMOUSESTATE mouseStatePrevious_;  // マウスの状態前回
 		DIJOYSTATE joyStateCurrent_;		// ジョイスティックの状態現在
 		DIJOYSTATE joyStatePrevious_;		// ジョイスティックの状態現在
 
-		InputConfig config_;
+		InputConfig config_;//入力の取り方の設定
 
 		Vector2Int mousePosition_;          // マウスカーソルの座標
 
@@ -140,4 +140,6 @@ namespace mtgb
 		//InputData();
 		//~InputData();
 	};
+
+	
 }

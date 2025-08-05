@@ -340,38 +340,11 @@
     <ClCompile Include="mtgb\MTImGui.cpp">
       <Filter>mtgb\System\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\registerRefl.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TextBox.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\TypeRegistry.cpp">
       <Filter>mtgb\System\Debug</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\DoubleWindow.cpp">
       <Filter>mtgb\System\Window</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\EndPoint.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\Log.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\Socket.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\TcpClient.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\MTNet\TcpListener.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\WindowManager.cpp">
       <Filter>mtgb\System\Window</Filter>
@@ -391,23 +364,11 @@
     <ClCompile Include="mtgb\WindowContextResource.cpp">
       <Filter>mtgb\System\Resource\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\InputResource.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\WindowContextResourceManager.cpp">
       <Filter>mtgb\System\Resource</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\WindowResource.cpp">
       <Filter>mtgb\System\Resource\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\Inspector.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\ResourceCollection.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\CameraResource.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
       <Filter>mtgb\MTNet</Filter>
@@ -442,17 +403,59 @@
     <ClCompile Include="mtgb\CameraSystem.cpp">
       <Filter>mtgb\System\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\FbxModel.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="mtgb\WindowContextUtil.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Game\PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\FbxModel.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Inspector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\BinaryWriter.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\EndPoint.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Log.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Socket.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpClient.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\TcpListener.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Reticle.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TextBox.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\CameraResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\InputResource.cpp">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ResourceCollection.cpp">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\WindowContextUtil.cpp">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ImGuiShowable.cpp">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\JoystickProxy.cpp">
+      <Filter>mtgb\System\Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -524,12 +527,6 @@
     </ClInclude>
     <ClInclude Include="mtgb\MTBin\MemoryStream.h">
       <Filter>mtgb\MTBin</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\IModelPack.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\PathUtility.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioPlayer.h">
       <Filter>mtgb\Component</Filter>
@@ -690,20 +687,11 @@
     <ClInclude Include="mtgb\Text.h">
       <Filter>mtgb\System\Text</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\ProfileUtlity.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Bar.h">
       <Filter>Game\PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Fbx.h">
       <Filter>mtgb\System\Draw\Fbx</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\MTImGui.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TextBox.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\TypeRegistry.h">
       <Filter>mtgb\System\Debug</Filter>
@@ -747,15 +735,6 @@
     <ClInclude Include="mtgb\MTNet\TcpListener.h">
       <Filter>mtgb\MTNet</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\IncludingWindows.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\JsonUtility.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Network\PIIO.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Background.h">
       <Filter>Game\PlayScene</Filter>
     </ClInclude>
@@ -766,49 +745,79 @@
       <Filter>mtgb\System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\FbxModel.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\IncludingInput.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\AccessibleMacro.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="mtgb\IModelPack.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\CameraResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Direct2DResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Direct3DResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\DXGIResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\InputResource.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="mtgb\IncludingWindows.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Inspector.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\ResourceCollection.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="mtgb\MTImGui.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\WindowContextResource.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="mtgb\PathUtility.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\WindowContextResourceManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="mtgb\ProfileUtlity.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\WindowContextUtil.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Source\JsonUtility.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\WindowResource.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Source\Network\PIIO.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Reticle.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TextBox.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DXGIResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CameraResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Direct2DResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Direct3DResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputResource.h">
+      <Filter>mtgb\System\Resource\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ResourceCollection.h">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\AccessibleMacro.h">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowResource.h">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowContextResource.h">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowContextResourceManager.h">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WindowContextUtil.h">
+      <Filter>mtgb\System\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ImGuiShowable.h">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\JoystickProxy.h">
+      <Filter>mtgb\System\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

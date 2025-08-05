@@ -40,9 +40,6 @@ void mtgb::Input::Initialize()
 {
 	HRESULT hResult{};
 
-	//const HWND hWnd{ Game::System<MainWindow>().GetHWND() };
-	//const HWND hWnd{ Game::System<DoubleWindow>().GetFirstWindowHandle() };
-
 	// DirectInput8のデバイス作成
 	hResult = DirectInput8Create(
 		GetModuleHandle(nullptr),
@@ -53,8 +50,6 @@ void mtgb::Input::Initialize()
 
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
-
-	
 }
 
 void mtgb::Input::Update()
@@ -222,7 +217,7 @@ void mtgb::Input::ChangeInputData(InputData* _pInputData)
 	pInputData_ = _pInputData;
 }
 
-void mtgb::Input::ChangeJoystickDevice(LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+void mtgb::Input::ChangeJoystickDevice(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 {
 	pJoystickDevice_ = _pJoystickDevice;
 }
@@ -262,23 +257,26 @@ void mtgb::Input::EnumJoystick()
 	{
 		return;
 	}
-	pDirectInput_->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, pDirectInput_, DIEDFL_ATTACHEDONLY);
+	pDirectInput_->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, pDirectInput_.Get(), DIEDFL_ATTACHEDONLY);
 }
 
-void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8> _pJoystickDevice)
 {
 	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd,_inputConfig,_pJoystickDevice));
 }
 
-void mtgb::Input::AssignJoystick(LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+void mtgb::Input::AssignJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 {
-	HWND hWnd = std::get<HWND>(requestedJoystickDevices_.front());
+	auto& front = requestedJoystickDevices_.front();
+	HWND hWnd = std::get<HWND>(front);
 	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	
 	//Joystick2は多機能なデバイスにも対応している
 	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
+	SetProperty(_pJoystickDevice, std::get<InputConfig>(front));
 	//_pJoystickDevice->SetDataFormat(&c_dfDIJoystick2);
-	std::get<LPDIRECTINPUTDEVICE8>(requestedJoystickDevices_.front()) = _pJoystickDevice;
+	std::get<ComPtr<IDirectInputDevice8>>(front) = _pJoystickDevice;
+
 }
 
 bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
@@ -291,7 +289,7 @@ bool mtgb::Input::IsNotSubscribed()
 	return requestedJoystickDevices_.empty();
 }
 
-void mtgb::Input::SetProperty(LPDIRECTINPUTDEVICE8 _pJoystickDevice, InputConfig _inputConfig)
+void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig)
 {
 	HRESULT hResult{};
 
