@@ -12,7 +12,6 @@ Enemy::Enemy() : GameObject(GameObjectBuilder()
 	radius_{ 30 },
 	speed_{ 5.0f }
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	//hModel_ = OBJ::Load("Model/OBJ/enemy.obj");
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	//hModel_ = Fbx::Load("Assets/Model/gCube.fbx");

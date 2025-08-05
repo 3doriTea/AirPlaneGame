@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Reticle.h"
 #include "Camera.h"
 #include "Network/PIIO.h"
 #include "Background.h"
@@ -39,9 +40,10 @@ void PlayScene::Initialize()
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
-	Instantiate<Player>(WindowContext::First);
 	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<Enemy>();
+	Instantiate<Reticle>();
+	Instantiate<Player>(WindowContext::First);
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);
