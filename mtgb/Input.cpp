@@ -1,7 +1,6 @@
 #include "Input.h"
 #include "IncludingWindows.h"
-#include <dinput.h>
-#include <Xinput.h>
+#include "IncludingInput.h"
 #include "InputData.h"
 #include "ReleaseUtility.h"
 #include "MTAssert.h"

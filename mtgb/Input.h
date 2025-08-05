@@ -2,10 +2,6 @@
 #include "ISystem.h"
 #include "cmtgb.h"
 
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dInput8.lib")
-#pragma comment(lib, "Xinput.lib")
-
 typedef struct IDirectInput8A* LPDIRECTINPUT8;
 typedef struct IDirectInputDevice8A* LPDIRECTINPUTDEVICE8;
 typedef struct HWND__* HWND;

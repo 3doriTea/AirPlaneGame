@@ -1,9 +1,7 @@
 #pragma once
-#define DIRECTINPUT_VERSION 0x0800
 
 #include <array>
-#include <Xinput.h>
-#include <dinput.h>
+#include "IncludingInput.h"
 #include <bitset>
 
 #include "Vector3.h"
