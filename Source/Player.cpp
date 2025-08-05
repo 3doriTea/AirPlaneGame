@@ -7,7 +7,7 @@ using namespace mtgb;
 
 namespace
 {
-	static const float PLAYER_SPEED{ 0.01f };
+	static const float PLAYER_SPEED{ 0.1f };
 	int hText;
 	int timer = 0;
 	TimerHandle timerHandle;
@@ -17,7 +17,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.SetName("player")
 		.SetPosition(Vector3(0, 0, 0))
 		.SetRotate(Quaternion::Identity())
-		.SetScale({ 100, 100, 100 })
+		.SetScale({ 1, 1, 1 })
 		.Build()),
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() },
@@ -32,8 +32,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 	//hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	fModel_ = Fbx::Load("Model/tCube.fbx");
 	hText = Text::Load(str,36);
-	pTransform_->position_.z = 50.0f;
-	pTransform_->scale_ = Vector3(10, 10, 10);
+	pTransform_->position_.z = 5.0f;
+	pTransform_->scale_ = Vector3(1, 1, 1);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });

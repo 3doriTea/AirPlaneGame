@@ -76,7 +76,6 @@ void mtgb::Text::Draw(int handle, float x, float y)
 	PixelFontMetrics metrics = formatData.second;
 
 	instance.Draw(entry->layout, x, y + metrics.textTopOffset);
-	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 }
 
 

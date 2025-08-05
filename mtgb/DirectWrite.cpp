@@ -8,7 +8,8 @@
 #include <dwrite.h> 
 #include <dwrite_1.h>
 #include <dxgidebug.h>
-
+#include "WindowContextUtil.h"
+#include "Direct2DResource.h"
 #include <clocale>
 #include <cstdlib>
 #pragma comment(lib,"dwrite.lib")
@@ -30,6 +31,8 @@ DWRITE_FONT_METRICS mtgb::DirectWrite::fontMetrics_{};
 mtgb::PixelFontMetrics mtgb::DirectWrite::pixelFontMetrics_;
 //int mtgb::DirectWrite::currentDefaultFontSize_{ DEFAULT_FONT_SIZE };
 static std::wstring StrToWStr(const std::string& str);
+
+
 
 mtgb::FontFormatData::~FontFormatData()
 {
@@ -152,14 +155,16 @@ void mtgb::DirectWrite::CreateTextFormat(int size, IDWriteTextFormat** ppTextFor
 
 
 
+
+
 void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, int size, IDWriteTextFormat* format, IDWriteTextLayout** ppTextLayout)
 {
 	//テキストレイアウト作成
-	D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
+	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
 
 	static const float dip = 96.0f;
 	FLOAT dpiX, dpiY;
-	mtgb::Direct2D::pDefRenderTarget_->GetDpi(&dpiX, &dpiY);
+	Game::System<Direct2D>().pDefRenderTarget_->GetDpi(&dpiX, &dpiY);
 	
 	rtSize.width = rtSize.width / dpiX * dip;
 	rtSize.height = rtSize.height / dpiY * dip;
@@ -185,9 +190,9 @@ void mtgb::DirectWrite::Draw(IDWriteTextLayout* textLayout, float x, float y)
 {
 	D2D1_POINT_2F origin = { x, y  };
 
-	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
-	mtgb::Direct2D::pDefRenderTarget_->DrawTextLayout(origin, textLayout, mtgb::Direct2D::pDefD2DBrush_);
-	mtgb::Direct2D::pDefRenderTarget_->EndDraw();
+	Game::System<Direct2D>().pDefRenderTarget_->BeginDraw();
+	Game::System<Direct2D>().pDefRenderTarget_->DrawTextLayout(origin, textLayout, Game::System<Direct2D>().pDefD2DBrush_.Get());
+	Game::System<Direct2D>().pDefRenderTarget_->EndDraw();
 }
 
 void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y)
@@ -214,21 +219,24 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y
 
 void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, int x, int y)
 {
-	D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
+	
+	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
 
-	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
+	
 
-	mtgb::Direct2D::pDefRenderTarget_->DrawText(
+	Game::System<Direct2D>().pDefRenderTarget_->BeginDraw();
+
+	Game::System<Direct2D>().pDefRenderTarget_->DrawText(
 		text.c_str(),
 		static_cast<uint32_t>(text.length()),
 		format,
 		D2D1::RectF(
 			static_cast<float>(x),
 			y + pixelFontMetrics.textTopOffset, rtSize.width, rtSize.height),
-		mtgb::Direct2D::pDefD2DBrush_
+		Game::System<Direct2D>().pDefD2DBrush_.Get()
 	);
 
-	mtgb::Direct2D::pDefRenderTarget_->EndDraw();
+	Game::System<Direct2D>().pDefRenderTarget_->EndDraw();
 }
 
 void mtgb::DirectWrite::Release()

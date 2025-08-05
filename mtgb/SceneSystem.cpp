@@ -56,6 +56,7 @@ void mtgb::SceneSystem::Update()
 
 	Game::System<MTImGui>().BeginFrame();
 	Game::System<MTImGui>().Begin("Window");
+
 	DirectX11Draw::Begin();
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)

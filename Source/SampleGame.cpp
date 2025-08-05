@@ -47,7 +47,6 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
-	_register.Set<CameraSystem>(SystemUpdateType::Frame);
 
 	_register.Set<Time>(SystemUpdateType::Cycle);
 	_register.Set<Timer>(SystemUpdateType::Frame);

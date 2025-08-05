@@ -37,7 +37,6 @@
     <ClCompile Include="mtgb\AudioPlayer.cpp" />
     <ClCompile Include="mtgb\AudioPlayerCP.cpp" />
     <ClCompile Include="mtgb\CameraResource.cpp" />
-    <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
@@ -136,6 +135,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\registerRefl.cpp" />
+    <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
@@ -143,7 +143,6 @@
   <ItemGroup>
     <ClInclude Include="minimp3.h" />
     <ClInclude Include="minimp3_ex.h" />
-    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="Source\Background.h" />
@@ -164,7 +163,6 @@
     <ClInclude Include="mtgb\AudioPlayer.h" />
     <ClInclude Include="mtgb\AudioPlayerCP.h" />
     <ClInclude Include="mtgb\CameraResource.h" />
-    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\cmtgb.h" />
     <ClInclude Include="mtgb\Color.h" />
     <ClInclude Include="mtgb\ComponentPool.h" />
@@ -281,6 +279,7 @@
     </ClInclude>
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
+    <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="Source\TextBox.h" />
   </ItemGroup>

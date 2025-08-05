@@ -299,7 +299,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 		.AddressW = D3D11_TEXTURE_ADDRESS_WRAP,
 	};
 
-	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, &DirectX11Draw::pDefaultSamplerState_);
+	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, DirectX11Draw::pDefaultSamplerState_.GetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "デフォルトのサンプラ作成に失敗 @DirectX11Manager::InitializeCommonResources");
 
@@ -307,7 +307,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	const D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
 	{
 		.DepthEnable = TRUE,
-		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO,
+		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
 		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
 		.StencilEnable = TRUE,
 		.StencilReadMask = {},
@@ -421,7 +421,7 @@ void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, ID
 	};
 
 	hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
-		DirectX11Draw::pDevice_,
+		DirectX11Draw::pDevice_.Get(),
 		hWnd,
 		&desc,
 		nullptr,//フルスクリーンの設定
@@ -512,15 +512,15 @@ void mtgb::DirectX11Manager::ChangeViewport(const D3D11_VIEWPORT& viewport)
 	DirectX11Draw::pContext_->RSSetViewports(1, &viewport);
 }
 
-void mtgb::DirectX11Manager::ChangeRenderTargets(ID3D11RenderTargetView* pRenderTargetView, ID3D11DepthStencilView* pDepthStencilView)
+void mtgb::DirectX11Manager::ChangeRenderTargets(ComPtr<ID3D11RenderTargetView> pRenderTargetView, ComPtr<ID3D11DepthStencilView> pDepthStencilView)
 {
 	DirectX11Draw::pRenderTargetView_ = pRenderTargetView;
 	DirectX11Draw::pDepthStencilView_ = pDepthStencilView;
 
-	DirectX11Draw::pContext_->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+	DirectX11Draw::pContext_->OMSetRenderTargets(1, pRenderTargetView.GetAddressOf(), pDepthStencilView.Get());
 }
 
-void mtgb::DirectX11Manager::ChangeSwapChain(IDXGISwapChain1* pSwapChain1)
+void mtgb::DirectX11Manager::ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1)
 {
 	DirectX11Draw::pSwapChain1_ = pSwapChain1;
 }
