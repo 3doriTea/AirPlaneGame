@@ -57,7 +57,7 @@ void mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(const bool _enabled)
 	else
 	{
 		// 深度バッファを外す nullptrを指定する
-		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
+		pContext_->OMSetRenderTargets(1, pRenderTargetView_.GetAddressOf(), nullptr);
 	}
 }
 
