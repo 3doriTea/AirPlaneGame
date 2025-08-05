@@ -43,5 +43,7 @@ namespace mtgb
 		/// <param name="ctx">ウィンドウの識別子</param>
 		/// <returns></returns>
 		HWND GetHWND(WindowContext ctx);
+
+		
 	}
 }

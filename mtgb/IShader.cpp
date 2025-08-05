@@ -13,9 +13,9 @@ mtgb::IShader::IShader() :
 
 void mtgb::IShader::Initialize()
 {
-	InitializeVertexBuffer(DirectX11Draw::pDevice_);
-	InitializeIndexBuffer(DirectX11Draw::pDevice_);
-	InitializeConstantBuffer(DirectX11Draw::pDevice_);
+	InitializeVertexBuffer(DirectX11Draw::pDevice_.Get());
+	InitializeIndexBuffer(DirectX11Draw::pDevice_.Get());
+	InitializeConstantBuffer(DirectX11Draw::pDevice_.Get());
 }
 
 void mtgb::IShader::Release()

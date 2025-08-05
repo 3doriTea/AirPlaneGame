@@ -113,7 +113,7 @@ namespace mtgb
 		// GPUデータアクセスせき止め解除
 		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
 
-		_contextSetterCallback(DirectX11Draw::pContext_);
+		_contextSetterCallback(DirectX11Draw::pContext_.Get());
 
 		DirectX11Draw::pContext_->DrawIndexed(6, 0, 0);
 	}

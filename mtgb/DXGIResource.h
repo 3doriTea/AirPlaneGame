@@ -24,9 +24,9 @@ namespace mtgb
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 
-		IDXGISwapChain1* pSwapChain1_;
-		IDXGIOutput* pOutput_;
-		IDXGISurface* pDXGISurface_;
+		ComPtr<IDXGISwapChain1> pSwapChain1_;
+		ComPtr<IDXGIOutput> pOutput_;
+		ComPtr<IDXGISurface> pDXGISurface_;
 
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		

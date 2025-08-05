@@ -31,8 +31,8 @@ namespace mtgb
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
 	private:
-		LPDIRECTINPUTDEVICE8 pKeyDevice_;    // キーデバイス
-		LPDIRECTINPUTDEVICE8 pMouseDevice_;
+		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pMouseDevice_;
 
 		// WindowContextResource を介して継承されました
 		InputResource* Clone() const override;
