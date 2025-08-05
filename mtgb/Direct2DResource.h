@@ -5,6 +5,7 @@
 #include "Direct3DResource.h"
 #include "MTAssert.h"
 #include "Direct2D/Direct2D.h"
+#include "DirectWrite.h"
 #include "Game.h"
 #include "ISystem.h"
 #include <d2d1.h>
@@ -19,6 +20,7 @@ namespace mtgb
 
 	class Direct2DResource : public WindowContextResource
 	{
+		friend class DirectWrite;
 	public:
 		Direct2DResource();
 		~Direct2DResource();

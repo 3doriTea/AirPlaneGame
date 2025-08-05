@@ -10,8 +10,8 @@ mtgb::Direct2DResource::Direct2DResource()
 
 mtgb::Direct2DResource::~Direct2DResource()
 {
-	SAFE_RELEASE(pRenderTarget_);
 	SAFE_RELEASE(pD2DBrush_);
+	SAFE_RELEASE(pRenderTarget_);
 }
 
 mtgb::Direct2DResource::Direct2DResource(const Direct2DResource& other)

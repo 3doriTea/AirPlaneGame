@@ -8,7 +8,8 @@
 #include <dwrite.h> 
 #include <dwrite_1.h>
 #include <dxgidebug.h>
-
+#include "WindowContextUtil.h"
+#include "Direct2DResource.h"
 #include <clocale>
 #include <cstdlib>
 #pragma comment(lib,"dwrite.lib")
@@ -186,7 +187,8 @@ void mtgb::DirectWrite::Draw(IDWriteTextLayout* textLayout, float x, float y)
 	D2D1_POINT_2F origin = { x, y  };
 
 	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
-	mtgb::Direct2D::pDefRenderTarget_->DrawTextLayout(origin, textLayout, mtgb::Direct2D::pDefD2DBrush_);
+	ID2D1Brush* brush = mtgb::WinCtxRes::Get<Direct2DResource>(mtgb::WinCtxRes::Current()).pD2DBrush_;
+	mtgb::Direct2D::pDefRenderTarget_->DrawTextLayout(origin, textLayout, brush);
 	mtgb::Direct2D::pDefRenderTarget_->EndDraw();
 }
 
