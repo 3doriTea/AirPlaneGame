@@ -28,8 +28,9 @@ namespace mtgb
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 	private:
-		ID2D1RenderTarget* pRenderTarget_;
-		ID2D1SolidColorBrush* pD2DBrush_;
+
+		ComPtr<ID2D1RenderTarget> pRenderTarget_;
+		ComPtr<ID2D1SolidColorBrush> pD2DBrush_;
 
 
 		// WindowContextResource ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½

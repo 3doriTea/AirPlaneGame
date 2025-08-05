@@ -1,10 +1,15 @@
 #pragma once
 #include "ISystem.h"
 #include "cmtgb.h"
+#include <dinput.h>
+#include <wrl/client.h> // 追加
 
-typedef struct IDirectInput8A* LPDIRECTINPUT8;
-typedef struct IDirectInputDevice8A* LPDIRECTINPUTDEVICE8;
+
+#pragma comment(lib, "dxguid.lib")
+#pragma comment(lib, "dInput8.lib")
+
 typedef struct HWND__* HWND;
+using Microsoft::WRL::ComPtr; // 追加
 
 namespace mtgb
 {
@@ -28,13 +33,13 @@ namespace mtgb
 
 		void CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice);
 		void CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDevice);
-		void ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice);
-		void ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice);
+		void ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice);
+		void ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice);
 		void ChangeInputData(InputData* _pInputData);
 	private:
 		InputData* pInputData_;				 // 入力の状態
-		LPDIRECTINPUT8 pDirectInput_;        // Direct Input 本体k
-		LPDIRECTINPUTDEVICE8 pKeyDevice_;    // キーデバイス
-		LPDIRECTINPUTDEVICE8 pMouseDevice_;  // マウスデバイス
+		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
+		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
 	};
 }

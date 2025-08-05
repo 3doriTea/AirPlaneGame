@@ -17,8 +17,13 @@
 
 ID2D1Factory* mtgb::Direct2D::pD2DFactory_{ nullptr };
 IDXGISurface* mtgb::Direct2D::pDefDXGISurface_{ nullptr };
-ID2D1SolidColorBrush* mtgb::Direct2D::pDefD2DBrush_{ nullptr };
-ID2D1RenderTarget* mtgb::Direct2D::pDefRenderTarget_{ nullptr };
+ComPtr<ID2D1SolidColorBrush> mtgb::Direct2D::pDefD2DBrush_{nullptr};
+ComPtr<ID2D1RenderTarget> mtgb::Direct2D::pDefRenderTarget_{ nullptr };
+
+mtgb::Direct2D::~Direct2D()
+{
+	Release();
+}
 
 void mtgb::Direct2D::Initialize()
 {
@@ -68,7 +73,7 @@ void mtgb::Direct2D::CreateSolidColorBrush(const D2D1::ColorF& color, ID2D1Rende
 		&& "CreateSolidColorBrush‚ÉŽ¸”s @Direct2D::CreateSolidColorBrush");
 }
 
-void mtgb::Direct2D::ChangeRenderTarget(ID2D1SolidColorBrush* pD2DBrush, ID2D1RenderTarget* pRenderTarget)
+void mtgb::Direct2D::ChangeRenderTarget(ComPtr<ID2D1SolidColorBrush> pD2DBrush, ComPtr<ID2D1RenderTarget> pRenderTarget)
 {
 	pDefD2DBrush_ = pD2DBrush;
 	pDefRenderTarget_ = pRenderTarget;
@@ -91,7 +96,7 @@ void mtgb::Direct2D::Release()
 {
 	SAFE_RELEASE(pD2DFactory_);
 	SAFE_RELEASE(pDefDXGISurface_);
-	SAFE_RELEASE(pDefD2DBrush_);
-	SAFE_RELEASE(pDefRenderTarget_);
+	pDefD2DBrush_.Reset();
+	pDefRenderTarget_.Reset();
 
 }

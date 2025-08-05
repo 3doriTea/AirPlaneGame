@@ -40,7 +40,7 @@ void mtgb::MTImGui::Initialize()
 	
 	
 	ImGui_ImplWin32_Init(WinCtxRes::GetHWND(WindowContext::First));
-	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_, mtgb::DirectX11Draw::pContext_);
+	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_.Get(), mtgb::DirectX11Draw::pContext_.Get());
 }
 
 void mtgb::MTImGui::Update()

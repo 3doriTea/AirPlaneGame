@@ -16,6 +16,7 @@ struct IDWriteFontCollection;
 struct IDWriteFontFamily;
 struct IDWriteFont;
 struct DWRITE_FONT_METRICS;
+struct ID2D1Brush;
 
 namespace mtgb
 {
@@ -136,6 +137,8 @@ namespace mtgb
 		/// <param name="outMetrics">åvéZÇ≥ÇÍÇÈPixelFontMetrics</param>
 		void CreateTextFormat(int size, IDWriteTextFormat** ppTextFormat, PixelFontMetrics& outMetrics);
 	private:
+
+	
 
 		static DWRITE_FONT_METRICS fontMetrics_;
 		static PixelFontMetrics pixelFontMetrics_;
