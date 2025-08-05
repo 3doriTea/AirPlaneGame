@@ -291,6 +291,18 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
+	const D3D11_SAMPLER_DESC SAMPLER_DESC
+	{
+		.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		.AddressU = D3D11_TEXTURE_ADDRESS_WRAP,
+		.AddressV = D3D11_TEXTURE_ADDRESS_WRAP,
+		.AddressW = D3D11_TEXTURE_ADDRESS_WRAP,
+	};
+
+	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, &DirectX11Draw::pDefaultSamplerState_);
+	massert(SUCCEEDED(hResult)
+		&& "デフォルトのサンプラ作成に失敗 @DirectX11Manager::InitializeCommonResources");
+
 	// 深度ステンシルの
 	const D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
 	{

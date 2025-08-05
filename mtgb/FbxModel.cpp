@@ -37,6 +37,8 @@ void mtgb::FbxModel::Load(const std::string& _fileName)
 	}
 	//none of the registered readers can process the file
 
+	fileName_ = _fileName;
+
 
 	char str[MAX_PATH]{};
 	GetCurrentDirectory(MAX_PATH, str);

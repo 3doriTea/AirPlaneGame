@@ -29,6 +29,15 @@ mtgb::FBXModelHandle mtgb::Fbx::Load(const std::string& _fileName)
 {
 	Fbx& instance{ Game::System<Fbx>() };
 
+	for (auto&& pFbxModel : instance.pFbxModels_)
+	{
+		if (pFbxModel.second->GetFileName() == _fileName)
+		{
+			// ‚·‚Å‚É“Ç‚Ýž‚Ü‚ê‚Ä‚¢‚é‚È‚ç‚»‚Ìƒnƒ“ƒhƒ‹‚ð•Ô‚·
+			return pFbxModel.first;
+		}
+	}
+
 	FbxModel* pFbxModel{ new FbxModel{} };
 
 	pFbxModel->Load(_fileName);

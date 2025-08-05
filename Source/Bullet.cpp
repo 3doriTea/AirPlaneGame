@@ -5,7 +5,7 @@ using namespace mtgb;
 
 namespace
 {
-	static constexpr size_t BULLET_SPEED{ 1 };  // 1秒当たりの移動ピクセルスピード
+	const float BULLET_SPEED{ 10.f }; // 1秒当たりの移動ピクセルスピード
 }
 
 Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
@@ -17,9 +17,11 @@ Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRb_{ Component<RigidBody>() }
 {
+	LOGF("(%f, %f, %f)\n", _position.x, _position.y, _position.z);
 	//hImage_ = Image::Load("Image/bullet.png");
 	hModel_ = Fbx::Load("Model/gCube.fbx");
-	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
+	pRb_->velocity_ = { 0, 0, 0 };
+	pTransform_->scale_ = Vector3(1.f, 1.f, 1.f);
 }
 
 Bullet::~Bullet()
@@ -37,10 +39,12 @@ void Bullet::Update()
 
 	//pTransform_->position_.z += 0.1f;
 	//LOGF("bulletだよ imagehandle:%d\n", hImage_);
+	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
 }
 
 void Bullet::Draw() const
 {
-	//Draw::Image(hImage_, pTransform_);
-	//Draw::OBJModel(hModel_, pTransform_);
+
+	Draw::FBXModel(hModel_, *pTransform_, 0);
+
 }
