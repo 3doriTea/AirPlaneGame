@@ -79,11 +79,21 @@ const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 
 
 
+const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both)
+{
+	const InputData& input = GetInput(_context);
+	switch (axis)
+	{
+	case Axis::X: return input.joyStateCurrent_.lX / input.config_.xRange;
+	case Axis::Y: return input.joyStateCurrent_.lY / input.config_.yRange;
+	case Axis::Z: return input.joyStateCurrent_.lZ / input.config_.zRange;
+	default: return 0.0f;
+	}
+}
+
 const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
 {
-	
 	return InputUtil::GetInput(_context).mousePosition_;
-	
 }
 
 const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
@@ -96,6 +106,41 @@ const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
 	};
 }
 
+void mtgb::InputConfig::SetRange(LONG _range)
+{
+	xRange = _range;
+	yRange = _range;
+	zRange = _range;
+}
 
+void mtgb::InputConfig::SetRange(LONG _range, Axis _axis)
+{
+	switch (_axis)
+	{
+	case Axis::X: 
+		xRange = _range;
+		break;
+	case Axis::Y:
+		yRange = _range;
+		break;
+	case Axis::Z:
+		zRange = _range;
+		break;
+	}
+}
 
+void mtgb::InputConfig::SetDeadZone(float _deadZone)
+{
+	deadZone = _deadZone;
+}
 
+float mtgb::InputConfig::ApplyDeadZone(float value)
+{
+	if (std::abs(value) < deadZone)
+	{
+		return 0.0f;
+	}
+	//0`1‚Ì”ÍˆÍ‚É’¼‚·
+	float sign = (value > 0) ? 1.0f : -1.0f;
+	return sign * (std::abs(value) - deadZone) / (1.0f - deadZone);
+}

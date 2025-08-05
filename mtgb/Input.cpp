@@ -8,11 +8,20 @@
 #include "MainWindow.h"
 #include "DoubleWindow.h"
 #include "InputResource.h"
-
+#include "Game.h"
+#include "ISystem.h"
 namespace
 {
 	static const size_t KEY_BUFFER_SIZE{ 256 };
+	LONG min = -1000;
+	LONG max = 1000;
+	LONG xMin{ min },
+		 xMax{ max },
+		 yMin{ min },
+		 yMax{ max };
 }
+
+using namespace mtgb;
 
 mtgb::Input::Input() :
 	pDirectInput_{ nullptr },
@@ -46,46 +55,7 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	//#pragma region キーボード
-	//// キーデバイス作成
-	//hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, &pKeyDevice_, nullptr);
-
-	//massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
-	//	&& "キーボードデバイスの作成に失敗 @Input::Initialize");
-
-	//// キーボード用にフォーマット
-	//hResult = pKeyDevice_->SetDataFormat(&c_dfDIKeyboard);
-
-	//massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
-	//	&& "キーボードフォーマットに失敗 @Input::Initialize");
-
-	//// キーボードのアプリ間共有レベルを設定
-	////  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
-	//hResult = pKeyDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	//
-	//massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
-	//	&& "キーボードアプリ間共有レベル設定に失敗 @Input::Initialize");
-	//#pragma endregion
-
-	//#pragma region マウス
-	//// マウスデバイス作成
-	//hResult = pDirectInput_->CreateDevice(GUID_SysMouse, &pMouseDevice_, nullptr);
-
-	//massert(SUCCEEDED(hResult)  // マウスデバイスの作成に成功
-	//	&& "マウスデバイスの作成に失敗 @Input::Initialize");
-
-	//// マウス用にフォーマット
-	//hResult = pMouseDevice_->SetDataFormat(&c_dfDIMouse);
-
-	//massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
-	//	&& "マウスフォーマットに失敗 @Input::Initialize");
-
-	//// マウスのアプリ間共有レベルの設定
-	//hResult = pMouseDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-
-	//massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
-	//	&& "マウスアプリ間共有レベル設定に失敗 @Input::Initialize");
-	//#pragma endregion
+	
 }
 
 void mtgb::Input::Update()
@@ -136,6 +106,48 @@ void mtgb::Input::Update()
 	pMouseDevice_->GetDeviceState(
 		sizeof(DIMOUSESTATE),
 		&pInputData_->mouseStateCurrent_);
+
+#pragma endregion
+
+#pragma region ジョイスティック
+	//ジョイスティック操作の許可をゲット
+	hResult = pJoystickDevice_->Acquire();
+	switch (hResult)
+	{
+	case S_FALSE://他のデバイスが許可を取得
+	case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
+		return;
+	default:
+		massert(SUCCEEDED(hResult)
+			&& "ジョイスティック操作の許可取得の際にエラーが起こりました @Input::Update");
+	}
+
+	memcpy(
+		&pInputData_->joyStatePrevious_,
+		&pInputData_->joyStateCurrent_,
+		sizeof(DIJOYSTATE));
+	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE),&pInputData_->joyStateCurrent_);
+	
+	switch (hResult)
+	{
+	case DI_OK:
+		break;
+	case DIERR_INPUTLOST://入力ロスト
+		LPDIDEVICEINSTANCE pDeviceInstance;
+		hResult = pJoystickDevice_->GetDeviceInfo(pDeviceInstance);
+		massert(SUCCEEDED(hResult)
+			&& "デバイスの情報の取得に失敗しました @Input::Update");
+
+		//デバイスを割り当て済みリストから除外
+		assignedJoystickGuids_.erase(pDeviceInstance->guidInstance);
+		return;
+	case DIERR_NOTACQUIRED://未取得
+		return;
+	default://何らかの失敗
+		massert(false
+			&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");
+	}
+
 #pragma endregion
 }
 
@@ -194,6 +206,8 @@ void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDe
 		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");
 }
 
+
+
 void mtgb::Input::ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice)
 {
 	pKeyDevice_ = _pKeyDevice;
@@ -207,4 +221,136 @@ void mtgb::Input::ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice)
 void mtgb::Input::ChangeInputData(InputData* _pInputData)
 {
 	pInputData_ = _pInputData;
+}
+
+void mtgb::Input::ChangeJoystickDevice(LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+{
+	pJoystickDevice_ = _pJoystickDevice;
+}
+
+/// <summary>
+/// ジョイスティックが接続されている場合、デバイスに割り当てる
+/// </summary>
+/// <param name="lpddi">デバイスの情報を持つインスタンス</param>
+/// <param name="pvRef">EnumDevicesで渡した値</param>
+/// <returns></returns>
+BOOL CALLBACK EnumJoysticksCallback(const LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
+{
+	LPDIRECTINPUT8 pDirectInput = reinterpret_cast<LPDIRECTINPUT8>(pvRef);
+	LPDIRECTINPUTDEVICE8A pJoyStick = nullptr;
+	
+	if (!Game::System<Input>().RegisterJoystickGuid(lpddi->guidInstance))
+	{
+		//既に割り当て済みの為、他のデバイスの列挙に移す
+		return DIENUM_CONTINUE;
+	}
+	HRESULT hResult = pDirectInput->CreateDevice(lpddi->guidInstance, &pJoyStick, nullptr);
+	massert(SUCCEEDED(hResult)
+		&& "ジョイスティックのデバイスの作成に失敗 @EnumJoysticksCallback");
+	
+
+
+	Game::System<Input>().AssignJoystick(pJoyStick);
+	
+	//他のデバイスも列挙し続けてくださいという指示
+	return DIENUM_CONTINUE;
+}
+
+void mtgb::Input::EnumJoystick()
+{
+	// 割り当て予約がなかったらデバイスを作成しない
+	if (Game::System<Input>().IsNotSubscribed())
+	{
+		return;
+	}
+	pDirectInput_->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, pDirectInput_, DIEDFL_ATTACHEDONLY);
+}
+
+void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+{
+	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd,_inputConfig,_pJoystickDevice));
+}
+
+void mtgb::Input::AssignJoystick(LPDIRECTINPUTDEVICE8 _pJoystickDevice)
+{
+	HWND hWnd = std::get<HWND>(requestedJoystickDevices_.front());
+	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	
+	//Joystick2は多機能なデバイスにも対応している
+	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
+	//_pJoystickDevice->SetDataFormat(&c_dfDIJoystick2);
+	std::get<LPDIRECTINPUTDEVICE8>(requestedJoystickDevices_.front()) = _pJoystickDevice;
+}
+
+bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
+{
+	return assignedJoystickGuids_.insert(_guid).second;
+}
+
+bool mtgb::Input::IsNotSubscribed()
+{
+	return requestedJoystickDevices_.empty();
+}
+
+void mtgb::Input::SetProperty(LPDIRECTINPUTDEVICE8 _pJoystickDevice, InputConfig _inputConfig)
+{
+	HRESULT hResult{};
+
+#pragma region 軸モード設定
+
+	DIPROPDWORD diprop;
+	diprop.diph.dwSize = sizeof(diprop);
+	diprop.diph.dwHeaderSize = sizeof(diprop.diph);
+	diprop.diph.dwHow = DIPH_DEVICE;
+
+	//https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee416636(v=vs.85)
+	//dwHowがDIPH_DEVICEの場合は0にしないといけない
+	diprop.diph.dwObj = 0;
+
+	//REL:前回のデバイスとの相対値を使用する
+	//ABS:デバイス上の絶対値を使用する
+	diprop.dwData = DIPROPAXISMODE_ABS;
+
+	hResult = _pJoystickDevice->SetProperty(DIPROP_AXISMODE, &diprop.diph);
+	massert(SUCCEEDED(hResult)
+		&& "軸モードの設定に失敗");
+
+#pragma endregion
+
+#pragma region 値の範囲設定
+
+	DIPROPRANGE diprg;
+	diprg;
+	diprg.diph.dwSize = sizeof(diprg);
+	diprg.diph.dwHeaderSize = sizeof(diprg.diph);
+	diprg.diph.dwHow = DIPH_BYOFFSET;
+
+	//X軸
+	diprg.diph.dwObj = DIJOFS_X;
+	diprg.lMin = _inputConfig.xRange;
+	diprg.lMax = _inputConfig.xRange;
+
+	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
+	massert(SUCCEEDED(hResult)
+		&& "値の範囲設定に失敗 @");
+
+	//y軸
+	diprg.diph.dwObj = DIJOFS_Y;
+	diprg.lMin = _inputConfig.yRange;
+	diprg.lMax = _inputConfig.yRange;
+
+	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
+	massert(SUCCEEDED(hResult)
+		&& "値の範囲設定に失敗 @");
+
+	//z軸
+	diprg.diph.dwObj = DIJOFS_Z;
+	diprg.lMin = _inputConfig.zRange;
+	diprg.lMax = _inputConfig.zRange;
+
+	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
+	massert(SUCCEEDED(hResult)
+		&& "値の範囲設定に失敗 @");
+
+#pragma endregion
 }
