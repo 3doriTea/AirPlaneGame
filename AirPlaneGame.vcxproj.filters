@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
+    <!--<Filter Include="ソース ファイル">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
@@ -12,6 +12,10 @@
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>-->
+    <Filter Include="未フィルターのなんとかしなきゃいけないファイル">
+      <UniqueIdentifier>{B1DCE997-2E26-4582-AFE5-19A91DACDCE5}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx;h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
@@ -126,6 +130,12 @@
     </Filter>
     <Filter Include="mtgb\System\Camera">
       <UniqueIdentifier>{c3026163-e52d-4f01-af5b-a01ed9efb2ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\PlayScene\Network">
+      <UniqueIdentifier>{455e098b-191f-4cf5-80e5-5a8846549624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mtgb\System\ImGui">
+      <UniqueIdentifier>{867fb158-f2d8-4419-8c6c-57ce9b6e131b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -328,7 +338,7 @@
       <Filter>mtgb\System\Text</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTImGui.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>mtgb\System\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="Source\registerRefl.cpp">
       <Filter>ソース ファイル</Filter>
@@ -424,7 +434,7 @@
       <Filter>mtgb\System\Draw\Fbx</Filter>
     </ClCompile>
     <ClCompile Include="Source\Network\PIIO.cpp">
-      <Filter>game</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="Source\Background.cpp">
       <Filter>Game\PlayScene</Filter>
@@ -435,14 +445,14 @@
     <ClCompile Include="mtgb\FbxModel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\CameraSystem.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\WindowContextUtil.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Game\PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Reticle.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -755,9 +765,6 @@
     <ClInclude Include="minimp3_ex.h">
       <Filter>mtgb\System\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\CameraSystem.h">
-      <Filter>mtgb\System\Camera</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\FbxModel.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -768,9 +775,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\CameraResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\CameraSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Direct2DResource.h">
@@ -801,6 +805,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\WindowResource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Reticle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
