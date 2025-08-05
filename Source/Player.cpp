@@ -17,7 +17,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.SetName("player")
 		.SetPosition(Vector3(0, 0, 0))
 		.SetRotate(Quaternion::Identity())
-		.SetScale(Vector3(100,100,100))
+		.SetScale({ 100, 100, 100 })
 		.Build()),
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() }
