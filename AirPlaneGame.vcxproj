@@ -136,6 +136,7 @@
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\registerRefl.cpp" />
+    <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
@@ -281,6 +282,7 @@
     </ClInclude>
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
+    <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="Source\TextBox.h" />
   </ItemGroup>
