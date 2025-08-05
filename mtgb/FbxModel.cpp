@@ -83,6 +83,9 @@ void mtgb::FbxModel::Load(const std::string& _fileName)
 		pParts->Initialize();
 		pParts_.push_back(pParts);
 	}
+
+	SetCurrentDirectory(defaultCurrentDirectory);
+
 }
 
 void mtgb::FbxModel::Draw(const Transform& _transfrom, int _frame)

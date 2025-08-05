@@ -132,9 +132,12 @@ void mtgb::Input::Update()
 		&pInputData_->mouseStateCurrent_,
 		sizeof(DIMOUSESTATE));
 
-	pMouseDevice_->GetDeviceState(
+	hResult = pMouseDevice_->GetDeviceState(
 		sizeof(DIMOUSESTATE),
 		&pInputData_->mouseStateCurrent_);
+
+	massert(SUCCEEDED(hResult)  // マウス操作の取得に成功
+		&& "マウス操作の取得に失敗 @Input::Update");
 #pragma endregion
 }
 
