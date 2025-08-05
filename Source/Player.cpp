@@ -20,7 +20,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.SetScale({ 100, 100, 100 })
 		.Build()),
 	pTransform_{ Component<Transform>() },
-	pAudioPlayer_{ Component<AudioPlayer>() }
+	pAudioPlayer_{ Component<AudioPlayer>() },
+	pCamera_{nullptr}
 {
 	name_ = "Player:" + std::to_string(entityId_);
 	test1 = 10;
@@ -36,6 +37,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
+	//pCamera_ = FindGameObject();
 }
 
 Player::Player(mtgb::WindowContext context)
@@ -57,7 +59,6 @@ void Player::Update()
 	if (InputUtil::GetKeyDown(KeyCode::Space,context_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
-		
 	}
 
 	if (InputUtil::GetKeyDown(KeyCode::F,context_))

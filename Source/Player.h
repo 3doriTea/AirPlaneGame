@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 #include "AccessibleMacro.h"
+#include "Camera.h"
 
 //REFL_FORWARD_DECLARATION
 REFL_FORWARD_DECLARATION()
@@ -26,4 +27,5 @@ private:
 	OBJModelHandle hModel_;
 	mtgb::WindowContext context_;
 	FBXModelHandle fModel_;
+	Camera* pCamera_;
 };
