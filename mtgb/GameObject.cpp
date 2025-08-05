@@ -4,9 +4,10 @@
 
 
 mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
+	name_{_desc.name},
 	status_
 	{
-		.isActive = _desc.isActive,
+		.isActive_ = _desc.isActive,
 		.callUpdate_ = _desc.callUpdate,
 		.callDraw_ = _desc.callDraw,
 		.toDestory_ = FALSE,  // ç≈èâÇÕçÌèúÇµÇ»Ç¢
@@ -25,8 +26,11 @@ mtgb::GameObject::GameObject(const GameObject& _other)
 {
 }
 
-
-
 mtgb::GameObject::~GameObject()
 {
+}
+
+mtgb::GameObject* mtgb::GameObject::FindGameObject(const std::string& _name)
+{
+	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_name);
 }

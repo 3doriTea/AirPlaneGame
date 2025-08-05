@@ -3,7 +3,7 @@
 #include <string>
 #include "GameObjectBuilder.h"
 #include <bitset>
-
+#include "Transform.h"
 
 constexpr size_t COMPONENT_CAPACITY{ (8 * 8) - 4 };
 
@@ -55,11 +55,15 @@ namespace mtgb
 		/// </summary>
 		/// <returns>íœ—\’è true / false</returns>
 		inline const bool IsToDestory() const { return status_.toDestory_; }
+		std::string GetName() { return name_; }
 
 	private:
+
+		std::string name_;
+
 		struct Status
 		{
-			uint8_t isActive : 1;
+			uint8_t isActive_ : 1;
 			uint8_t callUpdate_ : 1;
 			uint8_t callDraw_ : 1;
 			uint8_t toDestory_ : 1;  // íœ—\’è‚©

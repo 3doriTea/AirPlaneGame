@@ -2,6 +2,7 @@
 //#include "World.h"
 #include <list>
 #include "Handlers.h"
+#include <string>
 
 namespace mtgb
 {
@@ -28,6 +29,8 @@ namespace mtgb
 		/// <param name="_pGameObject">登録するゲームオブジェクトのポインタ</param>
 		/// <returns>登録されたカメラハンドル</returns>
 		CameraHandleInScene RegisterCameraGameObject(GameObject* _pGameObject) const;
+		
+		GameObject* GetGameObject(std::string _name) const;
 
 	protected:
 		virtual void Initialize();
