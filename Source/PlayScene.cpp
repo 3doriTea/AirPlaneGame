@@ -110,7 +110,7 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
-	LOGF("Begin begin\n");
+	//LOGF("Begin begin\n");
 	tBox_->Draw();
 }
 

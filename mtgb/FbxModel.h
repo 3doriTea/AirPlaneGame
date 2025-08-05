@@ -2,6 +2,7 @@
 #include <vector>
 #include "Vector3.h"
 #include <fbxsdk.h>
+#include <string>
 
 #include "IModelPack.h"
 
@@ -43,6 +44,22 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_boneName">ボーンの名前</param>
 		Vector3 GetAnimBonePosition(std::string _boneName);
+		
+		/// <summary>
+		/// ロードしたときのモデルファイルの名前を取得
+		/// </summary>
+		/// <returns>ファイル名</returns>
+		std::string GetFileName() const { return fileName_; }
+	private:
+
+		/// <summary>
+		/// ノードの中身を調べる
+		/// </summary>
+		/// <param name="_pNode">調べたいノード</param>
+		/// <param name="_parts">パーツリスト</param>
+		void CheckNode(FbxNode* _pNode, std::vector<FbxParts*>& _parts);
+
+
 	private:
 		std::vector<FbxParts*> pParts_;  // 複数あるかもしれないパーツ
 
@@ -53,11 +70,6 @@ namespace mtgb
 		int startFrame_;  // アニメーション最初のフレーム
 		int endFrame_;  // アニメーション最後のフレーム
 
-		/// <summary>
-		/// ノードの中身を調べる
-		/// </summary>
-		/// <param name="_pNode">調べたいノード</param>
-		/// <param name="_parts">パーツリスト</param>
-		void CheckNode(FbxNode* _pNode, std::vector<FbxParts*>& _parts);
+		std::string fileName_;  // モデルファイルのパス
 	};
 }
