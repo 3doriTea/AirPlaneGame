@@ -1,5 +1,5 @@
 #pragma once
-#include <dinput.h>
+#include "IncludingInput.h"
 
 /// <summary>
 /// マウスのマウスボタンコード
