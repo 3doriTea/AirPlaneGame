@@ -53,6 +53,7 @@ void mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(const bool _enabled)
 	{
 		// 深度バッファを指定する
 		pContext_->OMSetRenderTargets(1, pRenderTargetView_.GetAddressOf(), pDepthStencilView_.Get());
+
 	}
 	else
 	{

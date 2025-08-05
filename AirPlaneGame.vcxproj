@@ -37,7 +37,6 @@
     <ClCompile Include="mtgb\AudioPlayer.cpp" />
     <ClCompile Include="mtgb\AudioPlayerCP.cpp" />
     <ClCompile Include="mtgb\CameraResource.cpp" />
-    <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\Color.cpp" />
     <ClCompile Include="mtgb\ComponentPool.cpp" />
     <ClCompile Include="mtgb\Debug.cpp" />
@@ -165,7 +164,6 @@
     <ClInclude Include="mtgb\AudioPlayer.h" />
     <ClInclude Include="mtgb\AudioPlayerCP.h" />
     <ClInclude Include="mtgb\CameraResource.h" />
-    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\cmtgb.h" />
     <ClInclude Include="mtgb\Color.h" />
     <ClInclude Include="mtgb\ComponentPool.h" />
