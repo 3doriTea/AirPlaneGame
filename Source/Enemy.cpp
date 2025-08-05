@@ -14,7 +14,7 @@ Enemy::Enemy() : GameObject(GameObjectBuilder()
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
 	//hModel_ = OBJ::Load("Model/OBJ/enemy.obj");
-	hModel_ = Fbx::Load("AirPlene.fbx");
+	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	//hModel_ = Fbx::Load("Assets/Model/gCube.fbx");
 	massert(hModel_ >= 0 && "“Gƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 	pTransform_->position_.z = 6.0f;
