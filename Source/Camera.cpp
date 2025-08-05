@@ -8,7 +8,7 @@ namespace
 }
 
 Camera::Camera(const Vector3& _position, mtgb::WindowContext _context) : GameObject(GameObjectBuilder()
-		.SetName("Main Camera")
+		.SetName("Camera:" + std::to_string(static_cast<int32_t>(_context)))
 		.SetPosition(_position)
 		.SetRotate(Quaternion::Identity())
 		.SetScale(Vector3::One())
@@ -24,6 +24,7 @@ Camera::~Camera()
 
 void Camera::Update()
 {
+	LOGF("%s\n", this->GetName());
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
 	if (context_ == WindowContext::First)
 	{
