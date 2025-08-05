@@ -14,5 +14,5 @@ private:
 	ImageHandle    hImage_;
 	Transform*     pTransform_;
 	RigidBody*     pRb_;
-	OBJModelHandle hModel_;
+	FBXModelHandle hModel_;
 };
