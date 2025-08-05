@@ -22,9 +22,9 @@ mtgb::Input::Input() :
 
 mtgb::Input::~Input()
 {
-	SAFE_RELEASE(pMouseDevice_);
-	SAFE_RELEASE(pKeyDevice_);
-	SAFE_RELEASE(pDirectInput_);
+	pMouseDevice_.Reset();
+	pKeyDevice_.Reset();
+	pDirectInput_.Reset();
 }
 
 void mtgb::Input::Initialize()
@@ -39,7 +39,7 @@ void mtgb::Input::Initialize()
 		GetModuleHandle(nullptr),
 		DIRECTINPUT_VERSION,
 		IID_IDirectInput8,
-		reinterpret_cast<void**>(&pDirectInput_),
+		reinterpret_cast<void**>(pDirectInput_.GetAddressOf()),
 		nullptr);
 
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
@@ -196,12 +196,12 @@ void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDe
 		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");
 }
 
-void mtgb::Input::ChangeKeyDevice(LPDIRECTINPUTDEVICE8 _pKeyDevice)
+void mtgb::Input::ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice)
 {
 	pKeyDevice_ = _pKeyDevice;
 }
 
-void mtgb::Input::ChangeMouseDevice(LPDIRECTINPUTDEVICE8 _pMouseDevice)
+void mtgb::Input::ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice)
 {
 	pMouseDevice_ = _pMouseDevice;
 }

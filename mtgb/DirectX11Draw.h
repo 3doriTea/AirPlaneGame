@@ -1,7 +1,8 @@
 #pragma once
 #include "cmtgb.h"
 #include "Vector4.h"
-
+#include <wrl/client.h>
+using Microsoft::WRL::ComPtr;
 
 struct ID3D11Device;
 struct ID3D11DeviceContext;
@@ -134,21 +135,21 @@ namespace mtgb
 		static void Release();
 
 	private:
-		static ID3D11Device* pDevice_;                                                             // 描画を行うための環境、リソースの作成に使う
-		static ID3D11DeviceContext* pContext_;                                                     // GPUに命令出すやつ
-		static IDXGIDevice1* pDXGIDevice_;
-		static IDXGIAdapter* pDXGIAdapter_;
-		static IDXGIFactory2* pDXGIFactory_;
+		static ComPtr<ID3D11Device> pDevice_;                                                             // 描画を行うための環境、リソースの作成に使う
+		static ComPtr<ID3D11DeviceContext> pContext_;                                                     // GPUに命令出すやつ
+		static ComPtr<IDXGIDevice1> pDXGIDevice_;
+		static ComPtr<IDXGIAdapter> pDXGIAdapter_;
+		static ComPtr<IDXGIFactory2> pDXGIFactory_;
 
 		static IDXGISwapChain* pSwapChain_;                                                        // ダブルバッファリングするやつ
-		static IDXGISwapChain1* pSwapChain1_;
-		static ID3D11RenderTargetView* pRenderTargetView_;                                         // 描画先
-		static ID3D11DepthStencilView* pDepthStencilView_;                                         // 深度バッファ
+		static ComPtr<IDXGISwapChain1> pSwapChain1_;
+		static ComPtr<ID3D11RenderTargetView> pRenderTargetView_;                                         // 描画先
+		static ComPtr<ID3D11DepthStencilView> pDepthStencilView_;                                         // 深度バッファ
 		static ID3D11DepthStencilState* pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)];  // ブレンドによる深度バッファへの書き込み情報
-		static ID3D11Texture2D* pDepthStencil_;                                                    // 深度ステンシル
+		static ComPtr<ID3D11Texture2D> pDepthStencil_;                                                    // 深度ステンシル
 		static ID3D11BlendState* pBlendState_[static_cast<int8_t>(BlendMode::Max)];                // ブレンドの情報
 		static ShaderBundle shaderBundle_[static_cast<int8_t>(ShaderType::Max)];                   // シェーダのバンドル
 		static Vector4 backgroundColor_;
-		static ID3D11SamplerState* pDefaultSamplerState_;
+		static ComPtr<ID3D11SamplerState> pDefaultSamplerState_;
 	};
 }
