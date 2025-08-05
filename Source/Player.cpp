@@ -54,7 +54,7 @@ void Player::Update()
 	{
 		timer = 0;
 	}
-	if (InputUtil::GetKeyDown(KeyCode::C,context_))
+	if (InputUtil::GetKeyDown(KeyCode::Space,context_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
 		
