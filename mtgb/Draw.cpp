@@ -51,16 +51,26 @@ void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
 
 void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+
+	DirectX11Draw::SetShader(ShaderType::Sprite2D);
 	Game::System<mtgb::Text>().Draw(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y));
 }
 
 void mtgb::Draw::ImmediateText(const std::string& text, float x, float y)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+
+	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+
 	Game::System<mtgb::Text>().ImmediateDraw(text, x, y);
 }
 
 void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int size)
 {
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+
 	Game::System<mtgb::Text>().ImmediateDraw(text, x, y, size);
 }
 
@@ -71,7 +81,7 @@ void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTr
 
 void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame)
 {
-	Game::System<mtgb::Fbx>().Draw((int)_hFBXModel, _pTransform, _frame);
+	Game::System<mtgb::Fbx>().Draw(_hFBXModel, _pTransform, _frame);
 }
 
 mtgb::Draw::Draw() :

@@ -139,7 +139,7 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 	Game::System<CameraSystem>().GetProjMatrix(&mProj);
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
-	ID3D11DeviceContext* tmpContext = DirectX11Draw::pContext_;
+	ID3D11DeviceContext* tmpContext = DirectX11Draw::pContext_.Get();
 	tmpContext->VSSetShader(pVertexShader_, NULL, 0);
 	tmpContext->PSSetShader(pPixelShader_, NULL, 0);
 

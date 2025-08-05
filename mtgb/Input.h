@@ -1,18 +1,19 @@
 #pragma once
 #include "ISystem.h"
 #include "cmtgb.h"
+#include <dinput.h>
+#include <wrl/client.h> // 追加
 #include <functional>
 #include <vector>
 #include <tuple>
 #include <set>
 
+
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
-#pragma comment(lib, "Xinput.lib")
 
-typedef struct IDirectInput8A* LPDIRECTINPUT8;
-typedef struct IDirectInputDevice8A* LPDIRECTINPUTDEVICE8;
 typedef struct HWND__* HWND;
+using Microsoft::WRL::ComPtr; // 追加
 
 namespace mtgb
 {
@@ -92,9 +93,9 @@ namespace mtgb
 	private:
 		void SetProperty(LPDIRECTINPUTDEVICE8 _pJoystickDevice, InputConfig _inputConfig);
 		InputData* pInputData_;				 // 入力の状態
-		LPDIRECTINPUT8 pDirectInput_;        // Direct Input 本体k
-		LPDIRECTINPUTDEVICE8 pKeyDevice_;    // キーデバイス
-		LPDIRECTINPUTDEVICE8 pMouseDevice_;  // マウスデバイス
+		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
+		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
 		LPDIRECTINPUTDEVICE8 pJoystickDevice_;  // ジョイスティックデバイス
 		 
 		std::vector<std::tuple<HWND,InputConfig, LPDIRECTINPUTDEVICE8>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス

@@ -1,10 +1,12 @@
 #pragma once
 #include "ISystem.h"
 #include <string>
+#include <wrl/client.h>
 
 #pragma comment(lib, "d3d11.lib")  // DirectX11のライブラリ
 #pragma comment(lib, "d3dcompiler.lib")  // シェーダコンパイラ用ライブラリ
 
+using Microsoft::WRL::ComPtr;
 struct D3D11_INPUT_ELEMENT_DESC;
 struct CD3D11_RASTERIZER_DESC;
 struct D3D11_VIEWPORT;
@@ -41,8 +43,8 @@ namespace mtgb
 
 		//void ChangeRenderContext(WindowContext& context);
 		void ChangeViewport(const D3D11_VIEWPORT& viewport);
-		void ChangeRenderTargets(ID3D11RenderTargetView* pRenderTargetView, ID3D11DepthStencilView* pDepthStencilView);
-		void ChangeSwapChain(IDXGISwapChain1* pSwapChain1);
+		void ChangeRenderTargets(ComPtr<ID3D11RenderTargetView> pRenderTargetView, ComPtr<ID3D11DepthStencilView> pDepthStencilView);
+		void ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1);
 		//void ChangeRenderContext(WindowRenderContext& context);
 
 		void Release() override;

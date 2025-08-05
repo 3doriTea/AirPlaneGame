@@ -7,7 +7,7 @@ using namespace mtgb;
 
 namespace
 {
-	static const float PLAYER_SPEED{ 0.01f };
+	static const float PLAYER_SPEED{ 0.1f };
 	int hText;
 	int timer = 0;
 	TimerHandle timerHandle;
@@ -17,7 +17,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.SetName("player")
 		.SetPosition(Vector3(0, 0, 0))
 		.SetRotate(Quaternion::Identity())
-		.SetScale(Vector3(100,100,100))
+		.SetScale({ 1, 1, 1 })
 		.Build()),
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() }
@@ -31,8 +31,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 	//hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	fModel_ = Fbx::Load("Model/tCube.fbx");
 	hText = Text::Load(str,36);
-	pTransform_->position_.z = 50.0f;
-	pTransform_->scale_ = Vector3(10, 10, 10);
+	pTransform_->position_.z = 5.0f;
+	pTransform_->scale_ = Vector3(1, 1, 1);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
@@ -54,7 +54,7 @@ void Player::Update()
 	{
 		timer = 0;
 	}
-	if (InputUtil::GetKeyDown(KeyCode::C,context_))
+	if (InputUtil::GetKeyDown(KeyCode::Space,context_))
 	{
 		Instantiate<Bullet>(pTransform_->position_);
 		
@@ -118,6 +118,6 @@ void Player::Draw() const
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	//MTImGui::ShowInspector(this, "player");
 	//Draw::Text(hText, mousePos);
-	LOGF("PlayerDraw\n");
+	//LOGF("PlayerDraw\n");
 	TypeRegistry::ShowInspector(this, name_.c_str());
 }

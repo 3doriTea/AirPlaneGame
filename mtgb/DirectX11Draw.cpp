@@ -9,20 +9,20 @@
 #include "OBJ.h"
 
 
-ID3D11Device* mtgb::DirectX11Draw::pDevice_{ nullptr };                                                    // 描画を行うための環境、リソースの作成に使う
-ID3D11DeviceContext* mtgb::DirectX11Draw::pContext_{ nullptr };   
-IDXGIDevice1* mtgb::DirectX11Draw::pDXGIDevice_{ nullptr };
-IDXGIAdapter* mtgb::DirectX11Draw::pDXGIAdapter_{ nullptr };
-IDXGIFactory2* mtgb::DirectX11Draw::pDXGIFactory_{ nullptr };
+ComPtr<ID3D11Device> mtgb::DirectX11Draw::pDevice_{ nullptr };                                                    // 描画を行うための環境、リソースの作成に使う
+ComPtr<ID3D11DeviceContext> mtgb::DirectX11Draw::pContext_{ nullptr };   
+ComPtr<IDXGIDevice1> mtgb::DirectX11Draw::pDXGIDevice_{ nullptr };
+ComPtr<IDXGIAdapter> mtgb::DirectX11Draw::pDXGIAdapter_{ nullptr };
+ComPtr<IDXGIFactory2> mtgb::DirectX11Draw::pDXGIFactory_{ nullptr };
 
 IDXGISwapChain* mtgb::DirectX11Draw::pSwapChain_{ nullptr };                                               // ダブルバッファリングするやつ
-ID3D11RenderTargetView* mtgb::DirectX11Draw::pRenderTargetView_{ nullptr };                                // 描画先
-IDXGISwapChain1* mtgb::DirectX11Draw::pSwapChain1_{ nullptr };
-ID3D11DepthStencilView* mtgb::DirectX11Draw::pDepthStencilView_{ nullptr };                                // 深度バッファ
+ComPtr<ID3D11RenderTargetView> mtgb::DirectX11Draw::pRenderTargetView_{ nullptr };                                // 描画先
+ComPtr<IDXGISwapChain1> mtgb::DirectX11Draw::pSwapChain1_{ nullptr };
+ComPtr<ID3D11DepthStencilView> mtgb::DirectX11Draw::pDepthStencilView_{ nullptr };                                // 深度バッファ
 ID3D11DepthStencilState* mtgb::DirectX11Draw::pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドによる深度バッファへの書き込み情報
-ID3D11Texture2D* mtgb::DirectX11Draw::pDepthStencil_{ nullptr };                                           // ブレンドの情報
+ComPtr<ID3D11Texture2D> mtgb::DirectX11Draw::pDepthStencil_{ nullptr };                                           // ブレンドの情報
 ID3D11BlendState* mtgb::DirectX11Draw::pBlendState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドの情報
-ID3D11SamplerState* mtgb::DirectX11Draw::pDefaultSamplerState_{ nullptr };
+ComPtr<ID3D11SamplerState> mtgb::DirectX11Draw::pDefaultSamplerState_{ nullptr };
 mtgb::ShaderBundle mtgb::DirectX11Draw::shaderBundle_[static_cast<int8_t>(ShaderType::Max)]{};             // シェーダのバンドル
 mtgb::Vector4 mtgb::DirectX11Draw::backgroundColor_{ 0, 0, 0, 1 };
 
@@ -52,22 +52,23 @@ void mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(const bool _enabled)
 	if (_enabled)
 	{
 		// 深度バッファを指定する
-		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView_);
+		pContext_->OMSetRenderTargets(1, pRenderTargetView_.GetAddressOf(), pDepthStencilView_.Get());
+
 	}
 	else
 	{
 		// 深度バッファを外す nullptrを指定する
-		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
+		pContext_->OMSetRenderTargets(1, pRenderTargetView_.GetAddressOf(), nullptr);
 	}
 }
 
 void mtgb::DirectX11Draw::Begin()
 {
 	// 描画ビュークリア
-	pContext_->ClearRenderTargetView(pRenderTargetView_, backgroundColor_.f);
+	pContext_->ClearRenderTargetView(pRenderTargetView_.Get(), backgroundColor_.f);
 
 	// 深度バッファクリア
-	pContext_->ClearDepthStencilView(pDepthStencilView_, D3D11_CLEAR_DEPTH, 1.0f, 0U);
+	pContext_->ClearDepthStencilView(pDepthStencilView_.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0U);
 
 }
 
@@ -81,13 +82,13 @@ void mtgb::DirectX11Draw::End()
 
 void mtgb::DirectX11Draw::Release()
 {
-	SAFE_RELEASE(pDepthStencilView_);
-	SAFE_RELEASE(pRenderTargetView_);
-	SAFE_RELEASE(pDXGIDevice_);
-	SAFE_RELEASE(pDXGIAdapter_);
-	SAFE_RELEASE(pDXGIFactory_);
+	pDepthStencilView_.Reset();
+	pRenderTargetView_.Reset();
+	pDXGIDevice_.Reset();
+	pDXGIAdapter_.Reset();
+	pDXGIFactory_.Reset();
 	SAFE_RELEASE(pSwapChain_);
-	SAFE_RELEASE(pSwapChain1_);
-	SAFE_RELEASE(pContext_);
-	SAFE_RELEASE(pDevice_);
+	pSwapChain1_.Reset();
+	pContext_.Reset();
+	pDevice_.Reset();
 }

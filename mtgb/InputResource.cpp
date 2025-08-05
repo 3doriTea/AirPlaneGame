@@ -35,8 +35,14 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 {
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
-	Game::System<Input>().CreateKeyDevice(hWnd, &pKeyDevice_);
-	Game::System<Input>().CreateMouseDevice(hWnd, &pMouseDevice_);
+	IDirectInputDevice8* pRawKeyDevice = nullptr;
+	Game::System<Input>().CreateKeyDevice(hWnd, &pRawKeyDevice);
+	pKeyDevice_.Attach(pRawKeyDevice);
+
+	IDirectInputDevice8* pRawMouseDevice = nullptr;
+	Game::System<Input>().CreateMouseDevice(hWnd, &pRawMouseDevice);
+	pMouseDevice_.Attach(pRawMouseDevice);
+
 	pInputData_ = new InputData();
 }
 

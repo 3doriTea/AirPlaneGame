@@ -163,7 +163,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		{
 			// テクスチャがない場合でもデフォルトサンプラーを設定
 			ID3D11SamplerState* pDefaultSampler = nullptr;
-			DirectX11Draw::pContext_->PSSetSamplers(0, 1, &DirectX11Draw::pDefaultSamplerState_);
+			DirectX11Draw::pContext_->PSSetSamplers(0, 1, DirectX11Draw::pDefaultSamplerState_.GetAddressOf());
 			
 			ID3D11ShaderResourceView* pNullSRV = nullptr;
 			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pNullSRV);

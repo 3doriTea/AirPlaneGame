@@ -10,9 +10,9 @@ mtgb::DXGIResource::DXGIResource()
 
 mtgb::DXGIResource::~DXGIResource()
 {
-	SAFE_RELEASE(pSwapChain1_);
-	SAFE_RELEASE(pOutput_);
-	SAFE_RELEASE(pDXGISurface_);
+	pSwapChain1_.Reset();
+	pOutput_.Reset();
+	pDXGISurface_.Reset();
 }
 
 mtgb::DXGIResource::DXGIResource(const DXGIResource& other)
@@ -36,17 +36,24 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	if (isMultiMonitor) {
 		// 将来的にマルチモニター対応する場合のoutputIndexを管理
 		int outputIndex = 0; // 仮の値
-		dx11Manager.CreateOutput(outputIndex, &pOutput_);
+		IDXGIOutput* pRawDXGIOutput = nullptr;
+		dx11Manager.CreateOutput(outputIndex, &pRawDXGIOutput);
+		pOutput_.Attach(pRawDXGIOutput);
 	}
 	else {
 		pOutput_ = nullptr;
 	}
 
+	IDXGISwapChain1* pRawSwapChain1 = nullptr;
 	// スワップチェーンを作成
-	dx11Manager.CreateSwapChain(hWnd, pOutput_, &pSwapChain1_);
+	dx11Manager.CreateSwapChain(hWnd, pOutput_.Get(), &pRawSwapChain1);
+	pSwapChain1_.Attach(pRawSwapChain1);
 
+	IDXGISurface* pRawSurface = nullptr;
 	//サーフェスとやらを作成
-	dx11Manager.CreateDXGISurface(pSwapChain1_, &pDXGISurface_);
+	dx11Manager.CreateDXGISurface(pSwapChain1_.Get(), &pRawSurface);
+	pDXGISurface_.Attach(pRawSurface);
+
 }
 
 void DXGIResource::SetResource()
