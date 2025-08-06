@@ -1,15 +1,11 @@
 #include "Reticle.h"
+#include "WindowContext.h"
 
 using namespace mtgb;
 
 namespace
 {
 	static const float RETICLE_SIZE{ 10.0f };  // レティクルのサイズ
-
-	static const Vector3 START_RETICLE_POSITION{
-		400.0f, 300.0f, 0.0f
-	};  // レティクルの位置
-	static const int PATH_MAX = 32;
 
 	// レティクルの初期座標
 	RectInt START_RETICLE_RECT{
@@ -18,7 +14,7 @@ namespace
 	};  // レティクルの矩形
 
 	// レティクルの画像切り取り
-	RectInt START_RETICLE_CUT{
+	RectInt RETICLE_CUT{
 		0,0,
 		711, 712
 	};  // レティクルの切り取り矩形
@@ -26,15 +22,18 @@ namespace
 
 Reticle::Reticle() : GameObject(GameObjectBuilder()
 	.SetName("Reticle")
-	.SetPosition(START_RETICLE_POSITION)
 	.SetRotate(Quaternion::Identity())
-	.SetScale(Vector3(RETICLE_SIZE, RETICLE_SIZE, 1.0f))
 	.Build()),
-	pTransform_{ Component<Transform>() }
+	pTransform_{ Component<Transform>() },
+	pCamera_{ nullptr}
 {
-	hImage_ = Image::Load("Image/Reticle.png");
-	char test[PATH_MAX]{};
-	GetCurrentDirectory(PATH_MAX, test);
+	hImage_ = Image::Load("Image/Reticle.png");	
+	reticlePos_ = START_RETICLE_RECT;
+}
+
+Reticle::Reticle(mtgb::WindowContext context) : Reticle()
+{
+	context_ = context;
 }
 
 Reticle::~Reticle()
@@ -43,6 +42,11 @@ Reticle::~Reticle()
 
 void Reticle::Update()
 {
+	// Kキーを押したら右に行く
+	if (InputUtil::GetKeyDown(KeyCode::K, context_))
+	{
+		reticlePos_.point.x += 10;
+	}
 }
 
 void Reticle::Draw() const
