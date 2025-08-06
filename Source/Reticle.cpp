@@ -47,5 +47,9 @@ void Reticle::Update()
 
 void Reticle::Draw() const
 {
-	Draw::Image(hImage_, START_RETICLE_RECT, START_RETICLE_CUT, 0.0f);
+	const Vector2Int IMAGE_SIZE{ Image::GetSize(hImage_) };
+	const Vector2Int DRAW_SIZE{ 300, 300 };
+	const Vector2Int DRAW_POSITION{  IMAGE_SIZE / -2 };
+
+	Draw::Image(hImage_, { DRAW_POSITION, DRAW_SIZE }, { Vector2Int::Zero(), IMAGE_SIZE }, 0.0f);
 }
