@@ -5,8 +5,7 @@
 #include "Camera.h"
 #include "Network/PIIO.h"
 #include "Background.h"
-//#include "MTNet/Common.h"
-
+#include "SkySphere.h"
 
 using namespace mtgb;
 using Network::PIIO;
@@ -41,6 +40,7 @@ void PlayScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 	//Instantiate<Player>(WindowContext::Second);
+	Instantiate<SkySphere>();
 	Instantiate<Reticle>();
 	Instantiate<Player>(WindowContext::First);
 	Instantiate<Enemy>();

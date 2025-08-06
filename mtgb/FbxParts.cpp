@@ -13,6 +13,7 @@
 #include <algorithm>
 
 
+
 // FbxParts コンストラクタの初期化リストを拡張して、全メンバー変数を初期化
 mtgb::FbxParts::FbxParts(FbxNode* _parent)
 	: vertexCount_(0)
