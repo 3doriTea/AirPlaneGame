@@ -118,6 +118,7 @@ namespace mtgb
 	{
 		friend Input;
 		friend InputUtil;
+		friend class InputResource;
 	private:  // Data
 		static const size_t KEY_COUNT{ 256 };             // キーの数
 		std::bitset<KEY_COUNT> keyStateCurrent_;   // キーの状態現在

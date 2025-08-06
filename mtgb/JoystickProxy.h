@@ -18,5 +18,7 @@ namespace mtgb
 		LONG rglSlider[2];
 		DWORD rgdwPOV[4];
 		BYTE rgbButtons[32];
+
+		JoystickProxy operator=(const DIJOYSTATE& js);
 	};
 }

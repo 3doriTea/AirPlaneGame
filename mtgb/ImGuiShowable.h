@@ -68,6 +68,7 @@ namespace mtgb
 	inline ImGuiShowable<Derived>::ImGuiShowable(const std::string& name)
 		:ImGuiShowableBase(name)
 	{
+		ImGuiShowSystem::Instance().Register(this);
 	}
 
 	template<typename Derived>

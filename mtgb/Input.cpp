@@ -9,6 +9,8 @@
 #include "InputResource.h"
 #include "Game.h"
 #include "ISystem.h"
+#include "Debug.h"
+#include "../ImGui/imgui.h"
 namespace
 {
 	static const size_t KEY_BUFFER_SIZE{ 256 };
@@ -22,6 +24,15 @@ namespace
 
 using namespace mtgb;
 
+bool operator<(const GUID& lhs, const GUID& rhs)
+{
+	return std::memcmp(&lhs, &rhs, sizeof(GUID)) < 0;
+}
+//bool operator==(const GUID& lhs, const GUID& rhs)
+//{
+//	return std::memcmp(&lhs, &rhs, sizeof(GUID)) == 0;
+//}
+
 mtgb::Input::Input() :
 	pDirectInput_{ nullptr },
 	pKeyDevice_{ nullptr },
@@ -31,9 +42,8 @@ mtgb::Input::Input() :
 
 mtgb::Input::~Input()
 {
-	pMouseDevice_.Reset();
-	pKeyDevice_.Reset();
-	pDirectInput_.Reset();
+	Release();
+	
 }
 
 void mtgb::Input::Initialize()
@@ -54,6 +64,8 @@ void mtgb::Input::Initialize()
 
 void mtgb::Input::Update()
 {
+	assignedJoystickGuids_;
+	requestedJoystickDevices_;
 	static HRESULT hResult{};
 
 #pragma region キーボード
@@ -107,10 +119,16 @@ void mtgb::Input::Update()
 
 #pragma region ジョイスティック
 	//ジョイスティック操作の許可をゲット
+	if (pJoystickDevice_ == nullptr)
+	{
+		return;
+	}
 	hResult = pJoystickDevice_->Acquire();
 	switch (hResult)
 	{
-	case S_FALSE://他のデバイスが許可を取得
+	case DI_OK:  //取得手できた
+	case S_FALSE://他のデバイスも許可を取得している
+		break;
 	case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
 		return;
 	default:
@@ -123,13 +141,15 @@ void mtgb::Input::Update()
 		&pInputData_->joyStateCurrent_,
 		sizeof(DIJOYSTATE));
 	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE),&pInputData_->joyStateCurrent_);
-	
+	LOGF("%d\n", hResult);
 	switch (hResult)
 	{
 	case DI_OK:
+		LOGF("OK\n");
 		break;
 	case DIERR_INPUTLOST://入力ロスト
-		LPDIDEVICEINSTANCE pDeviceInstance;
+	{
+		LPDIDEVICEINSTANCE pDeviceInstance = nullptr;
 		hResult = pJoystickDevice_->GetDeviceInfo(pDeviceInstance);
 		massert(SUCCEEDED(hResult)
 			&& "デバイスの情報の取得に失敗しました @Input::Update");
@@ -137,6 +157,7 @@ void mtgb::Input::Update()
 		//デバイスを割り当て済みリストから除外
 		assignedJoystickGuids_.erase(pDeviceInstance->guidInstance);
 		return;
+	}
 	case DIERR_NOTACQUIRED://未取得
 		return;
 	default://何らかの失敗
@@ -145,6 +166,13 @@ void mtgb::Input::Update()
 	}
 
 #pragma endregion
+}
+
+void mtgb::Input::Release()
+{
+	pMouseDevice_.Reset();
+	pKeyDevice_.Reset();
+	pDirectInput_.Reset();
 }
 
 void mtgb::Input::UpdateMousePositionData(
@@ -171,9 +199,9 @@ void mtgb::Input::CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice
 
 	// キーボードのアプリ間共有レベルを設定
 	//  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
-	//hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	//非アクティブなアプリも入力を受け付ける
 	hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//非アクティブなアプリも入力を受け付ける
+	//hResult = (*_ppKeyDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 
 	massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
 		&& "キーボードアプリ間共有レベル設定に失敗 @Input::CreateDevice");
@@ -194,9 +222,9 @@ void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDe
 		&& "マウスフォーマットに失敗 @Input::CreateMouseDevice");
 
 	// マウスのアプリ間共有レベルの設定
-	//hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	//非アクティブなアプリも入力を受け付ける
 	hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//非アクティブなアプリも入力を受け付ける
+	//hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 
 	massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
 		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");
@@ -260,23 +288,25 @@ void mtgb::Input::EnumJoystick()
 	pDirectInput_->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, pDirectInput_.Get(), DIEDFL_ATTACHEDONLY);
 }
 
-void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8> _pJoystickDevice)
+void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8>* _pJoystickDevice)
 {
-	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd,_inputConfig,_pJoystickDevice));
+	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd, _inputConfig, _pJoystickDevice));
 }
 
-void mtgb::Input::AssignJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
+void mtgb::Input::AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice)
 {
 	auto& front = requestedJoystickDevices_.front();
 	HWND hWnd = std::get<HWND>(front);
+	//_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
 	
 	//Joystick2は多機能なデバイスにも対応している
 	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
 	SetProperty(_pJoystickDevice, std::get<InputConfig>(front));
 	//_pJoystickDevice->SetDataFormat(&c_dfDIJoystick2);
-	std::get<ComPtr<IDirectInputDevice8>>(front) = _pJoystickDevice;
-
+	auto& pComPtr = *std::get<2>(front);
+	pComPtr.Attach(_pJoystickDevice);
 }
 
 bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
@@ -324,7 +354,7 @@ void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, Inpu
 
 	//X軸
 	diprg.diph.dwObj = DIJOFS_X;
-	diprg.lMin = _inputConfig.xRange;
+	diprg.lMin = -_inputConfig.xRange;
 	diprg.lMax = _inputConfig.xRange;
 
 	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
@@ -333,7 +363,7 @@ void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, Inpu
 
 	//y軸
 	diprg.diph.dwObj = DIJOFS_Y;
-	diprg.lMin = _inputConfig.yRange;
+	diprg.lMin = -_inputConfig.yRange;
 	diprg.lMax = _inputConfig.yRange;
 
 	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
@@ -341,13 +371,13 @@ void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, Inpu
 		&& "値の範囲設定に失敗 @");
 
 	//z軸
-	diprg.diph.dwObj = DIJOFS_Z;
-	diprg.lMin = _inputConfig.zRange;
+	/*diprg.diph.dwObj = DIJOFS_Z;
+	diprg.lMin = -_inputConfig.zRange;
 	diprg.lMax = _inputConfig.zRange;
 
 	hResult = _pJoystickDevice->SetProperty(DIPROP_RANGE, &diprg.diph);
 	massert(SUCCEEDED(hResult)
-		&& "値の範囲設定に失敗 @");
+		&& "値の範囲設定に失敗 @");*/
 
 #pragma endregion
 }

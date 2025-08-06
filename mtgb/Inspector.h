@@ -246,7 +246,7 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 			for (size_t i = 0; i < N; ++i)
 			{
 				std::string elemName = std::string(name) + "[" + std::to_string(i) + "]";
-				DefaultShow(&(*value)[i], elemName.c_str());
+				DefaultShow(static_cast<ElemType*>(&(*value)[i]), elemName.c_str());
 			}
 
 			ImGui::Unindent();
@@ -254,15 +254,29 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else if constexpr (std::is_same_v<T, bool>)
 	{
-		ImGui::InputInt(name, value);
+		ImGui::Checkbox(name, reinterpret_cast<bool*>(value));
 	}
 	else if constexpr (std::is_floating_point_v<T> ) 
 	{
-		ImGui::InputFloat(name, value);
+		ImGui::InputFloat(name, reinterpret_cast<float*>(value));
 	}
-	else if constexpr (std::is_integral_v<T>)
+	else if constexpr (std::is_same_v<T,int>)
 	{
-		ImGui::Checkbox(name, value);
+		ImGui::InputInt(name, reinterpret_cast<int*>(value));
+		
+	}
+	else if constexpr (std::is_same_v<T, long>)
+	{
+		ImGui::Text("%s : %4.2ld", name, *value);
+		/*int* temp = static_cast<int*>(value);
+		if (ImGui::InputInt(name, temp))
+		{
+			*value = static_cast<long>(*temp);
+		}*/
+	}
+	else if constexpr (std::is_same_v<T, unsigned long>)
+	{
+		ImGui::Text("%s : %4.2lo", name, *value);
 	}
 	else if constexpr (std::is_enum_v<T>)
 	{
@@ -270,7 +284,7 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else
 	{
-		ImGui::Text("%s:Unknown",name );
+		ImGui::Text("%s:Unknown,%s",name,typeid(T).name() );
 		//std::cout << "Default unknown type: " << name << std::endl;
 	}
 }

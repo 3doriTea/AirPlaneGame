@@ -16,7 +16,13 @@ void mtgb::WindowContextResourceManager::Initialize()
 
 void mtgb::WindowContextResourceManager::Update()
 {
-	
+	for (auto& collection : collectionMap_)
+	{
+		for (auto& resource : collection.second)
+		{
+			resource.second->Update();
+		}
+	}
 }
 
 void mtgb::WindowContextResourceManager::Release()

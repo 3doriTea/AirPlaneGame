@@ -31,5 +31,5 @@ void Enemy::Draw() const
 {
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	LOGF("EnemyDraw\n");
+	//LOGF("EnemyDraw\n");
 }

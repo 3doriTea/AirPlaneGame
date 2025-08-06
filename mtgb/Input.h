@@ -7,7 +7,7 @@
 #include <vector>
 #include <tuple>
 #include <set>
-
+#include <guiddef.h>
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -15,11 +15,13 @@
 typedef struct HWND__* HWND;
 using Microsoft::WRL::ComPtr; // 追加
 
+
+
 namespace mtgb
 {
 	class InputResource;
 	class InputData;
-	class InputConfig;
+	struct InputConfig;
 
 	class Input : public ISystem
 	{
@@ -72,13 +74,13 @@ namespace mtgb
 		/// 先着順で割り当てられます
 		/// </summary>
 		/// <param name="_pJoystickDevice">割り当て希望のデバイス</param>
-		void RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8> _pJoystickDevice);
+		void RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8>* _pJoystickDevice);
 
 		/// <summary>
 		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
 		/// </summary>
 		/// <param name="_pJoystickDevice"></param>
-		void AssignJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice);
+		void AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice);
 
 		/// <summary>
 		/// 割り当てられたジョイスティックのGUIDを登録する
@@ -100,7 +102,7 @@ namespace mtgb
 		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;  // ジョイスティックデバイス
 		 
-		std::vector<std::tuple<HWND,InputConfig, ComPtr<IDirectInputDevice8>>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
+		std::vector<std::tuple<HWND,InputConfig, ComPtr<IDirectInputDevice8>*>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
 	};
 }

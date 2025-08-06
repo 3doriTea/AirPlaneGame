@@ -9,6 +9,7 @@
 #include <dinput.h>
 #include <map>
 #include <typeindex>
+#include "ImGuiShowable.h"
 #include "JoystickProxy.h"
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -27,6 +28,7 @@ namespace mtgb
 		~InputResource();
 		InputResource(const InputResource& other);
 		void Initialize(WindowContext _windowContext) override;
+		void Update() override;
 		void SetResource() override;
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
@@ -34,10 +36,10 @@ namespace mtgb
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;
-		JoystickProxy 
+		JoystickProxy* pProxy_;
 
 		// WindowContextResource を介して継承されました
-		InputResource* Clone() const override;
+		WindowContextResource* Clone() const override;
 		// マウスデバイス
 	};
 }

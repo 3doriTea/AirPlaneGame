@@ -80,7 +80,7 @@ const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 
 
 
-const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both)
+const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context)
 {
 	const InputData& input = GetInput(_context);
 	float value = 0.0f;
