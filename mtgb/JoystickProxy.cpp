@@ -10,6 +10,10 @@ lRx(js.lRx), lRy(js.lRy), lRz(js.lRz) {
 	std::copy(std::begin(js.rgbButtons), std::end(js.rgbButtons), rgbButtons);
 }
 
+void mtgb::JoystickProxy::UpdateFromInput(GUID guid)
+{
+}
+
 mtgb::JoystickProxy mtgb::JoystickProxy::operator=(const DIJOYSTATE& js)
 {
     lX = js.lX;

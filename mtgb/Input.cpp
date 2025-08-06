@@ -27,10 +27,10 @@ namespace
 
 using namespace mtgb;
 
-void mtgb::Input::AcquireJoystick()
+void mtgb::Input::AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 {
 	HRESULT hResult{};
-	hResult = pJoystickDevice_->Acquire();
+	hResult = _pJoystickDevice->Acquire();
 
 	switch (hResult)
 	{
@@ -86,7 +86,6 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	Timer::AddInterval(acquireInterval, [&]() {AcquireJoystick();});
 }
 
 void mtgb::Input::Update()
@@ -172,11 +171,11 @@ void mtgb::Input::Update()
 			&& "デバイスの情報の取得に失敗しました @Input::Update");
 
 		//デバイスを割り当て済みリストから除外
-		assignedJoystickGuids_.erase(deviceInstance.guidInstance);
+		UnregisterJoystickGuid(deviceInstance.guidInstance);
 		return;
 	}
 	case DIERR_NOTACQUIRED://未取得
-		AcquireJoystick();
+		AcquireJoystick(pJoystickDevice_);
 		return;
 	default://何らかの失敗
 		massert(false
@@ -348,14 +347,57 @@ void mtgb::Input::AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice)
 	pComPtr.Attach(_pJoystickDevice);
 }
 
+bool mtgb::Input::UnregisterJoystickGuid(GUID _guid)
+{
+	Timer::Remove(assignedJoystickCallbacks_[_guid]);
+	assignedJoystickGuids_.erase(_guid);
+}
+
 bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
 {
 	return assignedJoystickGuids_.insert(_guid).second;
 }
 
+void mtgb::Input::SetAcquireInterval(GUID _guid, ComPtr<IDirectInputDevice8> _device)
+{
+	TimerHandle hTimer = Timer::AddInterval(acquireInterval, [&]() {AcquireJoystick(_device); });
+	assignedJoystickCallbacks_.insert(std::make_pair(_guid, hTimer));
+}
+
 bool mtgb::Input::IsNotSubscribed()
 {
 	return requestedJoystickDevices_.empty();
+}
+
+std::string mtgb::Input::ConvertHResultToMessage(HRESULT hr) const
+{
+	return std::string();
+}
+
+HRESULT mtgb::Input::UpdateJoystickState(GUID guid)
+{
+	return E_NOTIMPL;
+}
+
+const std::string& mtgb::Input::GetJoystickStatusMessage(GUID guid) const
+{
+	// TODO: return ステートメントをここに挿入します
+}
+
+bool mtgb::Input::IsJoystickConnected(GUID guid) const
+{
+	const auto& itr = joystickLastResults_.find(guid);
+	if (itr == joystickLastResults_.end())
+	{
+		return false;
+	}
+	HRESULT hResult = itr->second;
+
+}
+
+bool mtgb::Input::IsJoystickAssigned(GUID guid) const
+{
+	return (assignedJoystickGuids_.find(guid) != assignedJoystickGuids_.end());
 }
 
 void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig)

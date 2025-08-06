@@ -9,6 +9,7 @@
 #include <set>
 #include <guiddef.h>
 #include <map>
+#include "Timer.h"
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -84,19 +85,39 @@ namespace mtgb
 		void AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice);
 
 		/// <summary>
+		/// 登録されたジョイスティックを解除する
+		/// </summary>
+		/// <param name="_guid">登録解除するGUID</param>
+		/// <returns></returns>
+		bool UnregisterJoystickGuid(GUID _guid);
+
+		/// <summary>
 		/// 割り当てられたジョイスティックのGUIDを登録する
 		/// </summary>
 		/// <param name="_guid">登録するジョイスティックのGUID</param>
 		/// <returns>登録済みの場合はfalseを返す</returns>
 		bool RegisterJoystickGuid(GUID _guid);
+
+		/// <summary>
+		/// 取得感覚を設定する
+		/// </summary>
+		void SetAcquireInterval(GUID _guid, ComPtr<IDirectInputDevice8> _device);
 		/// <summary>
 		/// 割り当て予約がされていないか否か
 		/// </summary>
 		/// <returns>/returns>
 		bool IsNotSubscribed();
 
+		std::string ConvertHResultToMessage(HRESULT hr) const;
+
+		HRESULT UpdateJoystickState(GUID guid);
+
+		const std::string& GetJoystickStatusMessage(GUID guid) const;
+		bool IsJoystickConnected(GUID guid) const;
+		bool IsJoystickAssigned(GUID guid) const;
+
 	private:
-		void AcquireJoystick();
+		void AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice);
 		void SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig);
 		InputData* pInputData_;				 // 入力の状態
 		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
@@ -106,6 +127,9 @@ namespace mtgb
 		 
 		std::vector<std::tuple<HWND,InputConfig, ComPtr<IDirectInputDevice8>*>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
+		std::map<GUID, TimerHandle> assignedJoystickCallbacks_;//割り当て済みのジョイスティックに対するコールバック関数の連想配列
 		
+		std::map<GUID, HRESULT> joystickLastResults_;//最後に取得したHRESULT
+		std::map<GUID, std::string> joystickStatusMessage_;
 	};
 }

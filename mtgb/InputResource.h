@@ -11,6 +11,7 @@
 #include <typeindex>
 #include "ImGuiShowable.h"
 #include "JoystickProxy.h"
+#include "Timer.h"
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
 #pragma comment(lib, "Xinput.lib")
@@ -40,6 +41,5 @@ namespace mtgb
 
 		// WindowContextResource を介して継承されました
 		WindowContextResource* Clone() const override;
-		// マウスデバイス
 	};
 }

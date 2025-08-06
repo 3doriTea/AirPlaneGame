@@ -46,7 +46,7 @@ void mtgb::Direct3DResource::Initialize(WindowContext _windowContext)
 	dx11Manager.CreateDepthStencilAndDepthStencilView(&pRawDepthStencil, &pRawDepthStencilView);
 	pDepthStencil_.Attach(pRawDepthStencil);
 	pDepthStencilView_.Attach(pRawDepthStencilView);
-
+	
 }
 
 void mtgb::Direct3DResource::SetResource()

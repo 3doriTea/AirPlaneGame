@@ -1,6 +1,7 @@
 #pragma once
 #include "IncludingInput.h"
 #include "ImGuiShowable.h"
+#include <string>
 namespace mtgb
 {
 	/// <summary>
@@ -19,6 +20,13 @@ namespace mtgb
 		DWORD rgdwPOV[4];
 		BYTE rgbButtons[32];
 
+		std::string connetionStatus;
+		std::string assignmentStatus;
+		std::string lastErrorMessage;
+		bool isConnected;
+		bool isAssigned;
+
+		void UpdateFromInput(GUID guid);
 		JoystickProxy operator=(const DIJOYSTATE& js);
 	};
 }
