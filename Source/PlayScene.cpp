@@ -41,7 +41,8 @@ void PlayScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 	//Instantiate<Player>(WindowContext::Second);
-	Instantiate<Reticle>();
+	Instantiate<Reticle>(WindowContext::First);
+	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
 	Instantiate<Enemy>();
 

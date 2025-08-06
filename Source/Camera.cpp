@@ -27,7 +27,6 @@ void Camera::Update()
 	LOGF("%s\n", this->GetName());
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
 	
-
 		if (InputUtil::GetKey(KeyCode::Up, context_))
 		{
 			pTransform_->position_.z += MOVE;
@@ -44,12 +43,6 @@ void Camera::Update()
 		{
 			pTransform_->position_.x += MOVE;
 		}
-	
-	
-		
-	
-
-
 }
 
 void Camera::Draw() const
