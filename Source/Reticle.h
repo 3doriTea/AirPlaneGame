@@ -11,6 +11,6 @@ public:
 	void Draw() const override;
 
 private:
-	ImageHandle hImage_ = 0;
+	ImageHandle hImage_;
 	Transform* pTransform_;
 };
