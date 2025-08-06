@@ -36,7 +36,7 @@ void Bullet::Update()
 	if (timer >= 300)
 	{
 		timer = 0;
-		DestoryMe();
+		DestroyMe();
 	}
 	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
 }
