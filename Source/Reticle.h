@@ -5,12 +5,15 @@ class Reticle : public mtgb::GameObject
 {
 public:
 	Reticle();
+	Reticle(mtgb::WindowContext context);
 	~Reticle();
 
 	void Update() override;
 	void Draw() const override;
 
 private:
-	ImageHandle hImage_ = 0;
+	ImageHandle hImage_;
 	Transform* pTransform_;
+	RectInt reticlePos_;
+	mtgb::WindowContext context_;
 };

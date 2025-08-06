@@ -41,7 +41,9 @@ void PlayScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<SkySphere>();
-	Instantiate<Reticle>();
+	//Instantiate<Reticle>();
+	Instantiate<Reticle>(WindowContext::First);
+	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
 	Instantiate<Enemy>();
 
