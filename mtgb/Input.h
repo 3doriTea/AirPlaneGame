@@ -8,6 +8,7 @@
 #include <tuple>
 #include <set>
 #include <guiddef.h>
+#include <map>
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -95,6 +96,7 @@ namespace mtgb
 		bool IsNotSubscribed();
 
 	private:
+		void AcquireJoystick();
 		void SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig);
 		InputData* pInputData_;				 // 入力の状態
 		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
@@ -104,5 +106,6 @@ namespace mtgb
 		 
 		std::vector<std::tuple<HWND,InputConfig, ComPtr<IDirectInputDevice8>*>> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
+		
 	};
 }

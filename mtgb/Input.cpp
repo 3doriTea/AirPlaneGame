@@ -11,6 +11,8 @@
 #include "ISystem.h"
 #include "Debug.h"
 #include "../ImGui/imgui.h"
+#include "Timer.h"
+
 namespace
 {
 	static const size_t KEY_BUFFER_SIZE{ 256 };
@@ -20,9 +22,32 @@ namespace
 		 xMax{ max },
 		 yMin{ min },
 		 yMax{ max };
+	float acquireInterval = 10.0f;
 }
 
 using namespace mtgb;
+
+void mtgb::Input::AcquireJoystick()
+{
+	HRESULT hResult{};
+	hResult = pJoystickDevice_->Acquire();
+
+	switch (hResult)
+	{
+	case DI_OK:  //取得できた
+	case S_FALSE://他のデバイスも許可を取得している
+		break;
+	case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
+		return;
+	case DIERR_INVALIDPARAM:
+	case DIERR_NOTINITIALIZED:
+		massert(SUCCEEDED(hResult)
+			&& "ジョイスティック操作の許可取得の際にエラーが起こりました @Input::Update");
+		return;
+	default:
+		break;
+	}
+}
 
 bool operator<(const GUID& lhs, const GUID& rhs)
 {
@@ -60,6 +85,8 @@ void mtgb::Input::Initialize()
 
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
+
+	Timer::AddInterval(acquireInterval, [&]() {AcquireJoystick();});
 }
 
 void mtgb::Input::Update()
@@ -118,29 +145,18 @@ void mtgb::Input::Update()
 #pragma endregion
 
 #pragma region ジョイスティック
-	//ジョイスティック操作の許可をゲット
+	
 	if (pJoystickDevice_ == nullptr)
 	{
 		return;
-	}
-	hResult = pJoystickDevice_->Acquire();
-	switch (hResult)
-	{
-	case DI_OK:  //取得手できた
-	case S_FALSE://他のデバイスも許可を取得している
-		break;
-	case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
-		return;
-	default:
-		massert(SUCCEEDED(hResult)
-			&& "ジョイスティック操作の許可取得の際にエラーが起こりました @Input::Update");
 	}
 
 	memcpy(
 		&pInputData_->joyStatePrevious_,
 		&pInputData_->joyStateCurrent_,
 		sizeof(DIJOYSTATE));
-	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE),&pInputData_->joyStateCurrent_);
+
+	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE), &pInputData_->joyStateCurrent_);
 	LOGF("%d\n", hResult);
 	switch (hResult)
 	{
@@ -149,21 +165,44 @@ void mtgb::Input::Update()
 		break;
 	case DIERR_INPUTLOST://入力ロスト
 	{
-		LPDIDEVICEINSTANCE pDeviceInstance = nullptr;
-		hResult = pJoystickDevice_->GetDeviceInfo(pDeviceInstance);
+		DIDEVICEINSTANCE deviceInstance = {};
+		deviceInstance.dwSize = sizeof(DIDEVICEINSTANCE);
+		hResult = pJoystickDevice_->GetDeviceInfo(&deviceInstance);
 		massert(SUCCEEDED(hResult)
 			&& "デバイスの情報の取得に失敗しました @Input::Update");
 
 		//デバイスを割り当て済みリストから除外
-		assignedJoystickGuids_.erase(pDeviceInstance->guidInstance);
+		assignedJoystickGuids_.erase(deviceInstance.guidInstance);
 		return;
 	}
 	case DIERR_NOTACQUIRED://未取得
+		AcquireJoystick();
 		return;
 	default://何らかの失敗
 		massert(false
 			&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");
 	}
+
+	//ジョイスティック操作の許可をゲット
+
+	//hResult = pJoystickDevice_->Acquire();
+	//
+	//switch (hResult)
+	//{
+	//case DI_OK:  //取得できた
+	//case S_FALSE://他のデバイスも許可を取得している
+	//	break;
+	//case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
+	//	return;
+	//case DIERR_INVALIDPARAM:
+	//case DIERR_NOTINITIALIZED:
+	//	massert(SUCCEEDED(hResult)
+	//		&& "ジョイスティック操作の許可取得の際にエラーが起こりました @Input::Update");
+	//default:
+	//	break;
+	//}
+
+	
 
 #pragma endregion
 }

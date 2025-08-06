@@ -278,6 +278,10 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	{
 		ImGui::Text("%s : %4.2lo", name, *value);
 	}
+	else if constexpr (std::is_same_v<T, unsigned char>)
+	{
+		ImGui::Text("%s : %4.2hhu", name, *value);
+	}
 	else if constexpr (std::is_enum_v<T>)
 	{
 
