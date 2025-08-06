@@ -10,6 +10,18 @@ namespace
 		400.0f, 300.0f, 0.0f
 	};  // レティクルの位置
 	static const int PATH_MAX = 32;
+
+	// レティクルの初期座標
+	RectInt START_RETICLE_RECT{
+		120,120,
+		300,300
+	};  // レティクルの矩形
+
+	// レティクルの画像切り取り
+	RectInt START_RETICLE_CUT{
+		0,0,
+		711, 712
+	};  // レティクルの切り取り矩形
 }
 
 Reticle::Reticle() : GameObject(GameObjectBuilder()
@@ -35,5 +47,5 @@ void Reticle::Update()
 
 void Reticle::Draw() const
 {
-	Draw::Image(hImage_, pTransform_);
+	Draw::Image(hImage_, START_RETICLE_RECT, START_RETICLE_CUT, 0.0f);
 }

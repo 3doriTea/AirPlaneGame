@@ -86,7 +86,7 @@ void mtgb::SceneSystem::Update()
 	for (auto&& itr = currentScene.pGameObjects_.begin();
 		itr != currentScene.pGameObjects_.end();)
 	{
-		if ((*itr)->IsToDestory())
+		if ((*itr)->IsToDestroy())
 		{
 			Game::RemoveEntityComponent((*itr)->GetEntityId());
 			itr = currentScene.pGameObjects_.erase(itr);
