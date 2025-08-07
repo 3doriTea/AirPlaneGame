@@ -15,13 +15,14 @@ namespace
 }
 
 SkySphere::SkySphere() : GameObject(GameObjectBuilder()
-							  .SetName("SkySphere")
-							  .SetPosition(Vector3(0, 0, 0))
-							  .SetRotate(Quaternion::Identity())
-							  .SetScale({ 1, 1, 1 })
-							  .Build()),
+		.SetName("SkySphere")
+		.SetPosition(Vector3(0, 0, 0))
+		.SetRotate(Quaternion::Identity())
+		.SetScale({ 1, 1, 1 })
+		.Build()),
 	pTransform_{ Component<Transform>() }
 {
+	pTransform_->rotate_ = Quaternion(DirectX::XMConvertToRadians(-90), 0, 0, 0);
 	hModel_ = Fbx::Load("Model/sky_sphere.fbx");
 }
 
