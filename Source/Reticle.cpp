@@ -24,8 +24,8 @@ Reticle::Reticle() : GameObject(GameObjectBuilder()
 	.SetName("Reticle")
 	.SetRotate(Quaternion::Identity())
 	.Build()),
-	pTransform_{ Component<Transform>() },
-	pCamera_{ nullptr}
+	pTransform_{ Component<Transform>() }
+	//pCamera_{ nullptr}
 {
 	hImage_ = Image::Load("Image/Reticle.png");	
 	reticlePos_ = START_RETICLE_RECT;

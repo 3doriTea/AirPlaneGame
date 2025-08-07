@@ -149,6 +149,9 @@
     <Filter Include="03mtgb\Library\MTNet">
       <UniqueIdentifier>{73DA8D07-9F90-465E-891B-1A677AFB2760}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03mtgb\Library\MTBit">
+      <UniqueIdentifier>{5E0E2846-6D8F-450A-B3FF-F768E6F41879}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03mtgb\Library\ImGui">
       <UniqueIdentifier>{90291104-2F3A-46D0-A8F3-49C8CFF88BA3}</UniqueIdentifier>
     </Filter>
@@ -295,9 +298,6 @@
     </Filter>-->
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="mtgb\MTNet\Socket.cpp">
-      <Filter>mtgb\MTNet</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\AssetsManager.cpp">
       <Filter>03mtgb\System\AssetsManager</Filter>
     </ClCompile>
@@ -609,6 +609,12 @@
     </ClCompile>
     <ClCompile Include="Source\TextBox.cpp">
       <Filter>01Game\03PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\Socket.cpp">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SkySphere.cpp">
+      <Filter>01Game\01Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -962,6 +968,12 @@
     </ClInclude>
     <ClInclude Include="Source\TextBox.h">
       <Filter>01Game\03PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SkySphere.h">
+      <Filter>01Game\01Common</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTBit\BitFlag.h">
+      <Filter>03mtgb\Library\MTBit</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
