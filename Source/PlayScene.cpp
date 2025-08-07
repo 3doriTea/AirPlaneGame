@@ -6,6 +6,7 @@
 #include "Network/PIIO.h"
 #include "Background.h"
 #include "SkySphere.h"
+#include "TestScene/TestScene.h"
 
 using namespace mtgb;
 using Network::PIIO;
@@ -18,7 +19,6 @@ namespace
 
 PlayScene::PlayScene()
 {
-	new Background();
 	tBox_ = new TextBox();
 	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
@@ -29,6 +29,8 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	Instantiate<Background>();
+
 	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
 	//SetCameraGameObject(Instantiate<Camera>());
 	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
@@ -56,6 +58,11 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
+	if (InputUtil::GetKeyDown(KeyCode::T))
+	{
+		Game::System<SceneSystem>().Move<TestScene>();
+	}
+
 	using LED_STATUS = Network::PIIO::LED_STATUS;
 	//if (InputUtil::GetKeyDown(KeyCode::Escape))
 	if (InputUtil::GetKeyDown(KeyCode::Escape, mtgb::WindowContext::Both))

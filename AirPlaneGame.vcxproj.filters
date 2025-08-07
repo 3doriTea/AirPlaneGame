@@ -176,6 +176,9 @@
     <Filter Include="03mtgb\System\Camera\Audio">
       <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\05TestScene">
+      <UniqueIdentifier>{f3ea2cb6-7ef2-4eb1-b9a6-6d9a44791181}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -616,6 +619,9 @@
     <ClCompile Include="Source\SkySphere.cpp">
       <Filter>01Game\01Common</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TestScene\TestScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -977,6 +983,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\GameObjectLayer.h">
       <Filter>03mtgb\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\TestScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
