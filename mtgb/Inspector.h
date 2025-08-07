@@ -14,6 +14,7 @@
 #include "WindowContext.h"
 #include "MTAssert.h"
 #include <stdio.h>
+#include "MTStringUtility.h"
 
 template <typename T>
 struct Range : refl::attr::usage::member
@@ -291,15 +292,12 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else if constexpr (std::is_same_v<Type, std::string>)
 	{
-		constexpr size_t bufSize = 256;
-		char buf[bufSize];
-
-		strncpy_s(buf, value->c_str(), bufSize);
-		buf[bufSize - 1] = '\0';
-
-		if (ImGui::InputText(name, buf, bufSize))
+		std::string str = SJIStoUTF8(*value).c_str();
+		std::vector<char> buffer(str.begin(), str.end());
+		buffer.resize(256);
+		if (ImGui::InputText(name,buffer.data(), buffer.size()))
 		{
-			*value = std::string(buf);
+			*value = SJIStoUTF8(std::string(buffer.data()));
 		}
 	}
 	else

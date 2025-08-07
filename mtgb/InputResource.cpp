@@ -64,6 +64,8 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 			pJoystickDevice_ = device;
 			assignedJoystickGuid_ = guid;
 			isActive_ = true;
+			Game::System<Input>().SetJoystickGuid(assignedJoystickGuid_);
+
 		};
 
 	Game::System<Input>().RequestJoystickDevice(&reservation);
@@ -73,7 +75,6 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 void mtgb::InputResource::Update()
 {
-	if (!isActive_) return;
 	Input& input = Game::System<Input>();
 	
 
@@ -90,7 +91,7 @@ void InputResource::SetResource()
 	Input& input = Game::System<Input>();
 	input.ChangeKeyDevice(pKeyDevice_);
 	input.ChangeMouseDevice(pMouseDevice_);
-	input.ChangeJoystickDevice(pJoystickDevice_);
+	//input.ChangeJoystickDevice(pJoystickDevice_);
 	input.ChangeInputData(pInputData_);
 }
 

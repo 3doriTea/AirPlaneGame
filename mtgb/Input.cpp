@@ -31,7 +31,7 @@ void mtgb::Input::AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 {
 	HRESULT hResult{};
 	hResult = _pJoystickDevice->Acquire();
-
+	joystickContext_[currJoystickGuid_].lastResult = hResult;
 	switch (hResult)
 	{
 	case DI_OK:  //取得できた
@@ -97,11 +97,31 @@ void mtgb::Input::Initialize()
 
 void mtgb::Input::Update()
 {
-	assignedJoystickGuids_;
-	requestedJoystickDevices_;
+	
 	static HRESULT hResult{};
 
 #pragma region キーボード
+	UpdateKeyDevice();
+#pragma endregion
+
+#pragma region マウス
+	UodateMouseDevice();
+#pragma endregion
+
+#pragma region ジョイスティック
+	
+	/*if (pJoystickDevice_ == nullptr)
+	{
+		return;
+	}*/
+	UpdateJoystickDevice();
+	
+#pragma endregion
+}
+
+void mtgb::Input::UpdateKeyDevice()
+{
+	static HRESULT hResult{};
 	// キーボード操作の許可ゲット
 	hResult = pKeyDevice_->Acquire();
 
@@ -123,9 +143,12 @@ void mtgb::Input::Update()
 	{
 		pInputData_->keyStateCurrent_[i] = keyBuffer[i];
 	}
-#pragma endregion
+}
 
-#pragma region マウス
+void mtgb::Input::UodateMouseDevice()
+{
+	static HRESULT hResult{};
+
 	// マウス操作の許可をゲット
 	hResult = pMouseDevice_->Acquire();
 
@@ -148,41 +171,38 @@ void mtgb::Input::Update()
 
 	massert(SUCCEEDED(hResult)  // マウス操作の取得に成功
 		&& "マウス操作の取得に失敗 @Input::Update");
-#pragma endregion
+}
 
-#pragma region ジョイスティック
-	
-	if (pJoystickDevice_ == nullptr)
-	{
-		return;
-	}
+void mtgb::Input::UpdateJoystickDevice()
+{
+	static HRESULT hResult{};
 
 	memcpy(
 		&pInputData_->joyStatePrevious_,
 		&pInputData_->joyStateCurrent_,
 		sizeof(DIJOYSTATE));
 
-	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE), &pInputData_->joyStateCurrent_);
-	
+
+	hResult = joystickContext_[currJoystickGuid_].device->GetDeviceState(sizeof(DIJOYSTATE), &pInputData_->joyStateCurrent_);
+	joystickContext_[currJoystickGuid_].lastResult = hResult;
 	switch (hResult)
 	{
 	case DI_OK:
 		LOGF("OK\n");
 		break;
-	case DIERR_INPUTLOST://入力ロスト
-	{
-		//デバイスを割り当て済みリストから除外
-		UnregisterJoystickGuid(GetDeviceGuid(pJoystickDevice_));
-		return;
-	}
+	case DIERR_INPUTLOST://入力ロスト、一時的なアクセス不可
 	case DIERR_NOTACQUIRED://未取得
-		AcquireJoystick(pJoystickDevice_);
+		AcquireJoystick(joystickContext_[currJoystickGuid_].device);
 		return;
 	default://何らかの失敗
-		massert(false
-			&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");
+	{
+		//デバイスを割り当て済みリストから除外
+		UnregisterJoystickGuid(GetDeviceGuid(joystickContext_[currJoystickGuid_].device));
+		return;
 	}
-#pragma endregion
+	/*massert(false
+		&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");*/
+	}
 }
 
 void mtgb::Input::Release()
@@ -250,6 +270,13 @@ void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDe
 void mtgb::Input::ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice)
 {
 	pKeyDevice_ = _pKeyDevice;
+}
+
+void mtgb::Input::SetJoystickGuid(GUID _guid)
+{
+	massert(assignedJoystickGuids_.contains(_guid)
+		&& "無効なGUIDが渡されました @Input::SetJoystickGuid");
+	currJoystickGuid_ = _guid;
 }
 
 void mtgb::Input::ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice)

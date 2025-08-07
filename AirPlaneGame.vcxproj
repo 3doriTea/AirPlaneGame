@@ -19,11 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />

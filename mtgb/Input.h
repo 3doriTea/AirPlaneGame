@@ -28,8 +28,8 @@ namespace mtgb
 	{
 		TimerHandle timerHandle;
 		HRESULT lastResult;
-		std::string statusMessage;
 		ComPtr<IDirectInputDevice8> device;
+		JoystickContext() = default;
 		JoystickContext(IDirectInputDevice8* _device);
 	};
 
@@ -51,6 +51,9 @@ namespace mtgb
 
 		void Initialize() override;
 		void Update() override;
+		void UpdateKeyDevice();
+		void UodateMouseDevice();
+		void UpdateJoystickDevice();
 
 		void Release();
 
@@ -68,6 +71,9 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_pJoystickDevice">切り替え対象のキーボードデバイス</param>
 		void ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice);
+
+		void SetJoystickGuid(GUID _guid);
+
 		/// <summary>
 		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
@@ -148,6 +154,7 @@ namespace mtgb
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
 		
 		std::map<GUID, JoystickContext> joystickContext_;
+		GUID currJoystickGuid_;
 	};
 	
 }
