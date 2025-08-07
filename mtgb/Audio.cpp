@@ -60,7 +60,6 @@ void mtgb::Audio::Update()
 		(*itr)->timeLeft -= Time::DeltaTimeF();
 
 		float diff{ (*itr)->timeLeft };  // ·•ª
-		LOGF("diff:%f\n", diff);
 		if (diff > 0)  // ·•ª‚ª0‚æ‚è‘å‚«‚¢ = Ä¶’†
 		{
 			break;  // Ä¶I—¹‚µ‚Ä‚¢‚È‚¢‚½‚ß—£’E
@@ -162,7 +161,6 @@ void mtgb::Audio::PlayOneShotBuffer(byte* pBuffer, const size_t _bufferSize)
 		oneShot->pAudioClip->pWaveData_);
 
 	oneShot->timeLeft = static_cast<float>(oneShot->pAudioClip->GetTotalTimeSec());
-	LOGF("timeleft=%f", oneShot->timeLeft);
 
 	EnqueueOneShot(oneShot);  // ©“®‰ğ•úƒLƒ…[‚É’Ç‰Á
 

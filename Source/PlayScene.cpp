@@ -69,7 +69,6 @@ void PlayScene::Update()
 	{
 		Game::Exit();
 	}
-	//LOGF("ƒeƒXƒg");
 
 	if (InputUtil::GetKeyDown(KeyCode::Alpha1))
 	{
@@ -121,7 +120,6 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
-	//LOGF("Begin begin\n");
 	tBox_->Draw();
 }
 

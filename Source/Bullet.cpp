@@ -18,7 +18,6 @@ Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRb_{ Component<RigidBody>() }
 {
-	LOGF("(%f, %f, %f)\n", _position.x, _position.y, _position.z);
 	//hImage_ = Image::Load("Image/bullet.png");
 	hModel_ = Fbx::Load("Model/gCube.fbx");
 	pRb_->velocity_ = { 0, 0, 0 };
@@ -31,7 +30,6 @@ Bullet::~Bullet()
 
 void Bullet::Update()
 {
-	//LOGF("bullet‚¾‚æ imagehandle:%d\n", hImage_);
 	timer += 1;
 	if (timer >= 300)
 	{

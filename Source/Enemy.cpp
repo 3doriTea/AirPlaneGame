@@ -25,20 +25,10 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	// find test
-	//if (mtgb::GameObject::FindGameObject("pluyer") != nullptr)
-	//{
-	//	LOGF("%s\n", "found");
-	//}
-	//else
-	//{
-	//	LOGF("%s\n", "not found");
-	//}
 }
 
 void Enemy::Draw() const
 {
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	LOGF("EnemyDraw\n");
 }
