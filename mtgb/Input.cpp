@@ -14,9 +14,11 @@ namespace
 }
 
 mtgb::Input::Input() :
+	pInputData_  { nullptr },
 	pDirectInput_{ nullptr },
-	pKeyDevice_{ nullptr },
-	pMouseDevice_{ nullptr }
+	pKeyDevice_  { nullptr },
+	pMouseDevice_{ nullptr },
+	pXInputData_ { nullptr }
 {
 }
 
@@ -25,6 +27,7 @@ mtgb::Input::~Input()
 	pMouseDevice_.Reset();
 	pKeyDevice_.Reset();
 	pDirectInput_.Reset();
+	SAFE_DELETE(pXInputData_);
 }
 
 void mtgb::Input::Initialize()
