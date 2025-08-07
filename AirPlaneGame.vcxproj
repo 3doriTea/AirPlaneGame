@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
+    <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\MTBit\BitFlag.h" />
     <ClInclude Include="Source\Background.h" />

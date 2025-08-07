@@ -10,8 +10,9 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 		.isActive_ = _desc.isActive,
 		.callUpdate_ = _desc.callUpdate,
 		.callDraw_ = _desc.callDraw,
-		.toDestory_ = FALSE,  // Å‰‚Ííœ‚µ‚È‚¢
-	}
+		.toDestroy_ = FALSE,  // Å‰‚Ííœ‚µ‚È‚¢
+	},
+	layerFlag_{ _desc.layerFlag }
 {
 	Transform* pTransform_{ Component<Transform>() };
 	pTransform_->position_ = _desc.position;
