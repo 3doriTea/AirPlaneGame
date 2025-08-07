@@ -59,9 +59,6 @@
     <Filter Include="03mtgb\System\AssetsManager">
       <UniqueIdentifier>{3E8CDCFC-184E-4A35-89F1-DF33951DB6E9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03mtgb\System\Audio">
-      <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03mtgb\System\Camera">
       <UniqueIdentifier>{69F464C2-D1B6-4CA7-9A92-1422F387591E}</UniqueIdentifier>
     </Filter>
@@ -175,6 +172,9 @@
     </Filter>
     <Filter Include="04Library\ImGui">
       <UniqueIdentifier>{B083F975-732A-45C3-89FD-9F553D8FE71C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03mtgb\System\Camera\Audio">
+      <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
     </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
@@ -302,13 +302,13 @@
       <Filter>03mtgb\System\AssetsManager</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Audio.cpp">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioClip.cpp">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioOneShot.cpp">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioPlayerCP.cpp">
       <Filter>03mtgb\System\ComponentPool</Filter>
@@ -602,7 +602,7 @@
       <Filter>03mtgb\Utility</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\WaveData.cpp">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\World.cpp">
       <Filter>03mtgb\X-Ignore</Filter>
@@ -622,13 +622,13 @@
       <Filter>03mtgb\System\AssetsManager</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Audio.h">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioClip.h">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioOneShot.h">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioPlayerCP.h">
       <Filter>03mtgb\System\ComponentPool</Filter>
@@ -961,7 +961,7 @@
       <Filter>03mtgb\Utility</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\WaveData.h">
-      <Filter>03mtgb\System\Audio</Filter>
+      <Filter>03mtgb\System\Camera\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\World.h">
       <Filter>03mtgb\X-Ignore</Filter>
@@ -974,6 +974,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\MTBit\BitFlag.h">
       <Filter>03mtgb\Library\MTBit</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\GameObjectLayer.h">
+      <Filter>03mtgb\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -51,7 +51,6 @@ void mtgb::SceneSystem::Update()
 	}
 
 	// •`‰æˆ—
-
 	WinCtxRes::ChangeResource(WindowContext::First);
 
 	Game::System<MTImGui>().BeginFrame();
@@ -61,7 +60,10 @@ void mtgb::SceneSystem::Update()
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
-		gameObject->Draw();
+		if (gameObject->GetLayerFlag().Has(GameObjectLayer::A))
+		{
+			gameObject->Draw();
+		}
 	}
 	Game::System<MTImGui>().End();
 	Game::System<MTImGui>().EndFrame();
@@ -77,7 +79,10 @@ void mtgb::SceneSystem::Update()
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
-		gameObject->Draw();
+		if (gameObject->GetLayerFlag().Has(GameObjectLayer::B))
+		{
+			gameObject->Draw();
+		}
 	}
 	
 	DirectX11Draw::End();

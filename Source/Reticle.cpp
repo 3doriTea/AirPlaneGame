@@ -23,6 +23,7 @@ namespace
 Reticle::Reticle() : GameObject(GameObjectBuilder()
 	.SetName("Reticle")
 	.SetRotate(Quaternion::Identity())
+	.SetLayerFlag(GameObjectLayer::B)
 	.Build()),
 	pTransform_{ Component<Transform>() }
 	//pCamera_{ nullptr}
@@ -52,8 +53,9 @@ void Reticle::Update()
 void Reticle::Draw() const
 {
 	const Vector2Int IMAGE_SIZE{ Image::GetSize(hImage_) };
-	const Vector2Int DRAW_SIZE{ 300, 300 };
-	const Vector2Int DRAW_POSITION{  IMAGE_SIZE / -2 };
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	const Vector2Int DRAW_SIZE{ IMAGE_SIZE };
+	const Vector2Int DRAW_POSITION{ SCREEN_SIZE / 2 - DRAW_SIZE / 2 };
 
 	Draw::Image(hImage_, { DRAW_POSITION, DRAW_SIZE }, { Vector2Int::Zero(), IMAGE_SIZE }, 0.0f);
 }
