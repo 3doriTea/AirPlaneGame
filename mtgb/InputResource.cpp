@@ -56,15 +56,32 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 	pInputData_->config_.SetDeadZone(0.1);
 	pProxy_->SetDisplayName("proxy:"+ id++);
 	
+	
+	reservation.config = pInputData_->config_;
+	reservation.hWnd = hWnd;
+	reservation.onAssign = [this](IDirectInputDevice8* device,GUID guid)
+		{
+			pJoystickDevice_.Attach(device);
+			assignedJoystickGuid_ = guid;
+			isJoystickAssigned = true;
+		};
 
-	Game::System<Input>().RequestJoystickDevice(hWnd, pInputData_->config_, &pJoystickDevice_);
+	Game::System<Input>().RequestJoystickDevice(&reservation);
 
 	Game::System<Input>().EnumJoystick();
 }
 
 void mtgb::InputResource::Update()
 {
-	*pProxy_ = pInputData_->joyStateCurrent_;
+	Input& input = Game::System<Input>();
+	//Š„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚È‚¢AØ’f‚³‚ê‚Ä‚¢‚éê‡‚Íreturn
+	if (!input.IsJoystickAssigned(assignedJoystickGuid_) || !input.IsJoystickConnected(assignedJoystickGuid_))
+	{
+		return;
+	}
+
+	pProxy_->UpdateFromInput(assignedJoystickGuid_);
+	pProxy_->UpdateInputData(pInputData_->joyStateCurrent_);
 }
 
 void InputResource::SetResource()

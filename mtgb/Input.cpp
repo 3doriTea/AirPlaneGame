@@ -35,7 +35,7 @@ void mtgb::Input::AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 	switch (hResult)
 	{
 	case DI_OK:  //取得できた
-	case S_FALSE://他のデバイスも許可を取得している
+	case S_FALSE://他のアプリも許可を取得している
 		break;
 	case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
 		return;
@@ -49,14 +49,21 @@ void mtgb::Input::AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice)
 	}
 }
 
+GUID mtgb::Input::GetDeviceGuid(ComPtr<IDirectInputDevice8> _pInputDevice)
+{
+	DIDEVICEINSTANCE deviceInstance = {};
+	deviceInstance.dwSize = sizeof(DIDEVICEINSTANCE);
+	HRESULT hResult = pJoystickDevice_->GetDeviceInfo(&deviceInstance);
+	massert(SUCCEEDED(hResult)
+		&& "デバイスの情報の取得に失敗しました @Input::Update");
+	return deviceInstance.guidInstance;
+}
+
 bool operator<(const GUID& lhs, const GUID& rhs)
 {
 	return std::memcmp(&lhs, &rhs, sizeof(GUID)) < 0;
 }
-//bool operator==(const GUID& lhs, const GUID& rhs)
-//{
-//	return std::memcmp(&lhs, &rhs, sizeof(GUID)) == 0;
-//}
+
 
 mtgb::Input::Input() :
 	pDirectInput_{ nullptr },
@@ -156,7 +163,7 @@ void mtgb::Input::Update()
 		sizeof(DIJOYSTATE));
 
 	hResult = pJoystickDevice_->GetDeviceState(sizeof(DIJOYSTATE), &pInputData_->joyStateCurrent_);
-	LOGF("%d\n", hResult);
+	
 	switch (hResult)
 	{
 	case DI_OK:
@@ -164,14 +171,8 @@ void mtgb::Input::Update()
 		break;
 	case DIERR_INPUTLOST://入力ロスト
 	{
-		DIDEVICEINSTANCE deviceInstance = {};
-		deviceInstance.dwSize = sizeof(DIDEVICEINSTANCE);
-		hResult = pJoystickDevice_->GetDeviceInfo(&deviceInstance);
-		massert(SUCCEEDED(hResult)
-			&& "デバイスの情報の取得に失敗しました @Input::Update");
-
 		//デバイスを割り当て済みリストから除外
-		UnregisterJoystickGuid(deviceInstance.guidInstance);
+		UnregisterJoystickGuid(GetDeviceGuid(pJoystickDevice_));
 		return;
 	}
 	case DIERR_NOTACQUIRED://未取得
@@ -181,28 +182,6 @@ void mtgb::Input::Update()
 		massert(false
 			&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");
 	}
-
-	//ジョイスティック操作の許可をゲット
-
-	//hResult = pJoystickDevice_->Acquire();
-	//
-	//switch (hResult)
-	//{
-	//case DI_OK:  //取得できた
-	//case S_FALSE://他のデバイスも許可を取得している
-	//	break;
-	//case DIERR_OTHERAPPHASPRIO://他のアプリが優先権を持っている
-	//	return;
-	//case DIERR_INVALIDPARAM:
-	//case DIERR_NOTINITIALIZED:
-	//	massert(SUCCEEDED(hResult)
-	//		&& "ジョイスティック操作の許可取得の際にエラーが起こりました @Input::Update");
-	//default:
-	//	break;
-	//}
-
-	
-
 #pragma endregion
 }
 
@@ -326,31 +305,39 @@ void mtgb::Input::EnumJoystick()
 	pDirectInput_->EnumDevices(DI8DEVCLASS_GAMECTRL, EnumJoysticksCallback, pDirectInput_.Get(), DIEDFL_ATTACHEDONLY);
 }
 
-void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8>* _pJoystickDevice)
+//void mtgb::Input::RequestJoystickDevice(HWND _hWnd, InputConfig _inputConfig, ComPtr<IDirectInputDevice8>* _pJoystickDevice)
+//{
+//	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd, _inputConfig, _pJoystickDevice));
+//}
+
+void mtgb::Input::RequestJoystickDevice(JoystickReservation* _reservation)
 {
-	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd, _inputConfig, _pJoystickDevice));
+	requestedJoystickDevices_.push_back(_reservation);
 }
 
 void mtgb::Input::AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice)
 {
 	auto& front = requestedJoystickDevices_.front();
-	HWND hWnd = std::get<HWND>(front);
+	HWND hWnd = front->hWnd;
 	//_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
-	
-	//Joystick2は多機能なデバイスにも対応している
-	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
-	SetProperty(_pJoystickDevice, std::get<InputConfig>(front));
+		_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
+	SetProperty(_pJoystickDevice, front->config);
+
+	//*front->requestedGuid = GetDeviceGuid(_pJoystickDevice);
 	//_pJoystickDevice->SetDataFormat(&c_dfDIJoystick2);
-	auto& pComPtr = *std::get<2>(front);
-	pComPtr.Attach(_pJoystickDevice);
+	//auto& pComPtr = *front->devicePtr;
+	//pComPtr.Attach(_pJoystickDevice);
+	front->onAssign(_pJoystickDevice, GetDeviceGuid(_pJoystickDevice));
+
+	requestedJoystickDevices_.erase(requestedJoystickDevices_.begin());
 }
 
 bool mtgb::Input::UnregisterJoystickGuid(GUID _guid)
 {
-	Timer::Remove(assignedJoystickCallbacks_[_guid]);
-	assignedJoystickGuids_.erase(_guid);
+	Timer::Remove(joystickContext_[_guid].timerHandle);
+	joystickContext_.erase(_guid);
 }
 
 bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
@@ -361,7 +348,7 @@ bool mtgb::Input::RegisterJoystickGuid(GUID _guid)
 void mtgb::Input::SetAcquireInterval(GUID _guid, ComPtr<IDirectInputDevice8> _device)
 {
 	TimerHandle hTimer = Timer::AddInterval(acquireInterval, [&]() {AcquireJoystick(_device); });
-	assignedJoystickCallbacks_.insert(std::make_pair(_guid, hTimer));
+	joystickContext_[_guid].timerHandle = hTimer;
 }
 
 bool mtgb::Input::IsNotSubscribed()
@@ -371,7 +358,15 @@ bool mtgb::Input::IsNotSubscribed()
 
 std::string mtgb::Input::ConvertHResultToMessage(HRESULT hr) const
 {
-	return std::string();
+	switch (hr)
+	{
+	case DI_OK: return "取得";
+	case S_FALSE:return "他アプリと共有";
+	case DIERR_INPUTLOST:return "切断";
+	case DIERR_NOTACQUIRED:return "デバイス未取得";
+	case DIERR_OTHERAPPHASPRIO:"他が優先権を所持";
+	
+	}
 }
 
 HRESULT mtgb::Input::UpdateJoystickState(GUID guid)
@@ -381,23 +376,34 @@ HRESULT mtgb::Input::UpdateJoystickState(GUID guid)
 
 const std::string& mtgb::Input::GetJoystickStatusMessage(GUID guid) const
 {
-	// TODO: return ステートメントをここに挿入します
+	const auto& itr = joystickContext_.find(guid);
+	if (itr == joystickContext_.end())
+	{
+		return "未割当";
+	}
+	return ConvertHResultToMessage(itr->second.lastResult);
 }
 
 bool mtgb::Input::IsJoystickConnected(GUID guid) const
 {
-	const auto& itr = joystickLastResults_.find(guid);
-	if (itr == joystickLastResults_.end())
+	const auto& itr = joystickContext_.find(guid);
+	if (itr == joystickContext_.end())
 	{
 		return false;
 	}
-	HRESULT hResult = itr->second;
-
+	switch (itr->second.lastResult)
+	{
+	case DI_OK:
+	case S_FALSE:
+		return true;
+	default:
+		return false;
+	}
 }
 
 bool mtgb::Input::IsJoystickAssigned(GUID guid) const
 {
-	return (assignedJoystickGuids_.find(guid) != assignedJoystickGuids_.end());
+	return (joystickContext_.find(guid) != joystickContext_.end());
 }
 
 void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig)

@@ -20,13 +20,14 @@ namespace mtgb
 		DWORD rgdwPOV[4];
 		BYTE rgbButtons[32];
 
-		std::string connetionStatus;
+		std::string connectionStatus;
 		std::string assignmentStatus;
 		std::string lastErrorMessage;
 		bool isConnected;
 		bool isAssigned;
 
 		void UpdateFromInput(GUID guid);
-		JoystickProxy operator=(const DIJOYSTATE& js);
+		void UpdateInputData(const DIJOYSTATE& js);
+		//JoystickProxy operator=(const DIJOYSTATE& js);
 	};
 }

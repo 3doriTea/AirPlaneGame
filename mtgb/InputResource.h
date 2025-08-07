@@ -38,7 +38,9 @@ namespace mtgb
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;
 		JoystickProxy* pProxy_;
-
+		GUID assignedJoystickGuid_;
+		JoystickReservation reservation;
+		bool isJoystickAssigned;
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		WindowContextResource* Clone() const override;
 	};
