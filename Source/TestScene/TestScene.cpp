@@ -13,6 +13,7 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
+	Audio::Clear();
 }
 
 void TestScene::Update()

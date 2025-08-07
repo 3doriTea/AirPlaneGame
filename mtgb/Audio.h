@@ -63,6 +63,10 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_fileName">ファイル名</param>
 		static void PlayOneShotFile(const std::string& _fileName);
+		/// <summary>
+		/// 再生キューをクリアする
+		/// </summary>
+		static void Clear();
 
 	private:
 		/// <summary>

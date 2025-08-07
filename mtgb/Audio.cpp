@@ -230,6 +230,17 @@ void mtgb::Audio::PlayOneShotFile(const std::string& _fileName)
 	delete[] pBuffer;  // バッファ解放
 }
 
+void mtgb::Audio::Clear()
+{
+	for (auto& oneShot : pOneShotQueue_)
+	{
+		oneShot->pSourceVoice->ExitLoop();
+		oneShot->pSourceVoice->Stop();
+		delete oneShot;
+	}
+	pAudioClips_.clear();
+}
+
 void mtgb::Audio::LoadAudioSource(const AudioHandle _hAudio, byte* pBuffer, const size_t _bufferSize)
 {
 	mtbin::MemoryStream ms{ pBuffer, _bufferSize };

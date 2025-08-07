@@ -8,13 +8,15 @@
 
 mtgb::AudioPlayer::~AudioPlayer()
 {
+
 	if (pSourceVoice_ != nullptr)
 	{
+		pSourceVoice_->Stop();
 		pSourceVoice_->DestroyVoice();
 		pSourceVoice_ = nullptr;
 	}
 
-	SAFE_DELETE(pAudioClip_);
+	//SAFE_DELETE(pAudioClip_);
 }
 
 void mtgb::AudioPlayer::Initialize()

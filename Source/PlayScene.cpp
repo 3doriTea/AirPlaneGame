@@ -29,6 +29,8 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	Audio::Clear();
+
 	Instantiate<Background>();
 
 	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
