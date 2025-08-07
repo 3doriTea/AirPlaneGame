@@ -3,10 +3,12 @@
 #include "cmtgb.h"
 #include <dinput.h>
 #include <wrl/client.h> // 追加
+#include <Xinput.h>
 
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
+#pragma comment(lib, "xinput.lib")
 
 typedef struct HWND__* HWND;
 using Microsoft::WRL::ComPtr; // 追加
@@ -37,9 +39,10 @@ namespace mtgb
 		void ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice);
 		void ChangeInputData(InputData* _pInputData);
 	private:
-		InputData* pInputData_;				 // 入力の状態
-		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
+		InputData*                  pInputData_;    // 入力の状態
+		ComPtr<IDirectInput8>       pDirectInput_;  // Direct Input 本体
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
+		PXINPUT_STATE               pXInputData_;   // XInputデバイスの入力状態
 	};
 }
