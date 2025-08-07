@@ -16,11 +16,16 @@ namespace mtgb
 	/// </summary>
 	/// <typeparam name="ComponentT">コンポーネントの型</typeparam>
 	template<class ComponentT>
-	class ComponentPool : public IComponentPool
+	class ComponentPool : public IComponentPool, public ISystem
 	{
 	public:
 		ComponentPool();
 		virtual ~ComponentPool();
+
+		void Initialize() override;
+		virtual void Update() override {};
+
+		void Release() override;
 
 		/// <summary>
 		/// コンポーネントを作成/取得する
@@ -58,6 +63,22 @@ namespace mtgb
 	template<class ComponentT>
 	inline ComponentPool<ComponentT>::~ComponentPool()
 	{
+	}
+
+	template<class ComponentT>
+	inline void ComponentPool<ComponentT>::Initialize()
+	{
+		RegisterCurrentScene([&, this] { Release(); });
+	}
+
+	template<class ComponentT>
+	inline void ComponentPool<ComponentT>::Release()
+	{
+		pool_.clear();
+		poolId_.clear();
+
+		pool_.reserve(COMPONENT_CAPACITY);
+		poolId_.reserve(COMPONENT_CAPACITY);
 	}
 
 	template<class ComponentT>

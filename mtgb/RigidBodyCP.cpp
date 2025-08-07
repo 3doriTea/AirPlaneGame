@@ -10,10 +10,6 @@ mtgb::RigidBodyCP::~RigidBodyCP()
 {
 }
 
-void mtgb::RigidBodyCP::Initialize()
-{
-}
-
 void mtgb::RigidBodyCP::Update()
 {
 	for (size_t i = 0; i < poolId_.size(); i++)
