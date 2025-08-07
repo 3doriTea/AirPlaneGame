@@ -457,6 +457,9 @@
     <ClCompile Include="mtgb\JoystickProxy.cpp">
       <Filter>mtgb\System\Input</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\InputConfig.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\cmtgb.h">
@@ -817,6 +820,12 @@
       <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\JoystickProxy.h">
+      <Filter>mtgb\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputConfig.h">
+      <Filter>mtgb\System\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Axis.h">
       <Filter>mtgb\System\Input</Filter>
     </ClInclude>
   </ItemGroup>

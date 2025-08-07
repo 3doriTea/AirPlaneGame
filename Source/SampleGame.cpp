@@ -29,7 +29,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<Input>(SystemUpdateType::DontCallMe);
 
 
-	_register.Set<WindowContextResourceManager>(SystemUpdateType::Frame);
+	_register.Set<WindowContextResourceManager>(SystemUpdateType::DontCallMe);
 	Game::System<WindowContextResourceManager>().RegisterResourceTypes<
 		WindowResource,
 		DXGIResource,

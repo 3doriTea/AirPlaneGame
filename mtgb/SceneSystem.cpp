@@ -37,9 +37,11 @@ void mtgb::SceneSystem::Update()
 
 	WinCtxRes::ChangeResource(WindowContext::First);
 	Game::System<Input>().Update();
+	Game::System<WindowContextResourceManager>().Update();
 
 	WinCtxRes::ChangeResource(WindowContext::Second);
 	Game::System<Input>().Update();
+	Game::System<WindowContextResourceManager>().Update();
 
 	// åªç›ÇÃÉVÅ[Éì
 	GameScene& currentScene{ *GameScene::pInstance_ };

@@ -12,6 +12,8 @@
 #include "ImGuiShowable.h"
 #include "JoystickProxy.h"
 #include "Timer.h"
+#include "InputConfig.h"
+
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
 #pragma comment(lib, "Xinput.lib")
@@ -20,7 +22,6 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
-
 	class InputData;
 	class InputResource : public WindowContextResource
 	{
@@ -40,7 +41,7 @@ namespace mtgb
 		JoystickProxy* pProxy_;
 		GUID assignedJoystickGuid_;
 		JoystickReservation reservation;
-		bool isJoystickAssigned;
+		bool isActive_;
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		WindowContextResource* Clone() const override;
 	};

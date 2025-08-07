@@ -13,6 +13,8 @@
 #include "WindowContextResourceManager.h"
 #include "WindowContext.h"
 #include "MTAssert.h"
+#include <stdio.h>
+
 template <typename T>
 struct Range : refl::attr::usage::member
 {
@@ -231,16 +233,17 @@ void TypeRegistry::ShowInspector(T* instance, const char* name)
 template<typename T>
 void TypeRegistry::DefaultShow(T* value, const char* name)
 {
-	if constexpr (std::is_array_v<T>)
+	using Type = refl::trait::remove_qualifiers_t<T>;
+	if constexpr (std::is_array_v<Type>)
 	{
 		if (ImGui::CollapsingHeader(name))
 		{
 			ImGui::Indent();
 
 			//óvëfå^éÊìæ
-			using ElemType = std::remove_extent_t<T>;
+			using ElemType = std::remove_extent_t<Type>;
 			//0éüå≥ñ⁄ÇÃóvëfêîéÊìæ
-			constexpr size_t N = std::extent_v<T>;
+			constexpr size_t N = std::extent_v<Type>;
 
 			//îzóÒóvëfÇ≤Ç∆Ç…çƒãAÇ∑ÇÈ
 			for (size_t i = 0; i < N; ++i)
@@ -252,20 +255,20 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 			ImGui::Unindent();
 		}
 	}
-	else if constexpr (std::is_same_v<T, bool>)
+	else if constexpr (std::is_same_v<Type, bool>)
 	{
 		ImGui::Checkbox(name, reinterpret_cast<bool*>(value));
 	}
-	else if constexpr (std::is_floating_point_v<T> ) 
+	else if constexpr (std::is_floating_point_v<Type> ) 
 	{
 		ImGui::InputFloat(name, reinterpret_cast<float*>(value));
 	}
-	else if constexpr (std::is_same_v<T,int>)
+	else if constexpr (std::is_same_v<Type,int>)
 	{
 		ImGui::InputInt(name, reinterpret_cast<int*>(value));
 		
 	}
-	else if constexpr (std::is_same_v<T, long>)
+	else if constexpr (std::is_same_v<Type, long>)
 	{
 		ImGui::Text("%s : %4.2ld", name, *value);
 		/*int* temp = static_cast<int*>(value);
@@ -274,21 +277,34 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 			*value = static_cast<long>(*temp);
 		}*/
 	}
-	else if constexpr (std::is_same_v<T, unsigned long>)
+	else if constexpr (std::is_same_v<Type, unsigned long>)
 	{
 		ImGui::Text("%s : %4.2lo", name, *value);
 	}
-	else if constexpr (std::is_same_v<T, unsigned char>)
+	else if constexpr (std::is_same_v<Type, unsigned char>)
 	{
 		ImGui::Text("%s : %4.2hhu", name, *value);
 	}
-	else if constexpr (std::is_enum_v<T>)
+	else if constexpr (std::is_enum_v<Type>)
 	{
 
 	}
+	else if constexpr (std::is_same_v<Type, std::string>)
+	{
+		constexpr size_t bufSize = 256;
+		char buf[bufSize];
+
+		strncpy_s(buf, value->c_str(), bufSize);
+		buf[bufSize - 1] = '\0';
+
+		if (ImGui::InputText(name, buf, bufSize))
+		{
+			*value = std::string(buf);
+		}
+	}
 	else
 	{
-		ImGui::Text("%s:Unknown,%s",name,typeid(T).name() );
+		ImGui::Text("%s:Unknown,%s",name,typeid(Type).name() );
 		//std::cout << "Default unknown type: " << name << std::endl;
 	}
 }

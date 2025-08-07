@@ -10,7 +10,7 @@
 #include <guiddef.h>
 #include <map>
 #include "Timer.h"
-
+#include "InputConfig.h"
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
 
@@ -23,8 +23,6 @@ namespace mtgb
 {
 	class InputResource;
 	class InputData;
-	struct InputConfig;
-
 
 	struct JoystickContext
 	{
@@ -32,6 +30,7 @@ namespace mtgb
 		HRESULT lastResult;
 		std::string statusMessage;
 		ComPtr<IDirectInputDevice8> device;
+		JoystickContext(IDirectInputDevice8* _device);
 	};
 
 	/// <summary>
@@ -41,7 +40,7 @@ namespace mtgb
 	{
 		HWND hWnd;
 		InputConfig config;
-		std::function<void(IDirectInputDevice8*, GUID)> onAssign;
+		std::function<void(ComPtr<IDirectInputDevice8>, GUID)> onAssign;
 	};
 
 	class Input : public ISystem
@@ -101,14 +100,14 @@ namespace mtgb
 		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
 		/// </summary>
 		/// <param name="_pJoystickDevice"></param>
-		void AssignJoystick(LPDIRECTINPUTDEVICE8A _pJoystickDevice);
+		void AssignJoystick(IDirectInputDevice8* _pJoystickDevice);
 
 		/// <summary>
 		/// 登録されたジョイスティックを解除する
 		/// </summary>
 		/// <param name="_guid">登録解除するGUID</param>
 		/// <returns></returns>
-		bool UnregisterJoystickGuid(GUID _guid);
+		void UnregisterJoystickGuid(GUID _guid);
 
 		/// <summary>
 		/// 割り当てられたジョイスティックのGUIDを登録する
@@ -131,7 +130,7 @@ namespace mtgb
 
 		HRESULT UpdateJoystickState(GUID guid);
 
-		const std::string& GetJoystickStatusMessage(GUID guid) const;
+		const std::string GetJoystickStatusMessage(GUID guid) const;
 		bool IsJoystickConnected(GUID guid) const;
 		bool IsJoystickAssigned(GUID guid) const;
 

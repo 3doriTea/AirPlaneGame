@@ -3,7 +3,7 @@
 #include "Inspector.h"
 #include "../Source/Player.h"
 #include "JoystickProxy.h"
-
+#include <string>
 using namespace mtgb;
 
 // ShowFuncëÆê´ïtÇ´Ç≈TypeÇìoò^
@@ -24,4 +24,7 @@ REGISTER_FIELD(lRz)
 REGISTER_FIELD(rglSlider)
 REGISTER_FIELD(rgdwPOV)
 REGISTER_FIELD(rgbButtons)
+REGISTER_FIELD(connectionStatus)
+REGISTER_FIELD(assignmentStatus)
+REGISTER_FIELD(lastErrorMessage)
 REGISTER_END

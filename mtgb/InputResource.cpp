@@ -59,11 +59,11 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 	
 	reservation.config = pInputData_->config_;
 	reservation.hWnd = hWnd;
-	reservation.onAssign = [this](IDirectInputDevice8* device,GUID guid)
+	reservation.onAssign = [this](ComPtr<IDirectInputDevice8> device,GUID guid)
 		{
-			pJoystickDevice_.Attach(device);
+			pJoystickDevice_ = device;
 			assignedJoystickGuid_ = guid;
-			isJoystickAssigned = true;
+			isActive_ = true;
 		};
 
 	Game::System<Input>().RequestJoystickDevice(&reservation);
@@ -73,15 +73,16 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 void mtgb::InputResource::Update()
 {
+	if (!isActive_) return;
 	Input& input = Game::System<Input>();
-	//Š„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚È‚¢AØ’f‚³‚ê‚Ä‚¢‚éê‡‚Íreturn
-	if (!input.IsJoystickAssigned(assignedJoystickGuid_) || !input.IsJoystickConnected(assignedJoystickGuid_))
-	{
-		return;
-	}
+	
 
 	pProxy_->UpdateFromInput(assignedJoystickGuid_);
 	pProxy_->UpdateInputData(pInputData_->joyStateCurrent_);
+
+	//Š„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚È‚¢AØ’f‚³‚ê‚Ä‚¢‚éê‡‚Íreturn
+	isActive_ = (input.IsJoystickAssigned(assignedJoystickGuid_) && input.IsJoystickConnected(assignedJoystickGuid_));
+	
 }
 
 void InputResource::SetResource()
