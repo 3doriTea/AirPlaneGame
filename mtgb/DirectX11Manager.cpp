@@ -546,7 +546,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			.DepthBias = {},
 			.DepthBiasClamp = {},
 			.SlopeScaledDepthBias = {},
-			.DepthClipEnable = {},
+			.DepthClipEnable = true,//クリッピングを有効にする
 			.ScissorEnable = {},
 			.MultisampleEnable = {},
 			.AntialiasedLineEnable = {},
@@ -592,7 +592,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -638,7 +638,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
