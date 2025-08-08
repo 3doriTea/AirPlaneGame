@@ -1,6 +1,5 @@
 #include "MTStringUtility.h"
 #include "IncludingWindows.h"
-#include <codecvt>
 
 std::wstring mtgb::MultiToWide(const std::string& _string)
 {
@@ -47,6 +46,11 @@ std::string mtgb::WideToMulti(const std::wstring& _wstring)
         len,
         NULL,
         NULL);
+
+    if (!str.empty() && str.back() == '\0')
+    {
+        str.pop_back();
+    }
 
     return str;
 }

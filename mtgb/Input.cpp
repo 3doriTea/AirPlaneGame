@@ -176,6 +176,8 @@ void mtgb::Input::UodateMouseDevice()
 void mtgb::Input::UpdateJoystickDevice()
 {
 	static HRESULT hResult{};
+	
+	if (joystickContext_.empty()) return;
 
 	memcpy(
 		&pInputData_->joyStatePrevious_,

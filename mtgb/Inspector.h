@@ -292,12 +292,12 @@ void TypeRegistry::DefaultShow(T* value, const char* name)
 	}
 	else if constexpr (std::is_same_v<Type, std::string>)
 	{
-		std::string str = SJIStoUTF8(*value).c_str();
+		std::string str = MultiToUTF8(*value).c_str();
 		std::vector<char> buffer(str.begin(), str.end());
 		buffer.resize(256);
 		if (ImGui::InputText(name,buffer.data(), buffer.size()))
 		{
-			*value = SJIStoUTF8(std::string(buffer.data()));
+			*value = UTF8ToMulti(std::string(buffer.data()));
 		}
 	}
 	else
