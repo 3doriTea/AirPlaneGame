@@ -12,8 +12,8 @@ mtgb::InputResource::InputResource()
 mtgb::InputResource::~InputResource()
 {
 	SAFE_DELETE(pInputData_);
-	SAFE_RELEASE(pKeyDevice_);
-	SAFE_RELEASE(pMouseDevice_);
+	pKeyDevice_.Reset();
+	pMouseDevice_.Reset();
 }
 
 mtgb::InputResource::InputResource(const InputResource& other)
