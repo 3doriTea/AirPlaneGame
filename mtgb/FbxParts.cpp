@@ -96,7 +96,6 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	using namespace DirectX;
 
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
-	DirectX11Draw::SetShader(ShaderType::FbxParts);
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };

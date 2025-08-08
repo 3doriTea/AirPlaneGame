@@ -36,5 +36,6 @@ void Enemy::Draw() const
 	//Draw::OBJModel(hModel_, pTransform_);
 	//Draw::FBXModel(hModel_, *pTransform_, 0);
 
+	Draw::SetShaderOnce(ShaderType::Debug3D);
 	Draw::FBXModel(hModelCollider_, *pTransform_, 0);
 }

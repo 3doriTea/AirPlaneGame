@@ -1017,6 +1017,9 @@
     <ClInclude Include="mtgb\Collider.h">
       <Filter>03mtgb\Component</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\ShaderType.h">
+      <Filter>03mtgb\System\DirectX11</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md" />
@@ -1040,6 +1043,12 @@
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Sprite.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Unlit3D.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
   </ItemGroup>

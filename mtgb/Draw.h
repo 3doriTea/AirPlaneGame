@@ -3,11 +3,13 @@
 #include "RectInt.h"
 #include "Color.h"
 #include "ISystem.h"
+#include "ShaderType.h"
 
 namespace mtgb
 {
 	class Figure;
 	class Transform;
+	//enum struct ShaderType : int8_t;
 	
 	/// <summary>
 	/// 描画する系
@@ -23,6 +25,12 @@ namespace mtgb
 		};
 
 	public:
+		static void SetShaderOnce(const ShaderType _type) { Draw::onceShaderType_ = _type; }
+		/// <summary>
+		/// シェーダがセットされているかチェックする
+		/// </summary>
+		/// <param name="_default">セットされていない場合のデフォルトシェーダ</param>
+		static void CheckSetShader(const ShaderType _default);
 
 		static void Box(
 			const Vector2Int& _begin,
@@ -91,5 +99,6 @@ namespace mtgb
 
 	private:
 		Figure* pFigure_;
+		static ShaderType onceShaderType_;
 	};
 }

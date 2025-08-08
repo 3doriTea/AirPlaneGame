@@ -30,7 +30,6 @@ void mtgb::Sprite::Draw(
 	using DirectX::XMMatrixRotationZ;    // Z軸の回転行列
 
 	DirectX11Draw::SetBlendMode(BlendMode::Default);  // ブレンドモードデフォルト
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);     // 図形シェーダ
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);    // 深度バッファへの書き込みなし
 
 	IShader::Draw<ConstantBuffer, Vertex>(
@@ -193,7 +192,6 @@ void mtgb::Sprite::Draw(const Transform* _pTransform, const Transform* _pCameraT
 	using DirectX::XMMatrixRotationQuaternion;  // 回転行列
 
 	DirectX11Draw::SetBlendMode(BlendMode::Default);  // ブレンドモードデフォルト
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);     // 図形シェーダ
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);    // 深度バッファへの書き込みなし
 
 	IShader::Draw<ConstantBuffer, Vertex>(
