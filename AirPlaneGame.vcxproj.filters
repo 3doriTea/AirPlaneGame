@@ -625,9 +625,6 @@
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TestScene\PlayerGunner.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
@@ -636,6 +633,9 @@
     </ClCompile>
     <ClCompile Include="mtgb\ColliderCP.cpp">
       <Filter>03mtgb\System\ComponentPool</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp">
+      <Filter>01Game\05TestScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

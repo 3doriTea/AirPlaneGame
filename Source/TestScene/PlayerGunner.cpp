@@ -15,7 +15,7 @@ PlayerGunner::~PlayerGunner()
 
 void PlayerGunner::Update()
 {
-	const float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
+	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(10.f) };
 
 	if (InputUtil::GetKey(KeyCode::W))
 	{

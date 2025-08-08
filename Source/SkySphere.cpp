@@ -42,5 +42,6 @@ void SkySphere::Update()
 
 void SkySphere::Draw() const
 {
+	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 }

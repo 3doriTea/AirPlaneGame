@@ -55,6 +55,11 @@ mtgb::Transform* mtgb::Transform::GetParent() const
 
 void mtgb::Transform::Rotation(const Vector3& _rotate)
 {
+	rotate_.f[0] += _rotate.x;
+	rotate_.f[1] += _rotate.y;
+	rotate_.f[2] += _rotate.z;
+	return;
+
 	using DirectX::XMQuaternionMultiply;
 	using DirectX::XMQuaternionRotationRollPitchYaw;
 	rotate_ = XMQuaternionMultiply(
