@@ -4,7 +4,7 @@
 class Enemy : public GameObject
 {
 public:
-	Enemy();
+	Enemy(const Vector3& _position);
 	~Enemy();
 
 	void Update() override;

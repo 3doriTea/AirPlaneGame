@@ -620,6 +620,15 @@
       <Filter>01Game\01Common</Filter>
     </ClCompile>
     <ClCompile Include="Source\TestScene\TestScene.cpp">
+      <Filter>01Game\05TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerPlane.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -985,7 +994,16 @@
       <Filter>03mtgb\Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\TestScene\TestScene.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerPlane.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerPilot.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerGunner.h">
+      <Filter>01Game\05TestScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

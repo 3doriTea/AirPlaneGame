@@ -1,9 +1,9 @@
 #include "Enemy.h"
 #include "../mtgb/DirectX11Draw.h"
 
-Enemy::Enemy() : GameObject(GameObjectBuilder()
+Enemy::Enemy(const Vector3& _position) : GameObject(GameObjectBuilder()
 	.SetName("enemy")
-	.SetPosition(Vector3(0, 0, 10))
+	.SetPosition(_position)
 	.SetRotate(Quaternion::Identity())
 	.SetScale(Vector3::One())
 	.Build()),

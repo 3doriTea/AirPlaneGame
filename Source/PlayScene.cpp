@@ -49,7 +49,7 @@ void PlayScene::Initialize()
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
-	Instantiate<Enemy>();
+	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);
