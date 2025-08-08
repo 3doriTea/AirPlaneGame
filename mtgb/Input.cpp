@@ -117,6 +117,10 @@ void mtgb::Input::Update()
 	UpdateJoystickDevice();
 	
 #pragma endregion
+	if (InputUtil::GetKeyDown(KeyCode::P))
+	{
+		EnumJoystick();
+	}
 }
 
 void mtgb::Input::UpdateKeyDevice()
@@ -193,6 +197,8 @@ void mtgb::Input::UpdateJoystickDevice()
 		LOGF("OK\n");
 		break;
 	case DIERR_INPUTLOST://入力ロスト、一時的なアクセス不可
+		AcquireJoystick(joystickContext_[currJoystickGuid_].device);
+		return;
 	case DIERR_NOTACQUIRED://未取得
 		AcquireJoystick(joystickContext_[currJoystickGuid_].device);
 		return;
@@ -304,6 +310,11 @@ void mtgb::Input::ChangeJoystickDevice(ComPtr<IDirectInputDevice8> _pJoystickDev
 /// <returns></returns>
 BOOL CALLBACK EnumJoysticksCallback(const LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef)
 {
+	// 割り当て予約がなかったらデバイスを作成しない
+	if (Game::System<Input>().IsNotSubscribed())
+	{
+		return DIENUM_STOP;
+	}
 	LPDIRECTINPUT8 pDirectInput = reinterpret_cast<LPDIRECTINPUT8>(pvRef);
 	LPDIRECTINPUTDEVICE8A pJoyStick = nullptr;
 	

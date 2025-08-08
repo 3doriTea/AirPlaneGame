@@ -41,7 +41,7 @@ namespace mtgb
 		JoystickProxy* pProxy_;
 		GUID assignedJoystickGuid_;
 		JoystickReservation reservation;
-		bool isActive_;
+		bool isInitialized;
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		WindowContextResource* Clone() const override;
 	};

@@ -63,7 +63,7 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 		{
 			pJoystickDevice_ = device;
 			assignedJoystickGuid_ = guid;
-			isActive_ = true;
+			isInitialized = true;
 			Game::System<Input>().SetJoystickGuid(assignedJoystickGuid_);
 
 		};
@@ -81,8 +81,8 @@ void mtgb::InputResource::Update()
 	pProxy_->UpdateFromInput(assignedJoystickGuid_);
 	pProxy_->UpdateInputData(pInputData_->joyStateCurrent_);
 
-	//Š„‚è“–‚Ä‚ç‚ê‚Ä‚¢‚È‚¢AØ’f‚³‚ê‚Ä‚¢‚éê‡‚Íreturn
-	isActive_ = (input.IsJoystickAssigned(assignedJoystickGuid_) && input.IsJoystickConnected(assignedJoystickGuid_));
+	
+	
 	
 }
 
@@ -91,7 +91,11 @@ void InputResource::SetResource()
 	Input& input = Game::System<Input>();
 	input.ChangeKeyDevice(pKeyDevice_);
 	input.ChangeMouseDevice(pMouseDevice_);
-	//input.ChangeJoystickDevice(pJoystickDevice_);
+	if (isInitialized)
+	{
+		input.SetJoystickGuid(assignedJoystickGuid_);
+
+	}
 	input.ChangeInputData(pInputData_);
 }
 
