@@ -1,5 +1,7 @@
 #include "ColliderCP.h"
 #include "RigidBody.h"
+#include "Matrix4x4.h"
+#include "Transform.h"
 
 mtgb::ColliderCP::ColliderCP()
 {
@@ -11,11 +13,26 @@ mtgb::ColliderCP::~ColliderCP()
 
 void mtgb::ColliderCP::Update()
 {
+	static Matrix4x4 matrix{};
 	for (size_t i = 0; i < poolId_.size(); i++)
 	{
 		if (poolId_[i] != INVALD_ENTITY)
 		{
 			pool_[i].onColliders_.clear();
+		}
+
+		switch (pool_[i].type_)
+		{
+		case Collider::TYPE_CAPSULE:
+			// TODO: ƒJƒvƒZƒ‹Œ^‚ÌŒvŽZ
+			break;
+		case Collider::TYPE_SPHERE:
+			pool_[i].pTransform_->GenerateWorldMatrix(&matrix);
+			pool_[i].computeSphere_.Center = pool_[i].sphere_.offset_ * matrix;
+			pool_[i].computeSphere_.Radius = pool_[i].sphere_.radius_;
+			break;
+		default:
+			break;
 		}
 	}
 

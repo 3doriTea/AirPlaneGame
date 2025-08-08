@@ -2,6 +2,8 @@
 #include "IComponent.h"
 #include "ColliderCP.h"
 #include <set>
+#include <DirectXCollision.h>
+#include "Vector3.h"
 
 namespace mtgb
 {
@@ -46,12 +48,18 @@ namespace mtgb
 		{
 			struct
 			{
+				Vector3 offset_;  // オフセット
 				float radius_;  // 半径
 			} sphere_;
 			struct
 			{
 
 			} capsule_;
+		};
+
+		union
+		{
+			DirectX::BoundingSphere computeSphere_;
 		};
 
 		std::set<Collider*> onColliders_;

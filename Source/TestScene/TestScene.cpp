@@ -27,13 +27,16 @@ void TestScene::Initialize()
 
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
 
-	RegisterCameraGameObject(
+	CameraHandleInScene hCamera1 = RegisterCameraGameObject(
 		Instantiate<PlayerPilot>(
 			pPlayerPlane->GetEntityId()));
 
-	RegisterCameraGameObject(
+	CameraHandleInScene hCamera2 = RegisterCameraGameObject(
 		Instantiate<PlayerGunner>(
 			pPlayerPlane->GetEntityId()));
+
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
 	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
 }

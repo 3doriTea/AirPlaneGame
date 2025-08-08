@@ -22,17 +22,20 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 	{
 		if (type_ == TYPE_SPHERE)
 		{
-			pTransform_->GenerateWorldMatrix(&matrix);
-			Vector3 worldPosition{ pTransform_->position_ * matrix };
+			//pTransform_->GenerateWorldMatrix(&matrix);
+			//Vector3 worldPosition{ pTransform_->position_ * matrix };
 
-			_other.pTransform_->GenerateWorldMatrix(&matrix);
-			Vector3 otherWorldPosition{ pTransform_->position_ * matrix };
+			//_other.pTransform_->GenerateWorldMatrix(&matrix);
+			//Vector3 otherWorldPosition{ pTransform_->position_ * matrix };
 
-			float distance{ (otherWorldPosition - worldPosition).Size() };
-			float hitDistance{ sphere_.radius_ + _other.sphere_.radius_ };
+			//float distance{ (otherWorldPosition - worldPosition).Size() };
+			//float hitDistance{ sphere_.radius_ + _other.sphere_.radius_ };
 
-			// ‹——£‚ª‘o•û‚Ì‹…‚Ì”¼Œa‚æ‚è‚à¬‚³‚¯‚ê‚Î“–‚½‚Á‚Ä‚¢‚é
-			return (distance <= hitDistance);
+			//// ‹——£‚ª‘o•û‚Ì‹…‚Ì”¼Œa‚æ‚è‚à¬‚³‚¯‚ê‚Î“–‚½‚Á‚Ä‚¢‚é
+			//return (distance <= hitDistance);
+
+			DirectX::ContainmentType type{ computeSphere_.Contains(_other.computeSphere_) };
+			return type != DirectX::ContainmentType::DISJOINT;
 		}
 		else if (type_ == TYPE_CAPSULE)
 		{

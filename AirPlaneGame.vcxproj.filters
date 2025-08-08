@@ -631,11 +631,11 @@
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\ColliderCP.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\Collider.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>03mtgb\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ColliderCP.cpp">
+      <Filter>03mtgb\System\ComponentPool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
