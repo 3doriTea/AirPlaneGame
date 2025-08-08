@@ -27,6 +27,8 @@ namespace mtgb
 		inline Vector3& operator+=(const Vector3& _other) { x += _other.x; y += _other.y; z += _other.z; return *this; }
 		inline Vector3& operator-=(const Vector3& _other) { x -= _other.x; y -= _other.y; z -= _other.z; return *this; }
 
+		inline float Size() const { return std::sqrtf(x * x + y * y + z * z); };
+
 		static inline auto Zero()    { return Vector3{  0,  0,  0 }; }
 		static inline auto One()     { return Vector3{  1,  1,  1 }; }
 		static inline auto Up()      { return Vector3{  0,  1,  0 }; }

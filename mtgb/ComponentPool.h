@@ -15,7 +15,8 @@ namespace mtgb
 	/// コンポーネントを連続した配置にするプール
 	/// </summary>
 	/// <typeparam name="ComponentT">コンポーネントの型</typeparam>
-	template<class ComponentT>
+	/// <typeparam name="IsSingleton">１つしか格納できないか true / false</typeparam>
+	template<class ComponentT, bool IsSingleton = true>
 	class ComponentPool : public IComponentPool, public ISystem
 	{
 	public:
@@ -32,7 +33,11 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_entityId">エンティティId</param>
 		/// <returns>コンポーネントの参照ポインタ (確実に存在する)</returns>
-		ComponentT& Get(EntityId _entityId);
+		ComponentT& Get(EntityId _entityId) requires(IsSingleton);
+
+		bool TryGet(ComponentT*& _pComponent, EntityId _entityId);
+
+		ComponentT& Add(EntityId _entityId) requires(!IsSingleton);
 
 		/// <summary>
 		/// エンティティが持っているコンポーネントを削除する
@@ -51,8 +56,8 @@ namespace mtgb
 		std::vector<EntityId> poolId_;  // コンポーネントの登録エンティティId
 	};
 
-	template<class ComponentT>
-	inline ComponentPool<ComponentT>::ComponentPool() :
+	template<class ComponentT, bool IsSingleton>
+	inline ComponentPool<ComponentT, IsSingleton>::ComponentPool() :
 		pool_{},
 		poolId_{}
 	{
@@ -60,19 +65,19 @@ namespace mtgb
 		poolId_.reserve(COMPONENT_CAPACITY);
 	}
 
-	template<class ComponentT>
-	inline ComponentPool<ComponentT>::~ComponentPool()
+	template<class ComponentT, bool IsSingleton>
+	inline ComponentPool<ComponentT, IsSingleton>::~ComponentPool()
 	{
 	}
 
-	template<class ComponentT>
-	inline void ComponentPool<ComponentT>::Initialize()
+	template<class ComponentT, bool IsSingleton>
+	inline void ComponentPool<ComponentT, IsSingleton>::Initialize()
 	{
 		RegisterCurrentScene([&, this] { Release(); });
 	}
 
-	template<class ComponentT>
-	inline void ComponentPool<ComponentT>::Release()
+	template<class ComponentT, bool IsSingleton>
+	inline void ComponentPool<ComponentT, IsSingleton>::Release()
 	{
 		pool_.clear();
 		poolId_.clear();
@@ -81,8 +86,8 @@ namespace mtgb
 		poolId_.reserve(COMPONENT_CAPACITY);
 	}
 
-	template<class ComponentT>
-	inline ComponentT& ComponentPool<ComponentT>::Get(EntityId _entityId)
+	template<class ComponentT, bool IsSingleton>
+	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Get(EntityId _entityId) requires(IsSingleton)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{
@@ -102,21 +107,62 @@ namespace mtgb
 		return pool_[pool_.size() - 1];  // 追加&&初期化したコンポーネントを返す
 	}
 
-	template<class ComponentT>
-	inline void ComponentPool<ComponentT>::Remove(const EntityId _entityId)
+	template<class ComponentT, bool IsSingleton>
+	inline bool ComponentPool<ComponentT, IsSingleton>::TryGet(ComponentT*& _pComponent, EntityId _entityId)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{
 			if (poolId_[i] == _entityId)
 			{
-				poolId_[i] = INVALD_ENTITY;
-				return;  // 見つかったなら無効Idにして回帰
+				_pComponent = &pool_[i];  // Idが一致した添字のコンポーネントを返す
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	template<class ComponentT, bool IsSingleton>
+	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Add(EntityId _entityId) requires(!IsSingleton)
+	{
+		// プールに存在しないなら新たに追加
+		poolId_.push_back(_entityId);
+		// NOTE: emplace_backで実体をそのまま追加
+		pool_.emplace_back(_entityId);
+		// 追加したら初期化処理
+		pool_[pool_.size() - 1].Initialize();
+
+		return pool_[pool_.size() - 1];  // 追加&&初期化したコンポーネントを返す
+	}
+
+	template<class ComponentT, bool IsSingleton>
+	inline void ComponentPool<ComponentT, IsSingleton>::Remove(const EntityId _entityId)
+	{
+		if constexpr (IsSingleton)
+		{
+			for (int i = 0; i < poolId_.size(); i++)
+			{
+				if (poolId_[i] == _entityId)
+				{
+					poolId_[i] = INVALD_ENTITY;
+					return;  // 見つかったなら無効Idにして回帰
+				}
+			}
+		}
+		else  // 複数ある可能性を考慮する
+		{
+			for (int i = 0; i < poolId_.size(); i++)
+			{
+				if (poolId_[i] == _entityId)
+				{
+					poolId_[i] = INVALD_ENTITY;
+				}
 			}
 		}
 	}
 
-	template<class ComponentT>
-	inline void ComponentPool<ComponentT>::UnRegister(EntityId _entityId)
+	template<class ComponentT, bool IsSingleton>
+	inline void ComponentPool<ComponentT, IsSingleton>::UnRegister(EntityId _entityId)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{

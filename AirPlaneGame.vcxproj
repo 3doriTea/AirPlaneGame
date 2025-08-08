@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\CameraSystem.cpp" />
+    <ClCompile Include="mtgb\Collider.cpp" />
+    <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
@@ -147,6 +149,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\CameraSystem.h" />
+    <ClInclude Include="mtgb\Collider.h" />
+    <ClInclude Include="mtgb\ColliderCP.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />

@@ -631,6 +631,12 @@
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\ColliderCP.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\Collider.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1004,6 +1010,12 @@
     </ClInclude>
     <ClInclude Include="Source\TestScene\PlayerGunner.h">
       <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ColliderCP.h">
+      <Filter>03mtgb\System\ComponentPool</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Collider.h">
+      <Filter>03mtgb\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
