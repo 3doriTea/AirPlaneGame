@@ -3,10 +3,11 @@
 #include "AccessibleMacro.h"
 #include "Camera.h"
 
-//REFL_FORWARD_DECLARATION
 REFL_FORWARD_DECLARATION()
+
 class Player : public GameObject
 {
+	//template<typename, typename, auto> friend struct refl::detail::member_descriptor;
 	ACCESSIBLE_PRIVATE()
 public:
 	Player();
@@ -20,6 +21,7 @@ public:
 private:
 	std::string str;
 	std::string name_;
+	float radius_;
 	Transform* pTransform_;
 	AudioPlayer* pAudioPlayer_;
 	ImageHandle hImage_;
@@ -28,4 +30,6 @@ private:
 	mtgb::WindowContext context_;
 	FBXModelHandle fModel_;
 	Camera* pCamera_;
+	RigidBody* pRigidbody_;
+	float acceleration_;
 };

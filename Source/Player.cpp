@@ -7,10 +7,13 @@ using namespace mtgb;
 
 namespace
 {
-	static const float PLAYER_SPEED{ 0.1f };
+	static const float PLAYER_MOVE_SPEED{ 0.1f };
+	static const float PLAYER_MAX_SPEED{ 100.0f };
+	static const float PLAYER_MIN_SPEED{ 0.0f };
 	int hText;
 	int timer = 0;
 	TimerHandle timerHandle;
+	
 }
 
 Player::Player() : GameObject(GameObjectBuilder()
@@ -21,8 +24,11 @@ Player::Player() : GameObject(GameObjectBuilder()
 		.Build()),
 	pTransform_{ Component<Transform>() },
 	pAudioPlayer_{ Component<AudioPlayer>() },
+	pRigidbody_{Component<RigidBody>()},
 	pCamera_{nullptr}
 {
+	
+	acceleration_ = 0.0f;
 	name_ = "Player:" + std::to_string(entityId_);
 	test1 = 10;
 	test2 = 20;
@@ -68,13 +74,16 @@ void Player::Update()
 
 	if (InputUtil::GetKey(KeyCode::W,context_))
 	{
-		pTransform_->position_ += pTransform_->Forward() * PLAYER_SPEED;
+		//pRigidbody_->velocity_ += pTransform_->Forward() * PLAYER_MOVE_SPEED;
+		acceleration_ = (std::min)(acceleration_ + PLAYER_MOVE_SPEED , PLAYER_MAX_SPEED);
 	}
 	if (InputUtil::GetKey(KeyCode::S,context_))
 	{
-		pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
+		//pRigidbody_->velocity_ += pTransform_->Back() * PLAYER_MOVE_SPEED;
+		acceleration_ = (std::max)(acceleration_ - PLAYER_MOVE_SPEED, PLAYER_MIN_SPEED);
+		//pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
 	}
-
+	//pRigidbody_->velocity_ *= pTransform_->Forward();
 	if (InputUtil::GetKey(KeyCode::A,context_))
 	{
 		pTransform_->rotate_.f[2] += 1;
@@ -95,6 +104,7 @@ void Player::Update()
 		pTransform_->rotate_.f[1] += 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
+	pRigidbody_->velocity_ = pTransform_->Forward() * acceleration_;
 }
 
 void Player::Draw() const
@@ -104,16 +114,11 @@ void Player::Draw() const
 	
 	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
 
-	/*RectInt draw{};
-	draw.point = mousePos;
-	draw.size = Image::GetSize(hImage_);*/
-	
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
 	//MTImGui::ShowInspector(&speed, "speed");
 	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
-	//Draw::Image(hImage_, pTransform_);
 	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
