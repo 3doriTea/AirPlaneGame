@@ -9,10 +9,6 @@ mtgb::TransformCP::~TransformCP()
 {
 }
 
-void mtgb::TransformCP::Initialize()
-{
-}
-
 void mtgb::TransformCP::Update()
 {
 	for (size_t i = 0; i < poolId_.size(); i++)

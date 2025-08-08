@@ -42,7 +42,8 @@ const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _cont
 	}
 
 	const InputData& input = GetInput(_context);
-	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & input.keyStatePrevious_[Index(_keyCode)]);
+	int result{ KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & static_cast<int>(input.keyStatePrevious_[Index(_keyCode)]) };
+	return static_cast<bool>(result);
 }
 const bool mtgb::InputUtil::GetMouse(const MouseCode _mouseCode, WindowContext _context)
 {

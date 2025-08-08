@@ -2,6 +2,8 @@
 #include "ISystem.h"
 #include "GameScene.h"
 #include "ReleaseUtility.h"
+#include <functional>
+#include <vector>
 
 namespace mtgb
 {
@@ -31,11 +33,19 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 
+		/// <summary>
+		/// シーン遷移時のイベントを受ける
+		/// </summary>
+		/// <param name="_onMove">void()</param>
+		void OnMove(const std::function<void()>& _onMove) { onMoveListener_.push_back(_onMove); }
+
 	private:
 		void ChangeScene();
 
 	private:
 		GameScene* pNextScene_;
+
+		std::vector<std::function<void()>> onMoveListener_;
 	};
 
 	template<class NextSceneT, typename ...Args>

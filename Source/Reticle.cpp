@@ -28,7 +28,7 @@ Reticle::Reticle() : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() }
 	//pCamera_{ nullptr}
 {
-	hImage_ = Image::Load("Image/Reticle.png");	
+	hImage_ = Image::Load("Image/Reticle.png");
 	reticlePos_ = START_RETICLE_RECT;
 }
 

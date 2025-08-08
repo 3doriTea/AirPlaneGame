@@ -52,3 +52,12 @@ mtgb::Transform* mtgb::Transform::GetParent() const
 		return &Transform::Get(parentId_);
 	}
 }
+
+void mtgb::Transform::Rotation(const Vector3& _rotate)
+{
+	using DirectX::XMQuaternionMultiply;
+	using DirectX::XMQuaternionRotationRollPitchYaw;
+	rotate_ = XMQuaternionMultiply(
+		rotate_,
+		XMQuaternionRotationRollPitchYaw(_rotate.x, _rotate.y, _rotate.z));
+}

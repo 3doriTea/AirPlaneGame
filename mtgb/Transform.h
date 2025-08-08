@@ -52,6 +52,9 @@ namespace mtgb
 		/// </summary>
 		/// <returns>Transform‚Ìƒ|ƒCƒ“ƒ^</returns>
 		Transform* GetParent() const;
+		void SetParent(const EntityId _entityId) { parentId_ = _entityId; }
+
+		void Rotation(const Vector3& _rotate);
 
 		Vector3 Up() const { return Vector3::Up() * matrixRotate_; };
 		Vector3 Down() const { return Vector3::Down() * matrixRotate_; };

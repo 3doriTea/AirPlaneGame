@@ -6,6 +6,7 @@
 #include "Network/PIIO.h"
 #include "Background.h"
 #include "SkySphere.h"
+#include "TestScene/TestScene.h"
 
 using namespace mtgb;
 using Network::PIIO;
@@ -18,7 +19,6 @@ namespace
 
 PlayScene::PlayScene()
 {
-	new Background();
 	tBox_ = new TextBox();
 	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
@@ -29,6 +29,10 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	Audio::Clear();
+
+	Instantiate<Background>();
+
 	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
 	//SetCameraGameObject(Instantiate<Camera>());
 	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
@@ -45,7 +49,7 @@ void PlayScene::Initialize()
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
-	Instantiate<Enemy>();
+	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
 
 	// 表示したいテキストを開始
 	tBox_->SetTextSpeedSec(0.1f);
@@ -56,13 +60,17 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
+	if (InputUtil::GetKeyDown(KeyCode::T))
+	{
+		Game::System<SceneSystem>().Move<TestScene>();
+	}
+
 	using LED_STATUS = Network::PIIO::LED_STATUS;
 	//if (InputUtil::GetKeyDown(KeyCode::Escape))
 	if (InputUtil::GetKeyDown(KeyCode::Escape, mtgb::WindowContext::Both))
 	{
 		Game::Exit();
 	}
-	//LOGF("テスト");
 
 	if (InputUtil::GetKeyDown(KeyCode::Alpha1))
 	{
@@ -114,7 +122,6 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
-	//LOGF("Begin begin\n");
 	tBox_->Draw();
 }
 

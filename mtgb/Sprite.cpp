@@ -266,9 +266,6 @@ void mtgb::Sprite::Draw(const Transform* _pTransform, const Transform* _pCameraT
 			};
 			_pCB->g_matrixWorldTranslate = XMMatrixTranspose(worldTranslate);
 
-			//LOGF("-----_pTransform->rotate_--------\n%s\n", _pTransform->rotate_.ToString().c_str());
-			//LOGF("-------------\n%s\n", worldTranslate.ToString().c_str());
-
 			_pTransform->GenerateWorldRotationMatrix(&_pCB->g_matrixWorldRotation);
 			_pCB->g_matrixWorldRotation = XMMatrixTranspose(_pCB->g_matrixWorldRotation);
 #pragma endregion

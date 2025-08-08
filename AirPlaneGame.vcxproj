@@ -138,8 +138,12 @@
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\SkySphere.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
+    <ClCompile Include="Source\TestScene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\CameraSystem.h" />
@@ -284,7 +288,11 @@
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="Source\SkySphere.h" />
+    <ClInclude Include="Source\TestScene\PlayerGunner.h" />
+    <ClInclude Include="Source\TestScene\PlayerPilot.h" />
+    <ClInclude Include="Source\TestScene\PlayerPlane.h" />
     <ClInclude Include="Source\TextBox.h" />
+    <ClInclude Include="Source\TestScene\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />

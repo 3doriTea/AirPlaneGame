@@ -8,35 +8,73 @@ namespace mtbit
 	template<typename EnumStructT>
 	concept IsEnumStruct = std::is_enum_v<EnumStructT> && !std::is_convertible_v<EnumStructT, std::underlying_type_t<EnumStructT>>;
 
+	/// <summary>
+	/// スコープ付き列挙型を使ったビットフラグ
+	/// </summary>
+	/// <typeparam name="EnumStructT">スコープ付き列挙型</typeparam>
 	template<typename EnumStructT>
 	class BitFlag
 	{
-		static_assert(
-			IsEnumStruct<EnumStructT>,
-			"enum structのみ指定できます。");
+		static_assert(IsEnumStruct<EnumStructT>, "enum structのみ指定できます。");
 		// 指定された enum struct のサイズ分のビット数
 		static constexpr size_t BIT_COUNT{ sizeof(EnumStructT) * 8 };
 
 	public:
+		/// <summary>
+		/// 操作可能なビットフラグ
+		/// </summary>
 		class BitFlagEditor
 		{
 			friend BitFlag;
 		public:
 			~BitFlagEditor() = default;
 
+			/// <summary>
+			/// 指定のフラグを立てる
+			/// </summary>
+			/// <param name="_e">スコープ付き列挙型</param>
+			/// <returns>続けて関数を呼び出せる</returns>
 			BitFlagEditor& On(const EnumStructT _e);
+			/// <summary>
+			/// 指定のフラグを降ろす
+			/// </summary>
+			/// <param name="_e">スコープ付き列挙型</param>
+			/// <returns>続けて関数を呼び出せる</returns>
 			BitFlagEditor& Off(const EnumStructT _e);
+			/// <summary>
+			/// 指定のフラグを追加する
+			/// </summary>
+			/// <param name="_other">スコープ付き列挙型</param>
+			/// <returns>続けて関数を呼び出せる</returns>
 			BitFlagEditor& Add(const BitFlag _other);
+			/// <summary>
+			/// 指定のフラグを引く
+			/// </summary>
+			/// <param name="_other">スコープ付き列挙型</param>
+			/// <returns>続けて関数を呼び出せる</returns>
 			BitFlagEditor& Sub(const BitFlag _other);
+			/// <summary>
+			/// すべてのフラグを立てる
+			/// </summary>
+			/// <returns>続けて関数を呼び出せる</returns>
 			BitFlagEditor& OnAll();
+			/// <summary>
+			/// すべてのフラグを降ろす
+			/// </summary>
+			/// <returns>続けて関数を呼び出せる</returns>
+			BitFlagEditor& OffAll();
 
+			/// <summary>
+			/// フラグの操作を終了する
+			/// </summary>
+			/// <returns>ビットフラグ</returns>
 			BitFlag& EndEdit() { return bitFlag_; }
 
 		private:
 			BitFlagEditor(BitFlag& _bitFlag) : bitFlag_{ _bitFlag } {}
 
 		private:
-			BitFlag& bitFlag_;
+			BitFlag& bitFlag_;  // 編集するビットフラグ
 		};
 
 	public:
@@ -45,17 +83,40 @@ namespace mtbit
 		BitFlag(const EnumStructT _e);
 		~BitFlag() = default;
 
+		/// <summary>
+		/// フラグの操作を開始する
+		/// </summary>
+		/// <returns></returns>
 		BitFlagEditor BeginEdit() { return BitFlagEditor{ *this }; }
 
+		/// <summary>
+		/// 指定フラグが立っているかどうか
+		/// </summary>
+		/// <param name="_e">指定フラグ</param>
+		/// <returns>立っている true / false</returns>
 		bool Has(const EnumStructT _e) const;
+		/// <summary>
+		/// 指定したフラグのいずれかが立っているかどうか
+		/// </summary>
+		/// <param name="_other">指定フラグ</param>
+		/// <returns>立っている true / false</returns>
 		bool Has(const BitFlag _other) const;
 
+		/// <summary>
+		/// フラグが一致しているか
+		/// </summary>
+		/// <param name="_other">フラグ</param>
+		/// <returns>一致している true / false</returns>
 		bool Is(const BitFlag _other) const;
 
+		/// <summary>
+		/// インスタンスを作る
+		/// </summary>
+		/// <returns>インスタンス</returns>
 		static BitFlag New() { return BitFlag{}; }
 
 	private:
-		std::bitset<BIT_COUNT> value_;
+		std::bitset<BIT_COUNT> value_;  // ビットフラグ
 	};
 }
 
@@ -139,5 +200,12 @@ template<typename EnumStructT>
 inline typename mtbit::BitFlag<EnumStructT>::BitFlagEditor& mtbit::BitFlag<EnumStructT>::BitFlagEditor::OnAll()
 {
 	bitFlag_.value_.set();
+	return *this;
+}
+
+template<typename EnumStructT>
+inline typename mtbit::BitFlag<EnumStructT>::BitFlagEditor& mtbit::BitFlag<EnumStructT>::BitFlagEditor::OffAll()
+{
+	bitFlag_.value_.reset();
 	return *this;
 }

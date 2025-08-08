@@ -1,9 +1,9 @@
 #include "Enemy.h"
 #include "../mtgb/DirectX11Draw.h"
 
-Enemy::Enemy() : GameObject(GameObjectBuilder()
+Enemy::Enemy(const Vector3& _position) : GameObject(GameObjectBuilder()
 	.SetName("enemy")
-	.SetPosition(Vector3(0, 0, 10))
+	.SetPosition(_position)
 	.SetRotate(Quaternion::Identity())
 	.SetScale(Vector3::One())
 	.Build()),
@@ -25,20 +25,10 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	// find test
-	//if (mtgb::GameObject::FindGameObject("pluyer") != nullptr)
-	//{
-	//	LOGF("%s\n", "found");
-	//}
-	//else
-	//{
-	//	LOGF("%s\n", "not found");
-	//}
 }
 
 void Enemy::Draw() const
 {
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	LOGF("EnemyDraw\n");
 }

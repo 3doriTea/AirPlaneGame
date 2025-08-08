@@ -9,7 +9,8 @@
 #include "WindowContextUtil.h"
 
 mtgb::SceneSystem::SceneSystem() :
-	pNextScene_{ nullptr }
+	pNextScene_{ nullptr },
+	onMoveListener_{}
 {
 }
 
@@ -105,6 +106,12 @@ void mtgb::SceneSystem::Update()
 
 void mtgb::SceneSystem::ChangeScene()
 {
+	// シーン遷移イベントを発動していく
+	for (auto& onMove : onMoveListener_)
+	{
+		onMove();
+	}
+
 	// もし現在のシーンがあるなら終了処理
 	if (GameScene::pInstance_)
 	{

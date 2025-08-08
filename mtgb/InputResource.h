@@ -6,7 +6,6 @@
 #include "ISystem.h"
 #include "Input.h"
 #include "WindowContext.h"
-#include <dinput.h>
 #include <map>
 #include <typeindex>
 

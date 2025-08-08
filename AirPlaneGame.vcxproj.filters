@@ -173,7 +173,10 @@
     <Filter Include="04Library\ImGui">
       <UniqueIdentifier>{B083F975-732A-45C3-89FD-9F553D8FE71C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="03mtgb\System\Camera\Audio">
+    <Filter Include="01Game\05TestScene">
+      <UniqueIdentifier>{f3ea2cb6-7ef2-4eb1-b9a6-6d9a44791181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03mtgb\System\Audio">
       <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
     </Filter>
     <!--<Filter Include="mtgb">
@@ -302,13 +305,13 @@
       <Filter>03mtgb\System\AssetsManager</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Audio.cpp">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioClip.cpp">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioOneShot.cpp">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\AudioPlayerCP.cpp">
       <Filter>03mtgb\System\ComponentPool</Filter>
@@ -602,7 +605,7 @@
       <Filter>03mtgb\Utility</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\WaveData.cpp">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\World.cpp">
       <Filter>03mtgb\X-Ignore</Filter>
@@ -616,19 +619,31 @@
     <ClCompile Include="Source\SkySphere.cpp">
       <Filter>01Game\01Common</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TestScene\TestScene.cpp">
+      <Filter>01Game\05TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerPlane.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
       <Filter>03mtgb\System\AssetsManager</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Audio.h">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioClip.h">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioOneShot.h">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\AudioPlayerCP.h">
       <Filter>03mtgb\System\ComponentPool</Filter>
@@ -961,7 +976,7 @@
       <Filter>03mtgb\Utility</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\WaveData.h">
-      <Filter>03mtgb\System\Camera\Audio</Filter>
+      <Filter>03mtgb\System\Audio</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\World.h">
       <Filter>03mtgb\X-Ignore</Filter>
@@ -977,6 +992,18 @@
     </ClInclude>
     <ClInclude Include="mtgb\GameObjectLayer.h">
       <Filter>03mtgb\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\TestScene.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerPlane.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerPilot.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerGunner.h">
+      <Filter>01Game\05TestScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

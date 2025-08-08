@@ -24,7 +24,6 @@ Camera::~Camera()
 
 void Camera::Update()
 {
-	LOGF("%s\n", this->GetName());
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
 	
 		if (InputUtil::GetKey(KeyCode::Up, context_))

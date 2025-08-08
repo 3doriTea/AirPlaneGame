@@ -3,7 +3,7 @@
 Background::Background() : GameObject(GameObjectBuilder()
 	.Build()),
 	pAudioPlayer_{ Component<AudioPlayer>() },
-	hBGM_{ Audio::Load("Assets\\Sound\\BGM\\playSceneBgm.mp3") }
+	hBGM_{ Audio::Load("Sound/BGM/playSceneBgm.mp3") }
 {
 	massert(hBGM_ >= 0 && "BGMÇÃì«Ç›çûÇ›Ç…é∏îs");
 

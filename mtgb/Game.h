@@ -125,7 +125,7 @@ namespace mtgb
 		/// ゲームのバージョンを取得
 		/// </summary>
 		/// <returns>バージョン情報の文字列</returns>
-		static inline std::string_view Varsion() { return pInstance_->GetVarsion(); }
+		static inline std::string_view Version() { return pInstance_->GetVarsion(); }
 		/// <summary>
 		/// ゲームタイトルを取得
 		/// </summary>

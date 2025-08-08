@@ -12,7 +12,7 @@ namespace
 {
 	static const float DEFAULT_FOV{ 60.0f };  // デフォルトの視野角 (Field Of View)
 	static const float DEFAULT_NEAR{ 0.1f };  // デフォルトのニヤー距離
-	static const float DEFAULT_FAR{ 100.0f };  // デフォルトのファー距離
+	static const float DEFAULT_FAR{ 100000.0f };  // デフォルトのファー距離
 }
 
 mtgb::CameraSystem::CameraSystem() :
