@@ -23,7 +23,7 @@ void mtgb::ColliderCP::Update()
 	{
 		if (poolId_[i] != INVALD_ENTITY && i < poolId_.size() - 1)
 		{
-			for (size_t j = j + 1; j < poolId_.size(); j++)
+			for (size_t j = i + 1; j < poolId_.size(); j++)
 			{
 				if (poolId_[j] != INVALD_ENTITY)
 				{
