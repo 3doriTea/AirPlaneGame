@@ -1026,7 +1026,7 @@
     <ClInclude Include="Source\TestScene\PlayerBullet.h">
       <Filter>01Game\05TestScene</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\TransfromCore.h">
+    <ClInclude Include="mtgb\TransformCore.h">
       <Filter>03mtgb\CoreType</Filter>
     </ClInclude>
   </ItemGroup>

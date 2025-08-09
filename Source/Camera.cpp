@@ -28,19 +28,19 @@ void Camera::Update()
 	
 		if (InputUtil::GetKey(KeyCode::Up, context_))
 		{
-			pTransform_->position_.z += MOVE;
+			pTransform_->position.z += MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Down, context_))
 		{
-			pTransform_->position_.z -= MOVE;
+			pTransform_->position.z -= MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Left, context_))
 		{
-			pTransform_->position_.x -= MOVE;
+			pTransform_->position.x -= MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Right, context_))
 		{
-			pTransform_->position_.x += MOVE;
+			pTransform_->position.x += MOVE;
 		}
 }
 

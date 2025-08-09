@@ -38,8 +38,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 	//hModel_ = OBJ::Load("Model/OBJ/cube.obj");
 	fModel_ = Fbx::Load("Model/tCube.fbx");
 	hText = Text::Load(str,36);
-	pTransform_->position_.z = 5.0f;
-	pTransform_->scale_ = Vector3(1, 1, 1);
+	pTransform_->position.z = 5.0f;
+	pTransform_->scale = Vector3(1, 1, 1);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
@@ -64,7 +64,7 @@ void Player::Update()
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Space,context_))
 	{
-		Instantiate<Bullet>(pTransform_->position_);
+		Instantiate<Bullet>(pTransform_->position);
 	}
 
 	if (InputUtil::GetKeyDown(KeyCode::F,context_))
@@ -81,27 +81,27 @@ void Player::Update()
 	{
 		//pRigidbody_->velocity_ += pTransform_->Back() * PLAYER_MOVE_SPEED;
 		acceleration_ = (std::max)(acceleration_ - PLAYER_MOVE_SPEED, PLAYER_MIN_SPEED);
-		//pTransform_->position_ += pTransform_->Down() * PLAYER_SPEED;
+		//pTransform_->position += pTransform_->Down() * PLAYER_SPEED;
 	}
 	//pRigidbody_->velocity_ *= pTransform_->Forward();
 	if (InputUtil::GetKey(KeyCode::A,context_))
 	{
-		pTransform_->rotate_.f[2] += 1;
+		pTransform_->rotate.f[2] += 1;
 		//pTransform_->scale_.z -= 0.01f;
 	}
 	if (InputUtil::GetKey(KeyCode::D,context_))
 	{
-		pTransform_->rotate_.f[2] -= 1;
+		pTransform_->rotate.f[2] -= 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
 	if (InputUtil::GetKey(KeyCode::E))
 	{
-		pTransform_->rotate_.f[1] -= 1;
+		pTransform_->rotate.f[1] -= 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
 	if (InputUtil::GetKey(KeyCode::Q))
 	{
-		pTransform_->rotate_.f[1] += 1;
+		pTransform_->rotate.f[1] += 1;
 		//pTransform_->scale_.z += 0.01f;
 	}
 	pRigidbody_->velocity_ = pTransform_->Forward() * acceleration_;

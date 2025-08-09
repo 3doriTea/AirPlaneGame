@@ -13,7 +13,7 @@ void mtgb::Transform::GenerateWorldMatrix(Matrix4x4* _pMatrix) const
 	*_pMatrix *= matrixScale_;
 	*_pMatrix *= matrixRotate_;
 	*_pMatrix *= matrixTranslate_;
-	if (parentId_ != INVALD_ENTITY)
+	if (parent != INVALD_ENTITY)
 	{
 		GetParent()->GenerateWorldMatrix(_pMatrix);
 	}
@@ -22,7 +22,7 @@ void mtgb::Transform::GenerateWorldMatrix(Matrix4x4* _pMatrix) const
 void mtgb::Transform::GenerateWorldRotationMatrix(Matrix4x4* _pMatrix) const
 {
 	*_pMatrix *= matrixRotate_;
-	if (parentId_ != INVALD_ENTITY)
+	if (parent != INVALD_ENTITY)
 	{
 		GetParent()->GenerateWorldMatrix(_pMatrix);
 	}
@@ -43,26 +43,26 @@ void mtgb::Transform::GenerateParentRotationMatrix(Matrix4x4* _pMatrix) const
 mtgb::Transform* mtgb::Transform::GetParent() const
 {
 	// êeIdÇ™ñ≥å¯ílÇ»ÇÁ nullptr Çï‘Ç∑
-	if (parentId_ == INVALD_ENTITY)
+	if (parent == INVALD_ENTITY)
 	{
 		return nullptr;
 	}
 	else
 	{
-		return &Transform::Get(parentId_);
+		return &Transform::Get(parent);
 	}
 }
 
 void mtgb::Transform::Rotation(const Vector3& _rotate)
 {
-	rotate_.f[0] += _rotate.x;
-	rotate_.f[1] += _rotate.y;
-	rotate_.f[2] += _rotate.z;
+	rotate.f[0] += _rotate.x;
+	rotate.f[1] += _rotate.y;
+	rotate.f[2] += _rotate.z;
 	return;
 
 	using DirectX::XMQuaternionMultiply;
 	using DirectX::XMQuaternionRotationRollPitchYaw;
-	rotate_ = XMQuaternionMultiply(
-		rotate_,
+	rotate = XMQuaternionMultiply(
+		rotate,
 		XMQuaternionRotationRollPitchYaw(_rotate.x, _rotate.y, _rotate.z));
 }

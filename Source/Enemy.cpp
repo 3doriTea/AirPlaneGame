@@ -20,7 +20,7 @@ Enemy::Enemy(const Vector3& _position) : GameObject(GameObjectBuilder()
 	hModelCollider_ = Fbx::Load("Model/SphereCollider.fbx");
 	massert(hModelCollider_ >= 0 && "“–‚½‚è”»’èƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 
-	pTransform_->position_.z = 5.0f;
+	pTransform_->position.z = 5.0f;
 }
 
 Enemy::~Enemy()

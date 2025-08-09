@@ -62,8 +62,8 @@ void mtgb::Collider::Draw() const
 {
 	static Matrix4x4 matrix{};
 	pTransform_->GenerateWorldMatrix(&matrix);
-	Vector3 worldPosition{ pTransform_->position_ * matrix };
-	Draw::FBXModel(hSphereModel_, )
+	Vector3 worldPosition{ pTransform_->position * matrix };
+	//Draw::FBXModel(hSphereModel_, )
 }
 
 mtgb::FBXModelHandle mtgb::Collider::hSphereModel_{ mtgb::INVALID_HANDLE };

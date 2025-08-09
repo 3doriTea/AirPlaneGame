@@ -16,7 +16,7 @@ void mtgb::RigidBodyCP::Update()
 	{
 		if (poolId_[i] != INVALD_ENTITY)
 		{
-			pool_[i].pTransform_->position_ += pool_[i].velocity_ * Time::DeltaTimeF();
+			pool_[i].pTransform_->position += pool_[i].velocity_ * Time::DeltaTimeF();
 		}
 	}
 }

@@ -131,12 +131,12 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_matrixWorld = XMMatrixTranspose(mWorld);
 
 		XMMATRIX matRotate_, rotateX_, rotateY_, rotateZ_;
-		rotateX_ = XMMatrixRotationX(XMConvertToRadians(_transform.rotate_.f[0]));
-		rotateY_ = XMMatrixRotationY(XMConvertToRadians(_transform.rotate_.f[1]));
-		rotateZ_ = XMMatrixRotationZ(XMConvertToRadians(_transform.rotate_.f[2]));
+		rotateX_ = XMMatrixRotationX(XMConvertToRadians(_transform.rotate.f[0]));
+		rotateY_ = XMMatrixRotationY(XMConvertToRadians(_transform.rotate.f[1]));
+		rotateZ_ = XMMatrixRotationZ(XMConvertToRadians(_transform.rotate.f[2]));
 		matRotate_ = rotateZ_ * rotateY_ * rotateX_   ;
 		
-		XMMATRIX matScale_ = XMMatrixScaling(_transform.scale_.x, _transform.scale_.y, _transform.scale_.z);
+		XMMATRIX matScale_ = XMMatrixScaling(_transform.scale.x, _transform.scale.y, _transform.scale.z);
 
 		cb.g_matrixNormalTrans = XMMatrixTranspose(matRotate_ * XMMatrixInverse(nullptr, matScale_));
 		cb.g_ambient = pMaterial_[i].ambient;

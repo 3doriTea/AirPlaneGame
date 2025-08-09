@@ -15,9 +15,9 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 	layerFlag_{ _desc.layerFlag }
 {
 	Transform* pTransform_{ Component<Transform>() };
-	pTransform_->position_ = _desc.position;
-	pTransform_->rotate_ = _desc.rotate;
-	pTransform_->scale_ = _desc.scale;
+	pTransform_->position = _desc.position;
+	pTransform_->rotate = _desc.rotate;
+	pTransform_->scale = _desc.scale;
 }
 
 mtgb::GameObject::GameObject(const GameObject& _other)
