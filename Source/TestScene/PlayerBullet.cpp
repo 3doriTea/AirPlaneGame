@@ -25,7 +25,7 @@ PlayerBullet::~PlayerBullet()
 
 void PlayerBullet::Update()
 {
-	pRigidBody_->velocity_ = pTransform_->Forward();
+	pRigidBody_->velocity_ = pTransform_->Forward() * 100.0f;
 }
 
 void PlayerBullet::Draw() const
