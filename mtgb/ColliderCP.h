@@ -12,6 +12,7 @@ namespace mtgb
 		ColliderCP();
 		~ColliderCP();
 
+		void Start() override;
 		void Update() override;
 	};
 }

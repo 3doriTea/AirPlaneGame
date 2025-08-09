@@ -39,6 +39,8 @@ namespace mtgb
 
 		bool IsHit(const Collider& _other) const;
 
+		void Draw() const;
+
 	private:
 		Transform* pTransform_;  // TODO: Šë‚È‚¢Transform
 
@@ -63,5 +65,7 @@ namespace mtgb
 		};
 
 		std::set<Collider*> onColliders_;
+
+		static FBXModelHandle hSphereModel_;
 	};
 }

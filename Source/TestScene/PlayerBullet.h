@@ -38,4 +38,5 @@ private:
 	Collider* pCollider_;
 
 	FBXModelHandle hModel_;
+	FBXModelHandle hModelCollider_;
 };

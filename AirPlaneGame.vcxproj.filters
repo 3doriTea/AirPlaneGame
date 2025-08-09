@@ -1026,6 +1026,9 @@
     <ClInclude Include="Source\TestScene\PlayerBullet.h">
       <Filter>01Game\05TestScene</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\TransfromCore.h">
+      <Filter>03mtgb\CoreType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md" />

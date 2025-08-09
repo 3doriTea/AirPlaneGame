@@ -156,6 +156,7 @@
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\MTBit\BitFlag.h" />
+    <ClInclude Include="mtgb\TransfromCore.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />

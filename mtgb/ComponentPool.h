@@ -24,6 +24,7 @@ namespace mtgb
 		virtual ~ComponentPool();
 
 		void Initialize() override;
+		virtual void Start() {};
 		virtual void Update() override {};
 
 		void Release() override;
@@ -74,6 +75,7 @@ namespace mtgb
 	inline void ComponentPool<ComponentT, IsSingleton>::Initialize()
 	{
 		RegisterCurrentScene([&, this] { Release(); });
+		Start();
 	}
 
 	template<class ComponentT, bool IsSingleton>

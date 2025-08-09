@@ -36,14 +36,14 @@ void PlayerGunner::Update()
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	{
-		Instantiate<PlayerBullet>(pTransform_->position_, pTransform_->rotate_);
+		Instantiate<PlayerBullet>(pTransform_->position_ + Vector3::Down() * 1.0f, pTransform_->rotate_);
 	}
 
-	LOGF("x:%f, y:%f, z:%f, w:%f\n",
+	/*LOGF("x:%f, y:%f, z:%f, w:%f\n",
 		pTransform_->rotate_.f[0],
 		pTransform_->rotate_.f[1],
 		pTransform_->rotate_.f[2],
-		pTransform_->rotate_.f[3]);
+		pTransform_->rotate_.f[3]);*/
 }
 
 void PlayerGunner::Draw() const

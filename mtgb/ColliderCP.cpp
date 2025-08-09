@@ -2,6 +2,7 @@
 #include "RigidBody.h"
 #include "Matrix4x4.h"
 #include "Transform.h"
+#include "Fbx.h"
 
 mtgb::ColliderCP::ColliderCP()
 {
@@ -9,6 +10,13 @@ mtgb::ColliderCP::ColliderCP()
 
 mtgb::ColliderCP::~ColliderCP()
 {
+}
+
+void mtgb::ColliderCP::Start()
+{
+	Collider::hSphereModel_ = Fbx::Load("Model/SphereCollider.fbx");
+	massert(Collider::hSphereModel_ >= 0
+		&& "SphereColliderƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s @ColliderCP::Start");
 }
 
 void mtgb::ColliderCP::Update()

@@ -2,6 +2,7 @@
 #include "Transform.h"
 #include "DirectXMath.h"
 #include "Matrix4x4.h"
+#include "Draw.h"
 
 mtgb::Collider::Collider(const EntityId _entityId) :
 	IComponent{ _entityId },
@@ -56,3 +57,13 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 
 	return false;
 }
+
+void mtgb::Collider::Draw() const
+{
+	static Matrix4x4 matrix{};
+	pTransform_->GenerateWorldMatrix(&matrix);
+	Vector3 worldPosition{ pTransform_->position_ * matrix };
+	Draw::FBXModel(hSphereModel_, )
+}
+
+mtgb::FBXModelHandle mtgb::Collider::hSphereModel_{ mtgb::INVALID_HANDLE };
