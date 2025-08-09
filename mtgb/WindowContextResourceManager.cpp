@@ -1,5 +1,5 @@
 #include "WindowContextResourceManager.h"
-mtgb::WindowContext mtgb::WindowContextResourceManager::currentContext_{ WindowContext::None };
+
 
 mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {

@@ -41,6 +41,8 @@
 #include "DoubleWindow.h"
 #include "CameraSystem.h"
 
+
+
 #pragma endregion
 
 #include "GameObjectBuilder.h"
@@ -49,6 +51,7 @@
 #pragma region Resource
 
 #include "WindowContextResource.h"
+#include "WindowResource.h"
 #include "DXGIResource.h"
 #include "Direct3DResource.h"
 #include "Direct2DResource.h"
@@ -60,7 +63,6 @@
 #pragma region Data
 
 #include "InputData.h"
-
 //
 #pragma endregion
 

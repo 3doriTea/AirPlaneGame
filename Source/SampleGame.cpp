@@ -5,6 +5,8 @@ using namespace mtgb;
 
 SampleGame::SampleGame()
 {
+	TypeRegistry::Instance();
+	TypeRegistry::Instance().Initialize();
 }
 
 SampleGame::~SampleGame()

@@ -1,5 +1,5 @@
 #include "ImGuiShowable.h"
-
+#include "../ImGui/imgui.h"
 mtgb::ImGuiShowableBase::ImGuiShowableBase(const std::string& name)
     :displayName_{name}
     ,isVisible_{true}

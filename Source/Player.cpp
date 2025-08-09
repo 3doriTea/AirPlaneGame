@@ -2,7 +2,8 @@
 #include "Bullet.h"
 #include "../mtgb/DirectX11Draw.h"
 #include "DoubleWindow.h"
-#include "Inspector.h"
+#include "TypeRegistry.h"
+#include "PlayerProxy.h"
 using namespace mtgb;
 
 namespace
@@ -34,6 +35,11 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_->position_.z = 5.0f;
 	pTransform_->scale_ = Vector3(1, 1, 1);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
+	proxy_ = new PlayerProxy(this);
+	TypeRegistry::Instance().RegisterFunc<PlayerProxy>([](std::any instance, const char* name)
+		{
+			ImGui::Text("%s,RegisterFunc!!", name);
+		});
 }
 
 Player::Player(mtgb::WindowContext context)
@@ -44,6 +50,7 @@ Player::Player(mtgb::WindowContext context)
 
 Player::~Player()
 {
+	SAFE_DELETE(proxy_);
 }
 
 void Player::Update()
@@ -112,5 +119,5 @@ void Player::Draw() const
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	//LOGF("PlayerDraw\n");
-	TypeRegistry::ShowInspector(this, name_.c_str());
+	Inspector::Instance().ShowInspector(proxy_, name_.c_str());
 }

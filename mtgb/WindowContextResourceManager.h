@@ -23,7 +23,7 @@ namespace mtgb
     class WindowContextResourceManager : public ISystem
     {
     private:
-        static WindowContext currentContext_;//現在のウィンドウ
+        WindowContext currentContext_;//現在のウィンドウ
         ResourceCollection defResource_;//複製用のリソース
         std::map<WindowContext, ResourceCollection> collectionMap_;//ウィンドウごとのリソース
     public:
@@ -71,7 +71,7 @@ namespace mtgb
         /// 現在有効なウィンドウの識別子を返す
         /// </summary>
         /// <returns>現在のWindowContext</returns>
-        static WindowContext CurrCtx()
+        WindowContext CurrCtx()
         {
             return currentContext_;
         }

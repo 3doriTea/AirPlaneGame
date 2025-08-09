@@ -834,6 +834,21 @@
     <ClInclude Include="mtgb\Axis.h">
       <Filter>mtgb\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\Reflection.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TypeRegisterMacro.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DefaultShow.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TypeRegistration.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TypeRegistryImpl.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Other\History\log20250720.md" />
@@ -845,6 +860,9 @@
     </None>
     <None Include="packages.config" />
     <None Include="通信体系.txt" />
+    <None Include="mtgb\DefaultShow.inl">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">

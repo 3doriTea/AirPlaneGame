@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "Inspector.h"
+#include "TypeRegistry.h"
 #include "ISystem.h"
 
 namespace mtgb
@@ -79,7 +79,7 @@ namespace mtgb
 	template<typename Derived>
 	inline void ImGuiShowable<Derived>::ShowImGui()
 	{
-		TypeRegistry::ShowInspector(static_cast<Derived*>(this), GetDisplayName().c_str());
+		Inspector::Instance().ShowInspector(dynamic_cast<Derived*>(this), GetDisplayName().c_str());
 	}
 
 }
