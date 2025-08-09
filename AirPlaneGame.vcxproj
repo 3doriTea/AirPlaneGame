@@ -156,6 +156,7 @@
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
+    <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />

@@ -8,21 +8,6 @@
 #include "MTStringUtility.h"
 #include "DefaultShow.h"
 
-
-template <typename T>
-struct Range : refl::attr::usage::member
-{
-	T Min;
-	T Max;
-
-	Range(T min, T max) : Min(min), Max(max) {}
-
-	template<typename FieldType>
-	void operator()(FieldType* instance, const char* name) const {
-		ShowRange(instance, name, Min, Max);
-	}
-};
-
 template <typename F>
 struct ShowFunc : refl::attr::usage::type
 {
@@ -41,31 +26,6 @@ constexpr auto make_show_func(F&& f) {
 	return ShowFunc<F>(std::forward<F>(f));
 }
 
-template <typename T>
-void ShowRange(T* instance, const char* name, T min, T max)
-{
-	if constexpr (std::is_same_v<T, int>)
-	{
-		 ImGui::SliderInt(name, instance, min, max);
-	}
-	else if constexpr (std::is_same_v<T, float>)
-	{
-		 ImGui::SliderFloat(name, instance, min, max);
-	}
-	else
-	{
-		ImGui::Text("Unknown : %s", name);
-	}
-}
-
-template <typename T>
-struct ReadOnly : refl::attr::usage::member
-{
-	template<typename FieldType>
-	void operator()(FieldType* instance, const char* name) const {
-		
-	}
-};
 
 // TypeRegistryのテンプレート実装
 template<typename T>
@@ -75,7 +35,7 @@ void TypeRegistry::RegisterType()
 	
 	showFunctions_[typeIdx] = [&](std::any ptr, const char* name)
 		{
-			using Type = std::remove_cvref_t<T>;
+			using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
 			if constexpr (refl::is_reflectable<Type>())
 			{
 
@@ -120,34 +80,75 @@ void TypeRegistry::RegisterType()
 					if (ImGui::CollapsingHeader(name))
 					{
 						ImGui::PushID(registerInstance);
+
+						//メンバごとに走査
 						refl::util::for_each(type.members, [&](auto&& member)
 							{
-								auto memberPtr = &(member(*registerInstance));
+								// メンバの実際の型を取得（ポインタかどうかを含む）
+								using MemberValueType = std::remove_cvref_t<decltype(member(*registerInstance))>;
+								
+								if constexpr (std::is_pointer_v<MemberValueType>)
+								{
+									// ポインタ型の場合：そのまま渡す
+									auto memberValue = member(*registerInstance);
+									
+									// 属性をチェックして適切な表示方法を選択
+									bool hasCustomAttribute = false;
 
-								// 属性をチェックして適切な表示方法を選択
-								bool hasCustomAttribute = false;
+									// メンバーの属性を取得
+									auto memberAttributes = refl::descriptor::get_attributes(member);
 
-								// メンバーの属性を取得
-								auto memberAttributes = refl::descriptor::get_attributes(member);
-
-								std::apply([&](auto&&... attrs)
-									{
-										(
+									std::apply([&](auto&&... attrs)
+										{
 											(
-												[&] {
-													using AttrType = std::decay_t<decltype(attrs)>;
-													if constexpr (std::is_base_of_v<refl::attr::usage::member, AttrType>)
-													{
-														attrs(memberPtr, member.name.c_str());
-														hasCustomAttribute = true;
-													}
-												}()
-													), ...);
-									}, memberAttributes);
+												(
+													[&] {
+														using AttrType = std::decay_t<decltype(attrs)>;
+														if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
+														{
+															attrs(memberValue, member.name.c_str());
+															hasCustomAttribute = true;
+														}
+													}()
+														), ...);
+										}, memberAttributes);
 
-								// カスタム属性がない場合はデフォルト表示
-								if (!hasCustomAttribute) {
-									mtgb::DefaultShow(memberPtr, member.name.c_str());
+									// カスタム属性がない場合はデフォルト表示
+									if (!hasCustomAttribute) {
+										mtgb::DefaultShow(memberValue, member.name.c_str());
+									}
+								}
+								else
+								{
+									// 値型の場合：アドレスを取得して渡す
+									auto memberPtr = &(member(*registerInstance));
+									
+									// 属性をチェックして適切な表示方法を選択
+									bool hasCustomAttribute = false;
+
+									// メンバーの属性を取得
+									auto memberAttributes = refl::descriptor::get_attributes(member);
+
+									std::apply([&](auto&&... attrs)
+										{
+											(
+												(
+													[&] {
+														using AttrType = std::decay_t<decltype(attrs)>;
+														if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
+														{
+														
+															attrs(memberPtr, member.name.c_str());
+															hasCustomAttribute = true;
+														}
+													}()
+														), ...);
+										}, memberAttributes);
+
+									// カスタム属性がない場合はデフォルト表示
+									if (!hasCustomAttribute) {
+										mtgb::DefaultShow(memberPtr, member.name.c_str());
+									}
 								}
 							});
 
@@ -157,8 +158,8 @@ void TypeRegistry::RegisterType()
 			}
 			else
 			{
-				ImGui::Text("%s,not", name);
-				
+				//リフレクションされていない
+				ImGui::Text("%s,NotReflectable", name);	
 			}
 		};
 }

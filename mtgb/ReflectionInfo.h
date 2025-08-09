@@ -1,17 +1,27 @@
 #pragma once
 #include <refl.hpp>
 #include "../Source/Player.h"
+#include "Vector3.h"
 #include "JoystickProxy.h"
 #include "../Source/PlayerProxy.h"
 #include "TypeRegistry.h"
+#include "ShowAttributes.h"
 //#include "TypeRegistryImpl.h"
 #include <string>
+
+
+REGISTER_TYPE(Vector3,Vector3Show())
+REGISTER_FIELD(x)
+REGISTER_FIELD(y)
+REGISTER_FIELD(z)
+REGISTER_END
 
 // ShowFuncëÆê´ïtÇ´Ç≈TypeÇìoò^
 REGISTER_TYPE(PlayerProxy)
 REGISTER_FIELD(test1)
 REGISTER_FIELD(test2)
 REGISTER_FIELD(name)
+REGISTER_FIELD(vec3_, Vector3Show())
 REGISTER_END
 
 REGISTER_TYPE(JoystickProxy)

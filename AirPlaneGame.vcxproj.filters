@@ -464,10 +464,10 @@
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\TypeRegistry.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>mtgb\System\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayerProxy.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -768,9 +768,6 @@
     <ClInclude Include="mtgb\IncludingWindows.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTImGui.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\PathUtility.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
@@ -834,20 +831,26 @@
     <ClInclude Include="mtgb\Axis.h">
       <Filter>mtgb\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\ReflectionInfo.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\DefaultShow.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    <ClInclude Include="mtgb\TypeRegistryImpl.h">
+      <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\TypeRegistry.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\TypeRegistryImpl.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    <ClInclude Include="mtgb\ReflectionInfo.h">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DefaultShow.h">
+      <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTImGui.h">
+      <Filter>mtgb\System\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayerProxy.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ShowAttributes.h">
+      <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -861,7 +864,7 @@
     <None Include="packages.config" />
     <None Include="通信体系.txt" />
     <None Include="mtgb\DefaultShow.inl">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>mtgb\System\Debug</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
