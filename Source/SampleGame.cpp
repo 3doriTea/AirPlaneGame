@@ -43,6 +43,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<CameraSystem>(SystemUpdateType::DontCallMe);
 	_register.Set<MTImGui>(SystemUpdateType::Frame);
+	_register.Set<ColliderCP>(SystemUpdateType::Frame, true);
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
 	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);

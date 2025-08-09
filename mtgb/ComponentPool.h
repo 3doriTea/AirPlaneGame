@@ -33,7 +33,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_entityId">エンティティId</param>
 		/// <returns>コンポーネントの参照ポインタ (確実に存在する)</returns>
-		ComponentT& Get(EntityId _entityId) requires(IsSingleton);
+		ComponentT& Get(EntityId _entityId);
 
 		bool TryGet(ComponentT*& _pComponent, EntityId _entityId);
 
@@ -87,7 +87,7 @@ namespace mtgb
 	}
 
 	template<class ComponentT, bool IsSingleton>
-	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Get(EntityId _entityId) requires(IsSingleton)
+	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Get(EntityId _entityId)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{

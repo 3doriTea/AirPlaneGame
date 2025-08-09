@@ -1,4 +1,5 @@
 #include "PlayerGunner.h"
+#include "PlayerBullet.h"
 
 using namespace mtgb;
 
@@ -19,11 +20,11 @@ void PlayerGunner::Update()
 
 	if (InputUtil::GetKey(KeyCode::W))
 	{
-		pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED);
 	}
 	if (InputUtil::GetKey(KeyCode::S))
 	{
-		pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED);
 	}
 	if (InputUtil::GetKey(KeyCode::A))
 	{
@@ -32,6 +33,10 @@ void PlayerGunner::Update()
 	if (InputUtil::GetKey(KeyCode::D))
 	{
 		pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::Space))
+	{
+		Instantiate<PlayerBullet>(pTransform_->position_, pTransform_->rotate_);
 	}
 
 	LOGF("x:%f, y:%f, z:%f, w:%f\n",

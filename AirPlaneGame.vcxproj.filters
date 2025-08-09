@@ -637,6 +637,9 @@
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerBullet.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1019,6 +1022,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\ShaderType.h">
       <Filter>03mtgb\System\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerBullet.h">
+      <Filter>01Game\05TestScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
