@@ -29,19 +29,23 @@ namespace mtgb
 				return *this;
 			}
 
-			this->position = _other.position;
-			this->rotate = _other.rotate;
-			this->scale = _other.scale;
-
 			this->parent = _other.parent;
+			this->position = _other.position;
+			this->scale = _other.scale;
+			this->rotate = _other.rotate;
+
 			this->matrixTranslate_ = _other.matrixTranslate_;
 			this->matrixRotate_ = _other.matrixRotate_;
 			this->matrixScale_ = _other.matrixScale_;
-			this->parent = _other.parent;
 
 //			massert(false && "Transformのコピー発生");
 			return *this;
 		}
+
+		/// <summary>
+		/// 計算する
+		/// </summary>
+		void Compute();
 
 		void GenerateWorldMatrix(Matrix4x4* _pMatrix) const;
 		void GenerateWorldRotationMatrix(Matrix4x4* _pMatrix) const;

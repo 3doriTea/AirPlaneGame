@@ -8,6 +8,24 @@ mtgb::Transform::~Transform()
 {
 }
 
+void mtgb::Transform::Compute()
+{
+	using DirectX::XMMatrixTranslation;
+	using DirectX::XMMatrixRotationX;
+	using DirectX::XMMatrixRotationY;
+	using DirectX::XMMatrixRotationZ;
+	using DirectX::XMConvertToRadians;
+	using DirectX::XMMatrixScaling;
+
+	matrixTranslate_ = XMMatrixTranslation(position.x, position.y, position.z);
+
+	matrixRotate_ = XMMatrixRotationZ(XMConvertToRadians(rotate.f[2]));
+	matrixRotate_ *= XMMatrixRotationY(XMConvertToRadians(rotate.f[1]));
+	matrixRotate_ *= XMMatrixRotationX(XMConvertToRadians(rotate.f[0]));
+
+	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
+}
+
 void mtgb::Transform::GenerateWorldMatrix(Matrix4x4* _pMatrix) const
 {
 	*_pMatrix *= matrixScale_;

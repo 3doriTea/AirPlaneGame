@@ -25,7 +25,7 @@ namespace mtgb
 
 		void Initialize() override;
 		virtual void Start() {};
-		virtual void Update() override {};
+		virtual void Update() override {}
 
 		void Release() override;
 

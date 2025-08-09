@@ -41,9 +41,7 @@ namespace mtgb
 
 		void Draw() const;
 
-	private:
-		Transform* pTransform_;  // TODO: Šë‚È‚¢Transform
-
+	public:
 		ColliderType type_;  // “–‚½‚è”»’è‚ÌŒ`
 
 		union
@@ -59,12 +57,15 @@ namespace mtgb
 			} capsule_;
 		};
 
+		std::set<Collider*> onColliders_;
+
+	private:
 		union
 		{
 			DirectX::BoundingSphere computeSphere_;
 		};
 
-		std::set<Collider*> onColliders_;
+		Transform* pTransform_;  // TODO: Šë‚È‚¢Transform
 
 		static FBXModelHandle hSphereModel_;
 	};

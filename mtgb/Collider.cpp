@@ -60,10 +60,22 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 
 void mtgb::Collider::Draw() const
 {
-	static Matrix4x4 matrix{};
-	pTransform_->GenerateWorldMatrix(&matrix);
-	Vector3 worldPosition{ pTransform_->position * matrix };
-	//Draw::FBXModel(hSphereModel_, )
+	static Transform copyTransform{};
+	switch (type_)
+	{
+	case mtgb::Collider::TYPE_SPHERE:
+		copyTransform = *pTransform_;
+		copyTransform.scale = Vector3::One() * sphere_.radius_;
+		copyTransform.position += sphere_.offset_;
+		copyTransform.Compute();
+		Draw::SetShaderOnce(ShaderType::Debug3D);
+		Draw::FBXModel(hSphereModel_, copyTransform, 0);
+		break;
+	case mtgb::Collider::TYPE_CAPSULE:
+		break;
+	default:
+		break;
+	}
 }
 
 mtgb::FBXModelHandle mtgb::Collider::hSphereModel_{ mtgb::INVALID_HANDLE };
