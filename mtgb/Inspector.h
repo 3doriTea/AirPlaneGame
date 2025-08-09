@@ -1,80 +1,65 @@
-//#pragma once
-//#include <typeinfo>
-//#include <unordered_map>
-//#include <functional>
-//#include <refl.hpp>
-//#include <typeindex>
-//#include <type_traits>
-//#include <iostream>
-//#include "../ImGui/imgui.h"
-//#include <any>
-//#include <Windows.h>
-//#include "WindowContext.h"
-//#include "MTAssert.h"
-//#include <stdio.h>
-//#include "MTStringUtility.h"
-//#include <unordered_set>
-//#include "DefaultShow.h"
-//#include "TypeRegistration.h"
-//
-//// TypeRegistrationで定義されたTypeRegistryを使用するため、
-//// ここでは属性とヘルパー関数のみを定義
-//
-//template <typename T>
-//struct Range : refl::attr::usage::member
-//{
-//	T Min;
-//	T Max;
-//
-//	Range(T min, T max) : Min(min), Max(max) {}
-//
-//	template<typename FieldType>
-//	void operator()(FieldType* instance, const char* name) const {
-//		ShowRange(instance, name, Min, Max);
-//	}
-//};
-//
-//template <typename F>
-//struct ShowFunc : refl::attr::usage::type
-//{
-//private:
-//	F func;
-//public:
-//	constexpr ShowFunc(F _func) : func(_func)
-//	{
-//	}
-//	void operator()(const char* name) const { func(name); }
-//};
-//
-//// ShowFuncを作成するヘルパー関数
-//template<typename F>
-//constexpr auto make_show_func(F&& f) {
-//	return ShowFunc<F>(std::forward<F>(f));
-//}
-//
-//template <typename T>
-//void ShowRange(T* instance, const char* name, T min, T max)
-//{
-//	if constexpr (std::is_same_v<T, int>)
-//	{
-//		 ImGui::SliderInt(name, instance, min, max);
-//	}
-//	else if constexpr (std::is_same_v<T, float>)
-//	{
-//		 ImGui::SliderFloat(name, instance, min, max);
-//	}
-//	else
-//	{
-//		ImGui::Text("Unknown : %s", name);
-//	}
-//}
-//
-//template <typename T>
-//struct ReadOnly : refl::attr::usage::member
-//{
-//	template<typename FieldType>
-//	void operator()(FieldType* instance, const char* name) const {
-//		
-//	}
-//};
-//
+#pragma once
+#include <typeinfo>
+#include <unordered_map>
+#include <functional>
+#include <typeindex>
+#include <type_traits>
+#include <any>
+#include <Windows.h>
+#include "WindowContext.h"
+#include "DefaultShow.h"
+#include "TypeRegistry.h"  
+
+using namespace mtgb;
+
+class Inspector
+{
+public:
+
+	static Inspector& Instance();
+
+	template<typename T>
+	void ShowInspector(T* instance, const char* name);
+	template<typename T>
+	void ShowInspector(const T* instance, const char* name);
+private:
+	Inspector() {};
+	void Show(std::type_index typeIdx,std::any instance,const char* name);
+	const static  mtgb::WindowContext mainWindow_ = mtgb::WindowContext::First;
+};
+
+template<typename T>
+void Inspector::ShowInspector(T* instance, const char* name)
+{
+	using Type = std::remove_cvref_t<T>;
+	std::type_index typeIdx(typeid(Type));
+	if (mtgb::CurrContext() != mainWindow_)
+	{
+		return;
+	}
+
+	if (TypeRegistry::Instance().IsRegisteredType(typeIdx))
+	{
+		TypeRegistry::Instance().CallFunc(typeIdx, std::any(instance), name);
+		//Show(typeIdx, std::any(instance), name);
+	}
+	else
+	{
+		if (mtgb::CurrContext() != mainWindow_) return;
+		mtgb::DefaultShow(instance, name);
+	}
+}
+
+template<typename T>
+void Inspector::ShowInspector(const T* instance, const char* name)
+{
+	ShowInspector(instance, name);
+}
+
+template<typename T>
+void TypeRegistry::RegisterFunc(std::function<void(std::any, const char*)> func)
+{
+	using Type = std::remove_cvref_t<T>;
+	std::type_index typeIdx(typeid(Type));
+	showFunctions_[typeIdx] = func;
+}

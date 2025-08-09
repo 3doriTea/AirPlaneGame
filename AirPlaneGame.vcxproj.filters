@@ -340,7 +340,7 @@
     <ClCompile Include="mtgb\MTImGui.cpp">
       <Filter>mtgb\System\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\TypeRegistry.cpp">
+    <ClCompile Include="mtgb\Inspector.cpp">
       <Filter>mtgb\System\Debug</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\DoubleWindow.cpp">
@@ -409,9 +409,6 @@
     <ClCompile Include="mtgb\FbxModel.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\Inspector.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
@@ -464,6 +461,12 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTStringUtility.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TypeRegistry.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerProxy.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -702,7 +705,7 @@
     <ClInclude Include="mtgb\Fbx.h">
       <Filter>mtgb\System\Draw\Fbx</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\TypeRegistry.h">
+    <ClInclude Include="mtgb\Inspector.h">
       <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
@@ -763,9 +766,6 @@
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\IncludingWindows.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Inspector.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\MTImGui.h">
@@ -834,19 +834,19 @@
     <ClInclude Include="mtgb\Axis.h">
       <Filter>mtgb\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\Reflection.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\TypeRegisterMacro.h">
+    <ClInclude Include="mtgb\ReflectionInfo.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\DefaultShow.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\TypeRegistration.h">
+    <ClInclude Include="mtgb\TypeRegistry.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\TypeRegistryImpl.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerProxy.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>

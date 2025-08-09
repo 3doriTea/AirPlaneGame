@@ -1,19 +1,38 @@
 #include "TypeRegistry.h"
+#include "TypeRegistryImpl.h"
+#include "ReflectionInfo.h"
 
-#include "WindowContextUtil.h"
-
-
-Inspector& Inspector::Instance()
+void TypeRegistry::ProvisionalRegister(std::type_index typeIdx, std::function<void(void)> registerFunc)
 {
-	static Inspector instance;
+	provisionalRegisterFunc_.emplace(typeIdx, registerFunc);
+}
+
+TypeRegistry& TypeRegistry::Instance()
+{
+	static TypeRegistry instance;
 	return instance;
 }
 
-void Inspector::Show(std::type_index typeIdx, std::any instance, const char* name)
+void TypeRegistry::Initialize()
 {
-	if (mtgb::WinCtxRes::CurrContext() != mainWindow_)
+	for (auto& itr : provisionalRegisterFunc_)
 	{
-		return;
+		itr.second();
 	}
-	TypeRegistry::Instance().CallFunc(typeIdx, instance, name);
+}
+
+void TypeRegistry::CallFunc(std::type_index typeIdx, std::any instance, const char* name)
+{
+	const auto& itr = showFunctions_.find(typeIdx);
+	if (itr != showFunctions_.end())
+	{
+		itr->second(instance, name);
+	}
+}
+bool TypeRegistry::IsRegisteredType(std::type_index typeIdx)
+{
+	return showFunctions_.contains(typeIdx);
+}
+TypeRegistry::TypeRegistry()
+{
 }

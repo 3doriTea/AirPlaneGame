@@ -24,10 +24,9 @@
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
-    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
-    <ClCompile Include="mtgb\TypeRegistration.cpp" />
+    <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -121,7 +120,7 @@
     <ClCompile Include="mtgb\Timer.cpp" />
     <ClCompile Include="mtgb\Transform.cpp" />
     <ClCompile Include="mtgb\TransformCP.cpp" />
-    <ClCompile Include="mtgb\TypeRegistry.cpp" />
+    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\Vector2.cpp" />
     <ClCompile Include="mtgb\Vector2Int.cpp" />
     <ClCompile Include="mtgb\Vector3.cpp" />
@@ -155,12 +154,9 @@
     <ClInclude Include="mtgb\ImGuiShowable.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
-    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
-    <ClInclude Include="mtgb\Reflection.h" />
-    <ClInclude Include="mtgb\ReflProxy.h" />
-    <ClInclude Include="mtgb\TypeRegisterMacro.h" />
-    <ClInclude Include="mtgb\TypeRegistration.h" />
+    <ClInclude Include="mtgb\ReflectionInfo.h" />
+    <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
@@ -273,7 +269,7 @@
     <ClInclude Include="mtgb\Timer.h" />
     <ClInclude Include="mtgb\Transform.h" />
     <ClInclude Include="mtgb\TransformCP.h" />
-    <ClInclude Include="mtgb\TypeRegistry.h" />
+    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\Vector2.h" />
     <ClInclude Include="mtgb\Vector2Int.h" />
     <ClInclude Include="mtgb\Vector3.h" />

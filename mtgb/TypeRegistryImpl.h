@@ -1,5 +1,5 @@
 #pragma once
-#include "TypeRegistration.h"
+#include "TypeRegistry.h"
 #include <refl.hpp>
 #include <iostream>
 #include "../ImGui/imgui.h"

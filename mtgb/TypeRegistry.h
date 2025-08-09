@@ -1,65 +1,47 @@
 #pragma once
-#include <typeinfo>
-#include <unordered_map>
-#include <functional>
 #include <typeindex>
-#include <type_traits>
+#include <functional>
+#include <unordered_map>
 #include <any>
-#include <Windows.h>
-#include "WindowContext.h"
-#include "DefaultShow.h"
-#include "TypeRegistration.h"  
 
-using namespace mtgb;
 
-class Inspector
+class TypeRegistry
 {
 public:
-
-	static Inspector& Instance();
-
 	template<typename T>
-	void ShowInspector(T* instance, const char* name);
+	void RegisterType();
+	
 	template<typename T>
-	void ShowInspector(const T* instance, const char* name);
+	void RegisterFunc(std::function<void(std::any, const char*)> func);
+
+	static TypeRegistry& Instance();
+	void ProvisionalRegister(std::type_index typeIdx, std::function<void(void)> registerFunc);
+	void Initialize();
+	void CallFunc(std::type_index typeIdx, std::any instance, const char* name);
+	bool IsRegisteredType(std::type_index typeIdx);
 private:
-	Inspector() {};
-	void Show(std::type_index typeIdx,std::any instance,const char* name);
-	const static  mtgb::WindowContext mainWindow_ = mtgb::WindowContext::First;
+	std::unordered_map<std::type_index, std::function<void(std::any, const char*)>> showFunctions_;
+	std::unordered_map<std::type_index, std::function<void(void)>> provisionalRegisterFunc_;
+
+	TypeRegistry();
+	TypeRegistry(const TypeRegistry&) = delete;
+	TypeRegistry& operator=(const TypeRegistry&) = delete;
 };
 
-template<typename T>
-void Inspector::ShowInspector(T* instance, const char* name)
-{
-	using Type = std::remove_cvref_t<T>;
-	std::type_index typeIdx(typeid(Type));
-	if (mtgb::CurrContext() != mainWindow_)
-	{
-		return;
-	}
+// É}ÉNÉçíËã`
+#define REGISTER_TYPE(Type, ...) \
+struct Type##_TypeRegister{ \
+	Type##_TypeRegister(){\
+		TypeRegistry::Instance().ProvisionalRegister(typeid(Type),[](){TypeRegistry::Instance().RegisterType<Type>();});\
+	}\
+};\
+static Type##_TypeRegister Type##_instance;\
+REFL_TYPE(Type, __VA_ARGS__)
 
-	if (TypeRegistry::Instance().IsRegisteredType(typeIdx))
-	{
-		TypeRegistry::Instance().CallFunc(typeIdx, std::any(instance), name);
-		//Show(typeIdx, std::any(instance), name);
-	}
-	else
-	{
-		if (mtgb::CurrContext() != mainWindow_) return;
-		mtgb::DefaultShow(instance, name);
-	}
-}
+#define REGISTER_FIELD(MemberName,...)\
+REFL_FIELD(MemberName,__VA_ARGS__)
 
-template<typename T>
-void Inspector::ShowInspector(const T* instance, const char* name)
-{
-	ShowInspector(instance, name);
-}
+#define REGISTER_MEMBER_FUNC(MemberName,...)\
+REFL_FUNC(MemberName,__VA_ARGS__)
 
-template<typename T>
-void TypeRegistry::RegisterFunc(std::function<void(std::any, const char*)> func)
-{
-	using Type = std::remove_cvref_t<T>;
-	std::type_index typeIdx(typeid(Type));
-	showFunctions_[typeIdx] = func;
-}
+#define REGISTER_END REFL_END

@@ -3,6 +3,7 @@
 mtgb::ImGuiShowableBase::ImGuiShowableBase(const std::string& name)
     :displayName_{name}
     ,isVisible_{true}
+    ,isAuto_{true}
 {
 }
 
@@ -23,6 +24,11 @@ void mtgb::ImGuiShowableBase::SetVisible(bool visible)
 bool mtgb::ImGuiShowableBase::IsVisible()
 {
     return isVisible_;
+}
+
+bool mtgb::ImGuiShowableBase::IsAuto()
+{
+    return isAuto_;
 }
 
 void mtgb::ImGuiShowableBase::SetDisplayName(const std::string& name)
@@ -52,7 +58,7 @@ void mtgb::ImGuiShowSystem::ShowAll()
 {
     for (auto* obj : showList_)
     {
-        if (obj && obj->IsVisible())
+        if (obj  && obj->IsAuto())
         {
             obj->ShowImGui();
         }

@@ -3,7 +3,7 @@
 #include "../Source/Player.h"
 #include "JoystickProxy.h"
 #include "../Source/PlayerProxy.h"
-#include "TypeRegistration.h"
+#include "TypeRegistry.h"
 //#include "TypeRegistryImpl.h"
 #include <string>
 
@@ -12,7 +12,6 @@ REGISTER_TYPE(PlayerProxy)
 REGISTER_FIELD(test1)
 REGISTER_FIELD(test2)
 REGISTER_FIELD(name)
-REGISTER_FIELD(a)
 REGISTER_END
 
 REGISTER_TYPE(JoystickProxy)
