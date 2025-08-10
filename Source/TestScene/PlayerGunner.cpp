@@ -16,34 +16,28 @@ PlayerGunner::~PlayerGunner()
 
 void PlayerGunner::Update()
 {
-	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(10.f) };
+	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
 
 	if (InputUtil::GetKey(KeyCode::W))
 	{
-		pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::S))
 	{
-		pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::A))
 	{
-		pTransform_->Rotation(Vector3::Down() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Down() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::D))
 	{
-		pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED);
+		pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	{
 		Instantiate<PlayerBullet>(pTransform_->position + Vector3::Down() * 1.0f, pTransform_->rotate);
 	}
-
-	/*LOGF("x:%f, y:%f, z:%f, w:%f\n",
-		pTransform_->rotate_.f[0],
-		pTransform_->rotate_.f[1],
-		pTransform_->rotate_.f[2],
-		pTransform_->rotate_.f[3]);*/
 }
 
 void PlayerGunner::Draw() const

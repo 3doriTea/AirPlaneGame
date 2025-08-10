@@ -21,7 +21,8 @@ EnemyPlane::~EnemyPlane()
 void EnemyPlane::Update()
 {
 	Vector3 addAngle{ Vector3::One() * (DirectX::XMConvertToRadians(30.0f) * Time::DeltaTimeF()) };
-	pTransform_->rotate += { addAngle.x, addAngle.y, addAngle.z, 0.0f };
+	pTransform_->rotate *= Quaternion::Euler(addAngle);
+	LOGF("(%f, %f, %f, %f)\n", pTransform_->rotate.X(), pTransform_->rotate.Y(), pTransform_->rotate.Z(), pTransform_->rotate.W());
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 }
 

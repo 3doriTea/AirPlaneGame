@@ -1,6 +1,7 @@
 #pragma once
 #include <DirectXMath.h>
 #include <string>
+#include "Vector3.h"
 
 
 namespace mtgb
@@ -37,11 +38,24 @@ namespace mtgb
 			v = _v;
 		}
 
-		//static Quaternion Identity() { return DirectX::XMQuaternionIdentity(); }
-		//static Quaternion Euler(const Vector3& _vec) { return DirectX::XMQuaternionRotationRollPitchYaw(_vec.x, _vec.y, _vec.z); }
-		//Quaternion GetInverse() const { return { -X(), -Y(), -Z(), W() }; }
-		//static Quaternion GetInverse(const Quaternion& _q) { return _q.GetInverse(); };
-		//static float GetSize(const Quaternion& _q) { return _q.X() * _q.X() + _q.Y() * _q.Y() + _q.Z() * _q.Z() + _q.W() * _q.W(); }
+		/// <summary>
+		/// 単位四元数を取得
+		/// </summary>
+		/// <returns>単位</returns>
+		static Quaternion Identity() { return DirectX::XMQuaternionIdentity(); }
+
+		//static 
+
+		/// <summary>
+		/// オイラー角を四元数に変換
+		/// </summary>
+		/// <param name="_vec">オイラー角のベクトル</param>
+		/// <returns>四元数</returns>
+		static Quaternion Euler(const Vector3& _vec) { return DirectX::XMQuaternionRotationRollPitchYaw(_vec.x, _vec.y, _vec.z); }
+		Quaternion GetInverse() const { return { -X(), -Y(), -Z(), W() }; }
+		static Quaternion GetInverse(const Quaternion& _q) { return _q.GetInverse(); }
+		float GetSize() const { return X() * X() + Y() * Y() + Z() * Z() + W() * W(); }
+		static float GetSize(const Quaternion& _q) { return _q.GetSize(); }
 
 		/// <summary>
 		/// 文字列に変換する
@@ -49,6 +63,7 @@ namespace mtgb
 		/// <returns>文字列</returns>
 		std::string ToString() const;
 
+		inline Quaternion& operator*= (const Quaternion& _other) { *this = DirectX::XMQuaternionMultiply(*this, _other); return *this; };
 		inline Quaternion& operator+=(const Quaternion& _other) { f[0] += f[0]; f[1] += f[1]; f[2] += f[2]; f[3] += f[3]; return *this; }
 		inline Quaternion& operator-=(const Quaternion& _other) { f[0] -= f[0]; f[1] -= f[1]; f[2] -= f[2]; f[3] -= f[3]; return *this; }
 	};
