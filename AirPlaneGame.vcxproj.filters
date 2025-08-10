@@ -137,6 +137,9 @@
     <Filter Include="mtgb\System\ImGui">
       <UniqueIdentifier>{867fb158-f2d8-4419-8c6c-57ce9b6e131b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mtgb\System\Debug\Proxy">
+      <UniqueIdentifier>{a16f70ac-ebf2-494a-9f96-35f7bffa174f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -468,6 +471,9 @@
     </ClCompile>
     <ClCompile Include="Source\PlayerProxy.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TransformProxy.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -851,6 +857,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\ShowAttributes.h">
       <Filter>mtgb\System\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TransformProxy.h">
+      <Filter>mtgb\System\Debug\Proxy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

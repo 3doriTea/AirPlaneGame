@@ -63,3 +63,4 @@ void TypeRegistry::RegisterFunc(std::function<void(std::any, const char*)> func)
 	std::type_index typeIdx(typeid(Type));
 	showFunctions_[typeIdx] = func;
 }
+

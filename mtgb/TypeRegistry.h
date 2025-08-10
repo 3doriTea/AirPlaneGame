@@ -22,6 +22,11 @@ public:
 private:
 	std::unordered_map<std::type_index, std::function<void(std::any, const char*)>> showFunctions_;
 	std::unordered_map<std::type_index, std::function<void(void)>> provisionalRegisterFunc_;
+	template<typename... Args, typename T>
+	bool CheckCustomAttrs(std::tuple<Args...>& attrs, T valPtr, const char* name);
+	
+	template<typename T>
+	bool ShowMemberWithReflection(T memberValue, const char* name);
 
 	TypeRegistry();
 	TypeRegistry(const TypeRegistry&) = delete;

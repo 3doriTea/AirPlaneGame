@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 
-struct Vector3Show : refl::attr::usage::any 
+struct Vector3Show : refl::attr::usage::type 
 {
 	void operator()(mtgb::Vector3* vec, const char* name) const
 	{

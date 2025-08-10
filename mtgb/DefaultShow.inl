@@ -72,13 +72,20 @@ void DefaultShow(T* value, const char* name)
     }
     else if constexpr (std::is_same_v<Type, std::string>)
     {
-        std::string str = mtgb::MultiToUTF8(*value).c_str();
-        std::vector<char> buffer(str.begin(), str.end());
+        std::string str = mtgb::MultiToUTF8(*value);
+        ImGui::Text("%s : %s",name, str.c_str());
+        /*std::vector<char> buffer(str.begin(), str.end());
         buffer.resize(256);
         if (ImGui::InputText(name,buffer.data(), buffer.size()))
         {
             *value = UTF8ToMulti(std::string(buffer.data()));
-        }
+        }*/
+    }
+    else if constexpr (std::is_same_v<Type, std::string_view>)
+    {
+        std::string str(value->data(),value->size());
+        str = MultiToUTF8(str);
+        ImGui::Text("%s : %s", name, str.c_str());
     }
     else
     {

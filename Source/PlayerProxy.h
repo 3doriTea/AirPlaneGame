@@ -8,6 +8,7 @@ public:
 	PlayerProxy(Player* player);
 	int* test1;
 	float* test2;
-	std::string name;
+	std::string_view name;
 	Vector3* vec3_;
+	Quaternion* rot_;
 };

@@ -26,6 +26,7 @@
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
+    <ClCompile Include="mtgb\TransformProxy.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\TransformProxy.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />

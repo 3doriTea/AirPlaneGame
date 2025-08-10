@@ -8,16 +8,19 @@
 #include "MTStringUtility.h"
 #include "DefaultShow.h"
 
-template <typename F>
+
+
+template <typename Func>
 struct ShowFunc : refl::attr::usage::type
 {
 private:
-	F func;
+	Func func;
 public:
-	constexpr ShowFunc(F _func) : func(_func)
+	constexpr ShowFunc(Func _func) : func(_func)
 	{
 	}
-	void operator()(const char* name) const { func(name); }
+	template<typename T>
+	void operator()(T value,const char* name) const { func(value,name); }
 };
 
 // ShowFuncを作成するヘルパー関数
@@ -32,8 +35,7 @@ template<typename T>
 void TypeRegistry::RegisterType()
 {
 	std::type_index typeIdx(typeid(T));
-	
-	showFunctions_[typeIdx] = [&](std::any ptr, const char* name)
+	showFunctions_[typeIdx] = [this](std::any ptr, const char* name)
 		{
 			using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
 			if constexpr (refl::is_reflectable<Type>())
@@ -67,7 +69,7 @@ void TypeRegistry::RegisterType()
 									//ShowFunc型のインスタンスか否か
 									if constexpr (refl::trait::is_instance_of_v<ShowFunc, AttrType>)
 									{
-										attrs(name);
+										attrs(registerInstance,name);
 										showFuncExecuted = true;
 									}
 								}()
@@ -92,30 +94,23 @@ void TypeRegistry::RegisterType()
 									// ポインタ型の場合：そのまま渡す
 									auto memberValue = member(*registerInstance);
 									
-									// 属性をチェックして適切な表示方法を選択
-									bool hasCustomAttribute = false;
+									// メンバの型がリフレクションされているかチェック
+									if (!this->ShowMemberWithReflection(memberValue, member.name.c_str()))
+									{
+										// 属性をチェックして適切な表示方法を選択
+										bool hasCustomAttribute = false;
 
-									// メンバーの属性を取得
-									auto memberAttributes = refl::descriptor::get_attributes(member);
+										// メンバーの属性を取得
+										auto memberAttributes = refl::descriptor::get_attributes(member);
 
-									std::apply([&](auto&&... attrs)
-										{
-											(
-												(
-													[&] {
-														using AttrType = std::decay_t<decltype(attrs)>;
-														if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
-														{
-															attrs(memberValue, member.name.c_str());
-															hasCustomAttribute = true;
-														}
-													}()
-														), ...);
-										}, memberAttributes);
 
-									// カスタム属性がない場合はデフォルト表示
-									if (!hasCustomAttribute) {
-										mtgb::DefaultShow(memberValue, member.name.c_str());
+
+										hasCustomAttribute = this->CheckCustomAttrs(memberAttributes, memberValue, member.name.c_str());
+
+										// カスタム属性がない場合はデフォルト表示
+										if (!hasCustomAttribute) {
+											mtgb::DefaultShow(memberValue, member.name.c_str());
+										}
 									}
 								}
 								else
@@ -123,31 +118,21 @@ void TypeRegistry::RegisterType()
 									// 値型の場合：アドレスを取得して渡す
 									auto memberPtr = &(member(*registerInstance));
 									
-									// 属性をチェックして適切な表示方法を選択
-									bool hasCustomAttribute = false;
+									// メンバの型がリフレクションされているかチェック
+									if (!this->ShowMemberWithReflection(memberPtr, member.name.c_str()))
+									{
+										// 属性をチェックして適切な表示方法を選択
+										bool hasCustomAttribute = false;
 
-									// メンバーの属性を取得
-									auto memberAttributes = refl::descriptor::get_attributes(member);
+										// メンバーの属性を取得
+										auto memberAttributes = refl::descriptor::get_attributes(member);
 
-									std::apply([&](auto&&... attrs)
-										{
-											(
-												(
-													[&] {
-														using AttrType = std::decay_t<decltype(attrs)>;
-														if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
-														{
-														
-															attrs(memberPtr, member.name.c_str());
-															hasCustomAttribute = true;
-														}
-													}()
-														), ...);
-										}, memberAttributes);
+										hasCustomAttribute = this->CheckCustomAttrs(memberAttributes, memberPtr, member.name.c_str());
 
-									// カスタム属性がない場合はデフォルト表示
-									if (!hasCustomAttribute) {
-										mtgb::DefaultShow(memberPtr, member.name.c_str());
+										// カスタム属性がない場合はデフォルト表示
+										if (!hasCustomAttribute) {
+											mtgb::DefaultShow(memberPtr, member.name.c_str());
+										}
 									}
 								}
 							});
@@ -164,3 +149,87 @@ void TypeRegistry::RegisterType()
 		};
 }
 
+// メンバの型がリフレクションされているかチェックし、ShowFunc属性があればそれを使用
+template<typename T>
+bool TypeRegistry::ShowMemberWithReflection(T memberValue, const char* name)
+{
+	using MemberType = std::remove_pointer_t<std::remove_cvref_t<T>>;
+	
+	if constexpr (refl::is_reflectable<MemberType>())
+	{
+		constexpr auto memberType = refl::reflect<MemberType>();
+		
+		// メンバの型にShowFunc属性があるかチェック
+		bool showFuncExecuted = false;
+		std::apply([&](auto&&... attrs)
+			{
+				(
+					(
+						[&]
+						{
+							using AttrType = std::decay_t<decltype(attrs)>;
+							if constexpr (refl::trait::is_instance_of_v<ShowFunc, AttrType>)
+							{
+								// ポインタの場合は値を渡し、値型の場合はそのまま渡す
+								if constexpr (std::is_pointer_v<T>)
+								{
+									attrs(memberValue, name);
+								}
+								else
+								{
+									attrs(&memberValue, name);
+								}
+								showFuncExecuted = true;
+							}
+						}()
+							),
+					...);
+			}, memberType.attributes);
+		
+		if (showFuncExecuted)
+		{
+			return true;
+		}
+		
+		// ShowFunc属性がない場合は、TypeRegistryに登録された表示関数を使用
+		std::type_index memberTypeIdx(typeid(MemberType));
+		
+		//TypeRegistryに登録されているかチェック
+		if (this->IsRegisteredType(memberTypeIdx))
+		{
+			if constexpr (std::is_pointer_v<T>)
+			{
+				this->CallFunc(memberTypeIdx, std::any(memberValue), name);
+			}
+			else
+			{
+				this->CallFunc(memberTypeIdx, std::any(&memberValue), name);
+			}
+			return true;
+		}
+	}
+	
+	return false; // リフレクションされていない、または表示関数が見つからない
+}
+
+template<typename ...Args, typename T>
+bool TypeRegistry::CheckCustomAttrs(std::tuple<Args...>& attrs, T valPtr, const char* name)
+{
+	bool ret = false;
+	std::apply([&](auto&&... attr)
+		{
+			(
+				(
+					[&] {
+						using AttrType = std::decay_t<decltype(attr)>;
+						if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
+						{
+							attr(valPtr, name);
+							ret = true;
+						}
+					}()
+				), 
+			...);
+		}, attrs);
+	return ret;
+}

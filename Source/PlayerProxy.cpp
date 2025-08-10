@@ -8,6 +8,7 @@ PlayerProxy::PlayerProxy(Player* player)
 	,test2(&target_->test2)
 	,name(target_->name_)
 	,vec3_(&target_->pTransform_->position_)
+
 {
 	isAuto_ = true;
 }
