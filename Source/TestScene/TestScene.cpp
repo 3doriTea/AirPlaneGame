@@ -27,19 +27,21 @@ void TestScene::Initialize()
 	Instantiate<Reticle>();
 
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
 
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(
-		Instantiate<PlayerPilot>(
-			pPlayerPlane->GetEntityId()));
+		Instantiate<PlayerPilot>(eIdPlayer));
 
 	CameraHandleInScene hCamera2 = RegisterCameraGameObject(
-		Instantiate<PlayerGunner>(
-			pPlayerPlane->GetEntityId()));
+		Instantiate<PlayerGunner>(eIdPlayer));
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<EnemyPlane>(Vector3{ 0, 0, 10 });
+	Instantiate<EnemyPlane>(Vector3{ 0, 0, 10 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 0, 0, 20 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 0, 10, 0 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 }
 
 void TestScene::Update()

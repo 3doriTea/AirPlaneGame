@@ -14,11 +14,18 @@ namespace mtgb
 			Vector3{ 0, 0, 0 }
 		{}
 
+		inline operator DirectX::XMVECTOR() const { return DirectX::XMLoadFloat3(this); }
+
 		inline Vector3& operator*=(const DirectX::XMMATRIX _matrix)
 		{
-			DirectX::XMVECTOR v = DirectX::XMLoadFloat3(this);
-			v = DirectX::XMVector3TransformCoord(v, _matrix);
-			DirectX::XMStoreFloat3(this, v);
+			using DirectX::XMVECTOR;
+			using DirectX::XMVector3TransformCoord;
+			using DirectX::XMStoreFloat3;
+
+			XMVECTOR v{ (XMVECTOR)*this };
+			v = XMVector3TransformCoord(v, _matrix);
+			XMStoreFloat3(this, v);
+
 			return *this;
 		}
 		inline Vector3& operator*=(const float _value) { x *= _value; y *= _value; z *= _value;  return *this; }
@@ -29,7 +36,16 @@ namespace mtgb
 
 		inline float Size() const { return std::sqrtf(x * x + y * y + z * z); };
 
+		Vector3& Normalize() { *this /= Size(); return *this; }
+		static Vector3 Normalize(const Vector3& _v) { return Vector3{ _v } /= _v.Size(); }
+
+		/// <summary>
+		/// 零ベクトル
+		/// </summary>
 		static inline auto Zero()    { return Vector3{  0,  0,  0 }; }
+		/// <summary>
+		/// 単位ベクトル
+		/// </summary>
 		static inline auto One()     { return Vector3{  1,  1,  1 }; }
 		static inline auto Up()      { return Vector3{  0,  1,  0 }; }
 		static inline auto Down()    { return Vector3{  0, -1,  0 }; }

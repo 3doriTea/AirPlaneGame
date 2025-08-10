@@ -4,7 +4,7 @@
 class EnemyPlane : public GameObject
 {
 public:
-	EnemyPlane(const Vector3& _worldPosition);
+	EnemyPlane(const Vector3& _worldPosition, const EntityId _playerPlane);
 	~EnemyPlane();
 
 	void Update() override;
@@ -14,5 +14,6 @@ private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
 	Transform* pTransform_;
+	Transform* pTarget_;
 	float speed_;
 };

@@ -57,6 +57,13 @@ namespace mtgb
 		float GetSize() const { return X() * X() + Y() * Y() + Z() * Z() + W() * W(); }
 		static float GetSize(const Quaternion& _q) { return _q.GetSize(); }
 
+		static Quaternion SLerp(const Vector3& _self, const Vector3& _to, float _lerp)
+		{
+			using DirectX::XMVECTOR;
+
+			return DirectX::XMQuaternionSlerp(Vector3::Normalize(_self), Vector3::Normalize(_to), _lerp);
+		}
+
 		/// <summary>
 		/// •¶Žš—ñ‚É•ÏŠ·‚·‚é
 		/// </summary>
