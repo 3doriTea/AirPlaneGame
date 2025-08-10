@@ -2,6 +2,7 @@
 #include "ImGuiShowable.h"
 #include "mtgb.h"
 class Player;
+class TransformProxy;
 class PlayerProxy : public ImGuiShowable<Player>
 {
 public:
@@ -9,6 +10,5 @@ public:
 	int* test1;
 	float* test2;
 	std::string_view name;
-	Vector3* vec3_;
-	Quaternion* rot_;
+	TransformProxy* pTransformProxy_;
 };
