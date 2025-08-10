@@ -140,6 +140,7 @@
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\SkySphere.cpp" />
+    <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
     <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="mtgb\ShaderType.h" />
     <ClInclude Include="Source\SkySphere.h" />
+    <ClInclude Include="Source\TestScene\EnemyPlane.h" />
     <ClInclude Include="Source\TestScene\PlayerBullet.h" />
     <ClInclude Include="Source\TestScene\PlayerGunner.h" />
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />

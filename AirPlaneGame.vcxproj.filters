@@ -640,6 +640,9 @@
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TestScene\EnemyPlane.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1028,6 +1031,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\TransformCore.h">
       <Filter>03mtgb\CoreType</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\EnemyPlane.h">
+      <Filter>01Game\05TestScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

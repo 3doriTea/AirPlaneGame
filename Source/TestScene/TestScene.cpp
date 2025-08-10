@@ -7,6 +7,7 @@
 #include "PlayerPlane.h"
 #include "PlayerGunner.h"
 #include "PlayerPilot.h"
+#include "EnemyPlane.h"
 
 using namespace mtgb;
 
@@ -38,7 +39,7 @@ void TestScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
+	Instantiate<EnemyPlane>(Vector3{ 0, 0, 10 });
 }
 
 void TestScene::Update()
