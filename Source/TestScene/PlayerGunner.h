@@ -12,4 +12,6 @@ public:
 
 private:
 	Transform* pTransform_;
+	float angleX_;
+	float angleY_;
 };

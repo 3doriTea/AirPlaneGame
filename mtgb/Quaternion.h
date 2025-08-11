@@ -24,10 +24,10 @@ namespace mtgb
 		{}
 		Quaternion(float _x, float _y, float _z, float _w)
 		{
-			f[0] = _x;
-			f[1] = _y;
-			f[2] = _z;
-			f[3] = _w;
+			X() = _x;
+			Y() = _y;
+			Z() = _z;
+			W() = _w;
 		}
 		Quaternion(const DirectX::XMVECTORF32& _v)
 		{
@@ -57,11 +57,36 @@ namespace mtgb
 		float GetSize() const { return X() * X() + Y() * Y() + Z() * Z() + W() * W(); }
 		static float GetSize(const Quaternion& _q) { return _q.GetSize(); }
 
-		static Quaternion SLerp(const Vector3& _self, const Vector3& _to, float _lerp)
+		static Quaternion SLerp(const Quaternion& _self, const Quaternion& _to, float _lerp)
 		{
-			using DirectX::XMVECTOR;
+			return DirectX::XMQuaternionSlerp(_self, _to, _lerp);
+		}
 
-			return DirectX::XMQuaternionSlerp(Vector3::Normalize(_self), Vector3::Normalize(_to), _lerp);
+		static Quaternion LookRotation(const Vector3& _dir, const Vector3& _upVec);
+
+		/// <summary>
+		/// 今向いている方向と、これから向きたい方向から四元数を作成
+		/// </summary>
+		/// <param name="_fromDir">今向いている方向ベクトル</param>
+		/// <param name="_toDir">向きたい方向ベクトル</param>
+		/// <returns>四元数</returns>
+		static Quaternion FromToRotation(const Vector3& _fromDir, const Vector3& _toDir)
+		{
+			// MEMO: 1. 正規化(v1, v2)
+			// MEMO: 2. 外積で回転軸の正規化(v = (x, y, z))ゲット norm(Vf x Vt)
+			// MEMO: 3. 内積で回転角度(th)ゲット acos(Vf ・ Vt)
+			// MEMO: 4. 四元数生成 
+			// MEMO: -. q = (x sin(th / 2), y sin(th / 2), z sin(th / 2), cos(th / 2))
+
+			Vector3 v1{ Vector3::Normalize(_fromDir) };
+			Vector3 v2{ Vector3::Normalize(_toDir) };
+
+			Vector3 axis{ DirectX::XMVector3Cross(v1, v2) };
+			float th{ acosf(DirectX::XMVector3Dot(v1, v2).m128_f32[0]) };
+			float s{ sinf(th * 0.5f) };
+			float w{ cosf(th * 0.5f) };
+
+			return { axis.x * s, axis.y * s, axis.z * s, w };
 		}
 
 		/// <summary>

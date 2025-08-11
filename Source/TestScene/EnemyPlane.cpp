@@ -26,7 +26,14 @@ void EnemyPlane::Update()
 	//Vector3 addAngle{ Vector3::One() * (DirectX::XMConvertToRadians(30.0f) * Time::DeltaTimeF()) };
 	//pTransform_->rotate *= Quaternion::Euler(addAngle);
 	//LOGF("(%f, %f, %f, %f)\n", pTransform_->rotate.X(), pTransform_->rotate.Y(), pTransform_->rotate.Z(), pTransform_->rotate.W());
-	pTransform_->rotate *= Quaternion::SLerp(pTransform_->Forward(), pTarget_->position - pTransform_->position, Time::DeltaTimeF());
+	//pTransform_->rotate = Quaternion::SLerp(pTransform_->Forward(), pTarget_->position - pTransform_->position, Time::DeltaTimeF());
+	
+	Vector3 diffDir{ pTarget_->position - pTransform_->position };
+	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
+	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
+	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+	//DirectX::XMQuaternionBaryCentric
+	
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 }
 

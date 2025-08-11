@@ -13,6 +13,9 @@ namespace mtgb
 		Vector3() :
 			Vector3{ 0, 0, 0 }
 		{}
+		Vector3(const DirectX::XMVECTOR& _v) :
+			Vector3{ _v.m128_f32[0], _v.m128_f32[1], _v.m128_f32[2] }
+		{}
 
 		inline operator DirectX::XMVECTOR() const { return DirectX::XMLoadFloat3(this); }
 

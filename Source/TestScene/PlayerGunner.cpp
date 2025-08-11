@@ -5,7 +5,9 @@ using namespace mtgb;
 
 PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder()
 	.Build()),
-	pTransform_{ Component<Transform>() }
+	pTransform_{ Component<Transform>() },
+	angleX_{ 0.0f },
+	angleY_{ 0.0f }
 {
 	pTransform_->SetParent(_plane);
 }
@@ -20,20 +22,25 @@ void PlayerGunner::Update()
 
 	if (InputUtil::GetKey(KeyCode::W))
 	{
-		pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED * Time::DeltaTimeF());
+		angleX_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::S))
 	{
-		pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED * Time::DeltaTimeF());
+		angleX_ += ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::A))
 	{
-		pTransform_->Rotation(Vector3::Down() * ANGLE_SPEED * Time::DeltaTimeF());
+		angleY_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Down() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::D))
 	{
-		pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED * Time::DeltaTimeF());
+		angleY_ += ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED * Time::DeltaTimeF());
 	}
+	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	{
 		Instantiate<PlayerBullet>(pTransform_->position + Vector3::Down() * 1.0f, pTransform_->rotate);
