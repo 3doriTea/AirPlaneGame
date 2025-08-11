@@ -11,6 +11,7 @@
 #include "Transform.h"
 #include "CameraSystem.h"
 #include "DirectWrite.h"
+#include "MTImGui.h"
 
 void mtgb::Draw::Box(
 	const Vector2Int& _begin,
@@ -72,6 +73,40 @@ void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int si
 	DirectX11Draw::SetShader(ShaderType::Sprite2D);
 
 	Game::System<mtgb::Text>().ImmediateDraw(text, x, y, size);
+}
+
+void mtgb::Draw::TransformGuizmo(Transform* _pTransform)
+{
+	//float[16]の配列を作成
+	Matrix4x4 worldMatrix4x4, viewMatrix4x4, projMatrix4x4;
+	_pTransform->GenerateWorldMatrix(&worldMatrix4x4);
+	Game::System<mtgb::CameraSystem>().GetViewMatrix(&viewMatrix4x4);
+	Game::System<mtgb::CameraSystem>().GetProjMatrix(&projMatrix4x4);
+
+	DirectX::XMFLOAT4X4 float4x4;
+
+	//ワールド行列
+	DirectX::XMStoreFloat4x4(&float4x4, worldMatrix4x4);
+	float worldMatrix[16];
+	memcpy(worldMatrix, &float4x4, sizeof(worldMatrix));
+
+	//ビュー行列
+	DirectX::XMStoreFloat4x4(&float4x4, viewMatrix4x4);
+	float viewMatrix[16];
+	memcpy(viewMatrix, &float4x4, sizeof(viewMatrix));
+
+	//プロジェクション行列
+	DirectX::XMStoreFloat4x4(&float4x4, projMatrix4x4);
+	float projMatrix[16];
+	memcpy(projMatrix, &float4x4, sizeof(projMatrix));
+
+	DirectX::XMFLOAT3 tempRot;
+	if (Game::System<mtgb::MTImGui>().DrawTransformGuizmo(worldMatrix, viewMatrix, projMatrix, &_pTransform->position_, &tempRot, &_pTransform->scale_))
+	{
+		_pTransform->rotate_.f[0] = tempRot.x;
+		_pTransform->rotate_.f[1] = tempRot.y;
+		_pTransform->rotate_.f[2] = tempRot.z;
+	}
 }
 
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)

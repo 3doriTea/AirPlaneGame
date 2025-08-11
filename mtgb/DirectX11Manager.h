@@ -2,7 +2,7 @@
 #include "ISystem.h"
 #include <string>
 #include <wrl/client.h>
-
+#include "Vector2Int.h"
 #pragma comment(lib, "d3d11.lib")  // DirectX11のライブラリ
 #pragma comment(lib, "d3dcompiler.lib")  // シェーダコンパイラ用ライブラリ
 
@@ -38,7 +38,7 @@ namespace mtgb
 		void CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1);
 		void CreateRenderTargetView(IDXGISwapChain1* pSwapChain1, ID3D11RenderTargetView** ppRenderTargetView);
 		void CreateViewport(D3D11_VIEWPORT& viewport);
-		void CreateDepthStencilAndDepthStencilView(ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
+		void CreateDepthStencilAndDepthStencilView(const Vector2Int bufSize, ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
 		//void InitializeWindowContext(WindowContext& context, bool isMultiMonitor);
 
 		//void ChangeRenderContext(WindowContext& context);

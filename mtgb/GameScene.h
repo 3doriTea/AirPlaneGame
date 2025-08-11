@@ -12,6 +12,7 @@ namespace mtgb
 	class GameScene
 	{
 		friend class SceneSystem;
+		friend class RenderSystem;
 	private:
 		static GameScene* pInstance_;
 

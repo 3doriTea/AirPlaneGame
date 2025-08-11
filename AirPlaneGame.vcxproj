@@ -19,13 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\GraphEditor.cpp" />
+    <ClCompile Include="ImGui\ImCurveEdit.cpp" />
+    <ClCompile Include="ImGui\ImGradient.cpp" />
+    <ClCompile Include="ImGui\ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
+    <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
+    <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TransformProxy.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
@@ -147,6 +154,12 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ImGui\GraphEditor.h" />
+    <ClInclude Include="ImGui\ImCurveEdit.h" />
+    <ClInclude Include="ImGui\ImGradient.h" />
+    <ClInclude Include="ImGui\ImGuizmo.h" />
+    <ClInclude Include="ImGui\ImSequencer.h" />
+    <ClInclude Include="ImGui\ImZoomSlider.h" />
     <ClInclude Include="minimp3.h" />
     <ClInclude Include="minimp3_ex.h" />
     <ClInclude Include="mtgb\Axis.h" />
@@ -157,7 +170,9 @@
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
+    <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TransformProxy.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />

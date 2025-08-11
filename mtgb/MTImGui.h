@@ -9,6 +9,14 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui_impl_dx11.h"
+#include <DirectXMath.h>
+#include <wrl/client.h>
+
+using Microsoft::WRL::ComPtr;
+struct ID3D11RenderTargetView;
+struct ID3D11ShaderResourceView;
+struct ID3D11Texture2D;
+struct ID3D11DepthStencilView;
 namespace mtgb
 {
 	/// <summary>
@@ -26,21 +34,36 @@ namespace mtgb
 	class MTImGui final : public ISystem
 	{
 	public:
+		MTImGui();
 		~MTImGui();
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
+
+		void BeginImGuizmoFrame();
 		void Begin(std::string str);
+		/// <summary>
+		/// ImGuizmoウィンドウを描画するためにRTVをセット
+		/// </summary>
+		void SetImGuizmoRenderTargetView();
 		void Draw();
-		void End();
-		void EndFrame();
-		void Release();
 		
+		void EndFrame();
+		void SetDrawList();
+		void RenderGameView();
+		void End();
+		void Release();
+		bool DrawTransformGuizmo(float* worldMat, const float* viewMat, const float* projMat,
+			DirectX::XMFLOAT3* position, DirectX::XMFLOAT3* rotation, DirectX::XMFLOAT3* scale);
 		
 	private:
+		UINT winWidth_, winHeight_;
+
 		//ImGuiIO io;
+		ComPtr<ID3D11RenderTargetView> pRenderTargetView_;
+		ComPtr<ID3D11ShaderResourceView> pSRV_;
+		ComPtr<ID3D11Texture2D> pTexture_;
+		ComPtr<ID3D11Texture2D> pDepthStencil_;
+		ComPtr<ID3D11DepthStencilView> pDepthStencilView_;
 	};
-
-
-
 }

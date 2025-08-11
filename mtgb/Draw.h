@@ -82,7 +82,7 @@ namespace mtgb
 			int size
 		);
 
-
+		static void TransformGuizmo(Transform* _pTransform);
 	public:
 		Draw();
 		~Draw();

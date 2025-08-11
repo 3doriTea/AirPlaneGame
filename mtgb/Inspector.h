@@ -45,7 +45,6 @@ void Inspector::ShowInspector(T* instance, const char* name)
 	}
 	else
 	{
-		if (mtgb::CurrContext() != mainWindow_) return;
 		mtgb::DefaultShow(instance, name);
 	}
 }

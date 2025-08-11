@@ -28,6 +28,7 @@
 #include "Timer.h"
 #include "Draw.h"
 #include "SceneSystem.h"
+#include "RenderSystem.h"
 #include "Debug.h"
 #include "Image.h"
 #include "Audio.h"

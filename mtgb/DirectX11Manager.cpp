@@ -463,17 +463,17 @@ void mtgb::DirectX11Manager::CreateViewport(D3D11_VIEWPORT& viewport)
 	};
 }
 
-void mtgb::DirectX11Manager::CreateDepthStencilAndDepthStencilView(ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView)
+void mtgb::DirectX11Manager::CreateDepthStencilAndDepthStencilView(const Vector2Int bufSize, ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView)
 {
 	HRESULT hResult{};
 	
-	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	//const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	
 	// 深度バッファの設定
 	const D3D11_TEXTURE2D_DESC DEPTH_TEXTURE2D_DESC
 	{
-		.Width = static_cast<UINT>(SCREEN_SIZE.x),
-		.Height = static_cast<UINT>(SCREEN_SIZE.y),
+		.Width = static_cast<UINT>(bufSize.x),
+		.Height = static_cast<UINT>(bufSize.y),
 		.MipLevels = 1,
 		.ArraySize = 1,
 		.Format = DXGI_FORMAT_D32_FLOAT,

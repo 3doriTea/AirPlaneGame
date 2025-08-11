@@ -106,12 +106,6 @@ void Player::Draw() const
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	Vector2Int mousePos = InputUtil::GetMousePosition(context_);
 	
-	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
-
-	/*RectInt draw{};
-	draw.point = mousePos;
-	draw.size = Image::GetSize(hImage_);*/
-	
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
@@ -119,5 +113,9 @@ void Player::Draw() const
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
 	//LOGF("PlayerDraw\n");
-	Inspector::Instance().ShowInspector(proxy_, name_.c_str());
+	/*Inspector::Instance().ShowInspector(proxy_, name_.c_str());
+	if (CurrContext() == WindowContext::First)
+	{
+		Draw::TransformGuizmo(pTransform_);
+	}*/
 }

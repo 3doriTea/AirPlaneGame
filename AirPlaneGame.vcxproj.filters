@@ -140,6 +140,9 @@
     <Filter Include="mtgb\System\Debug\Proxy">
       <UniqueIdentifier>{a16f70ac-ebf2-494a-9f96-35f7bffa174f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImGui\ImGuizmo">
+      <UniqueIdentifier>{0e4070c0-08c8-458b-87e7-b723a588d656}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\Game.cpp">
@@ -473,6 +476,27 @@
       <Filter>Game</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\TransformProxy.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\GraphEditor.cpp">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImCurveEdit.cpp">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGradient.cpp">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGuizmo.cpp">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImSequencer.cpp">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RenderSystem.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TransformGuizmo.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -859,6 +883,30 @@
       <Filter>mtgb\System\Debug</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\TransformProxy.h">
+      <Filter>mtgb\System\Debug\Proxy</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\GraphEditor.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImCurveEdit.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGradient.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGuizmo.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImSequencer.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImZoomSlider.h">
+      <Filter>ImGui\ImGuizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RenderSystem.h">
+      <Filter>mtgb\System\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TransformGuizmo.h">
       <Filter>mtgb\System\Debug\Proxy</Filter>
     </ClInclude>
   </ItemGroup>

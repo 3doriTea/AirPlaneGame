@@ -7,6 +7,11 @@
 
 namespace mtgb
 {
+	enum class Show
+	{
+		Inspector,
+		GameView
+	};
 	/// <summary>
 	/// åpè≥ã÷é~!!
 	/// ImGuiShowableÇåpè≥ÇµÇƒÇ≠ÇæÇ≥Ç¢
@@ -14,7 +19,8 @@ namespace mtgb
 	class ImGuiShowableBase
 	{
 	public:
-		ImGuiShowableBase(const std::string& name = "Showable");
+		ImGuiShowableBase();
+		ImGuiShowableBase(const std::string& name);
 		virtual ~ImGuiShowableBase();
 
 		virtual void ShowImGui();
@@ -39,8 +45,9 @@ namespace mtgb
 	class ImGuiShowable : public ImGuiShowableBase
 	{
 	public:
-		ImGuiShowable(const std::string& name = "Showable");
-		ImGuiShowable(TargetType* derived);
+		ImGuiShowable(Show show = Show::Inspector);
+		ImGuiShowable(const std::string& name,Show show);
+		ImGuiShowable(TargetType* derived,Show show);
 		
 		virtual ~ImGuiShowable() override;
 		/// <summary>
@@ -62,23 +69,34 @@ namespace mtgb
 			return instance;
 		}
 		
-		void Register(ImGuiShowableBase* obj);
-		void Unregister(ImGuiShowableBase* obj);
-		void ShowAll();
+		void Register(ImGuiShowableBase* obj, Show show);
+		void Unregister(ImGuiShowableBase* obj,Show show);
+		void ShowAll(Show show);
 	private:
-		std::vector<ImGuiShowableBase*> showList_;
+		std::vector<ImGuiShowableBase*> inspectorShowList_;
+		std::vector<ImGuiShowableBase*> gameViewShowList_;
 	};
 	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::ImGuiShowable(const std::string& name)
-		:ImGuiShowableBase(name),target_{nullptr}
+	inline ImGuiShowable<TargetType>::ImGuiShowable(Show show)
+		:ImGuiShowableBase()
+		,target_{nullptr}
 	{
-		ImGuiShowSystem::Instance().Register(this);
+		ImGuiShowSystem::Instance().Register(this,show);
+	}
+	template<typename TargetType>
+	inline ImGuiShowable<TargetType>::ImGuiShowable(const std::string& name, Show show)
+		:ImGuiShowableBase(name)
+		,target_{nullptr}
+	{
+		ImGuiShowSystem::Instance().Register(this,show);
 	}
 
 	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::ImGuiShowable(TargetType* target)
-		:target_{target}
+	inline ImGuiShowable<TargetType>::ImGuiShowable(TargetType* target, Show show)
+		:ImGuiShowableBase()
+		,target_{target}
 	{
+		ImGuiShowSystem::Instance().Register(this,show);
 	}
 
 	template<typename TargetType>

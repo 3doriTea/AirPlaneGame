@@ -18,11 +18,10 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	//_register(new MainWindow{}, SystemUpdateType::Cycle);
 
 	//_register.function_
-
+	_register.Set<RenderSystem>(SystemUpdateType::DontCallMe);
 	_register.Set<AssetsManager>(SystemUpdateType::DontCallMe);
 
 	_register.Set<Screen>(SystemUpdateType::DontCallMe);
-	//_register.Set<MainWindow>(SystemUpdateType::Cycle);
 	_register.Set<WindowManager>(SystemUpdateType::Cycle);
 
 	_register.Set<DirectX11Manager>(SystemUpdateType::Frame);
