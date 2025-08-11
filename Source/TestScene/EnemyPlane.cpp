@@ -10,9 +10,13 @@ EnemyPlane::EnemyPlane(
 	.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
+	pCollider_{ Component<Collider>() },
 	pTarget_{ &Transform::Get(_playerPlane) },
 	speed_{ 10.0f }
 {
+	pCollider_->type_ = Collider::TYPE_SPHERE;
+	pCollider_->sphere_.offset_ = Vector3::Zero();
+	pCollider_->sphere_.radius_ = 1.0f;
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	massert(hModel_ >= 0 && "“G”òs‹@ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 }
@@ -40,4 +44,5 @@ void EnemyPlane::Update()
 void EnemyPlane::Draw() const
 {
 	Draw::FBXModel(hModel_, *pTransform_, 0);
+	pCollider_->Draw();
 }

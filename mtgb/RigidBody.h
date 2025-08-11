@@ -25,6 +25,7 @@ namespace mtgb
 
 			this->velocity_ = _other.velocity_;
 			this->onHit_ = _other.onHit_;
+			this->isNeedUpdate_ = _other.isNeedUpdate_;
 			this->pTransform_ = _other.pTransform_;
 
 			return *this;
@@ -34,14 +35,14 @@ namespace mtgb
 		/// 当たったときのイベントコールバック
 		/// </summary>
 		/// <param name="onHit_">void(const EntityId)</param>
-		void OnCollisionEnter(const std::function<void(const EntityId)> _onHit);
+		void OnCollisionEnter(const std::function<void(const EntityId)>& _onHit);
 		/*void OnCollisionStay();
 		void OnCollisionExit();*/
-
 	public:
 		Vector3 velocity_;  // 速度
 
 	private:
+		bool isNeedUpdate_;
 		std::function<void(const EntityId)> onHit_;
 		Transform* pTransform_;  // TODO: 危ないTransform
 	};

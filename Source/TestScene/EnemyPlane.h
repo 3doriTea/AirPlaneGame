@@ -13,7 +13,9 @@ public:
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
+	Collider* pCollider_;
 	Transform* pTransform_;
 	Transform* pTarget_;
 	float speed_;
+	bool broken_;  // ‰ó‚ê‚Ä‚¢‚é‚©
 };
