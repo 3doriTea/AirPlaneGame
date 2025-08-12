@@ -1,4 +1,5 @@
 #include "TransformProxy.h"
+#include "mtgb.h"
 
 
 TransformProxy::TransformProxy(Transform* transform)

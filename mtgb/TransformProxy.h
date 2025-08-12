@@ -1,6 +1,6 @@
 #pragma once
 #include "ImGuiShowable.h"
-#include "mtgb.h"
+#include "Transform.h"
 
 class TransformProxy : public ImGuiShowable<Transform>
 {

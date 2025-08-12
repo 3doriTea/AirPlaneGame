@@ -52,7 +52,7 @@ Player::Player() : GameObject(GameObjectBuilder()
 		{
 			ImGui::Text("%s,RegisterFunc!!", name);
 		});*/
-	Timer::AddInterval(3.0f, []() {LOGIMGUI("aiueo%d",1); });
+	LOGIMGUI(name_, "aiueo%d", 1);
 
 }
 

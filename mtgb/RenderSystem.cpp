@@ -76,9 +76,17 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 	//ÉçÉOï\é¶
 	imGui.Begin("Log");
-	Debug::ShowLogWindow();
+
+	using mtgb::Debug;
+	const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
+	for (const mtgb::LogEntry log : logs)
+	{
+		ImGui::Text("%s (%d)", log.msg.c_str(), log.count);
+	}
+
 	imGui.End();
 	imGui.EndFrame();
+
 	//DirectX11Draw::End();
 }
 

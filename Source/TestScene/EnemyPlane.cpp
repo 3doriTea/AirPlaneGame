@@ -13,6 +13,8 @@ EnemyPlane::EnemyPlane(
 	pTarget_{ &Transform::Get(_playerPlane) },
 	speed_{ 10.0f }
 {
+	pTransformProxy_ = new TransformProxy(pTransform_);
+	pTransformGuizmo_ = new TransformGuizmo(pTransform_);
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	massert(hModel_ >= 0 && "“G”òs‹@ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 }

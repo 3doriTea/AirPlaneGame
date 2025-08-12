@@ -15,5 +15,7 @@ private:
 	RigidBody* pRB_;
 	Transform* pTransform_;
 	Transform* pTarget_;
+	TransformProxy* pTransformProxy_;
+	TransformGuizmo* pTransformGuizmo_;
 	float speed_;
 };
