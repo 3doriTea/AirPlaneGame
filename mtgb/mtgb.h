@@ -24,6 +24,7 @@
 #include "RigidBodyCP.h"
 #include "TransformCP.h"
 #include "AudioPlayerCP.h"
+#include "ColliderCP.h"
 #include "GameTime.h"
 #include "Timer.h"
 #include "Draw.h"
@@ -83,5 +84,6 @@ using mtgb::GameObject;
 using mtgb::Transform;
 using mtgb::RigidBody;
 using mtgb::AudioPlayer;
+using mtgb::Collider;
 
 #pragma endregion

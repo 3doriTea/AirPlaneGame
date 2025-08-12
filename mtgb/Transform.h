@@ -6,6 +6,7 @@
 #include "Matrix4x4.h"
 #include "cmtgb.h"
 #include "TransformCP.h"
+#include "TransformCore.h"
 
 namespace mtgb
 {
@@ -13,7 +14,7 @@ namespace mtgb
 
 	class TransformCP;
 
-	class Transform : public IComponent<mtgb::TransformCP, Transform>
+	class Transform : public IComponent<mtgb::TransformCP, Transform>, public TransformCore
 	{
 		friend TransformCP;
 
@@ -28,19 +29,23 @@ namespace mtgb
 				return *this;
 			}
 
-			this->position_ = _other.position_;
-			this->rotate_ = _other.rotate_;
-			this->scale_ = _other.scale_;
+			this->parent = _other.parent;
+			this->position = _other.position;
+			this->scale = _other.scale;
+			this->rotate = _other.rotate;
 
-			this->parentId_ = _other.parentId_;
 			this->matrixTranslate_ = _other.matrixTranslate_;
 			this->matrixRotate_ = _other.matrixRotate_;
 			this->matrixScale_ = _other.matrixScale_;
-			this->parentId_ = _other.parentId_;
 
 //			massert(false && "Transformのコピー発生");
 			return *this;
 		}
+
+		/// <summary>
+		/// 計算する
+		/// </summary>
+		void Compute();
 
 		void GenerateWorldMatrix(Matrix4x4* _pMatrix) const;
 		void GenerateWorldRotationMatrix(Matrix4x4* _pMatrix) const;
@@ -52,6 +57,9 @@ namespace mtgb
 		/// </summary>
 		/// <returns>Transformのポインタ</returns>
 		Transform* GetParent() const;
+		void SetParent(const EntityId _entityId) { parent = _entityId; }
+
+		void Rotation(const Vector3& _rotate);
 
 		Vector3 Up() const { return Vector3::Up() * matrixRotate_; };
 		Vector3 Down() const { return Vector3::Down() * matrixRotate_; };
@@ -60,13 +68,15 @@ namespace mtgb
 		Vector3 Back() const { return Vector3::Back() * matrixRotate_; };
 		Vector3 Forward() const { return Vector3::Forward() * matrixRotate_; };
 
-	public:
-		Vector3 position_{ Vector3::Zero() };          // ローカル座標
-		Quaternion rotate_{ Quaternion::Identity() };  // ローカル回転角(Degree)
-		Vector3 scale_{ Vector3::One() };              // ローカル大きさ
+	//public:
+	//	Vector3 position{ Vector3::Zero() };          // ローカル座標
+	//	Vector3 scale{ Vector3::One() };              // ローカル大きさ
+	//private:
+	//	EntityId parent{ INVALD_ENTITY };  // 親のエンティティId
+	//public:
+	//	Quaternion rotate{ Quaternion::Identity() };  // ローカル回転角(Degree)
 
 	private:
-		EntityId parentId_{ INVALD_ENTITY };  // 親のエンティティId
 		Matrix4x4 matrixTranslate_{};         // 計算された移動行列
 		Matrix4x4 matrixRotate_{};            // 計算された回転行列
 		Matrix4x4 matrixScale_{};             // 計算された拡縮行列

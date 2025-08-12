@@ -19,6 +19,7 @@ private:
 	float test2;
 	std::string str;
 	std::string name_;
+	float radius_;
 	Transform* pTransform_;
 	AudioPlayer* pAudioPlayer_;
 	ImageHandle hImage_;
@@ -26,6 +27,9 @@ private:
 	OBJModelHandle hModel_;
 	mtgb::WindowContext context_;
 	FBXModelHandle fModel_;
+	Camera* pCamera_;
+	RigidBody* pRigidbody_;
+	float acceleration_;
 };
 
 

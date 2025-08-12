@@ -546,7 +546,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			.DepthBias = {},
 			.DepthBiasClamp = {},
 			.SlopeScaledDepthBias = {},
-			.DepthClipEnable = {},
+			.DepthClipEnable = true,//クリッピングを有効にする
 			.ScissorEnable = {},
 			.MultisampleEnable = {},
 			.AntialiasedLineEnable = {},
@@ -592,7 +592,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -638,7 +638,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -678,6 +678,116 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		CompileShader(
 			L"Shader/FbxParts.hlsl",
 			ShaderType::FbxParts,
+			inputElementDesc,
+			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
+	// Unlit3Dシェーダの読み込み
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
+		{
+			{
+				.SemanticName = "POSITION",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 0,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
+				.SemanticName = "NORMAL",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 1,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
+				.SemanticName = "TEXCOORD",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 2,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+		};
+
+		CompileShader(
+			L"Shader/Unlit3D.hlsl",
+			ShaderType::Unlit3D,
+			inputElementDesc,
+			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
+	// Debug3Dシェーダの読み込み
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_WIREFRAME,  // 枠だけ: wireframe
+				.CullMode = D3D11_CULL_NONE,  // カリング: 隠面消去しない
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,//クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
+		{
+			{
+				.SemanticName = "POSITION",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 0,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
+				.SemanticName = "NORMAL",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 1,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
+				.SemanticName = "TEXCOORD",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 2,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+		};
+
+		CompileShader(
+			L"Shader/Debug3D.hlsl",
+			ShaderType::Debug3D,
 			inputElementDesc,
 			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);

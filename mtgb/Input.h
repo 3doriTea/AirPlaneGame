@@ -1,7 +1,7 @@
 #pragma once
 #include "ISystem.h"
 #include "cmtgb.h"
-#include <dinput.h>
+#include "IncludingInput.h"
 #include <wrl/client.h> // ’Ç‰Á
 #include <functional>
 #include <vector>

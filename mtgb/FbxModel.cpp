@@ -90,7 +90,7 @@ void mtgb::FbxModel::Load(const std::string& _fileName)
 
 }
 
-void mtgb::FbxModel::Draw(const Transform& _transfrom, int _frame)
+void mtgb::FbxModel::Draw(const Transform& _transform, int _frame)
 {
 	for (int i = 0; i < pParts_.size(); i++)
 	{
@@ -101,11 +101,11 @@ void mtgb::FbxModel::Draw(const Transform& _transfrom, int _frame)
 		// ボーンがあるスキンアニメーション
 		if (pParts_[i]->GetSkin() != nullptr)
 		{
-			pParts_[i]->DrawSkinAnimation(_transfrom, time);
+			pParts_[i]->DrawSkinAnimation(_transform, time);
 		}
 		else  // メッシュアニメーション
 		{
-			pParts_[i]->DrawMeshAnimation(_transfrom, time);
+			pParts_[i]->DrawMeshAnimation(_transform, time);
 		}
 	}
 }

@@ -10,7 +10,8 @@
 #include "ImGuiShowable.h"
 #include "RenderSystem.h"
 mtgb::SceneSystem::SceneSystem() :
-	pNextScene_{ nullptr }
+	pNextScene_{ nullptr },
+	onMoveListener_{}
 {
 }
 
@@ -107,7 +108,10 @@ void mtgb::SceneSystem::Update()
 	currentScene.Draw();
 	for (auto&& gameObject : currentScene.pGameObjects_)
 	{
-		gameObject->Draw();
+		if (gameObject->GetLayerFlag().Has(GameObjectLayer::B))
+		{
+			gameObject->Draw();
+		}
 	}
 	
 	DirectX11Draw::End();
@@ -116,7 +120,7 @@ void mtgb::SceneSystem::Update()
 	for (auto&& itr = currentScene.pGameObjects_.begin();
 		itr != currentScene.pGameObjects_.end();)
 	{
-		if ((*itr)->IsToDestory())
+		if ((*itr)->IsToDestroy())
 		{
 			Game::RemoveEntityComponent((*itr)->GetEntityId());
 			itr = currentScene.pGameObjects_.erase(itr);
@@ -130,6 +134,12 @@ void mtgb::SceneSystem::Update()
 
 void mtgb::SceneSystem::ChangeScene()
 {
+	// シーン遷移イベントを発動していく
+	for (auto& onMove : onMoveListener_)
+	{
+		onMove();
+	}
+
 	// もし現在のシーンがあるなら終了処理
 	if (GameScene::pInstance_)
 	{

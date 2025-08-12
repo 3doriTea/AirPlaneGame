@@ -1,5 +1,6 @@
 #include "SampleGame.h"
 #include "PlayScene.h"
+#include "TestScene/TestScene.h"
 
 using namespace mtgb;
 
@@ -43,9 +44,6 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<CameraSystem>(SystemUpdateType::DontCallMe);
 	_register.Set<MTImGui>(SystemUpdateType::Frame);
-	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
-	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
-	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 
@@ -60,11 +58,17 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<Fbx>(SystemUpdateType::Frame);
 	_register.Set<Text>(SystemUpdateType::Frame);
 
+	_register.Set<ColliderCP>(SystemUpdateType::Frame, true);
+	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
+	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
+	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
+
 	_register.Set<Draw>(SystemUpdateType::DontCallMe);
 
 
 	// 開始時のシーン
-	Game::System<SceneSystem>().Move<PlayScene>();
+	//Game::System<SceneSystem>().Move<PlayScene>();
+	Game::System<SceneSystem>().Move<TestScene>();
 
 	//_register<MainWindow>(SystemUpdateType::Cycle);
 }

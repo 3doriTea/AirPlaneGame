@@ -24,7 +24,7 @@ ComPtr<ID3D11Texture2D> mtgb::DirectX11Draw::pDepthStencil_{ nullptr };         
 ID3D11BlendState* mtgb::DirectX11Draw::pBlendState_[static_cast<int8_t>(BlendMode::Max)]{};  // ブレンドの情報
 ComPtr<ID3D11SamplerState> mtgb::DirectX11Draw::pDefaultSamplerState_{ nullptr };
 mtgb::ShaderBundle mtgb::DirectX11Draw::shaderBundle_[static_cast<int8_t>(ShaderType::Max)]{};             // シェーダのバンドル
-mtgb::Vector4 mtgb::DirectX11Draw::backgroundColor_{ 0, 0, 0, 1 };
+mtgb::Vector4 mtgb::DirectX11Draw::backgroundColor_{ 0, 1, 0, 1 };
 
 void mtgb::DirectX11Draw::SetShader(const ShaderType _type)
 {

@@ -12,7 +12,7 @@ namespace
 {
 	static const float DEFAULT_FOV{ 60.0f };  // デフォルトの視野角 (Field Of View)
 	static const float DEFAULT_NEAR{ 0.1f };  // デフォルトのニヤー距離
-	static const float DEFAULT_FAR{ 100.0f };  // デフォルトのファー距離
+	static const float DEFAULT_FAR{ 100000.0f };  // デフォルトのファー距離
 }
 
 mtgb::CameraSystem::CameraSystem() :
@@ -100,8 +100,8 @@ void mtgb::CameraSystem::GetViewMatrix(Matrix4x4* _pView) const
 {
 	const Transform& cameraTransform{ GetTransform() };
 
-	Vector4 vEyePt{ cameraTransform.position_ };  // カメラ（視点）位置
-	Vector4 vLookatPt{ cameraTransform.Forward() + cameraTransform.position_ };  // 注視位置
+	Vector4 vEyePt{ cameraTransform.position };  // カメラ（視点）位置
+	Vector4 vLookatPt{ cameraTransform.Forward() + cameraTransform.position };  // 注視位置
 	Vector4 vUpVec{ Vector3::Up() };  // 上方位置
 
 	*_pView = XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
@@ -123,5 +123,5 @@ void mtgb::CameraSystem::GetProjMatrix(Matrix4x4* _pProj) const
 
 void mtgb::CameraSystem::GetPosition(Vector4* _pPosition) const
 {
-	*_pPosition = GetTransform().position_;
+	*_pPosition = GetTransform().position;
 }

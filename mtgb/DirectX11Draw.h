@@ -2,6 +2,7 @@
 #include "cmtgb.h"
 #include "Vector4.h"
 #include <wrl/client.h>
+#include "ShaderType.h"
 using Microsoft::WRL::ComPtr;
 
 struct ID3D11Device;
@@ -30,16 +31,6 @@ namespace mtgb
 	class Figure;
 	class IShader;
 	class MTImGui;
-	/// <summary>
-	/// シェーダタイプ
-	/// </summary>
-	enum struct ShaderType : int8_t
-	{
-		Figure,
-		Sprite2D,
-		FbxParts,
-		Max,
-	};
 
 	/// <summary>
 	/// ブレンドモード

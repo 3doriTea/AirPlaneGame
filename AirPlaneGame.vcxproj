@@ -26,6 +26,8 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
+    <ClCompile Include="mtgb\Collider.cpp" />
+    <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
@@ -150,8 +152,15 @@
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
+    <ClCompile Include="Source\SkySphere.cpp" />
+    <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
+    <ClCompile Include="Source\TestScene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ImGui\GraphEditor.h" />
@@ -312,7 +321,15 @@
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
+    <ClInclude Include="mtgb\ShaderType.h" />
+    <ClInclude Include="Source\SkySphere.h" />
+    <ClInclude Include="Source\TestScene\EnemyPlane.h" />
+    <ClInclude Include="Source\TestScene\PlayerBullet.h" />
+    <ClInclude Include="Source\TestScene\PlayerGunner.h" />
+    <ClInclude Include="Source\TestScene\PlayerPilot.h" />
+    <ClInclude Include="Source\TestScene\PlayerPlane.h" />
     <ClInclude Include="Source\TextBox.h" />
+    <ClInclude Include="Source\TestScene\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -326,6 +343,24 @@
     <None Include="通信体系.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -345,6 +380,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Unlit3D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

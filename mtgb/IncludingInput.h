@@ -1,15 +1,12 @@
 #pragma once
 
-//#ifdef DIRECTINPUT_VERSION
-
-//#else
-
+#ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION 0x0800
-
-//#endif
+#endif
 
 #include <dinput.h>
 #include <Xinput.h>
+
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")

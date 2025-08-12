@@ -1,5 +1,6 @@
 #pragma once
 #include "cmtgb.h"
+#include <functional>
 
 namespace mtgb
 {
@@ -15,5 +16,8 @@ namespace mtgb
 		virtual ~IComponentPool();
 
 		virtual void Remove(const EntityId _entityId) = 0;
+
+	protected:
+		void RegisterCurrentScene(const std::function<void()>& _onMove);
 	};
 }

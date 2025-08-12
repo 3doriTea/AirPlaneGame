@@ -34,4 +34,17 @@ void mtgb::GameScene::End()
 {
 }
 
+mtgb::GameObject* mtgb::GameScene::GetGameObject(std::string _name) const
+{
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetName() != _name)
+		{
+			continue;
+		}
+		return object;
+	}
+	return nullptr;
+}
+
 mtgb::GameScene* mtgb::GameScene::pInstance_{ nullptr };

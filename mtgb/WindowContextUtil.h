@@ -5,7 +5,7 @@
 namespace mtgb
 {
 	using WinCtxResManager = WindowContextResourceManager;
-
+	
 	/// <summary>
 	/// WindowContextResource
 	/// ラッパー、具象クラス依存の便利関数群
