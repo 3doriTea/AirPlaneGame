@@ -5,6 +5,7 @@
 #include "ImGuiShowable.h"
 #include "SceneSystem.h"
 #include "GameObject.h"
+#include "Debug.h"
 
 void mtgb::RenderSystem::Initialize()
 {
@@ -66,16 +67,17 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	imGui.RenderGameView();
 	imGui.SetDrawList();
 	ImGuiShowSystem::Instance().ShowAll(Show::GameView);
-
 	imGui.End();
 
 	//Inspectorï\é¶
 	imGui.Begin("Inspector");
 	ImGuiShowSystem::Instance().ShowAll(Show::Inspector);
-	
-
 	imGui.End();
 
+	//ÉçÉOï\é¶
+	imGui.Begin("Log");
+	Debug::ShowLogWindow();
+	imGui.End();
 	imGui.EndFrame();
 	//DirectX11Draw::End();
 }

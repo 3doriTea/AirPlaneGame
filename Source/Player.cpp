@@ -52,6 +52,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 		{
 			ImGui::Text("%s,RegisterFunc!!", name);
 		});*/
+	Timer::AddInterval(3.0f, []() {LOGIMGUI("aiueo%d",1); });
+
 }
 
 Player::Player(mtgb::WindowContext context)
@@ -114,6 +116,7 @@ void Player::Update()
 		//pTransform_->scale_.z += 0.01f;
 	}
 	pRigidbody_->velocity_ = pTransform_->Forward() * acceleration_;
+
 }
 
 void Player::Draw() const
@@ -127,6 +130,7 @@ void Player::Draw() const
 	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
+	
 	//LOGF("PlayerDraw\n");
 	/*Inspector::Instance().ShowInspector(proxy_, name_.c_str());
 	if (CurrContext() == WindowContext::First)
