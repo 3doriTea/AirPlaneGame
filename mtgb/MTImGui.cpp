@@ -6,6 +6,44 @@
 #include "DirectX11Manager.h"
 #include "../ImGui\ImGuizmo.h"
 #include "../ImGui\imgui.h"
+#include <cmath>
+#include <algorithm>
+#include "Debug.h"
+namespace
+{
+	float titleBarHeight;
+}
+
+DirectX::XMVECTORF32 QuatToEuler(DirectX::XMVECTORF32 _q)
+{
+	//分母、分子
+	float denom, num;
+	float roll, pitch, yaw;
+	float x = _q[0], y = _q[1], z = _q[2], w = _q[3];
+
+	//ピッチ(x軸)
+	
+	//90～^90の範囲
+	float sinX = 2.0f * (w * y - z * x);
+	pitch = std::asinf(std::clamp(sinX,-1.0f,1.0f));
+
+	//ヨー(y軸)
+	num = 2.0f * (w * z + x * y);
+	denom = 1 - 2.0f * (y * y + z * z);
+	yaw = std::atan2f(num, denom);
+
+	//ロール(z軸)
+	num = 2.0f * (w * x + y * z);
+	denom = 1 - 2.0f * (x * x + y * y);
+	roll = std::atan2(num, denom);
+
+	float pitch_deg = DirectX::XMConvertToDegrees(pitch);
+	float yaw_deg = DirectX::XMConvertToDegrees(yaw);
+	float roll_deg = DirectX::XMConvertToDegrees(roll);
+
+	return { pitch_deg,roll_deg,yaw_deg,w };
+}
+
 mtgb::MTImGui::MTImGui()
 	:pRenderTargetView_{nullptr}
 	,pSRV_{nullptr}
@@ -34,7 +72,7 @@ void mtgb::MTImGui::Initialize()
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
+	
 	
 	ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\meiryo.ttc", 18.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
 	IM_ASSERT(font != nullptr);
@@ -60,6 +98,7 @@ void mtgb::MTImGui::Initialize()
 	ComPtr<ID3D11Device> device = mtgb::DirectX11Draw::pDevice_;
 	ComPtr<ID3D11DeviceContext> context = mtgb::DirectX11Draw::pContext_;
 	ImGui_ImplDX11_Init(device.Get(), context.Get());
+
 
 	//テクスチャ作成
 
@@ -109,7 +148,7 @@ void mtgb::MTImGui::Update()
 
 void mtgb::MTImGui::BeginFrame()
 {
-	mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(true);
+	
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -147,13 +186,23 @@ void mtgb::MTImGui::EndFrame()
 
 void mtgb::MTImGui::SetDrawList()
 {
-	ImGuizmo::SetDrawlist(ImGui::GetForegroundDrawList());
+	ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 
 }
 
 void mtgb::MTImGui::RenderGameView()
 {
 	ImGui::Image((void*)pSRV_.Get(), ImVec2(winWidth_, winHeight_));
+}
+
+bool mtgb::MTImGui::IsUsingImGuizmo()
+{
+	return ImGuizmo::IsUsing();
+}
+
+bool mtgb::MTImGui::IsOverImGuizmo()
+{
+	return ImGuizmo::IsOver();
 }
 
 void mtgb::MTImGui::End()
@@ -167,7 +216,7 @@ void mtgb::MTImGui::Release()
 	ImGui::DestroyContext();
 }
 
-bool mtgb::MTImGui::DrawTransformGuizmo(float* worldMat, const float* viewMat, const float* projMat, DirectX::XMFLOAT3* position, DirectX::XMFLOAT3* rotation, DirectX::XMFLOAT3* scale)
+bool mtgb::MTImGui::DrawTransformGuizmo(float* _worldMat, const float* _viewMat, const float* _projMat, DirectX::XMFLOAT3* _position, DirectX::XMVECTORF32* _rotation, DirectX::XMFLOAT3* _scale)
 {
 	//ImGuizmoの操作モードを指定
 	static ImGuizmo::OPERATION operation = ImGuizmo::TRANSLATE;
@@ -198,31 +247,33 @@ bool mtgb::MTImGui::DrawTransformGuizmo(float* worldMat, const float* viewMat, c
 		mode = ImGuizmo::WORLD;
 	}
 
-	//ImVec2 pos = ImGui::GetWindowPos();
-	//ImVec2 size = ImGui::GetWindowSize();
-	//ImGuizmo::SetRect(pos.x, pos.y, size.x, size.y);
+	ImVec2 pos = ImGui::GetWindowPos();
+	float windowWidth = (float)ImGui::GetWindowWidth();
+	float windowHeight = (float)ImGui::GetWindowHeight();
+	
+	
 	//ギズモ表示
-	ImGuizmo::SetRect(0, 0, ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
+	ImGuizmo::SetRect(pos.x, pos.y , ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
 	
 	bool ret = false;
-	if (ImGuizmo::Manipulate(viewMat, projMat, operation, mode, worldMat))
+	if (ImGuizmo::Manipulate(_viewMat, _projMat, operation, mode, _worldMat))
 	{
 		//編集されたworldMatからposition,rotation,scaleに分解
-		float tempPos[3], tempRot[3], tempScale[3];
-		ImGuizmo::DecomposeMatrixToComponents(worldMat, tempPos, tempRot, tempScale);
+		DirectX::XMMATRIX mat = DirectX::XMMATRIX(
+			_worldMat[0], _worldMat[1], _worldMat[2], _worldMat[3],
+			_worldMat[4], _worldMat[5], _worldMat[6], _worldMat[7],
+			_worldMat[8], _worldMat[9], _worldMat[10], _worldMat[11],
+			_worldMat[12], _worldMat[13], _worldMat[14], _worldMat[15]
+		);
+		
+		DirectX::XMVECTOR scale,trans;
+		bool result = DirectX::XMMatrixDecompose(&scale, &_rotation->v, &trans, mat);
+		assert(result);
 
-		//反映
-		position->x = tempPos[0];
-		position->y = tempPos[1];
-		position->z = tempPos[2];
+		//DirectX::XMQuaternion
 
-		rotation->x = tempRot[0];
-		rotation->y = tempRot[1];
-		rotation->z = tempRot[2];
-
-		scale->x = tempScale[0];
-		scale->y = tempScale[1];
-		scale->z = tempScale[2];
+		DirectX::XMStoreFloat3(_position, trans);
+		DirectX::XMStoreFloat3(_scale,scale);
 
 		ret = true;
 	}

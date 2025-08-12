@@ -51,10 +51,11 @@ namespace mtgb
 		void EndFrame();
 		void SetDrawList();
 		void RenderGameView();
+		bool IsUsingImGuizmo();
+		bool IsOverImGuizmo();
 		void End();
 		void Release();
-		bool DrawTransformGuizmo(float* worldMat, const float* viewMat, const float* projMat,
-			DirectX::XMFLOAT3* position, DirectX::XMFLOAT3* rotation, DirectX::XMFLOAT3* scale);
+		bool DrawTransformGuizmo(float * _worldMat, const float * _viewMat, const float * _projMat, DirectX::XMFLOAT3 * _position, DirectX::XMVECTORF32 * _rotation, DirectX::XMFLOAT3 * _scale);
 		
 	private:
 		UINT winWidth_, winHeight_;

@@ -10,5 +10,10 @@ TransformProxy::TransformProxy(Transform* transform)
 	isAuto_ = true;
 }
 
+void TransformProxy::ShowImGui()
+{
+	Inspector::Instance().ShowInspector(this, displayName_.c_str());
+}
+
 
 

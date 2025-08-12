@@ -101,11 +101,9 @@ void mtgb::Draw::TransformGuizmo(Transform* _pTransform)
 	memcpy(projMatrix, &float4x4, sizeof(projMatrix));
 
 	DirectX::XMFLOAT3 tempRot;
-	if (Game::System<mtgb::MTImGui>().DrawTransformGuizmo(worldMatrix, viewMatrix, projMatrix, &_pTransform->position_, &tempRot, &_pTransform->scale_))
+	if (Game::System<mtgb::MTImGui>().DrawTransformGuizmo(worldMatrix, viewMatrix, projMatrix, &_pTransform->position_, &_pTransform->rotate_, &_pTransform->scale_))
 	{
-		_pTransform->rotate_.f[0] = tempRot.x;
-		_pTransform->rotate_.f[1] = tempRot.y;
-		_pTransform->rotate_.f[2] = tempRot.z;
+		
 	}
 }
 

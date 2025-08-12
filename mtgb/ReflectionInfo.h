@@ -28,7 +28,6 @@ REGISTER_FIELD(rotate_)
 REGISTER_FIELD(scale_)
 REGISTER_END
 
-// ShowFunc‘®«•t‚«‚ÅType‚ð“o˜^
 REGISTER_TYPE(PlayerProxy)
 REGISTER_FIELD(test1)
 REGISTER_FIELD(test2)
