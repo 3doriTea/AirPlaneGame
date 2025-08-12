@@ -28,7 +28,8 @@ float4 PS(VS_OUT inData) : SV_Target
     }
     else
     {
-        color = float4(1, 1, 1, 0.3);
+        color = g_diffuseColor;
+        //float4(1, 1, 1, 0.3);
     }
     
     return color;
