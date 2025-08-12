@@ -181,6 +181,7 @@
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\TransformCore.h" />
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TransformProxy.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />

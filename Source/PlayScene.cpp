@@ -38,7 +38,7 @@ void PlayScene::Initialize()
 	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
 	//WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
 	//hCamera1_ = Game::System<CameraSystem>().RegisterCamera()
-	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }, WindowContext::First));
+	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -30 }, WindowContext::First));
 	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }, WindowContext::Second));
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);

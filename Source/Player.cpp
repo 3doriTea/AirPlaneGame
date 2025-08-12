@@ -4,6 +4,7 @@
 #include "DoubleWindow.h"
 #include "Inspector.h"
 #include "PlayerProxy.h"
+#include "TransformCore.h"
 using namespace mtgb;
 
 namespace
@@ -43,8 +44,8 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_->scale = Vector3(1, 1, 1);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
-	pTransform_->position_.z = 5.0f;
-	pTransform_->scale_ = Vector3(1, 1, 1);
+	pTransform_->position.z = 5.0f;
+	pTransform_->scale = Vector3(1, 1, 1);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
 	proxy_ = new PlayerProxy(this);
 	/*TypeRegistry::Instance().RegisterFunc<PlayerProxy>([](std::any instance, const char* name)

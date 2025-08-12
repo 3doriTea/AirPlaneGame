@@ -268,9 +268,8 @@ bool mtgb::MTImGui::DrawTransformGuizmo(float* _worldMat, const float* _viewMat,
 		
 		DirectX::XMVECTOR scale,trans;
 		bool result = DirectX::XMMatrixDecompose(&scale, &_rotation->v, &trans, mat);
-		assert(result);
-
-		//DirectX::XMQuaternion
+		massert(result
+		&&"XMMatrixDecompose‚ÉŽ¸”s @MTImGui::DrawTransformGuizmo");
 
 		DirectX::XMStoreFloat3(_position, trans);
 		DirectX::XMStoreFloat3(_scale,scale);

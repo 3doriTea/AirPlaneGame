@@ -1,6 +1,6 @@
 #pragma once
 #include <mtgb.h>
-
+#include "Camera.h"
 //REFL_FORWARD_DECLARATION
 
 class Player : public GameObject
