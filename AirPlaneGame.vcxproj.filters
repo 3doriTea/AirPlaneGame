@@ -1066,6 +1066,9 @@
     <FxCompile Include="Assets\Shader\Unlit3D.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\Ground.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Object Include="Assets\Model\Test.obj" />

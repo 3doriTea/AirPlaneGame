@@ -536,6 +536,61 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 
 	CD3D11_RASTERIZER_DESC cRasterizerDesc{};
 
+	// 2D共通のインプットレイアウト
+	const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_2D[]
+	{
+		{
+			.SemanticName = "POSITION",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 0,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "TEXCOORD",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 1,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+	};
+
+	// 3D共通のインプットレイアウト
+	const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_3D[]
+	{
+		{
+			.SemanticName = "POSITION",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 0,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "NORMAL",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 1,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "TEXCOORD",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 2,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+	};
+
 	// 2D図形用シェーダの読み込み
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
@@ -552,33 +607,11 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			.AntialiasedLineEnable = {},
 		});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Figure.hlsl",
 			ShaderType::Figure,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_2D,
+			sizeof(INPUT_ELEMENT_DESC_2D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -598,33 +631,11 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Sprite.hlsl",
 			ShaderType::Sprite2D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_2D,
+			sizeof(INPUT_ELEMENT_DESC_2D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -644,42 +655,11 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/FbxParts.hlsl",
 			ShaderType::FbxParts,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -699,42 +679,11 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Unlit3D.hlsl",
 			ShaderType::Unlit3D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -754,42 +703,11 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Debug3D.hlsl",
 			ShaderType::Debug3D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 }
