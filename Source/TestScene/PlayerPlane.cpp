@@ -33,8 +33,9 @@ void PlayerPlane::Update()
 	{
 		pTransform_->Rotation(Vector3::Down());
 	}
-
-	pRB_->velocity_ = (pTransform_->Forward()) * Time::DeltaTimeF();
+	Matrix4x4 world{};
+	Vector3 worldPos{};
+	//pRB_->velocity_ = (pTransform_->Forward()) * Time::DeltaTimeF();
 }
 
 void PlayerPlane::Draw() const

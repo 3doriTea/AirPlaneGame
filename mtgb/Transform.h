@@ -62,12 +62,12 @@ namespace mtgb
 
 		void Rotation(const Vector3& _rotate);
 
-		Vector3 Up() const { return Vector3::Up() * matrixRotate_; };
-		Vector3 Down() const { return Vector3::Down() * matrixRotate_; };
-		Vector3 Left() const { return Vector3::Left() * matrixRotate_; };
-		Vector3 Right() const { return Vector3::Right() * matrixRotate_; };
-		Vector3 Back() const { return Vector3::Back() * matrixRotate_; };
-		Vector3 Forward() const { return Vector3::Forward() * matrixRotate_; };
+		Vector3 Up() const { return Vector3::Up() * matrixWorldRot_; }
+		Vector3 Down() const { return Vector3::Down() * matrixWorldRot_; }
+		Vector3 Left() const { return Vector3::Left() * matrixWorldRot_; }
+		Vector3 Right() const { return Vector3::Right() * matrixWorldRot_; }
+		Vector3 Back() const { return Vector3::Back() * matrixWorldRot_; }
+		Vector3 Forward() const;
 
 	//public:
 	//	Vector3 position{ Vector3::Zero() };          // ローカル座標
@@ -79,11 +79,13 @@ namespace mtgb
 
 	private:
 		void GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const;
+		void GenerateWorldRotMatrixSelf(Matrix4x4* _pMatrix) const;
 
 	private:
 		Matrix4x4 matrixTranslate_{};         // 計算された移動行列
 		Matrix4x4 matrixRotate_{};            // 計算された回転行列
 		Matrix4x4 matrixScale_{};             // 計算された拡縮行列
 		Matrix4x4 matrixWorld_{};             // 計算されたワールド行列
+		Matrix4x4 matrixWorldRot_{};          // 計算されたワールド回転行列
 	};
 }
