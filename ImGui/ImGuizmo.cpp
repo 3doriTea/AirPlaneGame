@@ -938,7 +938,7 @@ namespace IMGUIZMO_NAMESPACE
       return IsWithin(p.x, gContext.mX, gContext.mXMax) && IsWithin(p.y, gContext.mY, gContext.mYMax);
    }
 
-   static bool IsHoveringWindow()
+   bool IsHoveringWindow()
    {
       ImGuiContext& g = *ImGui::GetCurrentContext();
       ImGuiWindow* window = ImGui::FindWindowByName(gContext.mDrawList->_OwnerName);

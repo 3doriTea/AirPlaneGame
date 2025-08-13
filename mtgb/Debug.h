@@ -11,8 +11,11 @@
 #define LOGF(format, ...) \
 	mtgb::Debug::LogF(format, __VA_ARGS__)
 
-#define LOGIMGUI(objName,format,...) \
-	Game::System<Debug>().LogImGui(objName,std::source_location::current(),format,__VA_ARGS__)
+//#define LOGIMGUI(objName,format,...) \
+//	Game::System<Debug>().LogImGui(objName,std::source_location::current(),format,__VA_ARGS__)
+
+#define LOGIMGUI(format,...) \
+	Game::System<Debug>().LogImGui("",std::source_location::current(),format,__VA_ARGS__)
 
 #else
 
@@ -53,7 +56,7 @@ namespace mtgb
 		static void LogF(const char* _format, const Args... _args);
 
 		template<typename ...Args>
-		void LogImGui(const std::string& object,const std::source_location& _location, const char* _format, const Args..._args);
+		void LogImGui(const std::string& object, const std::source_location& _location, const char* _format, const Args..._args);
 
 		std::list<LogEntry> GetLog();
 	private:

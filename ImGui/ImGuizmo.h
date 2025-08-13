@@ -266,6 +266,7 @@ namespace IMGUIZMO_NAMESPACE
    // from a x,y,z point in space and using Manipulation view/projection matrix, check if mouse is in pixel radius distance of that projected point
    IMGUI_API bool IsOver(float* position, float pixelRadius);
 
+   IMGUI_API bool IsHoveringWindow();
    enum COLOR
    {
       DIRECTION_X,      // directionColor[0]

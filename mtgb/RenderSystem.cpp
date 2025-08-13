@@ -47,26 +47,19 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	//RenderTargetViewをImGui用に切り替え
 	imGui.SetImGuizmoRenderTargetView();
 
-
-
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene);
 
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
 
-
-	//ゲーム画面表示
-	bool isGuizmoActive = imGui.IsUsingImGuizmo() || imGui.IsOverImGuizmo();
-	ImGuiWindowFlags flags = 0;
-	if (isGuizmoActive) {
-		flags |= ImGuiWindowFlags_NoMove; // ギズモ操作中はウィンドウ移動禁止
-	}
-	ImGui::Begin("Game View", 0, flags);
-
+	
+	imGui.BeginGameView();
+	
 	imGui.RenderGameView();
 	imGui.SetDrawList();
 	ImGuiShowSystem::Instance().ShowAll(Show::GameView);
+		
 	imGui.End();
 
 	//Inspector表示
@@ -85,6 +78,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	}
 
 	imGui.End();
+
 	imGui.EndFrame();
 
 	//DirectX11Draw::End();

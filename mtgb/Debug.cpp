@@ -40,5 +40,6 @@ mtgb::Debug::LogItr mtgb::Debug::RemoveLog(LogItr itr)
 
 std::string mtgb::Debug::MakeKey(const std::string& object, const char* file, int line, const char* func, const std::string msg)
 {
-	return msg + "|" + object + "|" + file + "|" + std::to_string(line) + func;
+	return msg;
+	//return msg + "|" + object + "|" + file + "|" + std::to_string(line) + func;
 }
