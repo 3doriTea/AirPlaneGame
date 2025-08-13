@@ -12,7 +12,7 @@
 //#include "TypeRegistryImpl.h"
 #include <string>
 
-REGISTER_TYPE(Quaternion, ShowFunc(XMVECTORF32Show{}))
+REGISTER_TYPE(Quaternion, ShowFunc(QuaternionSHow{}))
 REGISTER_FIELD(f)
 REGISTER_END
 

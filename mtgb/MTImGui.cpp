@@ -16,7 +16,7 @@ namespace
 	const char* GAME_VIEW_NAME = "Game View";
 }
 
-DirectX::XMVECTORF32 QuatToEuler(DirectX::XMVECTORF32 _q)
+mtgb::Vector3 mtgb::QuatToEuler(DirectX::XMVECTORF32 _q)
 {
 	//•ª•êA•ªŽq
 	float denom, num;
@@ -43,7 +43,7 @@ DirectX::XMVECTORF32 QuatToEuler(DirectX::XMVECTORF32 _q)
 	float yaw_deg = DirectX::XMConvertToDegrees(yaw);
 	float roll_deg = DirectX::XMConvertToDegrees(roll);
 
-	return { pitch_deg,roll_deg,yaw_deg,w };
+	return { pitch_deg,yaw_deg,roll_deg};
 }
 
 mtgb::MTImGui::MTImGui()
@@ -271,7 +271,7 @@ bool mtgb::MTImGui::DrawTransformGuizmo(uintptr_t _ptrId, float* _worldMat, cons
 	
 	
 	bool ret = false;
-	if (ImGuizmo::Manipulate(_viewMat, _projMat, manipulator_->operation_, manipulator_->mode_, _worldMat))
+	if (ImGuizmo::IsUsing())
 	{
 		if (currId_ == NULLID)
 		{
@@ -279,23 +279,27 @@ bool mtgb::MTImGui::DrawTransformGuizmo(uintptr_t _ptrId, float* _worldMat, cons
 		}
 		if (currId_ == _ptrId)
 		{
-			//•ÒW‚³‚ê‚½worldMat‚©‚çposition,rotation,scale‚É•ª‰ð
-			DirectX::XMMATRIX mat = DirectX::XMMATRIX(
-				_worldMat[0], _worldMat[1], _worldMat[2], _worldMat[3],
-				_worldMat[4], _worldMat[5], _worldMat[6], _worldMat[7],
-				_worldMat[8], _worldMat[9], _worldMat[10], _worldMat[11],
-				_worldMat[12], _worldMat[13], _worldMat[14], _worldMat[15]
-			);
+			if (ImGuizmo::Manipulate(_viewMat, _projMat, manipulator_->operation_, manipulator_->mode_, _worldMat))
+			{
+				//•ÒW‚³‚ê‚½worldMat‚©‚çposition,rotation,scale‚É•ª‰ð
+				DirectX::XMMATRIX mat = DirectX::XMMATRIX(
+					_worldMat[0], _worldMat[1], _worldMat[2], _worldMat[3],
+					_worldMat[4], _worldMat[5], _worldMat[6], _worldMat[7],
+					_worldMat[8], _worldMat[9], _worldMat[10], _worldMat[11],
+					_worldMat[12], _worldMat[13], _worldMat[14], _worldMat[15]
+				);
 
-			DirectX::XMVECTOR scale, trans;
-			bool result = DirectX::XMMatrixDecompose(&scale, &_rotation->v, &trans, mat);
-			massert(result
-				&& "XMMatrixDecompose‚ÉŽ¸”s @MTImGui::DrawTransformGuizmo");
+				DirectX::XMVECTOR scale, trans;
+				bool result = DirectX::XMMatrixDecompose(&scale, &_rotation->v, &trans, mat);
+				massert(result
+					&& "XMMatrixDecompose‚ÉŽ¸”s @MTImGui::DrawTransformGuizmo");
 
-			DirectX::XMStoreFloat3(_position, trans);
-			DirectX::XMStoreFloat3(_scale, scale);
+				DirectX::XMStoreFloat3(_position, trans);
+				DirectX::XMStoreFloat3(_scale, scale);
 
-			ret = true;
+				ret = true;
+
+			}
 		}
 	}
 	else

@@ -13,7 +13,7 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include "ImGuiShowable.h"
-
+#include "Vector3.h"
 using Microsoft::WRL::ComPtr;
 struct ID3D11RenderTargetView;
 struct ID3D11ShaderResourceView;
@@ -22,6 +22,7 @@ struct ID3D11DepthStencilView;
 
 namespace mtgb
 {
+	mtgb::Vector3 QuatToEuler(DirectX::XMVECTORF32 _q);
 	/// <summary>
 			/// ウィンドウからのメッセージを受信してImGuiで入力やイベントを処理するためのコールバック関数
 			/// </summary>
