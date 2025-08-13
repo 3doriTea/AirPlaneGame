@@ -13,6 +13,7 @@ namespace mtgb
 		FbxParts,
 		Unlit3D,
 		Debug3D,
+		Ground,
 		Max,
 	};
 }

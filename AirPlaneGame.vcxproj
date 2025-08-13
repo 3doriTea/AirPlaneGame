@@ -145,6 +145,7 @@
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
+    <ClCompile Include="Source\TestScene\Terrain.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="Source\TestScene\PlayerGunner.h" />
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
+    <ClInclude Include="Source\TestScene\Terrain.h" />
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
   </ItemGroup>

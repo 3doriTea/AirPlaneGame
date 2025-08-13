@@ -595,13 +595,13 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 		{
-			.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-			.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+			.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+			.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 			.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 			.DepthBias = {},
 			.DepthBiasClamp = {},
 			.SlopeScaledDepthBias = {},
-			.DepthClipEnable = true,//クリッピングを有効にする
+			.DepthClipEnable = true,        // クリッピングを有効にする
 			.ScissorEnable = {},
 			.MultisampleEnable = {},
 			.AntialiasedLineEnable = {},
@@ -619,13 +619,13 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_NONE,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_NONE,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -643,13 +643,13 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -667,13 +667,13 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -692,12 +692,12 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
 				.FillMode = D3D11_FILL_WIREFRAME,  // 枠だけ: wireframe
-				.CullMode = D3D11_CULL_NONE,  // カリング: 隠面消去しない
-				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.CullMode = D3D11_CULL_NONE,       // カリング: 隠面消去しない
+				.FrontCounterClockwise = TRUE,     // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,           // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
@@ -706,6 +706,30 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		CompileShader(
 			L"Shader/Debug3D.hlsl",
 			ShaderType::Debug3D,
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
+	// 地形シェーダの読み込み
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
+				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Ground.hlsl",
+			ShaderType::Ground,
 			INPUT_ELEMENT_DESC_3D,
 			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
