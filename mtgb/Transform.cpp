@@ -20,7 +20,7 @@ void mtgb::Transform::Compute()
 	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
 
 	GenerateWorldMatrix(&matrixWorld_);           // ワールド行列更新
-	GenerateWorldRotationMatrix(&matrixRotate_);  // ワールド回転行列更新
+	GenerateWorldRotationMatrix(&matrixWorldRot_);  // ワールド回転行列更新
 }
 
 void mtgb::Transform::GenerateWorldMatrix(Matrix4x4* _pMatrix) const

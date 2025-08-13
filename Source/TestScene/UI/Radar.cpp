@@ -4,6 +4,7 @@ namespace
 {
 	const int IMAGE_SIZE_PX{ 280 };
 	const int ENEMY_POS_CAPACITY{ 20 };
+	const int ENEMY_MARK_SIZE_PIX{ 10 };
 }
 
 Radar::Radar(const EntityId _playerId) : GameObject(GameObjectBuilder()
@@ -29,10 +30,11 @@ void Radar::Update()
 	for (auto& pGameObject : pEnemies)
 	{
 		Transform& enemyTransform{ Transform::Get(pGameObject->GetEntityId()) };
-		//Vector3 diff{ enemyTransform.position - pPlayerTransform_->position };
+		Vector3 diff{ pPlayerTransform_->position - enemyTransform.position };
 		Matrix4x4 mPlayerWorld{};
 		pPlayerTransform_->GenerateWorldMatrix(&mPlayerWorld);
-		Vector3 diff{ enemyTransform.position * mPlayerWorld };
+		diff *= mPlayerWorld;
+		//Vector3 diff{ enemyTransform.position * mPlayerWorld };
 
 		enemyMarkPos_.emplace_back(static_cast<int>(diff.x), static_cast<int>(diff.z));
 	}
@@ -51,6 +53,6 @@ void Radar::Draw() const
 
 	for (auto& markPos : enemyMarkPos_)
 	{
-		Draw::Box({ markPos + RADAR_OFFSET, Vector2Int{ 10, 10 } }, 0xff0000);
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PIX / 2), Vector2Int{ENEMY_MARK_SIZE_PIX, ENEMY_MARK_SIZE_PIX} }, 0xff0000);
 	}
 }

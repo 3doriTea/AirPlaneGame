@@ -19,23 +19,23 @@ void PlayerPlane::Update()
 
 	if (InputUtil::GetKey(KeyCode::Up))
 	{
-		pTransform_->Rotation(Vector3::Right());
+		pTransform_->Rotation(Vector3::Right() * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::Down))
 	{
-		pTransform_->Rotation(Vector3::Left());
+		pTransform_->Rotation(Vector3::Left() * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::Left))
 	{
-		pTransform_->Rotation(Vector3::Up());
+		pTransform_->Rotation(Vector3::Up() * Time::DeltaTimeF());
 	}
 	if (InputUtil::GetKey(KeyCode::Right))
 	{
-		pTransform_->Rotation(Vector3::Down());
+		pTransform_->Rotation(Vector3::Down() * Time::DeltaTimeF());
 	}
 	Matrix4x4 world{};
 	Vector3 worldPos{};
-	//pRB_->velocity_ = (pTransform_->Forward()) * Time::DeltaTimeF();
+	pRB_->velocity_ = (pTransform_->Forward()) * Time::DeltaTimeF();
 }
 
 void PlayerPlane::Draw() const
