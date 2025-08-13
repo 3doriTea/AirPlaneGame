@@ -3,6 +3,7 @@
 PlayerBullet::PlayerBullet(const Vector3& _position, const Quaternion& _quaternion) : GameObject(GameObjectBuilder()
 	.SetPosition(_position)
 	.SetRotate(_quaternion)
+	.SetName("PlayerBullet")
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	pRigidBody_{ Component<RigidBody>() },
@@ -15,8 +16,11 @@ PlayerBullet::PlayerBullet(const Vector3& _position, const Quaternion& _quaterni
 	massert(hModelCollider_ >= 0 && "SphereColliderÉÇÉfÉãÇÃì«Ç›çûÇ›Ç…é∏îs");
 
 	pCollider_->type_ = Collider::TYPE_SPHERE;
-	pCollider_->sphere_.offset_ = {};
-	pCollider_->sphere_.radius_ = 0.1f;
+	pCollider_->sphere_.offset_ = Vector3::Zero();
+	pCollider_->sphere_.radius_ = 0.5f;
+
+	// 3ïbåoÇ¡ÇΩÇÁè¡Ç∑
+	Timer::AddAram(1.0f, [this] { DestroyMe(); });
 }
 
 PlayerBullet::~PlayerBullet()

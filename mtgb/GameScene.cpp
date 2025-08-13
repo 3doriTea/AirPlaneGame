@@ -47,4 +47,18 @@ mtgb::GameObject* mtgb::GameScene::GetGameObject(std::string _name) const
 	return nullptr;
 }
 
+mtgb::GameObject* mtgb::GameScene::GetGameObject(const EntityId _entityId) const
+{
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetEntityId() != _entityId)
+		{
+			continue;
+		}
+		return object;
+	}
+
+	return nullptr;
+}
+
 mtgb::GameScene* mtgb::GameScene::pInstance_{ nullptr };

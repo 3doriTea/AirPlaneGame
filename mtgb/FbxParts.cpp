@@ -48,6 +48,7 @@ mtgb::FbxParts::~FbxParts()
 
 void mtgb::FbxParts::Initialize()
 {
+	// MEMO: テクスチャUVが異なる頂点を分割&複製 → UV情報と頂点情報の一致調整
 	pMesh_->SplitPoints(FbxLayerElement::eTextureDiffuse);
 	//各情報の個数を取得
 	vertexCount_ = pMesh_->GetControlPointsCount();         // 頂点の数

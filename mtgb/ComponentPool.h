@@ -36,7 +36,9 @@ namespace mtgb
 		/// <returns>コンポーネントの参照ポインタ (確実に存在する)</returns>
 		ComponentT& Get(EntityId _entityId);
 
-		bool TryGet(ComponentT*& _pComponent, EntityId _entityId);
+		bool TryGet(ComponentT*& _pComponent, const EntityId _entityId) requires(IsSingleton);
+
+		bool TryGet(std::vector<ComponentT*>* _pComponents, const EntityId _entityId) requires(!IsSingleton);
 
 		ComponentT& Add(EntityId _entityId) requires(!IsSingleton);
 
@@ -110,7 +112,8 @@ namespace mtgb
 	}
 
 	template<class ComponentT, bool IsSingleton>
-	inline bool ComponentPool<ComponentT, IsSingleton>::TryGet(ComponentT*& _pComponent, EntityId _entityId)
+	inline bool ComponentPool<ComponentT, IsSingleton>::TryGet(
+		ComponentT*& _pComponent, const EntityId _entityId) requires(IsSingleton)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{
@@ -122,6 +125,23 @@ namespace mtgb
 		}
 
 		return false;
+	}
+
+	template<class ComponentT, bool IsSingleton>
+	inline bool ComponentPool<ComponentT, IsSingleton>::TryGet(
+		std::vector<ComponentT*>* _pComponents, const EntityId _entityId) requires(!IsSingleton)
+	{
+		_pComponents->clear();
+		for (int i = 0; i < poolId_.size(); i++)
+		{
+			if (poolId_[i] == _entityId)
+			{
+				_pComponents->push_back(&pool_[i]);  // Idが一致した添字のコンポーネントを追加する
+			}
+		}
+
+		// 何かしら追加されたなら見つかっている
+		return _pComponents->size() >= 0;
 	}
 
 	template<class ComponentT, bool IsSingleton>

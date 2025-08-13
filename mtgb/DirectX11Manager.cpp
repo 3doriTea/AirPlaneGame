@@ -536,49 +536,82 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 
 	CD3D11_RASTERIZER_DESC cRasterizerDesc{};
 
+	// 2D共通のインプットレイアウト
+	const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_2D[]
+	{
+		{
+			.SemanticName = "POSITION",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 0,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "TEXCOORD",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 1,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+	};
+
+	// 3D共通のインプットレイアウト
+	const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_3D[]
+	{
+		{
+			.SemanticName = "POSITION",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 0,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "NORMAL",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 1,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "TEXCOORD",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 2,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+	};
+
 	// 2D図形用シェーダの読み込み
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 		{
-			.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-			.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+			.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+			.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 			.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 			.DepthBias = {},
 			.DepthBiasClamp = {},
 			.SlopeScaledDepthBias = {},
-			.DepthClipEnable = true,//クリッピングを有効にする
+			.DepthClipEnable = true,        // クリッピングを有効にする
 			.ScissorEnable = {},
 			.MultisampleEnable = {},
 			.AntialiasedLineEnable = {},
 		});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Figure.hlsl",
 			ShaderType::Figure,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_2D,
+			sizeof(INPUT_ELEMENT_DESC_2D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -586,45 +619,23 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_NONE,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_NONE,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Sprite.hlsl",
 			ShaderType::Sprite2D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_2D,
+			sizeof(INPUT_ELEMENT_DESC_2D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -632,54 +643,23 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/FbxParts.hlsl",
 			ShaderType::FbxParts,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -687,54 +667,23 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
-				.FillMode = D3D11_FILL_SOLID,  // 塗りつぶし: solid
-				.CullMode = D3D11_CULL_BACK,  // カリング: 陰面消去
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,        // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Unlit3D.hlsl",
 			ShaderType::Unlit3D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 
@@ -743,53 +692,46 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
 				.FillMode = D3D11_FILL_WIREFRAME,  // 枠だけ: wireframe
-				.CullMode = D3D11_CULL_NONE,  // カリング: 隠面消去しない
-				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.CullMode = D3D11_CULL_NONE,       // カリング: 隠面消去しない
+				.FrontCounterClockwise = TRUE,     // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
 				.SlopeScaledDepthBias = {},
-				.DepthClipEnable = true,//クリッピングを有効にする
+				.DepthClipEnable = true,           // クリッピングを有効にする
 				.ScissorEnable = {},
 				.MultisampleEnable = {},
 				.AntialiasedLineEnable = {},
 			});
 
-		D3D11_INPUT_ELEMENT_DESC inputElementDesc[]
-		{
-			{
-				.SemanticName = "POSITION",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 0,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "NORMAL",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 1,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-			{
-				.SemanticName = "TEXCOORD",
-				.SemanticIndex = 0,
-				.Format = DXGI_FORMAT_R32G32_FLOAT,
-				.InputSlot = 0,
-				.AlignedByteOffset = vectorSize * 2,
-				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
-				.InstanceDataStepRate = 0,
-			},
-		};
-
 		CompileShader(
 			L"Shader/Debug3D.hlsl",
 			ShaderType::Debug3D,
-			inputElementDesc,
-			sizeof(inputElementDesc) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
+	// 地形シェーダの読み込み
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
+				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Ground.hlsl",
+			ShaderType::Ground,
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
 }

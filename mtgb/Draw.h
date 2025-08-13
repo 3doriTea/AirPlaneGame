@@ -9,6 +9,8 @@ namespace mtgb
 {
 	class Figure;
 	class Transform;
+	class FbxModel;
+	class Ground;
 	//enum struct ShaderType : int8_t;
 	
 	/// <summary>
@@ -89,6 +91,8 @@ namespace mtgb
 			float y,
 			int size
 		);
+		
+		static void GroundPlane();
 
 		static void TransformGuizmo(Transform* _pTransform);
 	public:
@@ -98,7 +102,9 @@ namespace mtgb
 		void Update() override;
 
 	private:
+		FbxModel* pFbxModel_;
 		Figure* pFigure_;
+		Ground* pGround_;
 		static ShaderType onceShaderType_;
 	};
 }

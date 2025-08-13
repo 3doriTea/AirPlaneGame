@@ -35,6 +35,13 @@ namespace mtgb
 		inline FbxScene* GetFbxScene() { return pFbxScene_; }
 
 		/// <summary>
+		/// Fbxパーツを取得する
+		/// </summary>
+		/// <param name="_index">インデックス</param>
+		/// <returns>Fbxパーツのポインタ</returns>
+		inline FbxParts* GetFbxParts(const int _index) { return pParts_[_index]; }
+
+		/// <summary>
 		/// 任意のボーンの位置を取得
 		/// </summary>
 		/// <param name="_boneName">ボーンの名前</param>

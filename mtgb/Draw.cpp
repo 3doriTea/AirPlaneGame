@@ -1,17 +1,22 @@
 #include "Draw.h"
-#include "Figure.h"
 #include "ReleaseUtility.h"
 #include "Game.h"
 #include "Image.h"
 #include "Sprite.h"
 #include "OBJ.h"
 #include "Fbx.h"
+#include "FbxParts.h"
 #include "Text.h"
 #include "Model.h"
 #include "Transform.h"
 #include "CameraSystem.h"
 #include "DirectWrite.h"
+#include "MTAssert.h"
 #include "MTImGui.h"
+
+#include "Ground.h"
+#include "Figure.h"
+
 
 void mtgb::Draw::CheckSetShader(const ShaderType _default)
 {
@@ -71,6 +76,8 @@ void mtgb::Draw::Image(
 
 void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
 {
+	// TODO: FbxとObjをモデルとしてハンドル含め統合、自動分岐する
+	massert(false && "Draw::Modelが呼ばれていますが未実装です。FbxとObjで別関数を呼んでください。 @Draw::Model");
 }
 
 void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
@@ -129,6 +136,14 @@ void mtgb::Draw::TransformGuizmo(Transform* _pTransform)
 	}
 }
 
+void mtgb::Draw::GroundPlane()
+{
+	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	CheckSetShader(ShaderType::Ground);
+
+	Game::System<Draw>().pGround_->Draw();
+}
+
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)
 {
 	CheckSetShader(ShaderType::FbxParts);
@@ -144,19 +159,30 @@ void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTr
 }
 
 mtgb::Draw::Draw() :
-	pFigure_{ nullptr }
+	pFigure_{ nullptr },
+	pGround_{ nullptr },
+	pFbxModel_{ nullptr }
 {
 }
 
 mtgb::Draw::~Draw()
 {
 	SAFE_DELETE(pFigure_);
+	SAFE_RELEASE(pFbxModel_);
+	SAFE_DELETE(pGround_);
 }
 
 void mtgb::Draw::Initialize()
 {
 	pFigure_ = new Figure{};
 	pFigure_->Initialize();
+
+	pFbxModel_ = new FbxModel{};
+	pFbxModel_->Load("Model/GroundPlane.fbx");
+	FbxParts* pParts{ pFbxModel_->GetFbxParts(0) };
+
+	pGround_ = new Ground{ pParts->GetNode() };
+	pGround_->Initialize();
 }
 
 void mtgb::Draw::Update()
