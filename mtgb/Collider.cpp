@@ -50,7 +50,7 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 	{
 		if (type_ == TYPE_SPHERE)
 		{
-			// TODO: ‹…‚Æ‹…‚Ì“–‚½‚è”»’è
+			// TODO: ‹…‚ÆƒJƒvƒZƒ‹‚Ì“–‚½‚è”»’è
 		}
 		else if (type_ == TYPE_CAPSULE)
 		{
