@@ -18,6 +18,8 @@ void mtgb::Transform::Compute()
 	matrixTranslate_ = XMMatrixTranslation(position.x, position.y, position.z);
 	matrixRotate_ = XMMatrixRotationQuaternion(rotate);
 	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
+
+	GenerateWorldMatrix(&matrixWorld_);
 }
 
 void mtgb::Transform::GenerateWorldMatrix(Matrix4x4* _pMatrix) const

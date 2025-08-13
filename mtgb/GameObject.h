@@ -3,6 +3,7 @@
 #include <string>
 #include "GameObjectBuilder.h"
 #include <bitset>
+#include <vector>
 #include "Transform.h"
 
 constexpr size_t COMPONENT_CAPACITY{ (8 * 8) - 4 };
@@ -45,6 +46,7 @@ namespace mtgb
 		GameSceneT& GetScene();
 
 		GameObject* FindGameObject(const std::string& _name);
+		void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
 		GameObject* FindGameObject(const EntityId _entityId);
 
 		/// <summary>

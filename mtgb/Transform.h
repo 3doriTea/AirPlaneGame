@@ -37,6 +37,7 @@ namespace mtgb
 			this->matrixTranslate_ = _other.matrixTranslate_;
 			this->matrixRotate_ = _other.matrixRotate_;
 			this->matrixScale_ = _other.matrixScale_;
+			this->matrixWorld_ = _other.matrixWorld_;
 
 //			massert(false && "Transformのコピー発生");
 			return *this;
@@ -83,5 +84,6 @@ namespace mtgb
 		Matrix4x4 matrixTranslate_{};         // 計算された移動行列
 		Matrix4x4 matrixRotate_{};            // 計算された回転行列
 		Matrix4x4 matrixScale_{};             // 計算された拡縮行列
+		Matrix4x4 matrixWorld_{};             // 計算されたワールド行列
 	};
 }

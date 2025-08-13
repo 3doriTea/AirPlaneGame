@@ -47,6 +47,19 @@ mtgb::GameObject* mtgb::GameScene::GetGameObject(std::string _name) const
 	return nullptr;
 }
 
+void mtgb::GameScene::GetGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects) const
+{
+	_pFoundGameObjects->clear();
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetName() != _name)
+		{
+			continue;
+		}
+		_pFoundGameObjects->push_back(object);
+	}
+}
+
 mtgb::GameObject* mtgb::GameScene::GetGameObject(const EntityId _entityId) const
 {
 	for (auto& object : pGameObjects_)

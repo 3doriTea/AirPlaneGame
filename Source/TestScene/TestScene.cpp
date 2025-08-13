@@ -9,6 +9,7 @@
 #include "PlayerPilot.h"
 #include "EnemyPlane.h"
 #include "Terrain.h"
+#include "UI/Radar.h"
 
 using namespace mtgb;
 
@@ -44,6 +45,8 @@ void TestScene::Initialize()
 	//Instantiate<EnemyPlane>(Vector3{ 0, 20, 20 }, eIdPlayer);
 	//Instantiate<EnemyPlane>(Vector3{ 0, 10, 0 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
+
+	Instantiate<Radar>(eIdPlayer);
 }
 
 void TestScene::Update()

@@ -36,6 +36,11 @@ mtgb::GameObject* mtgb::GameObject::FindGameObject(const std::string& _name)
 	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_name);
 }
 
+void mtgb::GameObject::FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects)
+{
+	mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, _pFoundGameObjects);
+}
+
 mtgb::GameObject* mtgb::GameObject::FindGameObject(const EntityId _entityId)
 {
 	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_entityId);

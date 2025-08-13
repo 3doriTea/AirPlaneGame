@@ -123,5 +123,7 @@ void mtgb::CameraSystem::GetProjMatrix(Matrix4x4* _pProj) const
 
 void mtgb::CameraSystem::GetPosition(Vector4* _pPosition) const
 {
-	*_pPosition = GetTransform().position;
+	static Matrix4x4 mWorld{};
+	GetTransform().GenerateWorldMatrix(&mWorld);
+	*_pPosition = GetTransform().position * mWorld;
 }

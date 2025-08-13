@@ -17,24 +17,24 @@ PlayerPlane::~PlayerPlane()
 void PlayerPlane::Update()
 {
 
-	/*if (InputUtil::GetKey(KeyCode::W))
+	if (InputUtil::GetKey(KeyCode::Up))
 	{
 		pTransform_->Rotation(Vector3::Right());
 	}
-	if (InputUtil::GetKey(KeyCode::S))
+	if (InputUtil::GetKey(KeyCode::Down))
 	{
 		pTransform_->Rotation(Vector3::Left());
 	}
-	if (InputUtil::GetKey(KeyCode::A))
+	if (InputUtil::GetKey(KeyCode::Left))
+	{
+		pTransform_->Rotation(Vector3::Up());
+	}
+	if (InputUtil::GetKey(KeyCode::Right))
 	{
 		pTransform_->Rotation(Vector3::Down());
 	}
-	if (InputUtil::GetKey(KeyCode::D))
-	{
-		pTransform_->Rotation(Vector3::Up());
-	}*/
 
-	pRB_->velocity_ = pTransform_->Forward() * Time::DeltaTimeF();
+	pRB_->velocity_ = (pTransform_->Forward()) * Time::DeltaTimeF();
 }
 
 void PlayerPlane::Draw() const
