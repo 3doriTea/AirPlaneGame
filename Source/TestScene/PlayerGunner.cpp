@@ -43,7 +43,6 @@ void PlayerGunner::Update()
 			angleX_ = ANGLE_X_MAX;
 		}
 	}
-	LOGF("angleX=%f\n", angleX_);
 	if (InputUtil::GetKey(KeyCode::A))
 	{
 		angleY_ -= ANGLE_SPEED * Time::DeltaTimeF();
