@@ -182,6 +182,9 @@
     <Filter Include="03mtgb\System\Ground">
       <UniqueIdentifier>{de5c7e48-ac63-4fe9-9610-1e5cdb555812}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\05TestScene\UI">
+      <UniqueIdentifier>{3004756e-d5c0-458e-b75e-843c3b227730}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -643,14 +646,14 @@
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TestScene\EnemyPlane.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TestScene\Terrain.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\Ground.cpp">
       <Filter>03mtgb\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\EnemyPlane.cpp">
+      <Filter>01Game\05TestScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

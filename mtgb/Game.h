@@ -82,7 +82,7 @@ namespace mtgb
 		/// ゲームのバージョンを必ず返してください
 		/// </summary>
 		/// <returns></returns>
-		virtual std::string_view GetVarsion() const = 0;
+		virtual std::string_view GetVersion() const = 0;
 		/// <summary>
 		/// ゲームのタイトルを必ず返してください
 		/// </summary>
@@ -125,7 +125,7 @@ namespace mtgb
 		/// ゲームのバージョンを取得
 		/// </summary>
 		/// <returns>バージョン情報の文字列</returns>
-		static inline std::string_view Version() { return pInstance_->GetVarsion(); }
+		static inline std::string_view Version() { return pInstance_->GetVersion(); }
 		/// <summary>
 		/// ゲームタイトルを取得
 		/// </summary>
