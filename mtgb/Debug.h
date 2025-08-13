@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <list>
 #include <source_location>
-
+#include "MTStringUtility.h"
 #ifdef _DEBUG
 
 #define LOGF(format, ...) \
@@ -91,6 +91,7 @@ namespace mtgb
 		
 		std::string msg = buffer;
 		std::string key = Debug::MakeKey(object, _location.file_name(), _location.line(), _location.function_name(), msg);
+		key = mtgb::MultiToUTF8(key);
 		auto itr = logMap_.find(key);
 		if (itr != logMap_.end())
 		{

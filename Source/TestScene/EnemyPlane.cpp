@@ -25,6 +25,7 @@ EnemyPlane::EnemyPlane(
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
 			LOGF("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			LOGIMGUI("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			if (FindGameObject(_targetId)->GetName() == "PlayerBullet")
 			{
 				//DestroyMe();

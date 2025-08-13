@@ -29,6 +29,7 @@
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
+    <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="minimp3.h" />
     <ClInclude Include="minimp3_ex.h" />
     <ClInclude Include="mtgb\Axis.h" />
+    <ClInclude Include="mtgb\Collider.h" />
     <ClInclude Include="mtgb\DefaultShow.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\GameObjectLayer.h" />
