@@ -5,6 +5,7 @@
 #include "Fbx.h"
 #include "Debug.h"
 
+
 mtgb::ColliderCP::ColliderCP()
 {
 }
@@ -59,6 +60,7 @@ void mtgb::ColliderCP::Update()
 						pool_[j].onColliders_.insert(&pool_[i]);
 						
 						LOGF("Add %d and %d\n", pool_[i].GetEntityId(), pool_[j].GetEntityId());
+						LOGIMGUI("Add %d and %d", pool_[i].GetEntityId(), pool_[j].GetEntityId());
 					}
 				}
 			}
@@ -76,6 +78,7 @@ void mtgb::ColliderCP::TestDraw() const
 		if (poolId_[i] != INVALD_ENTITY)
 		{
 			LOGF("EID:%d colSize=%d\n ", poolId_[i], pool_[i].onColliders_.size());
+			LOGIMGUI("EID:%d colSize=%d ", poolId_[i], pool_[i].onColliders_.size());
 		}
 	}
 	LOGF("ColliderCP END\n");

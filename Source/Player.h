@@ -1,14 +1,11 @@
 #pragma once
 #include <mtgb.h>
-#include "AccessibleMacro.h"
 #include "Camera.h"
-
-REFL_FORWARD_DECLARATION()
+//REFL_FORWARD_DECLARATION
 
 class Player : public GameObject
 {
-	//template<typename, typename, auto> friend struct refl::detail::member_descriptor;
-	ACCESSIBLE_PRIVATE()
+	friend class PlayerProxy;
 public:
 	Player();
 	Player(mtgb::WindowContext context);
@@ -17,8 +14,9 @@ public:
 	void Update() override;
 	void Draw() const override;
 	int test1;
-	float test2;
 private:
+	PlayerProxy* proxy_;
+	float test2;
 	std::string str;
 	std::string name_;
 	float radius_;
@@ -33,3 +31,5 @@ private:
 	RigidBody* pRigidbody_;
 	float acceleration_;
 };
+
+

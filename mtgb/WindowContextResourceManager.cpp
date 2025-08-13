@@ -1,5 +1,5 @@
 #include "WindowContextResourceManager.h"
-mtgb::WindowContext mtgb::WindowContextResourceManager::currentContext_{ WindowContext::None };
+
 
 mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {
@@ -16,6 +16,13 @@ void mtgb::WindowContextResourceManager::Initialize()
 
 void mtgb::WindowContextResourceManager::Update()
 {
+	for (auto& collection : collectionMap_)
+	{
+		for (auto& resource : collection.second)
+		{
+			resource.second->Update();
+		}
+	}
 }
 
 void mtgb::WindowContextResourceManager::Release()

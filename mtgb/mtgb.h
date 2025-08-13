@@ -10,6 +10,8 @@
 #include "Vector2Int.h"
 #include "RectInt.h"
 #include "WindowContextUtil.h"
+#include "TransformProxy.h"
+#include "TransformGuizmo.h"
 
 #pragma endregion
 
@@ -29,6 +31,7 @@
 #include "Timer.h"
 #include "Draw.h"
 #include "SceneSystem.h"
+#include "RenderSystem.h"
 #include "Debug.h"
 #include "Image.h"
 #include "Audio.h"
@@ -42,6 +45,7 @@
 #include "DoubleWindow.h"
 #include "CameraSystem.h"
 
+
 #pragma endregion
 
 #include "GameObjectBuilder.h"
@@ -50,6 +54,7 @@
 #pragma region Resource
 
 #include "WindowContextResource.h"
+#include "WindowResource.h"
 #include "DXGIResource.h"
 #include "Direct3DResource.h"
 #include "Direct2DResource.h"
@@ -61,7 +66,6 @@
 #pragma region Data
 
 #include "InputData.h"
-
 //
 #pragma endregion
 

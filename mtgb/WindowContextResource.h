@@ -24,10 +24,15 @@ namespace mtgb
 		/// ウィンドウを変更する際に固有のリソースをセットする
 		/// </summary>
 		virtual void SetResource() = 0;
+
+		/// <summary>
+		/// 更新処理
+		/// </summary>
+		virtual void Update() {};
 		/// <summary>
 		/// リソースのコピーを作成、返す
 		/// </summary>
 		/// <returns>生成したオブジェクト</returns>
-		virtual WindowContextResource* Clone() const= 0;
+		virtual WindowContextResource* Clone() const = 0;
 	};
 }

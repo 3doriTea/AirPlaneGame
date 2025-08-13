@@ -17,12 +17,15 @@ EnemyPlane::EnemyPlane(
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->sphere_.offset_ = Vector3::Zero();
 	pCollider_->sphere_.radius_ = 1.0f;
+	pTransformProxy_ = new TransformProxy(pTransform_);
+	pTransformGuizmo_ = new TransformGuizmo(pTransform_);
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
 			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			if (FindGameObject(_targetId)->GetName() == "PlayerBullet")
 			{
 				//DestroyMe();
@@ -36,11 +39,12 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	Vector3 diffDir{ pTarget_->position - pTransform_->position };
+	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
+	//DirectX::XMQuaternionBaryCentric
+	Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
 	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
-	//DirectX::XMQuaternionBaryCentric
 	
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 }

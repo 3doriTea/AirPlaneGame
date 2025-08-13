@@ -19,11 +19,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\GraphEditor.cpp" />
+    <ClCompile Include="ImGui\ImCurveEdit.cpp" />
+    <ClCompile Include="ImGui\ImGradient.cpp" />
+    <ClCompile Include="ImGui\ImGuizmo.cpp" />
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
+    <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
+    <ClCompile Include="mtgb\ImGuiShowable.cpp" />
+    <ClCompile Include="mtgb\InputConfig.cpp" />
+    <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\MTStringUtility.cpp" />
+    <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\TransformGuizmo.cpp" />
+    <ClCompile Include="mtgb\TransformProxy.cpp" />
+    <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -73,7 +87,6 @@
     <ClCompile Include="mtgb\Input.cpp" />
     <ClCompile Include="mtgb\InputData.cpp" />
     <ClCompile Include="mtgb\InputResource.cpp" />
-    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\IShader.cpp" />
     <ClCompile Include="mtgb\ISystem.cpp" />
     <ClCompile Include="mtgb\MainWindow.cpp" />
@@ -118,7 +131,7 @@
     <ClCompile Include="mtgb\Timer.cpp" />
     <ClCompile Include="mtgb\Transform.cpp" />
     <ClCompile Include="mtgb\TransformCP.cpp" />
-    <ClCompile Include="mtgb\TypeRegistry.cpp" />
+    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\Vector2.cpp" />
     <ClCompile Include="mtgb\Vector2Int.cpp" />
     <ClCompile Include="mtgb\Vector3.cpp" />
@@ -136,8 +149,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp" />
+    <ClCompile Include="Source\PlayerProxy.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
-    <ClCompile Include="Source\registerRefl.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\SkySphere.cpp" />
@@ -153,15 +166,32 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mtgb\CameraSystem.h" />
+    <ClInclude Include="ImGui\GraphEditor.h" />
+    <ClInclude Include="ImGui\ImCurveEdit.h" />
+    <ClInclude Include="ImGui\ImGradient.h" />
+    <ClInclude Include="ImGui\ImGuizmo.h" />
+    <ClInclude Include="ImGui\ImSequencer.h" />
+    <ClInclude Include="ImGui\ImZoomSlider.h" />
+    <ClInclude Include="minimp3.h" />
+    <ClInclude Include="minimp3_ex.h" />
+    <ClInclude Include="mtgb\Axis.h" />
     <ClInclude Include="mtgb\Collider.h" />
-    <ClInclude Include="mtgb\ColliderCP.h" />
+    <ClInclude Include="mtgb\DefaultShow.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\Ground.h" />
+    <ClInclude Include="mtgb\ImGuiShowable.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
-    <ClInclude Include="mtgb\MTBit\BitFlag.h" />
+    <ClInclude Include="mtgb\InputConfig.h" />
+    <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\ReflectionInfo.h" />
+    <ClInclude Include="mtgb\RenderSystem.h" />
+    <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\TransformCore.h" />
+    <ClInclude Include="mtgb\TransformGuizmo.h" />
+    <ClInclude Include="mtgb\TransformProxy.h" />
+    <ClInclude Include="mtgb\TypeRegistry.h" />
+    <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -220,7 +250,6 @@
     <ClInclude Include="mtgb\InputKeyCode.h" />
     <ClInclude Include="mtgb\InputMouseCode.h" />
     <ClInclude Include="mtgb\InputResource.h" />
-    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\IShader.h" />
     <ClInclude Include="mtgb\ISystem.h" />
     <ClInclude Include="mtgb\MainWindow.h" />
@@ -274,7 +303,7 @@
     <ClInclude Include="mtgb\Timer.h" />
     <ClInclude Include="mtgb\Transform.h" />
     <ClInclude Include="mtgb\TransformCP.h" />
-    <ClInclude Include="mtgb\TypeRegistry.h" />
+    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\Vector2.h" />
     <ClInclude Include="mtgb\Vector2Int.h" />
     <ClInclude Include="mtgb\Vector3.h" />
@@ -295,6 +324,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Player.h" />
+    <ClInclude Include="Source\PlayerProxy.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
@@ -313,6 +343,7 @@
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
+    <None Include="mtgb\DefaultShow.inl" />
     <None Include="Other\History\log20250720.md">
       <SubType>
       </SubType>

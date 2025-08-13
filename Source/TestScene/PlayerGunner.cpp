@@ -14,6 +14,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pTransform_{ Component<Transform>() },
 	angleX_{ 0.0f },
 	angleY_{ 0.0f }
+	,ImGuiShowable<PlayerGunner>("Gunner",Show::Inspector)
 {
 	pTransform_->SetParent(_plane);
 }
@@ -64,9 +65,15 @@ void PlayerGunner::Update()
 	//if (InputUtil::GetMouseDown(MouseCode::Left))
 	{
 		Instantiate<PlayerBullet>(pTransform_->position + Vector3::Down() * 1.0f, pTransform_->rotate);
+		LOGIMGUI("Gunner:shoot");
 	}
 }
 
 void PlayerGunner::Draw() const
 {
+}
+
+void PlayerGunner::ShowImGui()
+{
+	ImGui::Text("%d,Gunner", entityId_);
 }

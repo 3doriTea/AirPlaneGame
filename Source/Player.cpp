@@ -3,6 +3,8 @@
 #include "../mtgb/DirectX11Draw.h"
 #include "DoubleWindow.h"
 #include "Inspector.h"
+#include "PlayerProxy.h"
+#include "TransformCore.h"
 using namespace mtgb;
 
 namespace
@@ -42,8 +44,16 @@ Player::Player() : GameObject(GameObjectBuilder()
 	pTransform_->scale = Vector3(1, 1, 1);
 	//hMnow_ = Audio::Load("Sound/Meow.wav");
 	//pAudioPlayer_->SetAudio(hMnow_);
+	pTransform_->position.z = 5.0f;
+	pTransform_->scale = Vector3(1, 1, 1);
 	timerHandle = Timer::AddInterval(0.01f, [this]() { timer += 10; });
-	//pCamera_ = FindGameObject();
+	proxy_ = new PlayerProxy(this);
+	/*TypeRegistry::Instance().RegisterFunc<PlayerProxy>([](std::any instance, const char* name)
+		{
+			ImGui::Text("%s,RegisterFunc!!", name);
+		});*/
+	
+
 }
 
 Player::Player(mtgb::WindowContext context)
@@ -54,6 +64,7 @@ Player::Player(mtgb::WindowContext context)
 
 Player::~Player()
 {
+	SAFE_DELETE(proxy_);
 }
 
 void Player::Update()
@@ -105,6 +116,7 @@ void Player::Update()
 		//pTransform_->scale_.z += 0.01f;
 	}
 	pRigidbody_->velocity_ = pTransform_->Forward() * acceleration_;
+
 }
 
 void Player::Draw() const
@@ -112,17 +124,17 @@ void Player::Draw() const
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	Vector2Int mousePos = InputUtil::GetMousePosition(context_);
 	
-	//Draw::Box({ SCREEN_SIZE.x / 2, SCREEN_SIZE.y / 2 }, { mousePos.x, mousePos.y }, Color::RED);
-
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
-	//MTImGui::ShowInspector(&speed, "speed");
-	//Draw::Image(draw, { Vector2Int::Zero(), draw.size }, hImage_);
 	
 	Game::System<Text>().ChangeFontSize(100);
 	Draw::ImmediateText(std::to_string(timer),0,0);
-	//MTImGui::ShowInspector(this, "player");
-	//Draw::Text(hText, mousePos);
-	TypeRegistry::ShowInspector(this, name_.c_str());
+	
+	//LOGF("PlayerDraw\n");
+	/*Inspector::Instance().ShowInspector(proxy_, name_.c_str());
+	if (CurrContext() == WindowContext::First)
+	{
+		Draw::TransformGuizmo(pTransform_);
+	}*/
 }

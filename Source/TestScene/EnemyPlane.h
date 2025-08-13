@@ -16,6 +16,8 @@ private:
 	Collider* pCollider_;
 	Transform* pTransform_;
 	Transform* pTarget_;
+	TransformProxy* pTransformProxy_;
+	TransformGuizmo* pTransformGuizmo_;
 	float speed_;
 	bool broken_;  // ‰ó‚ê‚Ä‚¢‚é‚©
 };

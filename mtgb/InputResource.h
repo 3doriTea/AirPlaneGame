@@ -8,6 +8,10 @@
 #include "WindowContext.h"
 #include <map>
 #include <typeindex>
+#include "ImGuiShowable.h"
+#include "JoystickProxy.h"
+#include "Timer.h"
+#include "InputConfig.h"
 
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
@@ -17,7 +21,6 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
-
 	class InputData;
 	class InputResource : public WindowContextResource
 	{
@@ -26,15 +29,19 @@ namespace mtgb
 		~InputResource();
 		InputResource(const InputResource& other);
 		void Initialize(WindowContext _windowContext) override;
+		void Update() override;
 		void SetResource() override;
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
 	private:
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
-
+		ComPtr<IDirectInputDevice8> pJoystickDevice_;
+		JoystickProxy* pProxy_;
+		GUID assignedJoystickGuid_;
+		JoystickReservation reservation;
+		bool isInitialized;
 		// WindowContextResource を介して継承されました
-		InputResource* Clone() const override;
-		// マウスデバイス
+		WindowContextResource* Clone() const override;
 	};
 }

@@ -1061,6 +1061,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\2DCommon.hlsli" />
+    <None Include="Assets\Shader\3DCommon.hlsli" />
+    <None Include="mtgb\DefaultShow.inl" />
     <None Include="Other\History\log20250720.md" />
     <None Include="packages.config" />
     <None Include="通信体系.txt" />

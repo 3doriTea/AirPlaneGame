@@ -5,6 +5,7 @@
 #include "InputResource.h"
 #include "Game.h"
 #include "ISystem.h"
+#include "JoystickProxy.h"
 
 
 const bool mtgb::InputUtil::GetKey(const KeyCode _keyCode, WindowContext _context)
@@ -80,11 +81,23 @@ const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 
 
 
+const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context)
+{
+	const InputData& input = GetInput(_context);
+	float value = 0.0f;
+	switch (axis)
+	{
+	case Axis::X: value = input.joyStateCurrent_.lX / input.config_.xRange; break;
+	case Axis::Y: value = input.joyStateCurrent_.lY / input.config_.yRange; break;
+	case Axis::Z: value = input.joyStateCurrent_.lZ / input.config_.zRange; break;
+	default: return 0.0f;
+	}
+	return input.config_.ApplyDeadZone(value);
+}
+
 const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
 {
-	
 	return InputUtil::GetInput(_context).mousePosition_;
-	
 }
 
 const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
@@ -96,6 +109,7 @@ const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
 		static_cast<float>(InputUtil::GetInput(_context).mouseStateCurrent_.lZ),
 	};
 }
+
 
 
 

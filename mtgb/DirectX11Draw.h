@@ -89,6 +89,7 @@ namespace mtgb
 
 		friend class DoubleWindow;
 		friend class SceneSystem;
+		friend class RenderSystem;
 	public:
 		/// <summary>
 		/// 描画するシェーダをセットする
