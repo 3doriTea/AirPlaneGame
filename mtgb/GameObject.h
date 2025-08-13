@@ -45,6 +45,7 @@ namespace mtgb
 		GameSceneT& GetScene();
 
 		GameObject* FindGameObject(const std::string& _name);
+		GameObject* FindGameObject(const EntityId _entityId);
 
 		/// <summary>
 		/// このオブジェクトを削除する
@@ -91,5 +92,14 @@ namespace mtgb
 	{
 		return Game::System<SceneSystem>().GetActiveScene()
 			->Instantiate<GameObjectT>(_args...);
+	}
+	template<typename GameSceneT>
+	inline GameSceneT& GameObject::GetScene()
+	{
+		GameSceneT* pActiveScene{ Game::System<SceneSystem>().GetActiveScene() };
+		massert(pActiveScene != nullptr
+			&& "アクティブシーンの取得に失敗 @GameObject::GetScene");
+
+		return *pActiveScene;
 	}
 }

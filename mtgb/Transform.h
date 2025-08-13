@@ -77,6 +77,9 @@ namespace mtgb
 	//	Quaternion rotate{ Quaternion::Identity() };  // ƒ[ƒJƒ‹‰ñ“]Šp(Degree)
 
 	private:
+		void GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const;
+
+	private:
 		Matrix4x4 matrixTranslate_{};         // ŒvZ‚³‚ê‚½ˆÚ“®s—ñ
 		Matrix4x4 matrixRotate_{};            // ŒvZ‚³‚ê‚½‰ñ“]s—ñ
 		Matrix4x4 matrixScale_{};             // ŒvZ‚³‚ê‚½Šgks—ñ

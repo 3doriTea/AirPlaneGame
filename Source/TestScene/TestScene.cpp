@@ -38,9 +38,9 @@ void TestScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<EnemyPlane>(Vector3{ 0, 10, 10 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 0, 20, 20 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 0, 10, 0 }, eIdPlayer);
+	//Instantiate<EnemyPlane>(Vector3{ 0, 10, 10 }, eIdPlayer);
+	//Instantiate<EnemyPlane>(Vector3{ 0, 20, 20 }, eIdPlayer);
+	//Instantiate<EnemyPlane>(Vector3{ 0, 10, 0 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 }
 

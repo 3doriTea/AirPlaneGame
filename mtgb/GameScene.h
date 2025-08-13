@@ -3,6 +3,7 @@
 #include <list>
 #include "Handlers.h"
 #include <string>
+#include <cmtgb.h>
 
 namespace mtgb
 {
@@ -31,6 +32,8 @@ namespace mtgb
 		CameraHandleInScene RegisterCameraGameObject(GameObject* _pGameObject) const;
 		
 		GameObject* GetGameObject(std::string _name) const;
+
+		GameObject* GetGameObject(const EntityId _entityId) const;
 
 	protected:
 		virtual void Initialize();

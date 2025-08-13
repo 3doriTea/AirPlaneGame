@@ -14,5 +14,7 @@ namespace mtgb
 
 		void Start() override;
 		void Update() override;
+
+		void TestDraw() const;
 	};
 }
