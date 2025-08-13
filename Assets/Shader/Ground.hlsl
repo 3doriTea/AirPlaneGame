@@ -12,5 +12,5 @@ VS_OUT VS(float4 position : POSITION, float4 normal : NORMAL, float2 uv : TEXCOO
 
 float4 PS(VS_OUT inData) : SV_Target
 {
-    return float4(1, 1, 1, 0.3);
+    return float4(1, 1, 1, 1);
 }

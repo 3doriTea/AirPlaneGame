@@ -8,6 +8,7 @@
 #include "PlayerGunner.h"
 #include "PlayerPilot.h"
 #include "EnemyPlane.h"
+#include "Terrain.h"
 
 using namespace mtgb;
 
@@ -24,6 +25,7 @@ void TestScene::Initialize()
 	Audio::Clear();
 
 	Instantiate<SkySphere>();
+	Instantiate<Terrain>();
 	Instantiate<Reticle>();
 
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };

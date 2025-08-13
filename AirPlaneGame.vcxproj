@@ -23,6 +23,7 @@
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
+    <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="mtgb\ColliderCP.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\GameObjectLayer.h" />
+    <ClInclude Include="mtgb\Ground.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\MTBit\BitFlag.h" />
     <ClInclude Include="mtgb\TransformCore.h" />

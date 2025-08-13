@@ -1,6 +1,10 @@
 #include "Terrain.h"
 
-Terrain::Terrain()
+using namespace mtgb;
+
+Terrain::Terrain() : GameObject(GameObjectBuilder()
+	.SetName("Terrain")
+	.Build())
 {
 }
 
@@ -14,5 +18,5 @@ void Terrain::Update()
 
 void Terrain::Draw() const
 {
-
+	Draw::GroundPlane();
 }

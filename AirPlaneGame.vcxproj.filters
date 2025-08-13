@@ -179,6 +179,9 @@
     <Filter Include="03mtgb\System\Audio">
       <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03mtgb\System\Ground">
+      <UniqueIdentifier>{de5c7e48-ac63-4fe9-9610-1e5cdb555812}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -646,6 +649,9 @@
     <ClCompile Include="Source\TestScene\Terrain.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Ground.cpp">
+      <Filter>03mtgb\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1040,6 +1046,9 @@
     </ClInclude>
     <ClInclude Include="Source\TestScene\Terrain.h">
       <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Ground.h">
+      <Filter>03mtgb\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

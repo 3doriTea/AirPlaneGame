@@ -54,7 +54,8 @@ namespace mtgb
 		template<typename ConstantBufferT, typename VertexT>
 		void Draw(
 			const std::function<void(ConstantBufferT* _pConstantBuffer)>& _makeConstantBufferCallback,
-			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback);
+			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback,
+			const int _drawIndexCount = 6);
 
 		/// <summary>
 		/// ƒJƒƒ‰‚ÌÀ•WŒn‚ğæ“¾
@@ -71,7 +72,8 @@ namespace mtgb
 	template<typename ConstantBufferT, typename VertexT>
 	inline void IShader::Draw(
 		const std::function<void(ConstantBufferT*)>& _makeConstantBufferCallback,
-		const std::function<void(ID3D11DeviceContext*)>& _contextSetterCallback)
+		const std::function<void(ID3D11DeviceContext*)>& _contextSetterCallback,
+		const int _drawIndexCount)
 	{
 		UINT stride{ 0U };
 		UINT offset{ 0U };
@@ -115,6 +117,6 @@ namespace mtgb
 
 		_contextSetterCallback(DirectX11Draw::pContext_.Get());
 
-		DirectX11Draw::pContext_->DrawIndexed(6, 0, 0);
+		DirectX11Draw::pContext_->DrawIndexed(_drawIndexCount, 0, 0);
 	}
 }
