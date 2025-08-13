@@ -1,6 +1,8 @@
 #include "Ground.h"
 #include "MTAssert.h"
 #include "CameraSystem.h"
+#include "ReleaseUtility.h"
+#include <vector>
 
 namespace
 {
@@ -35,6 +37,8 @@ void mtgb::Ground::Initialize()
 
 void mtgb::Ground::Release()
 {
+	SAFE_DELETE_ARRAY(pVertexes_);
+	SAFE_DELETE_ARRAY(pIndexData_);
 }
 
 void mtgb::Ground::Draw()
@@ -76,41 +80,21 @@ void mtgb::Ground::Draw()
 void mtgb::Ground::InitializeVertexBuffer(ID3D11Device* _pDevice)
 {
 	// xyzアクセス用インデックス
-	static enum { X, Y, Z };
+	enum { X, Y, Z };
 
 	pVertexes_ = new Vertex[vertexCount_]{};
 
-	for (uint32_t poly = 0; poly < polygonCount_; poly++)
+	int vertexCount{ pMesh_->GetControlPointsCount() };
+	FbxVector4* pPoints{ pMesh_->GetControlPoints() };
+	for (int i = 0; i < vertexCount; i++)
 	{
-		for (uint32_t vertex = 0; vertex < GetVertexCount(); vertex++)
+		pVertexes_[i].position =
 		{
-			int index{ pMesh_->GetPolygonVertex(poly, vertex) };
-
-			if (index < 0 || index >= static_cast<int>(vertexCount_))
-			{
-				massert(false && "頂点インデックスが範囲外 @Ground::InitializeVertexBuffer");
-				continue;
-			}
-
-			// 頂点の座標
-			FbxVector4 position{ pMesh_->GetControlPointAt(index) };
-			pVertexes_[index].position =
-			{
-				static_cast<float>(position[X]),
-				static_cast<float>(position[Y]),
-				static_cast<float>(position[Z]),
-			};
-
-			// 頂点の法線
-			FbxVector4 normal{};
-			pMesh_->GetPolygonVertexNormal(poly, vertex, normal);
-			pVertexes_[index].normal =
-			{
-				static_cast<float>(normal[X]),
-				static_cast<float>(normal[Y]),
-				-static_cast<float>(normal[Z]),
-			};
-		}
+			static_cast<float>(pPoints[i][X]),
+			static_cast<float>(pPoints[i][Y]),
+			static_cast<float>(pPoints[i][Z]),
+		};
+		pVertexes_[i].normal = Vector3::Up();
 	}
 
 	const D3D11_BUFFER_DESC BUFFER_DESC
@@ -143,6 +127,8 @@ void mtgb::Ground::InitializeVertexBuffer(ID3D11Device* _pDevice)
 void mtgb::Ground::InitializeIndexBuffer(ID3D11Device* _pDevice)
 {
 	pIndexData_ = new DWORD[GetIndexCount()]{};
+	//std::vector<DWORD> indexData{};
+	//indexData.reserve()
 
 	// ポリゴンを見ていく
 	for (uint32_t poly = 0; poly < polygonCount_; poly++)
@@ -154,13 +140,13 @@ void mtgb::Ground::InitializeIndexBuffer(ID3D11Device* _pDevice)
 		for (int v = 0; v < polygonSize; v++)
 		{
 			int index{ pMesh_->GetPolygonVertex(poly, v) };
-			pIndexData_[GetVertexCount(poly) + v] = static_cast<DWORD>(index);
+			pIndexData_[GetVertexCount(poly) + (polygonSize - 1 - v)] = static_cast<DWORD>(index);
 		}
 	}
 
 	const D3D11_BUFFER_DESC BUFFER_DESC
 	{
-		.ByteWidth = sizeof(pIndexData_),
+		.ByteWidth = sizeof(DWORD) * GetIndexCount(),
 		.Usage = D3D11_USAGE_DEFAULT,          // 途中で書き換えない
 		.BindFlags = D3D11_BIND_INDEX_BUFFER,
 		.CPUAccessFlags = 0,
