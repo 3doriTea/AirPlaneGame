@@ -39,14 +39,14 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	Vector3 diffDir{ pTarget_->position - pTransform_->position };
+	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
 	//DirectX::XMQuaternionBaryCentric
-	/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
+	Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
 	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
 	
-	pRB_->velocity_ = pTransform_->Forward() * speed_;*/
+	pRB_->velocity_ = pTransform_->Forward() * speed_;
 }
 
 void EnemyPlane::Draw() const
