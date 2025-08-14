@@ -161,6 +161,7 @@
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
     <ClCompile Include="Source\TestScene\Terrain.cpp" />
     <ClCompile Include="Source\TestScene\UI\Radar.cpp" />
+    <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
     <ClInclude Include="Source\TestScene\Terrain.h" />
     <ClInclude Include="Source\TestScene\UI\Radar.h" />
+    <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
   </ItemGroup>

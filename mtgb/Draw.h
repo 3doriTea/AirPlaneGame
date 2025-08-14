@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Vector2Int.h"
 #include "RectInt.h"
 #include "Color.h"
@@ -14,7 +14,7 @@ namespace mtgb
 	//enum struct ShaderType : int8_t;
 	
 	/// <summary>
-	/// �`�悷��n
+	/// 描画する系
 	/// </summary>
 	class Draw final : public ISystem
 	{
@@ -29,9 +29,9 @@ namespace mtgb
 	public:
 		static void SetShaderOnce(const ShaderType _type) { Draw::onceShaderType_ = _type; }
 		/// <summary>
-		/// �V�F�[�_���Z�b�g����Ă��邩�`�F�b�N����
+		/// シェーダがセットされているかチェックする
 		/// </summary>
-		/// <param name="_default">�Z�b�g����Ă��Ȃ��ꍇ�̃f�t�H���g�V�F�[�_</param>
+		/// <param name="_default">セットされていない場合のデフォルトシェーダ</param>
 		static void CheckSetShader(const ShaderType _default);
 
 		static void Box(
@@ -79,12 +79,25 @@ namespace mtgb
 			const TextHandle _hText, 
 			const Vector2Int& origin);
 
+		/// <summary>
+		/// 頻繫に変わるテキストを描画する
+		/// </summary>
+		/// <param name="text">描画する文字列</param>
+		/// <param name="x">描画座標ピクセル x</param>
+		/// <param name="y">描画座標ピクセル y</param>
 		static void ImmediateText(
 			const std::string& text,
 			float x,
 			float y
 		);
 
+		/// <summary>
+		/// 頻繫に変わるテキストを描画する
+		/// </summary>
+		/// <param name="text">描画する文字列</param>
+		/// <param name="x">描画座標ピクセル x</param>
+		/// <param name="y">描画座標ピクセル y</param>
+		/// <param name="size">テキストのフォントサイズピクセル</param>
 		static void ImmediateText(
 			const std::string& text,
 			float x,
