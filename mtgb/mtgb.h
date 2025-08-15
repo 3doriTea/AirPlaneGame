@@ -10,8 +10,6 @@
 #include "Vector2Int.h"
 #include "RectInt.h"
 #include "WindowContextUtil.h"
-#include "TransformProxy.h"
-#include "TransformGuizmo.h"
 
 #pragma endregion
 

@@ -1,123 +1,69 @@
 #pragma once
 #include <vector>
+#include <queue>
 #include <string>
-#include "Inspector.h"
+#include "TypeRegistry.h"
 #include "ISystem.h"
 #include <type_traits>
-
+#include <any>
+#include <unordered_map>
+#include <typeindex>
+#include "WindowContext.h"
+#include <functional>
+#include "MTStringUtility.h"
 namespace mtgb
 {
-	enum class Show
+	enum class ShowType
 	{
 		Inspector,
-		GameView
+		GameView,
+		None
 	};
-	/// <summary>
-	/// 継承禁止!!
-	/// ImGuiShowableを継承してください
-	/// </summary>
-	class ImGuiShowableBase
+	
+	class ImGuiShowable
 	{
+		friend class ImGuiShowManager;
 	public:
-		ImGuiShowableBase();
-		ImGuiShowableBase(const std::string& name);
-		virtual ~ImGuiShowableBase();
+		ImGuiShowable();
+		ImGuiShowable(ShowType _showType);
+		ImGuiShowable(const std::string& _name,ShowType _showType);
+		virtual ~ImGuiShowable();
 
 		virtual void ShowImGui();
-
-		void SetVisible(bool visible);
-		bool IsVisible();
-		bool IsAuto();
-		void SetDisplayName(const std::string& name);
-		const std::string& GetDisplayName() const;
 	protected:
 		std::string displayName_;
-		bool isVisible_;
-		bool isAuto_;
+		ShowType show_;
 	};
-
-	/// <summary>
-	/// 自動でImGui表示をするインターフェース
-	/// 既存のクラスをラップ、または自身の型を渡してCRTP
-	/// </summary>
-	/// <typeparam name="TargetType"></typeparam>
-	template<typename TargetType>
-	class ImGuiShowable : public ImGuiShowableBase
+	class ImGuiShowManager final
 	{
-	public:
-		ImGuiShowable(Show show = Show::Inspector);
-		ImGuiShowable(const std::string& name,Show show);
-		ImGuiShowable(TargetType* derived,Show show);
-		
-		virtual ~ImGuiShowable() override;
-		/// <summary>
-		/// 任意の表示をしたい場合はオーバライド
-		/// オーバライドしなければ自動で表示方法が選ばれる
-		/// </summary>
-		virtual void ShowImGui() override;
-	protected:
-		TargetType* target_;
-	};
 
-
-	class ImGuiShowSystem
-	{
 	public:
-		static ImGuiShowSystem& Instance()
+		static ImGuiShowManager& Instance()
 		{
-			static ImGuiShowSystem instance;
+			static ImGuiShowManager instance;
 			return instance;
 		}
 		
-		void Register(ImGuiShowableBase* obj, Show show);
-		void Unregister(ImGuiShowableBase* obj,Show show);
-		void ShowAll(Show show);
+		void Update();
+		void ShowAll(ShowType show);
+		template<typename T>
+		void Show(T* target, const std::string& name,ShowType show = ShowType::Inspector);
+		void Register(ImGuiShowable* obj);
+		void Unregister(ImGuiShowable* obj);
 	private:
-		std::vector<ImGuiShowableBase*> inspectorShowList_;
-		std::vector<ImGuiShowableBase*> gameViewShowList_;
+		const mtgb::WindowContext mainWindow_ = WindowContext::First;
+		std::vector<ImGuiShowable*> showableObjs_;
+		void PushShowFunc(std::function<void()> func, ShowType show);
+		std::queue<std::function<void()>> inspectorShowList_;
+		std::queue<std::function<void()>> gameViewShowList_;
 	};
-	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::ImGuiShowable(Show show)
-		:ImGuiShowableBase()
-		,target_{nullptr}
-	{
-		ImGuiShowSystem::Instance().Register(this,show);
-	}
-	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::ImGuiShowable(const std::string& name, Show show)
-		:ImGuiShowableBase(name)
-		,target_{nullptr}
-	{
-		ImGuiShowSystem::Instance().Register(this,show);
-	}
-
-	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::ImGuiShowable(TargetType* target, Show show)
-		:ImGuiShowableBase()
-		,target_{target}
-	{
-		ImGuiShowSystem::Instance().Register(this,show);
-	}
-
-	template<typename TargetType>
-	inline ImGuiShowable<TargetType>::~ImGuiShowable()
-	{
-	}
-
 	
-	template<typename TargetType>
-	inline void ImGuiShowable<TargetType>::ShowImGui()
+	template<typename T>
+	inline void ImGuiShowManager::Show(T* target, const std::string& name, ShowType show)
 	{
-		//ImGuiShowableBase派生クラスの場合はTargetTypeにキャスト
-		if constexpr (std::is_base_of_v<ImGuiShowableBase, TargetType>)
-		{
-			Inspector::Instance().ShowInspector(dynamic_cast<TargetType*>(this), GetDisplayName().c_str());
-		}
-		//派生していないならそのまま
-		else
-		{
-			Inspector::Instance().ShowInspector(this, GetDisplayName().c_str());
-		}
+		using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
+		//PushShowFunc( [=] {proxy->ShowImGui(std::any(target), name); }, show);
+		PushShowFunc([=](){TypeRegistry::Instance().CallFunc<Type>(target, name.c_str()); }, show);
 	}
 
 }

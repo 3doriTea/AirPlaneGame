@@ -7,51 +7,34 @@
 #include "MTAssert.h"
 #include "MTStringUtility.h"
 #include "DefaultShow.h"
+#include "ShowAttributes.h"
 
 
 
-template <typename Func>
-struct ShowFunc : refl::attr::usage::type
-{
-private:
-	Func func;
-public:
-	constexpr ShowFunc(Func _func) : func(_func)
-	{
-	}
-	template<typename T>
-	void operator()(T value,const char* name) const { func(value,name); }
-};
-
-// ShowFuncを作成するヘルパー関数
-template<typename F>
-constexpr auto make_show_func(F&& f) {
-	return ShowFunc<F>(std::forward<F>(f));
-}
 
 
 // TypeRegistryのテンプレート実装
 template<typename T>
 void TypeRegistry::RegisterType()
 {
-	std::type_index typeIdx(typeid(T));
-	showFunctions_[typeIdx] = [this](std::any ptr, const char* name)
+	
+	using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
+	showFunctions_[typeid(Type)] = [this](std::any ptr, const char* name)
 		{
-			using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
+			
 			if constexpr (refl::is_reflectable<Type>())
 			{
-
-				T* registerInstance = nullptr;
-				if (ptr.type() == typeid(Type*))
+				Type* registerInstance = nullptr;
+				if (ptr.type() == typeid(T*))
 				{
-					registerInstance = std::any_cast<Type*>(ptr);
+					registerInstance = std::any_cast<T*>(ptr);
 				}
-				else if (ptr.type() == typeid(const Type*))
+				else if (ptr.type() == typeid(const T*))
 				{
-					registerInstance = const_cast<Type*>(std::any_cast<const Type*>(ptr));
+					registerInstance = const_cast<T*>(std::any_cast<const T*>(ptr));
 				}
 				massert(registerInstance != nullptr
-					&& "RegisterTypeに失敗:ptrがnullptrです @TypeRegistry::RegisterType");
+					&& "instanceのany_castに失敗:ptrがnullptrです @TypeRegistry::RegisterType");
 				constexpr auto type = refl::reflect<Type>();
 
 				// Check if ShowFunc is present and execute it
@@ -69,7 +52,7 @@ void TypeRegistry::RegisterType()
 									//ShowFunc型のインスタンスか否か
 									if constexpr (refl::trait::is_instance_of_v<ShowFunc, AttrType>)
 									{
-										attrs(registerInstance,name);
+										attrs(registerInstance, name);
 										showFuncExecuted = true;
 									}
 								}()
@@ -82,18 +65,17 @@ void TypeRegistry::RegisterType()
 					if (ImGui::CollapsingHeader(name))
 					{
 						ImGui::PushID(registerInstance);
-
 						//メンバごとに走査
 						refl::util::for_each(type.members, [&](auto&& member)
 							{
 								// メンバの実際の型を取得（ポインタかどうかを含む）
 								using MemberValueType = std::remove_cvref_t<decltype(member(*registerInstance))>;
-								
+
 								if constexpr (std::is_pointer_v<MemberValueType>)
 								{
 									// ポインタ型の場合：そのまま渡す
 									auto memberValue = member(*registerInstance);
-									
+
 									// メンバの型がリフレクションされているかチェック
 									if (!this->ShowMemberWithReflection(memberValue, member.name.c_str()))
 									{
@@ -117,7 +99,7 @@ void TypeRegistry::RegisterType()
 								{
 									// 値型の場合：アドレスを取得して渡す
 									auto memberPtr = &(member(*registerInstance));
-									
+
 									// メンバの型がリフレクションされているかチェック
 									if (!this->ShowMemberWithReflection(memberPtr, member.name.c_str()))
 									{
@@ -144,7 +126,7 @@ void TypeRegistry::RegisterType()
 			else
 			{
 				//リフレクションされていない
-				ImGui::Text("%s,NotReflectable", name);	
+				ImGui::Text("%s,NotReflectable", name);
 			}
 		};
 }
@@ -222,7 +204,7 @@ bool TypeRegistry::CheckCustomAttrs(std::tuple<Args...>& attrs, T valPtr, const 
 				(
 					[&] {
 						using AttrType = std::decay_t<decltype(attr)>;
-						if constexpr (std::is_base_of_v<refl::attr::usage::any, AttrType>)
+						if constexpr (std::is_base_of_v<refl::attr::usage::member, AttrType>)
 						{
 							attr(valPtr, name);
 							ret = true;
@@ -233,3 +215,38 @@ bool TypeRegistry::CheckCustomAttrs(std::tuple<Args...>& attrs, T valPtr, const 
 		}, attrs);
 	return ret;
 }
+
+template<typename T>
+void TypeRegistry::CheckProxyAttrs()
+{
+	using ProxyType = std::remove_pointer_t<std::remove_cvref_t<T>>;
+
+	if constexpr (refl::is_reflectable<T>())
+	{
+		constexpr auto typeDesc = refl::reflect<ProxyType>();
+		std::apply([&](auto&&... attr)
+			{
+				(
+					(
+						[&] {
+							using AttrType = std::decay_t<decltype(attr)>;
+							if constexpr (refl::trait::is_instance_of_v<ProxyFor, AttrType>)
+							{
+								/*RegisterFunc<typename AttrType::TargetType>([this](std::any instance, const char* name) {
+									using Proxy = T;
+									using Target = typename AttrType::TargetType;
+									Target* targetPtr = std::any_cast<Target*>(instance);
+									Proxy proxy(targetPtr);
+									showFunctions_[typeid(Proxy)](std::any(&proxy), name);
+									});*/
+
+							}
+						}()
+							),
+					...);
+			}, typeDesc.attributes);
+	}
+}
+
+
+

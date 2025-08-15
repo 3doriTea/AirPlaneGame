@@ -1,7 +1,7 @@
 #pragma once
 #include "IncludingWindows.h"
 #include "ISystem.h"
-#include <refl.hpp>
+
 #include <type_traits>
 #include <assert.h>
 #include <typeinfo>
@@ -14,6 +14,9 @@
 #include <wrl/client.h>
 #include "ImGuiShowable.h"
 #include "Vector3.h"
+#include "Handlers.h"
+#include <d3d11.h>
+#include "TypeRegistry.h"
 using Microsoft::WRL::ComPtr;
 struct ID3D11RenderTargetView;
 struct ID3D11ShaderResourceView;
@@ -22,6 +25,8 @@ struct ID3D11DepthStencilView;
 
 namespace mtgb
 {
+	class GameObject;
+	class Transform;
 	mtgb::Vector3 QuatToEuler(DirectX::XMVECTORF32 _q);
 	/// <summary>
 			/// ウィンドウからのメッセージを受信してImGuiで入力やイベントを処理するためのコールバック関数
@@ -33,15 +38,25 @@ namespace mtgb
 			/// <returns></returns>
 	//IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-	class ImGuizmoManipulator : public ImGuiShowable<ImGuizmoManipulator>
+	class ImGuizmoManipulator : public ImGuiShowable
 	{
 		friend class MTImGui;
 	public:
 		ImGuizmoManipulator();
+		
+		void SetCamera();
+		void Initialize();
 		void ShowImGui() override;
+		void UpdateCamera();
+		bool IsMouseInGameView();
 	private:
 		ImGuizmo::OPERATION operation_;
 		ImGuizmo::MODE mode_;
+		GameObject* pCamera_;
+		Transform* pCameraTransform_;
+		float angleX_;
+		float angleY_;
+		CameraHandleInScene hCamera_;
 	};
 	class MTImGui final : public ISystem
 	{
@@ -51,23 +66,26 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
-
+		void UpdateCamera();
 		void BeginImGuizmoFrame();
+		void SetupShowFunc();
+
 		void Begin(std::string str);
 		void Begin(std::string str, ImGuiWindowFlags flag);
 		/// <summary>
 		/// ImGuizmoウィンドウを描画するためにRTVをセット
 		/// </summary>
 		void SetImGuizmoRenderTargetView();
+
+		void SetGameViewCamera();
 		void Draw();
 		
 		void EndFrame();
 		void SetDrawList();
 		void BeginGameView();
 		void RenderGameView();
-		bool IsUsingImGuizmo();
 		bool IsHoveringWindow();
-		bool IsMouseInGameView();
+		/*bool IsMouseInGameView();*/
 		void UpdateGameViewRect();
 		void End();
 		void Release();
@@ -90,5 +108,6 @@ namespace mtgb
 		ComPtr<ID3D11Texture2D> pTexture_;
 		ComPtr<ID3D11Texture2D> pDepthStencil_;
 		ComPtr<ID3D11DepthStencilView> pDepthStencilView_;
+		D3D11_VIEWPORT viewPort_;
 	};
 }

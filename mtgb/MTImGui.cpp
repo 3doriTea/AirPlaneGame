@@ -1,14 +1,9 @@
-#include "MTImGui.h"
-#include "Game.h"
-#include "WindowContextResourceManager.h"
-#include "WindowContextUtil.h"
+#include "mtgb.h"
 #include "DirectX11Draw.h"
-#include "DirectX11Manager.h"
 #include "../ImGui\imgui.h"
 #include "../ImGui\imgui_internal.h"
 #include <cmath>
 #include <algorithm>
-#include "Debug.h"
 namespace
 {
 	float titleBarHeight;
@@ -56,6 +51,7 @@ mtgb::MTImGui::MTImGui()
 	,winHeight_{480}
 	,gameViewRectValid_{false}
 {
+	
 }
 mtgb::MTImGui::~MTImGui()
 {
@@ -142,6 +138,10 @@ void mtgb::MTImGui::Initialize()
 	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(Vector2Int(winWidth_, winHeight_), &pRawDepthStencil, &pRawDepthStencilView);
 	pDepthStencil_.Attach(pRawDepthStencil);
 	pDepthStencilView_.Attach(pRawDepthStencilView);
+
+	Game::System<DirectX11Manager>().CreateViewport(viewPort_);
+
+	SetupShowFunc();
 }
 
 void mtgb::MTImGui::Update()
@@ -150,10 +150,12 @@ void mtgb::MTImGui::Update()
 	//BeginFrame();
 	//ImGui::ShowDemoWindow();
 }
-
+void mtgb::MTImGui::UpdateCamera()
+{
+	manipulator_->UpdateCamera();
+}
 void mtgb::MTImGui::BeginFrame()
 {
-	
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -163,7 +165,17 @@ void mtgb::MTImGui::BeginFrame()
 void mtgb::MTImGui::BeginImGuizmoFrame()
 {
 	ImGuizmo::BeginFrame();
-	
+}
+void mtgb::MTImGui::SetupShowFunc()
+{
+	using RegisterShowFuncHolder::Set;
+
+	Set<Transform>([](Transform* _target,const char* _name)
+		{
+			TypeRegistry::Instance().CallFunc(&_target->position, "Position");
+			TypeRegistry::Instance().CallFunc(&_target->rotate, "Rotation");
+			TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
+		});
 }
 void mtgb::MTImGui::Begin(std::string str)
 {
@@ -176,6 +188,10 @@ void mtgb::MTImGui::Begin(std::string str, ImGuiWindowFlags flag)
 void mtgb::MTImGui::SetImGuizmoRenderTargetView()
 {
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
+}
+void mtgb::MTImGui::SetGameViewCamera()
+{
+	Game::System<CameraSystem>().SetDrawCamera(manipulator_->hCamera_);
 }
 void mtgb::MTImGui::Draw()
 {
@@ -197,13 +213,12 @@ void mtgb::MTImGui::EndFrame()
 void mtgb::MTImGui::SetDrawList()
 {
 	ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
-	
 }
 
 void mtgb::MTImGui::BeginGameView()
 {
 	ImGuiWindowFlags flags = 0;
-	if (IsMouseInGameView())
+	if (manipulator_->IsMouseInGameView())
 	{
 		flags |= ImGuiWindowFlags_NoMove;
 	}
@@ -215,7 +230,7 @@ void mtgb::MTImGui::RenderGameView()
 	ImGui::Image((void*)pSRV_.Get(), ImVec2(winWidth_, winHeight_));
 }
 
-bool mtgb::MTImGui::IsMouseInGameView()
+bool mtgb::ImGuizmoManipulator::IsMouseInGameView()
 {
 	//	前フレームの矩形情報を使用
 	/*if (gameViewRectValid_)
@@ -312,10 +327,30 @@ bool mtgb::MTImGui::DrawTransformGuizmo(uintptr_t _ptrId, float* _worldMat, cons
 }
 
 mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
-	:ImGuiShowable("Manipulater",Show::GameView)
+	:ImGuiShowable("Manipulater", ShowType::GameView)
 	, operation_{ ImGuizmo::TRANSLATE }
-	, mode_{ImGuizmo::LOCAL}
-{}
+	, mode_{ ImGuizmo::LOCAL }
+	,angleX_{0.0f}
+	,angleY_{0.0f}
+{
+	pCamera_ = new GameObject(
+		GameObjectBuilder()
+		.SetPosition({ 0,0,0 })
+		.SetName("Camera")
+		.Build());
+
+	pCameraTransform_ = &Game::System<TransformCP>().Get(pCamera_->GetEntityId());
+	hCamera_ = Game::System<CameraSystem>().RegisterDrawCamera(pCameraTransform_);
+}
+
+void mtgb::ImGuizmoManipulator::SetCamera()
+{
+	Game::System<CameraSystem>().SetDrawCamera(hCamera_);
+}
+
+void mtgb::ImGuizmoManipulator::Initialize()
+{
+}
 
 void mtgb::ImGuizmoManipulator::ShowImGui()
 {
@@ -345,4 +380,36 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 	{
 		mode_ = ImGuizmo::WORLD;
 	}
+
+
+}
+
+void mtgb::ImGuizmoManipulator::UpdateCamera()
+{
+	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
+	if (!ImGui::IsWindowFocused() || !IsMouseInGameView())
+	{
+		return;
+	}
+	if (InputUtil::GetKey(KeyCode::W))
+	{
+		angleX_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Left() * ANGLE_SPEED * Time::DeltaTimeF());
+	}
+	if (InputUtil::GetKey(KeyCode::S))
+	{
+		angleX_ += ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Right() * ANGLE_SPEED * Time::DeltaTimeF());
+	}
+	if (InputUtil::GetKey(KeyCode::A))
+	{
+		angleY_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Down() * ANGLE_SPEED * Time::DeltaTimeF());
+	}
+	if (InputUtil::GetKey(KeyCode::D))
+	{
+		angleY_ += ANGLE_SPEED * Time::DeltaTimeF();
+		//pTransform_->Rotation(Vector3::Up() * ANGLE_SPEED * Time::DeltaTimeF());
+	}
+	pCameraTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
 }

@@ -5,3 +5,5 @@ mtgb::WindowContext mtgb::CurrContext()
 {
     return mtgb::WinCtxRes::CurrContext();
 }
+
+

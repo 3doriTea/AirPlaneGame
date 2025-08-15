@@ -3,103 +3,99 @@
 
 namespace
 {
-    UINT defNameCount = 0;
+    uint32_t defNameCount = 0;
 }
-mtgb::ImGuiShowableBase::ImGuiShowableBase()
+mtgb::ImGuiShowable::ImGuiShowable()
+    :show_{ShowType::Inspector}
 {
-    displayName_ = "Showable (" + std::to_string(defNameCount++) + ")";
-}
-mtgb::ImGuiShowableBase::ImGuiShowableBase(const std::string& name)
-    :displayName_{name}
-    ,isVisible_{true}
-    ,isAuto_{true}
-{
-}
-
-mtgb::ImGuiShowableBase::~ImGuiShowableBase()
-{
-}
-
-void mtgb::ImGuiShowableBase::ShowImGui()
-{
-    ImGui::Text("%s : default show",displayName_.c_str());
-}
-
-void mtgb::ImGuiShowableBase::SetVisible(bool visible)
-{
-    isVisible_ = false;
-}
-
-bool mtgb::ImGuiShowableBase::IsVisible()
-{
-    return isVisible_;
-}
-
-bool mtgb::ImGuiShowableBase::IsAuto()
-{
-    return isAuto_;
-}
-
-void mtgb::ImGuiShowableBase::SetDisplayName(const std::string& name)
-{
-    displayName_ = name;
-}
-
-const std::string& mtgb::ImGuiShowableBase::GetDisplayName() const
-{
-    return displayName_;
-}
-
-void mtgb::ImGuiShowSystem::Register(ImGuiShowableBase* obj, Show show)
-{
-    if (show == Show::Inspector)
-    {
-        inspectorShowList_.push_back(obj);
+    ImGuiShowManager::Instance().Register(this);
+    displayName_ = "Default (" + std::to_string(defNameCount++) + ")";
+    /*if (defNameCount < UINT32_MAX) {
+        displayName_ = "Default (" + std::to_string(defNameCount++) + ")";
     }
-    else if (show == Show::GameView)
-    {
-        gameViewShowList_.push_back(obj);
-    }
+    else {
+        displayName_ = "Default (Max)";
+    }*/
 }
 
-void mtgb::ImGuiShowSystem::Unregister(ImGuiShowableBase* obj,Show show)
+void mtgb::ImGuiShowable::ShowImGui()
 {
-    if (show == Show::Inspector)
-    {
-        auto it = std::find(inspectorShowList_.begin(), inspectorShowList_.end(), obj);
-        if (it != inspectorShowList_.end()) {
-            inspectorShowList_.erase(it);
-        }
-    }
-    else if (show == Show::GameView)
-    {
-        auto it = std::find(gameViewShowList_.begin(), gameViewShowList_.end(), obj);
-        if (it != gameViewShowList_.end()) {
-            gameViewShowList_.erase(it);
-        }
-    }
+
 }
 
-void mtgb::ImGuiShowSystem::ShowAll(Show show)
+mtgb::ImGuiShowable::ImGuiShowable(ShowType _showType)
+    :show_{_showType}
 {
-    if (show == Show::Inspector)
+}
+
+mtgb::ImGuiShowable::ImGuiShowable(const std::string& _name, ShowType _showType)
+    :ImGuiShowable(_showType)
+{
+    displayName_ = _name;
+}
+
+
+mtgb::ImGuiShowable::~ImGuiShowable()
+{
+}
+
+void mtgb::ImGuiShowManager::Update()
+{
+    for (ImGuiShowable* obj : showableObjs_)
     {
-        for (auto* obj : inspectorShowList_)
+        ImGui::PushID(obj);
+        if (ImGui::CollapsingHeader(obj->displayName_.c_str()))
         {
-            if (obj && obj->IsAuto())
-            {
-                obj->ShowImGui();
-            }
+			PushShowFunc([=]()
+				{
+                    obj->ShowImGui();
+				}, obj->show_);
+		}
+        ImGui::PopID();
+    }   
+}
+
+void mtgb::ImGuiShowManager::ShowAll(ShowType show)
+{
+    if (show == ShowType::Inspector)
+    {
+        while (!inspectorShowList_.empty())
+        {
+            inspectorShowList_.front()();
+            inspectorShowList_.pop();
         }
     }
-    else if (show == Show::GameView)
+    else if (show == ShowType::GameView)
     {
-        for (auto* obj : gameViewShowList_)
+        while (!gameViewShowList_.empty())
         {
-            if (obj && obj->IsAuto())
-            {
-                obj->ShowImGui();
-            }
+            gameViewShowList_.front()();
+            gameViewShowList_.pop();
         }
+    }
+}
+
+void mtgb::ImGuiShowManager::Register(ImGuiShowable* obj)
+{
+    showableObjs_.push_back(obj);
+}
+
+void mtgb::ImGuiShowManager::Unregister(ImGuiShowable* obj)
+{
+    auto it = std::find(showableObjs_.begin(), showableObjs_.end(), obj);
+    if (it != showableObjs_.end()) {
+        showableObjs_.erase(it);
+    }
+}
+
+void mtgb::ImGuiShowManager::PushShowFunc(std::function<void()> func, ShowType show)
+{
+    if (show == ShowType::Inspector)
+    {
+        inspectorShowList_.push(func);
+    }
+    else if (show == ShowType::GameView)
+    {
+        inspectorShowList_.push(func);
     }
 }

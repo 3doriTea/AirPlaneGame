@@ -36,7 +36,6 @@
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
-    <ClCompile Include="mtgb\TransformProxy.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
@@ -149,7 +148,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp" />
-    <ClCompile Include="Source\PlayerProxy.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
@@ -186,9 +184,9 @@
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\TransformCore.h" />
     <ClInclude Include="mtgb\TransformGuizmo.h" />
-    <ClInclude Include="mtgb\TransformProxy.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />
@@ -323,7 +321,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Player.h" />
-    <ClInclude Include="Source\PlayerProxy.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />

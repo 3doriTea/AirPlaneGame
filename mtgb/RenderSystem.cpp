@@ -48,23 +48,23 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	imGui.SetImGuizmoRenderTargetView();
 
 	DirectX11Draw::Begin();
+	imGui.SetGameViewCamera();
 	DrawGameObjects(_scene);
 
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
 
-	
 	imGui.BeginGameView();
-	
+	imGui.UpdateCamera();
 	imGui.RenderGameView();
 	imGui.SetDrawList();
-	ImGuiShowSystem::Instance().ShowAll(Show::GameView);
+	ImGuiShowManager::Instance().ShowAll(ShowType::GameView);
 		
 	imGui.End();
 
 	//Inspectorï\é¶
 	imGui.Begin("Inspector");
-	ImGuiShowSystem::Instance().ShowAll(Show::Inspector);
+	ImGuiShowManager::Instance().ShowAll(ShowType::Inspector);
 	imGui.End();
 
 	//ÉçÉOï\é¶

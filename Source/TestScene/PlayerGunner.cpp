@@ -8,7 +8,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pTransform_{ Component<Transform>() },
 	angleX_{ 0.0f },
 	angleY_{ 0.0f }
-	,ImGuiShowable<PlayerGunner>("Gunner",Show::Inspector)
+	
 {
 	pTransform_->SetParent(_plane);
 }
@@ -53,7 +53,8 @@ void PlayerGunner::Draw() const
 {
 }
 
-void PlayerGunner::ShowImGui()
-{
-	ImGui::Text("%d,Gunner", entityId_);
-}
+//void PlayerGunner::ShowImGui()
+//{
+//	ImGui::Text("%d,Gunner", entityId_);
+//	Inspector::Instance().ShowInspector(pTransform_, "Gunner");
+//}
