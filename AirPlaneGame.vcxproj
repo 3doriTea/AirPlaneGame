@@ -160,6 +160,7 @@
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
     <ClCompile Include="Source\TestScene\Terrain.cpp" />
+    <ClCompile Include="Source\TestScene\UI\EventPopup.cpp" />
     <ClCompile Include="Source\TestScene\UI\Radar.cpp" />
     <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="mtgb\Axis.h" />
     <ClInclude Include="mtgb\Collider.h" />
     <ClInclude Include="mtgb\DefaultShow.h" />
+    <ClInclude Include="mtgb\Easing.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\Ground.h" />

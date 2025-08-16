@@ -700,6 +700,9 @@
     <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TestScene\UI\EventPopup.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1160,6 +1163,9 @@
     </ClInclude>
     <ClInclude Include="Source\TestScene\UI\EventPopup.h">
       <Filter>01Game\05TestScene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Easing.h">
+      <Filter>03mtgb\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

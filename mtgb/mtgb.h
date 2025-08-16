@@ -12,6 +12,7 @@
 #include "WindowContextUtil.h"
 #include "TransformProxy.h"
 #include "TransformGuizmo.h"
+#include "Easing.h"
 
 #pragma endregion
 
