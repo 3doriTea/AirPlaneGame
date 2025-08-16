@@ -589,9 +589,6 @@
     <ClCompile Include="mtgb\Sprite.cpp">
       <Filter>03mtgb\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="Source\registerRefl.cpp">
-      <Filter>01Game\03PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\ResourceCollection.cpp">
       <Filter>03mtgb\System\Window\WindowContextResourceManager</Filter>
     </ClCompile>
@@ -658,6 +655,51 @@
     <ClCompile Include="Source\TestScene\UI\Radar.cpp">
       <Filter>01Game\05TestScene\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ImGui\GraphEditor.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImCurveEdit.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGradient.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGuizmo.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImSequencer.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ImGuiShowable.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\InputConfig.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\JoystickProxy.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTStringUtility.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RenderSystem.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TransformGuizmo.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\TransformProxy.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayerProxy.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -677,9 +719,6 @@
     </ClInclude>
     <ClInclude Include="Source\Background.h">
       <Filter>01Game\03PlayScene</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\CameraSystem.h">
-      <Filter>03mtgb\System\Camera</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Debug.h">
       <Filter>03mtgb\System\Debug</Filter>
@@ -1014,9 +1053,6 @@
     <ClInclude Include="Source\SkySphere.h">
       <Filter>01Game\01Common</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\MTBit\BitFlag.h">
-      <Filter>03mtgb\Library\MTBit</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\GameObjectLayer.h">
       <Filter>03mtgb\Core</Filter>
     </ClInclude>
@@ -1031,9 +1067,6 @@
     </ClInclude>
     <ClInclude Include="Source\TestScene\PlayerGunner.h">
       <Filter>01Game\05TestScene</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\ColliderCP.h">
-      <Filter>03mtgb\System\ComponentPool</Filter>
     </ClInclude>
     <ClInclude Include="mtgb\Collider.h">
       <Filter>03mtgb\Component</Filter>
@@ -1057,6 +1090,75 @@
       <Filter>03mtgb\Shader</Filter>
     </ClInclude>
     <ClInclude Include="Source\TestScene\UI\Radar.h">
+      <Filter>01Game\05TestScene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\GraphEditor.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImCurveEdit.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGradient.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGuizmo.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImSequencer.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImZoomSlider.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="minimp3.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="minimp3_ex.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Axis.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DefaultShow.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ImGuiShowable.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\InputConfig.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\JoystickProxy.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ReflectionInfo.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RenderSystem.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ShowAttributes.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TransformGuizmo.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TransformProxy.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TypeRegistryImpl.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayerProxy.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\UI\SpeedMeter.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Observer.h">
+      <Filter>03mtgb\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\UI\EventPopup.h">
       <Filter>01Game\05TestScene\UI</Filter>
     </ClInclude>
   </ItemGroup>

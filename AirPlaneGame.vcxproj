@@ -185,6 +185,7 @@
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
@@ -337,6 +338,7 @@
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
     <ClInclude Include="Source\TestScene\Terrain.h" />
+    <ClInclude Include="Source\TestScene\UI\EventPopup.h" />
     <ClInclude Include="Source\TestScene\UI\Radar.h" />
     <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
