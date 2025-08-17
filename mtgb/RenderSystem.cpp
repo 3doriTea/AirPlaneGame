@@ -42,7 +42,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	//ImGuiは一つ目のウィンドウに依存している
 	WinCtxRes::ChangeResource(WindowContext::First);
 
-	MTImGui& imGui = Game::System<MTImGui>();
+	ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
 
 	//RenderTargetViewをImGui用に切り替え
 	imGui.SetImGuizmoRenderTargetView();
@@ -54,21 +54,21 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
 
-	imGui.BeginGameView();
-	imGui.UpdateCamera();
-	imGui.RenderGameView();
+	//SceneView表示
+	imGui.Begin(MTImGui::GetName(ShowType::SceneView).data(), ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+	imGui.UpdateCamera(MTImGui::GetName(ShowType::SceneView).data());
+	imGui.RenderSceneView();
 	imGui.SetDrawList();
-	ImGuiShowManager::Instance().ShowAll(ShowType::GameView);
-		
+	MTImGui::Instance().ShowAll(ShowType::SceneView);
 	imGui.End();
 
 	//Inspector表示
-	imGui.Begin("Inspector");
-	ImGuiShowManager::Instance().ShowAll(ShowType::Inspector);
+	imGui.Begin(MTImGui::GetName(ShowType::Inspector).data());
+	MTImGui::Instance().ShowAll(ShowType::Inspector);
 	imGui.End();
 
 	//ログ表示
-	imGui.Begin("Log");
+	imGui.Begin(Debug::GetName().data());
 
 	using mtgb::Debug;
 	const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
@@ -86,7 +86,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 void mtgb::RenderSystem::RenderGameView(GameScene& _scene)
 {
-	MTImGui& imGui = Game::System<MTImGui>();
+	ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
 
 }
 

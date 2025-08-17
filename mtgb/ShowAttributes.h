@@ -6,7 +6,7 @@
 #include "MTImGui.h"
 #include "Transform.h"
 #include "ShowFunc.h"
-
+#include "QuatToEuler.h"
 
 struct Vector3Show : refl::attr::usage::type 
 {

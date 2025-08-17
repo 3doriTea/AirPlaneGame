@@ -4,8 +4,9 @@
 /// <summary>
 /// マウスのマウスボタンコード
 /// </summary>
-enum struct MouseCode
+enum struct MouseCode : uint8_t
 {
-	Left = VK_LBUTTON,
-	Right = VK_RBUTTON,
+	Left = 0x00,
+	Right = 0x01,
+	Middle = 0x02
 };

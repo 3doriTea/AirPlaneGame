@@ -13,10 +13,11 @@
 #include <DirectXMath.h>
 #include <wrl/client.h>
 #include "ImGuiShowable.h"
-#include "Vector3.h"
 #include "Handlers.h"
 #include <d3d11.h>
-#include "TypeRegistry.h"
+#include "ShowType.h"
+#include "Matrix4x4.h"
+
 using Microsoft::WRL::ComPtr;
 struct ID3D11RenderTargetView;
 struct ID3D11ShaderResourceView;
@@ -27,7 +28,7 @@ namespace mtgb
 {
 	class GameObject;
 	class Transform;
-	mtgb::Vector3 QuatToEuler(DirectX::XMVECTORF32 _q);
+	struct Vector3;
 	/// <summary>
 			/// ウィンドウからのメッセージを受信してImGuiで入力やイベントを処理するためのコールバック関数
 			/// </summary>
@@ -37,41 +38,60 @@ namespace mtgb
 			/// <param name="lParam">パラメータ</param>
 			/// <returns></returns>
 	//IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
+	
 	class ImGuizmoManipulator : public ImGuiShowable
 	{
-		friend class MTImGui;
+		friend class ImGuiRenderer;
 	public:
 		ImGuizmoManipulator();
 		
 		void SetCamera();
 		void Initialize();
 		void ShowImGui() override;
-		void UpdateCamera();
-		bool IsMouseInGameView();
+		void UpdateCamera(const char* _name);
+		bool IsMouseInWindow(const char* _name);
+		void GetMouseRay(Vector3* _near, Vector3* _far);
+		void SelectTransform();
+
 	private:
+		void DrawTransformGuizmo();
+		void Calculate();
 		ImGuizmo::OPERATION operation_;
 		ImGuizmo::MODE mode_;
 		GameObject* pCamera_;
 		Transform* pCameraTransform_;
+		Transform* pTargetTransform_;
 		float angleX_;
 		float angleY_;
 		CameraHandleInScene hCamera_;
+		uintptr_t currId_;
+	private:
+		float worldMat_[16], viewMat_[16], projMat_[16];
+		Matrix4x4 worldMatrix4x4, viewMatrix4x4_, projMatrix4x4_;
+		DirectX::XMFLOAT4X4 float4x4_;
+
 	};
-	class MTImGui final : public ISystem
+	class ImGuiRenderer final : public ISystem
 	{
 	public:
-		MTImGui();
-		~MTImGui();
+		enum class WindowFlag
+		{
+			None,
+			NoMoveWhenHovered // マウスカーソルがウィンドウ内にあるとき移動禁止
+		};
+	public:
+	
+		ImGuiRenderer();
+		~ImGuiRenderer();
 		void Initialize() override;
 		void Update() override;
 		void BeginFrame();
-		void UpdateCamera();
+		void UpdateCamera(const char* _name);
 		void BeginImGuizmoFrame();
-		void SetupShowFunc();
 
-		void Begin(std::string str);
-		void Begin(std::string str, ImGuiWindowFlags flag);
+		void Begin(const char* _str);
+		void Begin(const char* _str,WindowFlag _flag);
+		
 		/// <summary>
 		/// ImGuizmoウィンドウを描画するためにRTVをセット
 		/// </summary>
@@ -82,19 +102,18 @@ namespace mtgb
 		
 		void EndFrame();
 		void SetDrawList();
-		void BeginGameView();
-		void RenderGameView();
+		
+		void RenderSceneView();
 		bool IsHoveringWindow();
 		/*bool IsMouseInGameView();*/
 		void UpdateGameViewRect();
 		void End();
 		void Release();
-		bool DrawTransformGuizmo(uintptr_t _ptrId, float * _worldMat, const float * _viewMat, const float * _projMat, DirectX::XMFLOAT3 * _position, DirectX::XMVECTORF32 * _rotation, DirectX::XMFLOAT3 * _scale);
 		
+		const D3D11_VIEWPORT& GetViewport() { return viewport_; }
 	private:
 		UINT winWidth_, winHeight_;
 		bool isManipulatingGuizmo_;
-		uintptr_t currId_;
 		ImGuizmoManipulator* manipulator_;
 		
 		// Game Viewウィンドウの前フレーム情報
@@ -108,6 +127,6 @@ namespace mtgb
 		ComPtr<ID3D11Texture2D> pTexture_;
 		ComPtr<ID3D11Texture2D> pDepthStencil_;
 		ComPtr<ID3D11DepthStencilView> pDepthStencilView_;
-		D3D11_VIEWPORT viewPort_;
+		D3D11_VIEWPORT viewport_;
 	};
 }

@@ -30,7 +30,7 @@ namespace mtgb
 {
 	class Figure;
 	class IShader;
-	class MTImGui;
+	class ImGuiRenderer;
 
 	/// <summary>
 	/// ブレンドモード
@@ -84,7 +84,7 @@ namespace mtgb
 		friend class DirectWrite;
 		friend class Direct2D;
 		friend class OBJ;
-		friend class MTImGui;
+		friend class ImGuiRenderer;
 		friend class FbxParts;
 
 		friend class DoubleWindow;

@@ -59,6 +59,11 @@ namespace mtgb
 		void LogImGui(const std::string& object, const std::source_location& _location, const char* _format, const Args..._args);
 
 		std::list<LogEntry> GetLog();
+
+		static constexpr std::string_view GetName()
+		{
+			return "Log";
+		}
 	private:
 		static constexpr size_t BUFFER_SIZE{ 1024 };  // ログ出力時の文字列バッファサイズ
 		static constexpr UINT MAX_LOG_COUNT{ 30 };
@@ -103,4 +108,6 @@ namespace mtgb
 			logMap_[key] = std::prev(logs_.end());
 		}
 	}
+
+	
 }

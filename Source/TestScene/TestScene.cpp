@@ -22,6 +22,10 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
+	TypeRegistry::Instance();
+	TypeRegistry::Instance().Initialize();
+	MTImGui::Instance().Initialize();
+
 	Audio::Clear();
 
 	Instantiate<SkySphere>();

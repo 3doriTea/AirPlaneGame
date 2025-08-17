@@ -51,6 +51,11 @@ namespace mtgb
 			return _keyStateCurrent[Index(_keyCode)] ^ _keyStatePrevious[Index(_keyCode)];
 		}
 		
+		static inline const int MouseXOR(const MouseCode _mouseCode, const _DIMOUSESTATE& _mouseStateCurrent, const _DIMOUSESTATE& _mouseStatePrevious)
+		{
+			return _mouseStateCurrent.rgbButtons[Index(_mouseCode)] ^ _mouseStatePrevious.rgbButtons[Index(_mouseCode)];
+		}
+
 		/// <summary>
 		/// キーコード構造体列挙型をインデックスに変換
 		/// </summary>
@@ -61,6 +66,10 @@ namespace mtgb
 			return static_cast<size_t>(_keyCode);
 		}
 
+		static inline const size_t Index(const MouseCode _moudeCode)
+		{
+			return static_cast<size_t>(_moudeCode);
+		}
 		/// <summary>
 		/// 入力状態を取得
 		/// どのウィンドウでも構わない場合はWindowContext::Firstのウィンドウが取得される

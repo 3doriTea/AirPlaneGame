@@ -12,7 +12,7 @@
 #include "JoystickProxy.h"
 #include "Timer.h"
 #include "InputConfig.h"
-
+#include <string>
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dInput8.lib")
 #pragma comment(lib, "Xinput.lib")
@@ -34,6 +34,7 @@ namespace mtgb
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
 	private:
+		std::string name_;
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;
@@ -43,5 +44,6 @@ namespace mtgb
 		bool isInitialized;
 		// WindowContextResource を介して継承されました
 		WindowContextResource* Clone() const override;
+		WindowContext context_;
 	};
 }

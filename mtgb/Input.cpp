@@ -267,9 +267,9 @@ void mtgb::Input::CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDe
 		&& "マウスフォーマットに失敗 @Input::CreateMouseDevice");
 
 	// マウスのアプリ間共有レベルの設定
-	hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	//hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 	//非アクティブなアプリも入力を受け付ける
-	//hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+	hResult = (*_ppMouseDevice)->SetCooperativeLevel(_hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 
 	massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
 		&& "マウスアプリ間共有レベル設定に失敗 @Input::CreateMouseDevice");

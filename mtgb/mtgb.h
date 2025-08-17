@@ -42,7 +42,7 @@
 #include "WindowManager.h"
 #include "DoubleWindow.h"
 #include "CameraSystem.h"
-
+#include "ImGuiShowable.h"
 
 #pragma endregion
 

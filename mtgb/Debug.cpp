@@ -27,6 +27,8 @@ void mtgb::Debug::Update()
 	}
 }
 
+
+
 std::list<mtgb::LogEntry> mtgb::Debug::GetLog()
 {
 	return logs_;

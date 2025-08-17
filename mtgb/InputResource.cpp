@@ -40,6 +40,7 @@ mtgb::InputResource::InputResource(const InputResource& other)
 
 void mtgb::InputResource::Initialize(WindowContext _windowContext)
 {
+	context_ = _windowContext;
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
 	IDirectInputDevice8* pRawKeyDevice = nullptr;
@@ -71,6 +72,15 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 	Game::System<Input>().RequestJoystickDevice(&reservation);
 
 	Game::System<Input>().EnumJoystick();
+
+	if (_windowContext == WindowContext::First)
+	{
+		name_ = "FirstWindowController";
+	}
+	else if (_windowContext == WindowContext::Second)
+	{
+		name_ = "SecondWindowController";
+	}
 }
 
 void mtgb::InputResource::Update()
@@ -80,9 +90,8 @@ void mtgb::InputResource::Update()
 
 	pProxy_->UpdateFromInput(assignedJoystickGuid_);
 	pProxy_->UpdateInputData(pInputData_->joyStateCurrent_);
-
-	
-	
+	//ImGui::GetWindow
+	MTImGui::Instance().TypedShow<JoystickProxy>(pProxy_, name_.c_str(), ShowType::Inspector);
 	
 }
 

@@ -94,7 +94,6 @@ namespace mtgb
 		
 		static void GroundPlane();
 
-		static void TransformGuizmo(Transform* _pTransform);
 	public:
 		Draw();
 		~Draw();

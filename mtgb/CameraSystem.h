@@ -54,7 +54,9 @@ namespace mtgb
 		void GetViewMatrix(Matrix4x4* _pView) const;
 		void GetProjMatrix(Matrix4x4* _pProj) const;
 		void GetPosition(Vector4* _pPosition) const;
-
+		float GetNear() const;
+		float GetFar() const;
+		float GetFov() const;
 	private:
 		std::vector<Transform*> pTransforms_;
 		float fov_;

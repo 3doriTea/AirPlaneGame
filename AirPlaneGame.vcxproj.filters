@@ -685,6 +685,9 @@
     <ClCompile Include="mtgb\TransformGuizmo.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\QuatToEuler.cpp">
+      <Filter>03mtgb\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1130,6 +1133,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\ShowFunc.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ShowType.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\QuatToEuler.h">
+      <Filter>03mtgb\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

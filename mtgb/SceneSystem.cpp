@@ -53,6 +53,7 @@ void mtgb::SceneSystem::Update()
 	{
 		gameObject->Update();
 	}
+	MTImGui::Instance().Update();
 
 	// •`‰æˆ—
 	Game::System<RenderSystem>().Render(currentScene);

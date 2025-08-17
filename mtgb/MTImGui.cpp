@@ -1,63 +1,49 @@
-#include "mtgb.h"
+#include "MTImGui.h"
+#include "Game.h"
+#include "ISystem.h"
+#include "ColliderCP.h"
+#include "CameraSystem.h"
 #include "DirectX11Draw.h"
+#include "DirectX11Manager.h"
+#include "GameObject.h"
+#include "WindowContextUtil.h"
+#include "GameTime.h"
+#include "InputData.h"
+#include "Vector3.h"
 #include "../ImGui\imgui.h"
 #include "../ImGui\imgui_internal.h"
 #include <cmath>
-#include <algorithm>
+#include "QuatToEuler.h"
+#include "InputResource.h"
+#include "Screen.h"
 namespace
 {
 	float titleBarHeight;
 	const unsigned long long NULLID = 0;
-	const char* GAME_VIEW_NAME = "Game View";
+	const char* WINDOWNAME_GAME_VIEW = "Game View";
 }
 
-mtgb::Vector3 mtgb::QuatToEuler(DirectX::XMVECTORF32 _q)
-{
-	//分母、分子
-	float denom, num;
-	float roll, pitch, yaw;
-	float x = _q[0], y = _q[1], z = _q[2], w = _q[3];
 
-	//ピッチ(x軸)
-	
-	//90～^90の範囲
-	float sinX = 2.0f * (w * y - z * x);
-	pitch = std::asinf(std::clamp(sinX,-1.0f,1.0f));
 
-	//ヨー(y軸)
-	num = 2.0f * (w * z + x * y);
-	denom = 1 - 2.0f * (y * y + z * z);
-	yaw = std::atan2f(num, denom);
 
-	//ロール(z軸)
-	num = 2.0f * (w * x + y * z);
-	denom = 1 - 2.0f * (x * x + y * y);
-	roll = std::atan2(num, denom);
 
-	float pitch_deg = DirectX::XMConvertToDegrees(pitch);
-	float yaw_deg = DirectX::XMConvertToDegrees(yaw);
-	float roll_deg = DirectX::XMConvertToDegrees(roll);
-
-	return { pitch_deg,yaw_deg,roll_deg};
-}
-
-mtgb::MTImGui::MTImGui()
+mtgb::ImGuiRenderer::ImGuiRenderer()
 	:pRenderTargetView_{nullptr}
 	,pSRV_{nullptr}
 	,pTexture_{nullptr}
 	,pDepthStencil_{nullptr}
 	,pDepthStencilView_{nullptr}
-	,winWidth_{640}
-	,winHeight_{480}
 	,gameViewRectValid_{false}
+	,winWidth_{0}
+	,winHeight_{0}
 {
 	
 }
-mtgb::MTImGui::~MTImGui()
+mtgb::ImGuiRenderer::~ImGuiRenderer()
 {
 }
 
-void mtgb::MTImGui::Initialize()
+void mtgb::ImGuiRenderer::Initialize()
 {
 	IMGUI_CHECKVERSION();
 
@@ -91,15 +77,18 @@ void mtgb::MTImGui::Initialize()
 
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 
-	ImGui::SetNextWindowSize(ImVec2(winWidth_, winHeight_), ImGuiCond_Once);
 	ImGui_ImplWin32_Init(WinCtxRes::GetHWND(WindowContext::First));
 	const auto& ctx = ImGui::GetCurrentContext();
 	ComPtr<ID3D11Device> device = mtgb::DirectX11Draw::pDevice_;
 	ComPtr<ID3D11DeviceContext> context = mtgb::DirectX11Draw::pContext_;
 	ImGui_ImplDX11_Init(device.Get(), context.Get());
 
-	currId_ = NULLID;
 	manipulator_ = new ImGuizmoManipulator();
+
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	winWidth_ = SCREEN_SIZE.x;
+	winHeight_ = SCREEN_SIZE.y;
+	Game::System<DirectX11Manager>().CreateViewport(SCREEN_SIZE, viewport_);
 
 	//テクスチャ作成
 
@@ -135,26 +124,26 @@ void mtgb::MTImGui::Initialize()
 	// 深度ステンシルと深度ステンシルビューを作成
 	ID3D11Texture2D* pRawDepthStencil = nullptr;
 	ID3D11DepthStencilView* pRawDepthStencilView = nullptr;
-	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(Vector2Int(winWidth_, winHeight_), &pRawDepthStencil, &pRawDepthStencilView);
+	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(Vector2Int(static_cast<int>(winWidth_),static_cast<int>( winHeight_)), &pRawDepthStencil, &pRawDepthStencilView);
 	pDepthStencil_.Attach(pRawDepthStencil);
 	pDepthStencilView_.Attach(pRawDepthStencilView);
 
-	Game::System<DirectX11Manager>().CreateViewport(viewPort_);
 
-	SetupShowFunc();
+	
+
 }
 
-void mtgb::MTImGui::Update()
+void mtgb::ImGuiRenderer::Update()
 {
 	//EndFrame();
 	//BeginFrame();
 	//ImGui::ShowDemoWindow();
 }
-void mtgb::MTImGui::UpdateCamera()
+void mtgb::ImGuiRenderer::UpdateCamera(const char* _name)
 {
-	manipulator_->UpdateCamera();
+	manipulator_->UpdateCamera(_name);
 }
-void mtgb::MTImGui::BeginFrame()
+void mtgb::ImGuiRenderer::BeginFrame()
 {
 	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
 	ImGui_ImplDX11_NewFrame();
@@ -162,43 +151,48 @@ void mtgb::MTImGui::BeginFrame()
 	ImGui::NewFrame();
 	
 }
-void mtgb::MTImGui::BeginImGuizmoFrame()
+void mtgb::ImGuiRenderer::BeginImGuizmoFrame()
 {
 	ImGuizmo::BeginFrame();
 }
-void mtgb::MTImGui::SetupShowFunc()
-{
-	using RegisterShowFuncHolder::Set;
 
-	Set<Transform>([](Transform* _target,const char* _name)
+void mtgb::ImGuiRenderer::Begin(const char* _str)
+{
+	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Always);
+
+	ImGui::Begin(_str);
+}
+
+void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
+{
+	ImGuiWindowFlags flags = 0;
+	if (_flag == WindowFlag::NoMoveWhenHovered)
+	{
+		if (manipulator_->IsMouseInWindow(_str))
 		{
-			TypeRegistry::Instance().CallFunc(&_target->position, "Position");
-			TypeRegistry::Instance().CallFunc(&_target->rotate, "Rotation");
-			TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
-		});
+			flags |= ImGuiWindowFlags_NoMove;
+		}
+	}
+	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Always);
+	
+	ImGui::Begin(_str,0,flags);
 }
-void mtgb::MTImGui::Begin(std::string str)
-{
-	ImGui::Begin(str.c_str());
-}
-void mtgb::MTImGui::Begin(std::string str, ImGuiWindowFlags flag)
-{
-	ImGui::Begin(str.c_str(), 0, flag);
-}
-void mtgb::MTImGui::SetImGuizmoRenderTargetView()
+
+
+void mtgb::ImGuiRenderer::SetImGuizmoRenderTargetView()
 {
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
 }
-void mtgb::MTImGui::SetGameViewCamera()
+void mtgb::ImGuiRenderer::SetGameViewCamera()
 {
 	Game::System<CameraSystem>().SetDrawCamera(manipulator_->hCamera_);
 }
-void mtgb::MTImGui::Draw()
+void mtgb::ImGuiRenderer::Draw()
 {
 
 }
 
-void mtgb::MTImGui::EndFrame()
+void mtgb::ImGuiRenderer::EndFrame()
 {
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -210,27 +204,19 @@ void mtgb::MTImGui::EndFrame()
 	}
 }
 
-void mtgb::MTImGui::SetDrawList()
+void mtgb::ImGuiRenderer::SetDrawList()
 {
 	ImGuizmo::SetDrawlist(ImGui::GetWindowDrawList());
 }
 
-void mtgb::MTImGui::BeginGameView()
+void mtgb::ImGuiRenderer::RenderSceneView()
 {
-	ImGuiWindowFlags flags = 0;
-	if (manipulator_->IsMouseInGameView())
-	{
-		flags |= ImGuiWindowFlags_NoMove;
-	}
-	ImGui::Begin(GAME_VIEW_NAME, 0, flags);
+	ImGui::Image((void*)pSRV_.Get(), ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)));
 }
 
-void mtgb::MTImGui::RenderGameView()
-{
-	ImGui::Image((void*)pSRV_.Get(), ImVec2(winWidth_, winHeight_));
-}
 
-bool mtgb::ImGuizmoManipulator::IsMouseInGameView()
+
+bool mtgb::ImGuizmoManipulator::IsMouseInWindow(const char* _name)
 {
 	//	前フレームの矩形情報を使用
 	/*if (gameViewRectValid_)
@@ -239,95 +225,173 @@ bool mtgb::ImGuizmoManipulator::IsMouseInGameView()
 		return mousePos.x >= gameViewPos_.x && mousePos.x <= gameViewPos_.x + gameViewSize_.x &&
 			   mousePos.y >= gameViewPos_.y && mousePos.y <= gameViewPos_.y + gameViewSize_.y;
 	}*/
-	
-	//	GameViewウィンドウを検索
-	ImGuiWindow* window = ImGui::FindWindowByName(GAME_VIEW_NAME);
+
+	//	ウィンドウを検索
+	ImGuiWindow* window = ImGui::FindWindowByName(_name);
 	if (window && window->WasActive)
 	{
 		ImVec2 mousePos = ImGui::GetIO().MousePos;
 		ImRect rect = window->InnerRect;
 		return rect.Contains(mousePos);
 	}
-	
 	return false;
 }
 
-void mtgb::MTImGui::UpdateGameViewRect()
+void mtgb::ImGuizmoManipulator::GetMouseRay(Vector3* _near, Vector3* _far)
+{
+
+	Game::System<CameraSystem>().GetViewMatrix(&viewMatrix4x4_);
+	Game::System<CameraSystem>().GetProjMatrix(&projMatrix4x4_);
+
+	ImVec2 mousePos = ImGui::GetMousePos();
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	ImVec2 gameViewSize_ = ImGui::GetWindowSize();
+	
+	float tabBarHeight = ImGui::GetCurrentWindow()->TitleBarHeight;
+	
+	ImVec2 localPos = ImVec2(mousePos.x - windowPos.x, mousePos.y - windowPos.y - tabBarHeight);
+
+	Vector3 nearVec = { static_cast<float>(localPos.x),static_cast<float>(localPos.y),0.0f };
+	const D3D11_VIEWPORT& viewport = Game::System<ImGuiRenderer>().GetViewport();
+	*_near = DirectX::XMVector3Unproject(
+		nearVec,
+		viewport.TopLeftX,
+		viewport.TopLeftY,
+		viewport.Width,
+		viewport.Height,
+		viewport.MinDepth,
+		viewport.MaxDepth,
+		projMatrix4x4_,
+		viewMatrix4x4_,
+		DirectX::XMMatrixIdentity());
+
+	Vector3 farVec = { static_cast<float>(localPos.x),static_cast<float>(localPos.y),1.0f };
+	*_far = DirectX::XMVector3Unproject(
+		farVec,
+		viewport.TopLeftX,
+		viewport.TopLeftY,
+		viewport.Width,
+		viewport.Height,
+		viewport.MinDepth,
+		viewport.MaxDepth,
+		projMatrix4x4_,
+		viewMatrix4x4_,
+		DirectX::XMMatrixIdentity());
+
+}
+
+void mtgb::ImGuizmoManipulator::SelectTransform()
+{
+
+	Vector3 origin, end, vec;
+	GetMouseRay(&origin, &end);
+	vec = end - origin;
+	
+	// vec.Normalize()の結果を別変数に保存して、元の長さを保持
+	Vector3 direction = vec.Normalize();  // これで正規化されたベクトルが返される
+
+	const CameraSystem& camera = Game::System<CameraSystem>();
+	float distance = camera.GetFar() - camera.GetNear();          // 元の長さを計算
+
+	EntityId entityId = Game::System<ColliderCP>().RaycastHit(origin, direction, distance);
+	if (entityId != INVALD_ENTITY)
+	{
+		pTargetTransform_ = &Game::System<TransformCP>().Get(entityId);
+	}
+	else
+	{
+		pTargetTransform_ = nullptr;
+	}
+}
+
+void mtgb::ImGuiRenderer::UpdateGameViewRect()
 {
 	gameViewPos_ = ImGui::GetWindowPos();
 	gameViewSize_ = ImGui::GetWindowSize();
 	gameViewRectValid_ = true;
 }
 
-
-
-void mtgb::MTImGui::End()
+void mtgb::ImGuiRenderer::End()
 {
 	ImGui::End();
 }
-void mtgb::MTImGui::Release()
+void mtgb::ImGuiRenderer::Release()
 {
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
 
-bool mtgb::MTImGui::DrawTransformGuizmo(uintptr_t _ptrId, float* _worldMat, const float* _viewMat, const float* _projMat, DirectX::XMFLOAT3* _position, DirectX::XMVECTORF32* _rotation, DirectX::XMFLOAT3* _scale)
+void mtgb::ImGuizmoManipulator::DrawTransformGuizmo()
 {
-	ImGui::PushID(&_ptrId);
+	if (!pTargetTransform_)
+	{
+		return;
+	}
+	uintptr_t ptrId = reinterpret_cast<uintptr_t>(pTargetTransform_);
+	
+	Calculate();
 
+	ImGui::PushID(&ptrId);
+
+
+	
 	ImVec2 pos = ImGui::GetWindowPos();
 	float windowWidth = (float)ImGui::GetWindowWidth();
 	float windowHeight = (float)ImGui::GetWindowHeight();
 	
-	
 	//ギズモ表示
-	ImGuizmo::SetRect(pos.x, pos.y , ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
+	float tabBarHeight = ImGui::GetCurrentWindow()->TitleBarHeight;
+	ImGuizmo::SetRect(pos.x, pos.y + tabBarHeight , ImGui::GetIO().DisplaySize.x, ImGui::GetIO().DisplaySize.y);
 	
 	
-	bool ret = false;
-	if (ImGuizmo::IsUsing())
+		
+		
+	if (ImGuizmo::Manipulate(viewMat_, projMat_, operation_, mode_, worldMat_))
 	{
-		if (currId_ == NULLID)
-		{
-			currId_ = _ptrId;
-		}
-		if (currId_ == _ptrId)
-		{
-			if (ImGuizmo::Manipulate(_viewMat, _projMat, manipulator_->operation_, manipulator_->mode_, _worldMat))
-			{
-				//編集されたworldMatからposition,rotation,scaleに分解
-				DirectX::XMMATRIX mat = DirectX::XMMATRIX(
-					_worldMat[0], _worldMat[1], _worldMat[2], _worldMat[3],
-					_worldMat[4], _worldMat[5], _worldMat[6], _worldMat[7],
-					_worldMat[8], _worldMat[9], _worldMat[10], _worldMat[11],
-					_worldMat[12], _worldMat[13], _worldMat[14], _worldMat[15]
-				);
+		//編集されたworldMatからposition,rotation,scaleに分解
+		DirectX::XMMATRIX mat = DirectX::XMMATRIX(
+			worldMat_[0], worldMat_[1], worldMat_[2], worldMat_[3],
+			worldMat_[4], worldMat_[5], worldMat_[6], worldMat_[7],
+			worldMat_[8], worldMat_[9], worldMat_[10], worldMat_[11],
+			worldMat_[12], worldMat_[13], worldMat_[14], worldMat_[15]
+		);
 
-				DirectX::XMVECTOR scale, trans;
-				bool result = DirectX::XMMatrixDecompose(&scale, &_rotation->v, &trans, mat);
-				massert(result
-					&& "XMMatrixDecomposeに失敗 @MTImGui::DrawTransformGuizmo");
+		DirectX::XMVECTOR scale, trans;
+		bool result = DirectX::XMMatrixDecompose(&scale, &pTargetTransform_->rotate.v, &trans, mat);
+		massert(result
+			&& "XMMatrixDecomposeに失敗 @MTImGui::DrawTransformGuizmo");
 
-				DirectX::XMStoreFloat3(_position, trans);
-				DirectX::XMStoreFloat3(_scale, scale);
+		DirectX::XMStoreFloat3(&pTargetTransform_->position, trans);
+		DirectX::XMStoreFloat3(&pTargetTransform_->scale, scale);
 
-				ret = true;
-
-			}
-		}
 	}
-	else
-	{
-		currId_ = NULLID;
-	}
-	
 	ImGui::PopID();
-	return ret;
+}
+
+void mtgb::ImGuizmoManipulator::Calculate()
+{
+	//float[16]の配列を作成
+	pTargetTransform_->GenerateWorldMatrix(&worldMatrix4x4);
+	Game::System<mtgb::CameraSystem>().GetViewMatrix(&viewMatrix4x4_);
+	Game::System<mtgb::CameraSystem>().GetProjMatrix(&projMatrix4x4_);
+
+
+	//ワールド行列
+	DirectX::XMStoreFloat4x4(&float4x4_, worldMatrix4x4);	
+	memcpy(worldMat_, &float4x4_, sizeof(worldMat_));
+
+	//ビュー行列
+	DirectX::XMStoreFloat4x4(&float4x4_, viewMatrix4x4_);
+	memcpy(viewMat_, &float4x4_, sizeof(viewMat_));
+
+	//プロジェクション行列
+	DirectX::XMStoreFloat4x4(&float4x4_, projMatrix4x4_);
+	memcpy(projMat_, &float4x4_, sizeof(projMat_));
 }
 
 mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
-	:ImGuiShowable("Manipulater", ShowType::GameView)
+	:ImGuiShowable("Manipulater", ShowType::SceneView)
 	, operation_{ ImGuizmo::TRANSLATE }
 	, mode_{ ImGuizmo::LOCAL }
 	,angleX_{0.0f}
@@ -341,6 +405,7 @@ mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
 
 	pCameraTransform_ = &Game::System<TransformCP>().Get(pCamera_->GetEntityId());
 	hCamera_ = Game::System<CameraSystem>().RegisterDrawCamera(pCameraTransform_);
+	currId_ = NULLID;
 }
 
 void mtgb::ImGuizmoManipulator::SetCamera()
@@ -355,7 +420,19 @@ void mtgb::ImGuizmoManipulator::Initialize()
 void mtgb::ImGuizmoManipulator::ShowImGui()
 {
 	//ImGuizmoの操作モードを指定
+	
 
+	if (InputUtil::GetMouseDown(MouseCode::Left))
+	{
+		if ((!ImGuizmo::IsViewManipulateHovered() && !ImGuizmo::IsOver() ) || !pTargetTransform_)
+		{
+			SelectTransform();
+		}
+	}
+	
+	DrawTransformGuizmo();
+
+	
 	if (ImGui::RadioButton("Translate", operation_ == ImGuizmo::TRANSLATE))
 	{
 		operation_ = ImGuizmo::TRANSLATE;
@@ -381,13 +458,17 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 		mode_ = ImGuizmo::WORLD;
 	}
 
-
+	ImVec2 mousePos = ImGui::GetMousePos();
+	ImVec2 windowPos = ImGui::GetWindowPos();
+	ImVec2 localPos = ImVec2(mousePos.x - windowPos.x, mousePos.y - windowPos.y);
+	int mousePosInt[2] = { localPos.x ,localPos.y };
+	ImGui::InputInt2("mouse", mousePosInt);
 }
 
-void mtgb::ImGuizmoManipulator::UpdateCamera()
+void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)
 {
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
-	if (!ImGui::IsWindowFocused() || !IsMouseInGameView())
+	if (!ImGui::IsWindowFocused() || !IsMouseInWindow(_name))
 	{
 		return;
 	}

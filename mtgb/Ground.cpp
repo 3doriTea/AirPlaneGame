@@ -44,33 +44,33 @@ void mtgb::Ground::Draw()
 	// カメラシステムへのアクセス用
 	const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
 
-	IShader::Draw<ConstantBuffer, Vertex>(
-		[&, this](ConstantBuffer* _pCB)
-		{
-			// TODO: 地形位置を別クラスから操作
-			Matrix4x4 mWorld{ XMMatrixTranslation(WORLD_POSITION.x, WORLD_POSITION.y, WORLD_POSITION.z) };
-			//_transform.GenerateWorldMatrix(&mWorld);
+	//IShader::Draw<ConstantBuffer, Vertex>(
+	//	[&, this](ConstantBuffer* _pCB)
+	//	{
+	//		// TODO: 地形位置を別クラスから操作
+	//		Matrix4x4 mWorld{ XMMatrixTranslation(WORLD_POSITION.x, WORLD_POSITION.y, WORLD_POSITION.z) };
+	//		//_transform.GenerateWorldMatrix(&mWorld);
 
-			Matrix4x4 mView{};  // ビュー行列
-			CAMERA.GetViewMatrix(&mView);
+	//		Matrix4x4 mView{};  // ビュー行列
+	//		CAMERA.GetViewMatrix(&mView);
 
-			Matrix4x4 mProj{};  // プロジェクション行列
-			CAMERA.GetProjMatrix(&mProj);
+	//		Matrix4x4 mProj{};  // プロジェクション行列
+	//		CAMERA.GetProjMatrix(&mProj);
 
-			_pCB->g_matrixWorldViewProj = XMMatrixTranspose(mWorld * mView * mProj);
-			_pCB->g_matrixWorld = XMMatrixTranspose(mWorld);
+	//		_pCB->g_matrixWorldViewProj = XMMatrixTranspose(mWorld * mView * mProj);
+	//		_pCB->g_matrixWorld = XMMatrixTranspose(mWorld);
 
-			CAMERA.GetPosition(&_pCB->g_cameraPosition);
-			// TODO: ライトの向きはLightSystemから操作
-			_pCB->g_lightDirection = LIGHT_DIRECTION; // ライトの向き
-			_pCB->g_isTexture = (false);
+	//		CAMERA.GetPosition(&_pCB->g_cameraPosition);
+	//		// TODO: ライトの向きはLightSystemから操作
+	//		_pCB->g_lightDirection = LIGHT_DIRECTION; // ライトの向き
+	//		_pCB->g_isTexture = (false);
 
-		},
-		[this](ID3D11DeviceContext* _pDC)
-		{
+	//	},
+	//	[this](ID3D11DeviceContext* _pDC)
+	//	{
 
-		},
-		GetIndexCount());
+	//	},
+	//	GetIndexCount());
 }
 
 void mtgb::Ground::InitializeVertexBuffer(ID3D11Device* _pDevice)

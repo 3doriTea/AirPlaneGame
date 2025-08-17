@@ -38,8 +38,11 @@ namespace mtgb
 		}
 
 		bool IsHit(const Collider& _other) const;
-
+		bool IsHit(const Vector3& _origin, const Vector3& _dir, float* dist);
 		void Draw() const;
+
+		// BoundingSphere‚ğ‰Šú‰»
+		void InitializeBoundingSphere();
 
 	public:
 		ColliderType type_;  // “–‚½‚è”»’è‚ÌŒ`
@@ -60,10 +63,10 @@ namespace mtgb
 		std::set<Collider*> onColliders_;
 
 	private:
-		union
-		{
+		//union
+		//{
 			DirectX::BoundingSphere computeSphere_;
-		};
+		//};
 
 		Transform* pTransform_;  // TODO: Šë‚È‚¢Transform
 
