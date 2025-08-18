@@ -31,6 +31,7 @@
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
+    <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\Ground.h" />
     <ClInclude Include="mtgb\ImGuiShowable.h" />
+    <ClInclude Include="mtgb\ImGuizmoManipulator.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />

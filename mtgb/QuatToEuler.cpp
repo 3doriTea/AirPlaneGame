@@ -3,6 +3,7 @@
 
 mtgb::Vector3 mtgb::QuatToEuler(DirectX::XMVECTORF32 _q)
 {
+	using namespace DirectX;
 	//分母、分子
 	float denom, num;
 	float roll, pitch, yaw;
@@ -11,18 +12,43 @@ mtgb::Vector3 mtgb::QuatToEuler(DirectX::XMVECTORF32 _q)
 	//ピッチ(x軸)
 
 	//90～^90の範囲
-	float sinX = 2.0f * (w * y - z * x);
-	pitch = std::asinf(std::clamp(sinX, -1.0f, 1.0f));
+	float e = 0.9999f;
+	float sinX = -2.0f * (z * x - w * y );
+	bool gimbalLock = false;
+	if (fabsf(sinX) >= e)
+	{
+		gimbalLock = true;
+	}
+
+	pitch = std::asinf(std::clamp(sinX,-e,e));
+
+
 
 	//ヨー(y軸)
-	num = 2.0f * (w * z + x * y);
-	denom = 1 - 2.0f * (y * y + z * z);
+	if (gimbalLock)
+	{
+		num = 2.0f * (w * z + x * y);
+		denom = 1 - 2.0f * (w * w + z * z);
+	}
+	else
+	{
+		num = 2.0f * (w * z - x * y);
+		denom = 1 - 2.0f * (w * w + y * y);
+	}
 	yaw = std::atan2f(num, denom);
 
 	//ロール(z軸)
-	num = 2.0f * (w * x + y * z);
-	denom = 1 - 2.0f * (x * x + y * y);
-	roll = std::atan2(num, denom);
+
+	if (gimbalLock)
+	{
+		num = 2.0f * (w * x + y * z);
+		denom = 1 - 2.0f * (w * w + z * z);
+		roll = std::atan2f(num, denom);
+	}
+	else
+	{
+		roll = 0;
+	}
 
 	float pitch_deg = DirectX::XMConvertToDegrees(pitch);
 	float yaw_deg = DirectX::XMConvertToDegrees(yaw);

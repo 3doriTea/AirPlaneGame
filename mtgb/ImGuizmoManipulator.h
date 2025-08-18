@@ -1,0 +1,65 @@
+#pragma once
+#include "ImGuiShowable.h"
+#include "Matrix4x4.h"
+#include "Handlers.h"
+#include "../ImGui\ImGuizmo.h"
+
+
+
+
+
+namespace mtgb
+{
+
+	class GameObject;
+	class Transform;
+	struct Vector3;
+
+	class ImGuizmoManipulator : public ImGuiShowable
+	{
+		friend class ImGuiRenderer;
+	public:
+		ImGuizmoManipulator();
+
+		void SetCamera();
+		void Initialize();
+		void ShowImGui() override;
+		void UpdateCamera(const char* _name);
+		bool IsMouseInWindow(const char* _name);
+		void GetMouseRay(Vector3* _near, Vector3* _far);
+		void SelectTransform();
+
+	private:
+		void DrawTransformGuizmo();
+		void Calculate();
+		void SpinCamera();
+		void InitializeSpinAnglesFromCurrentPosition();
+		ImGuizmo::OPERATION operation_;
+		ImGuizmo::MODE mode_;
+		GameObject* pCamera_;
+		Transform* pCameraTransform_;
+		Transform* pTargetTransform_;
+		float angleX_, angleY_;
+		float spinAngleX_,spinAngleY_;
+		CameraHandleInScene hCamera_;
+		uintptr_t currId_;
+	
+		enum class CameraOperation
+		{
+			None,
+			Translate,
+			Rotate,
+			Spin
+		};
+		CameraOperation cameraOperation_;
+		bool updatingCameraTransform_;
+		float distance_;
+		float spinSpeed_;
+		float moveSpeed_;
+		float rotateSensitivity_;
+		float worldMat_[16], viewMat_[16], projMat_[16];
+		Matrix4x4 worldMatrix4x4, viewMatrix4x4_, projMatrix4x4_;
+		DirectX::XMFLOAT4X4 float4x4_;
+
+	};
+}

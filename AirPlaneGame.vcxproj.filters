@@ -688,6 +688,9 @@
     <ClCompile Include="mtgb\QuatToEuler.cpp">
       <Filter>03mtgb\Utility</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\ImGuizmoManipulator.cpp">
+      <Filter>03mtgb\System\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1139,6 +1142,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\QuatToEuler.h">
       <Filter>03mtgb\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ImGuizmoManipulator.h">
+      <Filter>03mtgb\System\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

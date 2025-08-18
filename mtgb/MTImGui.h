@@ -17,6 +17,7 @@
 #include <d3d11.h>
 #include "ShowType.h"
 #include "Matrix4x4.h"
+#include "ImGuizmoManipulator.h"
 
 using Microsoft::WRL::ComPtr;
 struct ID3D11RenderTargetView;
@@ -29,48 +30,9 @@ namespace mtgb
 	class GameObject;
 	class Transform;
 	struct Vector3;
-	/// <summary>
-			/// ウィンドウからのメッセージを受信してImGuiで入力やイベントを処理するためのコールバック関数
-			/// </summary>
-			/// <param name="hwnd">ウィンドウハンドル</param>
-			/// <param name="msg">メッセージ</param>
-			/// <param name="wParam">パラメータ</param>
-			/// <param name="lParam">パラメータ</param>
-			/// <returns></returns>
-	//IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	
-	class ImGuizmoManipulator : public ImGuiShowable
-	{
-		friend class ImGuiRenderer;
-	public:
-		ImGuizmoManipulator();
-		
-		void SetCamera();
-		void Initialize();
-		void ShowImGui() override;
-		void UpdateCamera(const char* _name);
-		bool IsMouseInWindow(const char* _name);
-		void GetMouseRay(Vector3* _near, Vector3* _far);
-		void SelectTransform();
-
-	private:
-		void DrawTransformGuizmo();
-		void Calculate();
-		ImGuizmo::OPERATION operation_;
-		ImGuizmo::MODE mode_;
-		GameObject* pCamera_;
-		Transform* pCameraTransform_;
-		Transform* pTargetTransform_;
-		float angleX_;
-		float angleY_;
-		CameraHandleInScene hCamera_;
-		uintptr_t currId_;
-	private:
-		float worldMat_[16], viewMat_[16], projMat_[16];
-		Matrix4x4 worldMatrix4x4, viewMatrix4x4_, projMatrix4x4_;
-		DirectX::XMFLOAT4X4 float4x4_;
-
-	};
+	
+	
 	class ImGuiRenderer final : public ISystem
 	{
 	public:

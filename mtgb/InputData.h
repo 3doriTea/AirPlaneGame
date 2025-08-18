@@ -36,8 +36,8 @@ namespace mtgb
 		
 		static const float GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both);
 
-		static const Vector2Int GetMousePosition(WindowContext _context);
-		static const Vector3 GetMouseMove(WindowContext _context);
+		static const Vector2Int GetMousePosition(WindowContext _context = mtgb::WindowContext::Both);
+		static const Vector3 GetMouseMove(WindowContext _context = mtgb::WindowContext::Both);
 
 	private:  // Utilities
 		static const size_t KEY_COUNT{ 256 };             // ÉLÅ[ÇÃêî
