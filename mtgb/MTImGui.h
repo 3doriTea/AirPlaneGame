@@ -1,95 +1,111 @@
 #pragma once
-#include "IncludingWindows.h"
-#include "ISystem.h"
-
+#include <vector>
+#include <queue>
 #include <type_traits>
-#include <assert.h>
-#include <typeinfo>
-#include <string>
-#include "../ImGui/imgui.h"
-#include "../ImGui\ImGuizmo.h"
-#include "../ImGui/imgui_impl_win32.h"
-#include "../ImGui/imgui_impl_dx11.h"
-#include <DirectXMath.h>
-#include <wrl/client.h>
-#include "ImGuiShowable.h"
-#include "Handlers.h"
-#include <d3d11.h>
+#include <functional>
 #include "ShowType.h"
-#include "Matrix4x4.h"
-#include "ImGuizmoManipulator.h"
-
-using Microsoft::WRL::ComPtr;
-struct ID3D11RenderTargetView;
-struct ID3D11ShaderResourceView;
-struct ID3D11Texture2D;
-struct ID3D11DepthStencilView;
+#include "ImGuiShowable.h"
+#include "TypeRegistry.h"
+#include <optional>
 
 namespace mtgb
 {
-	class GameObject;
-	class Transform;
+
 	struct Vector3;
-	
-	
-	
-	class ImGuiRenderer final : public ISystem
-	{
-	public:
-		enum class WindowFlag
-		{
-			None,
-			NoMoveWhenHovered // マウスカーソルがウィンドウ内にあるとき移動禁止
-		};
-	public:
-	
-		ImGuiRenderer();
-		~ImGuiRenderer();
-		void Initialize() override;
-		void Update() override;
-		void BeginFrame();
-		void UpdateCamera(const char* _name);
-		void BeginImGuizmoFrame();
 
-		void Begin(const char* _str);
-		void Begin(const char* _str,WindowFlag _flag);
-		
-		/// <summary>
-		/// ImGuizmoウィンドウを描画するためにRTVをセット
+	/// <summary>
+		/// ImGuiに表示をする際に使う
 		/// </summary>
-		void SetImGuizmoRenderTargetView();
+	class MTImGui final
+	{
 
-		void SetGameViewCamera();
-		void Draw();
-		
-		void EndFrame();
-		void SetDrawList();
-		
-		void RenderSceneView();
-		bool IsHoveringWindow();
-		/*bool IsMouseInGameView();*/
-		void UpdateGameViewRect();
-		void End();
-		void Release();
-		
-		const D3D11_VIEWPORT& GetViewport() { return viewport_; }
-		ImGuizmoManipulator&  Manipulator() { return *manipulator_; };
+	public:
+		static MTImGui& Instance()
+		{
+			static MTImGui instance;
+			return instance;
+		}
+
+		void Initialize();
+		void Update();
+
+		/// <summary>
+		/// 表示キューを一括実行し、クリア
+		/// </summary>
+		/// <param name="show"></param>
+		void ShowAll(ShowType show);
+
+		/// <summary>
+		/// 表示キューに積む
+		/// 事前に型に結び付けたコールバックを登録する必要あり
+		/// </summary>
+		/// <typeparam name="T">表示対象の型</typeparam>
+		/// <param name="target">表示対象のポインタ</param>
+		/// <param name="name">表示対象の名前</param>
+		/// <param name="show">表示するImGuiWindow</param>
+		template<typename T>
+		void TypedShow(T* target, const std::string& name, ShowType show = ShowType::Inspector);
+		/// <summary>
+		/// ImGuiShowable*インスタンスを登録、毎回ShowImGuiを呼ぶ
+		/// ImGuiShowableは自動で登録される
+		/// </summary>
+		/// <param name="obj"></param>
+		void Register(ImGuiShowable* obj);
+		/// <summary>
+		/// 登録解除
+		/// デストラクタで呼ばれる
+		/// </summary>
+		/// <param name="obj"></param>
+		void Unregister(ImGuiShowable* obj);
+
+		/// <summary>
+		/// コールバックを表示キューに直接積む
+		/// </summary>
+		/// <param name="func">コールバック</param>
+		/// <param name="show">表示場所</param>
+		void DirectShow(std::function<void()> func, ShowType show);
+
+		/// <summary>
+		/// ImGuiWindowに線を描画
+		/// </summary>
+		/// <param name="_from">始点</param>
+		/// <param name="_to">終点</param>
+		/// <param name="_thickness">線の太さ</param>
+		void DrawLine(const Vector3& _from, const Vector3& _to, float _thickness);
+
+		static constexpr std::string_view GetName(ShowType _showType)
+		{
+			if (_showType == ShowType::Inspector)
+			{
+				return "Inspector";
+			}
+			if (_showType == ShowType::SceneView)
+			{
+				return "Game View";
+			}
+
+			return "None";
+		}
 	private:
-		UINT winWidth_, winHeight_;
-		bool isManipulatingGuizmo_;
-		ImGuizmoManipulator* manipulator_;
-		
-		// Game Viewウィンドウの前フレーム情報
-		ImVec2 gameViewPos_;
-		ImVec2 gameViewSize_;
-		bool gameViewRectValid_;
+		MTImGui() = default;
+		MTImGui(const MTImGui& other) = delete;
 
-		//ImGuiIO io;
-		ComPtr<ID3D11RenderTargetView> pRenderTargetView_;
-		ComPtr<ID3D11ShaderResourceView> pSRV_;
-		ComPtr<ID3D11Texture2D> pTexture_;
-		ComPtr<ID3D11Texture2D> pDepthStencil_;
-		ComPtr<ID3D11DepthStencilView> pDepthStencilView_;
-		D3D11_VIEWPORT viewport_;
+		/// <summary>
+		/// 型に対応する表示関数を設定する
+		/// </summary>
+		void SetupShowFunc();
+
+		std::vector<ImGuiShowable*> showableObjs_;
+		std::queue<std::function<void()>> inspectorShowList_;
+		std::queue<std::function<void()>> sceneViewShowList_;
+
 	};
+
+	template<typename T>
+	inline void MTImGui::TypedShow(T* target, const std::string& name, ShowType show)
+	{
+		using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
+		//PushShowFunc( [=] {proxy->ShowImGui(std::any(target), name); }, show);
+		DirectShow([=]() {TypeRegistry::Instance().CallFunc<Type>(target, name.c_str()); }, show);
+	}
 }

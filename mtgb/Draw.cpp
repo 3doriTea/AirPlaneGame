@@ -12,7 +12,7 @@
 #include "CameraSystem.h"
 #include "DirectWrite.h"
 #include "MTAssert.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 
 #include "Ground.h"
 #include "Figure.h"

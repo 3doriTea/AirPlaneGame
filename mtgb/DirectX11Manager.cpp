@@ -6,7 +6,7 @@
 #include <dxgi1_2.h> 
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 #include "MainWindow.h"
 #include "Screen.h"
 #include "Vector3.h"

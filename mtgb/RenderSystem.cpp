@@ -1,11 +1,12 @@
 #include "RenderSystem.h"
 #include "WindowContextUtil.h"
 #include "DirectX11Draw.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 #include "ImGuiShowable.h"
 #include "SceneSystem.h"
 #include "GameObject.h"
 #include "Debug.h"
+#include "MTImGui.h"
 
 void mtgb::RenderSystem::Initialize()
 {

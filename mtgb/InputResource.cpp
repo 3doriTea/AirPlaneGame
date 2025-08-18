@@ -4,6 +4,7 @@
 #include "WindowContextUtil.h"
 #include "IncludingInput.h"
 #include "JoystickProxy.h"
+#include "MTImGui.h"
 using namespace mtgb;
 namespace
 {

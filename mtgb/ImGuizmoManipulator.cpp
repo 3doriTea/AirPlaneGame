@@ -4,7 +4,9 @@
 #include "Transform.h"
 #include "Game.h"
 #include "ISystem.h"
-#include "../ImGui/imgui.h"
+//#include "../ImGui/imgui.h"
+//#include "../ImGui\ImGuizmo.h"
+
 #include "../ImGui\imgui_internal.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui_impl_dx11.h"
@@ -13,6 +15,7 @@
 #include "WindowContextUtil.h"
 #include "GameTime.h"
 #include "QuatToEuler.h"
+#include "ImGuiRenderer.h"
 #include "MTImGui.h"
 
 namespace

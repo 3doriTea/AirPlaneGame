@@ -4,10 +4,10 @@
 #include "DirectX11Manager.h"
 #include "DirectX11Draw.h"
 #include "Input.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 #include "WindowContext.h"
 #include "WindowContextUtil.h"
-#include "ImGuiShowable.h"
+#include "MTImGui.h"
 #include "RenderSystem.h"
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr },

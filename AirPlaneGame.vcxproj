@@ -34,6 +34,7 @@
     <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\MTImGui.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
@@ -95,7 +96,7 @@
     <ClCompile Include="mtgb\Model.cpp" />
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
-    <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\ImGuiRenderer.cpp" />
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -184,6 +185,7 @@
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
@@ -261,7 +263,7 @@
     <ClInclude Include="mtgb\MTBin\Common.h" />
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
-    <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\ImGuiRenderer.h" />
     <ClInclude Include="mtgb\MTNet\BinaryReader.h" />
     <ClInclude Include="mtgb\MTNet\BinaryWriter.h" />
     <ClInclude Include="mtgb\MTNet\Common.h" />

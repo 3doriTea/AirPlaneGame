@@ -8,7 +8,6 @@
 #include "WindowContext.h"
 #include <map>
 #include <typeindex>
-#include "ImGuiShowable.h"
 #include "JoystickProxy.h"
 #include "Timer.h"
 #include "InputConfig.h"
