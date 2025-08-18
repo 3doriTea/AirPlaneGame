@@ -251,7 +251,7 @@ void mtgb::ImGuizmoManipulator::GetMouseRay(Vector3* _near, Vector3* _far)
 	
 	ImVec2 localPos = ImVec2(mousePos.x - windowPos.x, mousePos.y - windowPos.y - tabBarHeight);
 
-	Vector3 nearVec = { static_cast<float>(localPos.x),static_cast<float>(localPos.y),0.0f };
+	Vector3 nearVec = {localPos.x,localPos.y,0.0f };
 	const D3D11_VIEWPORT& viewport = Game::System<ImGuiRenderer>().GetViewport();
 	*_near = DirectX::XMVector3Unproject(
 		nearVec,

@@ -45,9 +45,14 @@ void EnemyPlane::Update()
 	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
 	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
 	
-	pRB_->velocity_ = pTransform_->Forward() * speed_;
+	//pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 	MTImGui::Instance().TypedShow(pTransform_, std::to_string(entityId_));
+	MTImGui::Instance().DirectShow([this]()
+		{
+			Vector3 to = pTransform_->position + pTransform_->Forward() * speed_;
+			MTImGui::Instance().DrawLine(pTransform_->position, to, 3.0f);
+		}, ShowType::SceneView);
 }
 
 void EnemyPlane::Draw() const

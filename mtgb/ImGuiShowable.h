@@ -16,6 +16,7 @@
 namespace mtgb
 {
 	
+	struct Vector3;
 	
 	/// <summary>
 	/// 継承してShowImGuiをオーバライドして使う
@@ -90,6 +91,8 @@ namespace mtgb
 		/// <param name="show">表示場所</param>
 		void DirectShow(std::function<void()> func, ShowType show);
 
+		void DrawLine(const Vector3& _from, const Vector3& _to, float _thickness);
+
 		static constexpr std::string_view GetName(ShowType _showType)
 		{
 			if (_showType == ShowType::Inspector)
@@ -111,6 +114,7 @@ namespace mtgb
 		std::vector<ImGuiShowable*> showableObjs_;
 		std::queue<std::function<void()>> inspectorShowList_;
 		std::queue<std::function<void()>> sceneViewShowList_;
+
 	};
 	
 	template<typename T>

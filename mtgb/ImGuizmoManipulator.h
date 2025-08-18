@@ -3,6 +3,7 @@
 #include "Matrix4x4.h"
 #include "Handlers.h"
 #include "../ImGui\ImGuizmo.h"
+#include <optional>
 
 
 
@@ -29,7 +30,9 @@ namespace mtgb
 		void GetMouseRay(Vector3* _near, Vector3* _far);
 		void SelectTransform();
 
+		std::optional<ImVec2> WorldToImGui(const Vector3& _vec);
 	private:
+		//void DrawLine(const Vector3& _from, const Vector3& _to);
 		void DrawTransformGuizmo();
 		void Calculate();
 		void SpinCamera();
@@ -57,6 +60,7 @@ namespace mtgb
 		float spinSpeed_;
 		float moveSpeed_;
 		float rotateSensitivity_;
+		float thickness_;
 		float worldMat_[16], viewMat_[16], projMat_[16];
 		Matrix4x4 worldMatrix4x4, viewMatrix4x4_, projMatrix4x4_;
 		DirectX::XMFLOAT4X4 float4x4_;

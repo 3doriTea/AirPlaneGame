@@ -73,6 +73,7 @@ namespace mtgb
 		void Release();
 		
 		const D3D11_VIEWPORT& GetViewport() { return viewport_; }
+		ImGuizmoManipulator&  Manipulator() { return *manipulator_; };
 	private:
 		UINT winWidth_, winHeight_;
 		bool isManipulatingGuizmo_;

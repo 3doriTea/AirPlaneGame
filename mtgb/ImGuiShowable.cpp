@@ -2,6 +2,10 @@
 #include "../ImGui/imgui.h"
 #include "Transform.h"
 #include "Game.h"
+#include "Vector3.h"
+#include "MTImGui.h"
+#include "ImGuizmoManipulator.h"
+
 namespace
 {
     uint32_t defNameCount = 0;
@@ -120,5 +124,16 @@ void mtgb::MTImGui::DirectShow(std::function<void()> func, ShowType show)
     else if (show == ShowType::SceneView)
     {
         sceneViewShowList_.push(func);
+    }
+}
+
+void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to,float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_from);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_to);
+    
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
     }
 }
