@@ -73,6 +73,15 @@ namespace mtgb
 		/// <param name="_thickness">ê¸ÇÃëæÇ≥</param>
 		void DrawLine(const Vector3& _from, const Vector3& _to, float _thickness);
 
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="_start"></param>
+		/// <param name="_dir"></param>
+		/// <param name="_thickness"></param>
+		void DrawRay(const Vector3& _start,const Vector3& _dir, float _thickness);
+
 		static constexpr std::string_view GetName(ShowType _showType)
 		{
 			if (_showType == ShowType::Inspector)

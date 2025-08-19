@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Debug.h"
 #include "MTImGui.h"
+#include "../ImGui/imgui.h"
 
 void mtgb::RenderSystem::Initialize()
 {
@@ -40,12 +41,12 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 
 void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 {
-	//ImGuiは一つ目のウィンドウに依存している
+	// ImGuiは一つ目のウィンドウに依存している
 	WinCtxRes::ChangeResource(WindowContext::First);
 
 	ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
 
-	//RenderTargetViewをImGui用に切り替え
+	// RenderTargetViewをImGui用に切り替え
 	imGui.SetImGuizmoRenderTargetView();
 
 	DirectX11Draw::Begin();
@@ -55,7 +56,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
 
-	//SceneView表示
+	// SceneView表示
 	imGui.Begin(MTImGui::GetName(ShowType::SceneView).data(), ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
 	imGui.UpdateCamera(MTImGui::GetName(ShowType::SceneView).data());
 	imGui.RenderSceneView();
@@ -63,19 +64,42 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	MTImGui::Instance().ShowAll(ShowType::SceneView);
 	imGui.End();
 
-	//Inspector表示
+	// Inspector表示
 	imGui.Begin(MTImGui::GetName(ShowType::Inspector).data());
 	MTImGui::Instance().ShowAll(ShowType::Inspector);
 	imGui.End();
 
-	//ログ表示
+	// ログ表示
 	imGui.Begin(Debug::GetName().data());
 
 	using mtgb::Debug;
 	const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
+
+	static int selectedLog = -1;
+	int idx = 0;
 	for (const mtgb::LogEntry log : logs)
 	{
-		ImGui::Text("%s (%d)", log.msg.c_str(), log.count);
+		std::string text = log.msg + " (" + std::to_string(log.count) + ")";
+
+		if (ImGui::Selectable(text.c_str(), selectedLog == idx))
+		{
+			selectedLog = idx;
+		}
+		++idx;
+	}
+
+	// ログの詳細表示
+	if (selectedLog >= 0)
+	{
+		auto it = logs.begin();
+		std::advance(it, selectedLog);
+
+		ImGui::Begin("Log Details");
+		ImGui::Text("File: %s", it->file.c_str());
+		ImGui::Text("Line: %d", it->line);
+		ImGui::Text("Function: %s", it->func.c_str());
+		ImGui::End();
+
 	}
 
 	imGui.End();

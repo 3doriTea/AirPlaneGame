@@ -28,11 +28,11 @@ namespace mtgb
 	struct LogEntry
 	{
 		std::string msg;
-		/*std::string message;
+		std::string msgDetail;
 		std::string file;
 		int line;
 		std::string func;
-		std::string objectName;*/
+		std::string objectName;
 		int count = 1;
 	};
 
@@ -104,7 +104,16 @@ namespace mtgb
 		}
 		else
 		{
-			logs_.push_back({key});
+			logs_.push_back(
+				LogEntry{
+					.msg = msg,
+					.msgDetail = key,
+					.file = _location.file_name(),
+					.line = static_cast<int>(_location.line()),
+					.func = _location.function_name(),
+					.objectName = object,
+					.count = 1					
+				});
 			logMap_[key] = std::prev(logs_.end());
 		}
 	}

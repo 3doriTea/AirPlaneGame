@@ -83,10 +83,28 @@ void mtgb::MTImGui::DirectShow(std::function<void()> func, ShowType show)
     }
 }
 
+
 void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to, float _thickness)
 {
     std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_from);
     std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_to);
+
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+    }
+}
+
+/// <summary>
+/// レイを表示
+/// </summary>
+/// <param name="_start">レイ始点</param>
+/// <param name="_dir">レイの向きと長さ</param>
+/// <param name="_thickness">レイの太さ</param>
+void mtgb::MTImGui::DrawRay(const Vector3& _start, const Vector3& _dir, float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start + _dir);
 
     if (p1 && p2)
     {
