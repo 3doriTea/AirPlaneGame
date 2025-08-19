@@ -6,7 +6,7 @@
 #include <dxgi1_2.h> 
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 #include "MainWindow.h"
 #include "Screen.h"
 #include "Vector3.h"
@@ -448,16 +448,15 @@ void mtgb::DirectX11Manager::CreateRenderTargetView(IDXGISwapChain1* pSwapChain1
 	pBackBuffer->Release();  // バックバッファは使わないため解放する
 }
 
-void mtgb::DirectX11Manager::CreateViewport(D3D11_VIEWPORT& viewport)
+void mtgb::DirectX11Manager::CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport)
 {
-	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	
 	viewport =
 	{
 		.TopLeftX = 0,
 		.TopLeftY = 0,
-		.Width = static_cast<float>(SCREEN_SIZE.x),
-		.Height = static_cast<float>(SCREEN_SIZE.y),
+		.Width = static_cast<float>(size.x),
+		.Height = static_cast<float>(size.y),
 		.MinDepth = 0,
 		.MaxDepth = 1,
 	};

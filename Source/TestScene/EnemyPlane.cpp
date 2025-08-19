@@ -17,8 +17,7 @@ EnemyPlane::EnemyPlane(
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->sphere_.offset_ = Vector3::Zero();
 	pCollider_->sphere_.radius_ = 1.0f;
-	pTransformProxy_ = new TransformProxy(pTransform_);
-	pTransformGuizmo_ = new TransformGuizmo(pTransform_);
+	
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	massert(hModel_ >= 0 && "“G”òs‹@ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 
@@ -47,6 +46,12 @@ void EnemyPlane::Update()
 	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
 	
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
+
+	MTImGui::Instance().TypedShow(pTransform_, std::to_string(entityId_));
+	MTImGui::Instance().DirectShow([this]()
+		{
+			MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_,2.0f);
+		}, ShowType::SceneView);
 }
 
 void EnemyPlane::Draw() const
@@ -54,6 +59,5 @@ void EnemyPlane::Draw() const
 	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
-
 	//Game::System<ColliderCP>().TestDraw();
 }

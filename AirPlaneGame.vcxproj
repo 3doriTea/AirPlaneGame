@@ -31,12 +31,14 @@
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\ImGuiShowable.cpp" />
+    <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\MTImGui.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
+    <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
-    <ClCompile Include="mtgb\TransformProxy.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
@@ -94,7 +96,7 @@
     <ClCompile Include="mtgb\Model.cpp" />
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
-    <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\ImGuiRenderer.cpp" />
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -149,7 +151,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp" />
-    <ClCompile Include="Source\PlayerProxy.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
@@ -184,16 +185,20 @@
     <ClInclude Include="mtgb\GameObjectLayer.h" />
     <ClInclude Include="mtgb\Ground.h" />
     <ClInclude Include="mtgb\ImGuiShowable.h" />
+    <ClInclude Include="mtgb\ImGuizmoManipulator.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Observer.h" />
+    <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\QuatToEuler.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\ShowFunc.h" />
+    <ClInclude Include="mtgb\ShowType.h" />
     <ClInclude Include="mtgb\TransformCore.h" />
     <ClInclude Include="mtgb\TransformGuizmo.h" />
-    <ClInclude Include="mtgb\TransformProxy.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />
@@ -263,7 +268,7 @@
     <ClInclude Include="mtgb\MTBin\Common.h" />
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
-    <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\ImGuiRenderer.h" />
     <ClInclude Include="mtgb\MTNet\BinaryReader.h" />
     <ClInclude Include="mtgb\MTNet\BinaryWriter.h" />
     <ClInclude Include="mtgb\MTNet\Common.h" />
@@ -328,7 +333,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\Player.h" />
-    <ClInclude Include="Source\PlayerProxy.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />

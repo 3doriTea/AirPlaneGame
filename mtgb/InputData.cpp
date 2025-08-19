@@ -48,15 +48,31 @@ const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _cont
 }
 const bool mtgb::InputUtil::GetMouse(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+	//	return GetInput(WindowContext::First).mouseStateCurrent_.rgbButtons[static_cast<LONG>(_mouseCode)] || 
+		return GetMouse(_mouseCode, WindowContext::First) || GetMouse(_mouseCode, WindowContext::Second);
+	}
+	return GetInput(_context).mouseStateCurrent_.rgbButtons[Index(_mouseCode)] & 0x80;
 }
 const bool mtgb::InputUtil::GetMouseDown(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+		return GetMouseDown(_mouseCode, WindowContext::First) || GetMouseDown(_mouseCode, WindowContext::Second);
+	}
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(MouseXOR(_mouseCode, input.mouseStateCurrent_, input.mouseStatePrevious_) & static_cast<int>(input.mouseStateCurrent_.rgbButtons[Index(_mouseCode)]));
 }
 const bool mtgb::InputUtil::GetMouseUp(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+		return GetMouseUp(_mouseCode, WindowContext::First) || GetMouseUp(_mouseCode, WindowContext::Second);
+	}
+
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(MouseXOR(_mouseCode, input.mouseStateCurrent_, input.mouseStatePrevious_) & static_cast<int>(input.mouseStatePrevious_.rgbButtons[Index(_mouseCode)]));
 }
 const bool mtgb::InputUtil::GetGamePad(const MouseCode _mouseCode, WindowContext _context)
 {

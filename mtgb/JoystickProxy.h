@@ -7,7 +7,7 @@ namespace mtgb
 	/// <summary>
 	/// ジョイスティックの入力をImGuiで表示する用
 	/// </summary>
-	struct JoystickProxy : public ImGuiShowable<JoystickProxy>
+	struct JoystickProxy 
 	{
 		JoystickProxy(const DIJOYSTATE& js);
 		LONG lX;

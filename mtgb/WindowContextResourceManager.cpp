@@ -16,14 +16,15 @@ void mtgb::WindowContextResourceManager::Initialize()
 
 void mtgb::WindowContextResourceManager::Update()
 {
-	for (auto& collection : collectionMap_)
+	auto& collection = collectionMap_[CurrContext()];
+
+	for (auto& resource : collection)
 	{
-		for (auto& resource : collection.second)
-		{
-			resource.second->Update();
-		}
+		resource.second->Update();
 	}
 }
+
+
 
 void mtgb::WindowContextResourceManager::Release()
 {

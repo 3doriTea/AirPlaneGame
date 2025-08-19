@@ -5,7 +5,7 @@
 namespace mtgb
 {
 	class Collider;
-
+	struct Vector3;
 	class ColliderCP : public ComponentPool<Collider, false>
 	{
 	public:
@@ -16,5 +16,7 @@ namespace mtgb
 		void Update() override;
 
 		void TestDraw() const;
+		EntityId RaycastHit(const Vector3& _origin, const Vector3& _dir, float dist);
+
 	};
 }

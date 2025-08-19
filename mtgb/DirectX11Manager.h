@@ -37,7 +37,7 @@ namespace mtgb
 		void CreateOutput(int index, IDXGIOutput** ppOutput);
 		void CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1);
 		void CreateRenderTargetView(IDXGISwapChain1* pSwapChain1, ID3D11RenderTargetView** ppRenderTargetView);
-		void CreateViewport(D3D11_VIEWPORT& viewport);
+		void CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport);
 		void CreateDepthStencilAndDepthStencilView(const Vector2Int bufSize, ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
 		//void InitializeWindowContext(WindowContext& context, bool isMultiMonitor);
 

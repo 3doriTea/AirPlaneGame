@@ -41,7 +41,6 @@ void Inspector::ShowInspector(T* instance, const char* name)
 	if (TypeRegistry::Instance().IsRegisteredType(typeIdx))
 	{
 		TypeRegistry::Instance().CallFunc(typeIdx, std::any(instance), name);
-		//Show(typeIdx, std::any(instance), name);
 	}
 	else
 	{
@@ -49,17 +48,14 @@ void Inspector::ShowInspector(T* instance, const char* name)
 	}
 }
 
+
+
 template<typename T>
 void Inspector::ShowInspector(const T* instance, const char* name)
 {
-	ShowInspector(instance, name);
+	ShowInspector(const_cast<T*>(instance), name);
 }
 
-template<typename T>
-void TypeRegistry::RegisterFunc(std::function<void(std::any, const char*)> func)
-{
-	using Type = std::remove_cvref_t<T>;
-	std::type_index typeIdx(typeid(Type));
-	showFunctions_[typeIdx] = func;
-}
+
+
 

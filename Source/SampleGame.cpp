@@ -6,8 +6,7 @@ using namespace mtgb;
 
 SampleGame::SampleGame()
 {
-	TypeRegistry::Instance();
-	TypeRegistry::Instance().Initialize();
+	
 }
 
 SampleGame::~SampleGame()
@@ -43,7 +42,11 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<CameraSystem>(SystemUpdateType::DontCallMe);
-	_register.Set<MTImGui>(SystemUpdateType::Frame);
+
+	
+
+	_register.Set<ImGuiRenderer>(SystemUpdateType::Frame);
+
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 

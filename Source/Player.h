@@ -5,7 +5,7 @@
 
 class Player : public GameObject
 {
-	friend class PlayerProxy;
+	
 public:
 	Player();
 	Player(mtgb::WindowContext context);
@@ -15,7 +15,7 @@ public:
 	void Draw() const override;
 	int test1;
 private:
-	PlayerProxy* proxy_;
+	
 	float test2;
 	std::string str;
 	std::string name_;
