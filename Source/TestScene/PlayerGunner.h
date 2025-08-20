@@ -1,7 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
-class PlayerGunner : public mtgb::GameObject,ImGuiShowable<PlayerGunner>
+class PlayerGunner : public mtgb::GameObject
 {
 public:
 	PlayerGunner(const EntityId _plane);
@@ -10,7 +10,7 @@ public:
 	void Update() override;
 	void Draw() const override;
 
-	void ShowImGui() override;
+	
 private:
 	Transform* pTransform_;
 	float angleX_;

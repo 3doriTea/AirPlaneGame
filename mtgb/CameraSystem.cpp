@@ -127,3 +127,18 @@ void mtgb::CameraSystem::GetPosition(Vector4* _pPosition) const
 	GetTransform().GenerateWorldMatrix(&mWorld);
 	*_pPosition = GetTransform().position * mWorld;
 }
+
+float mtgb::CameraSystem::GetNear() const
+{
+	return near_;
+}
+
+float mtgb::CameraSystem::GetFar() const
+{
+	return far_;
+}
+
+float mtgb::CameraSystem::GetFov() const
+{
+	return fov_;
+}

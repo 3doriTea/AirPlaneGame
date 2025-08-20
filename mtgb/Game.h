@@ -11,7 +11,7 @@
 #include "ISystem.h"
 #include "cmtgb.h"
 #include "Vector2Int.h"
-
+#include <typeindex>
 
 namespace mtgb
 {
@@ -39,7 +39,7 @@ namespace mtgb
 		/// システム登録のコールバック関数
 		/// </summary>
 		using RegisterSystem = std::function<void(
-			const char* _systemTypeName,
+			std::type_index _systemTypeName,
 			ISystem* _system,
 			const bool _isComponentPool,
 			const SystemUpdateType)>;
@@ -58,7 +58,7 @@ namespace mtgb
 			void Set(SystemUpdateType _type, const bool _isComponentCP = false) const
 			{
 				function_(
-					typeid(SystemT).name(),
+					typeid(SystemT),
 					dynamic_cast<ISystem*>(new SystemT{}),
 					_isComponentCP,
 					_type);
@@ -92,7 +92,7 @@ namespace mtgb
 		virtual Vector2Int GetScreenSize() const;
 
 	private:
-		std::map<std::string, ISystem*> pRegisterSystems_;  // 登録済みのシステム
+		std::map<std::type_index, ISystem*> pRegisterSystems_;  // 登録済みのシステム
 		std::list<ISystem*> pCycleUpdateSystems_;  // 毎サイクル更新されるシステム
 		std::list<ISystem*> pFrameUpdateSystems_;  // 毎フレーム更新されるシステム
 		std::list<ISystem*> pFixedUpdateSystems_;  // 一定期間で更新されるシステム
@@ -179,7 +179,7 @@ namespace mtgb
 		pInstance_->SetupSystems(
 		{
 			[&](
-				const char* _systemTypeName,
+				std::type_index _systemType,
 				ISystem* _pSystem,
 				const bool _isComponentPool,
 				const SystemUpdateType _systemUpdateType)
@@ -192,7 +192,7 @@ namespace mtgb
 				{
 					pInstance_->pComponentPools_.push_back(dynamic_cast<IComponentPool*>(_pSystem));
 				}
-				pInstance_->pRegisterSystems_.insert({ std::string{ _systemTypeName }, _pSystem });
+				pInstance_->pRegisterSystems_.insert({ _systemType , _pSystem });
 				switch (_systemUpdateType)
 				{
 				case SystemUpdateType::Cycle:
@@ -230,7 +230,7 @@ namespace mtgb
 	{
 		const char* t = typeid(SystemT).name();
 
-		ISystem* pSystem{ pInstance_->pRegisterSystems_[typeid(SystemT).name()] };
+		ISystem* pSystem{ pInstance_->pRegisterSystems_[typeid(SystemT)] };
 
 		assert(pSystem != nullptr);
 

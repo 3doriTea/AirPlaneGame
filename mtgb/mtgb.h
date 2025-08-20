@@ -10,8 +10,7 @@
 #include "Vector2Int.h"
 #include "RectInt.h"
 #include "WindowContextUtil.h"
-#include "TransformProxy.h"
-#include "TransformGuizmo.h"
+
 #include "Easing.h"
 #include "Mathf.h"
 
@@ -38,7 +37,7 @@
 #include "Image.h"
 #include "Audio.h"
 #include "OBJ.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
 #include "Text.h"
 #include "Fbx.h"
 #include "WindowContext.h"
@@ -46,7 +45,8 @@
 #include "WindowManager.h"
 #include "DoubleWindow.h"
 #include "CameraSystem.h"
-
+#include "ImGuiShowable.h"
+#include "MTImGui.h"
 
 #pragma endregion
 

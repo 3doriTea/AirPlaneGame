@@ -3,6 +3,7 @@
 #include <functional>
 #include <unordered_map>
 #include <any>
+#include "DefaultShow.h"
 
 
 class TypeRegistry
@@ -17,6 +18,9 @@ public:
 	static TypeRegistry& Instance();
 	void ProvisionalRegister(std::type_index typeIdx, std::function<void(void)> registerFunc);
 	void Initialize();
+	template<typename T>
+	void CallFunc(T* instance, const char* name);
+
 	void CallFunc(std::type_index typeIdx, std::any instance, const char* name);
 	bool IsRegisteredType(std::type_index typeIdx);
 private:
@@ -26,11 +30,54 @@ private:
 	bool CheckCustomAttrs(std::tuple<Args...>& attrs, T valPtr, const char* name);
 	
 	template<typename T>
+	void CheckProxyAttrs();
+
+	
+
+	template<typename T>
 	bool ShowMemberWithReflection(T memberValue, const char* name);
 
 	TypeRegistry();
 	TypeRegistry(const TypeRegistry&) = delete;
 	TypeRegistry& operator=(const TypeRegistry&) = delete;
+};
+template<typename T>
+void TypeRegistry::CallFunc(T* instance, const char* name)
+{
+	const auto& itr = showFunctions_.find(typeid(T));
+	if (itr != showFunctions_.end())
+	{
+		itr->second(std::any(instance),name);
+	}
+	else
+	{
+		mtgb::DefaultShow(instance, name);
+	}
+}
+
+template<typename T>
+void TypeRegistry::RegisterFunc(std::function<void(std::any, const char*)> func)
+{
+	using Type = std::remove_cvref_t<T>;
+	std::type_index typeIdx(typeid(Type));
+	showFunctions_[typeIdx] = func;
+}
+namespace RegisterShowFuncHolder
+{
+	//using ShowFunc = std::function<void(std::any, const char*)>;
+	/*RegisterShowFuncHolder(ShowFunc _function):
+		function_{ _function }
+	{}*/
+	//ShowFunc function_;
+
+	template<typename Type>
+	void Set(std::function<void(Type* _target, const char* _name)> _func)
+	{
+		TypeRegistry::Instance().RegisterFunc<Type>([=](std::any target, const char* name)
+			{
+				_func(std::any_cast<Type*>(target), name);
+			});
+	}
 };
 
 // É}ÉNÉçíËã`

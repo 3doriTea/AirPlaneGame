@@ -28,11 +28,11 @@ namespace mtgb
 	struct LogEntry
 	{
 		std::string msg;
-		/*std::string message;
+		std::string msgDetail;
 		std::string file;
 		int line;
 		std::string func;
-		std::string objectName;*/
+		std::string objectName;
 		int count = 1;
 	};
 
@@ -59,6 +59,11 @@ namespace mtgb
 		void LogImGui(const std::string& object, const std::source_location& _location, const char* _format, const Args..._args);
 
 		std::list<LogEntry> GetLog();
+
+		static constexpr std::string_view GetName()
+		{
+			return "Log";
+		}
 	private:
 		static constexpr size_t BUFFER_SIZE{ 1024 };  // ログ出力時の文字列バッファサイズ
 		static constexpr UINT MAX_LOG_COUNT{ 30 };
@@ -99,8 +104,19 @@ namespace mtgb
 		}
 		else
 		{
-			logs_.push_back({key});
+			logs_.push_back(
+				LogEntry{
+					.msg = msg,
+					.msgDetail = key,
+					.file = _location.file_name(),
+					.line = static_cast<int>(_location.line()),
+					.func = _location.function_name(),
+					.objectName = object,
+					.count = 1					
+				});
 			logMap_[key] = std::prev(logs_.end());
 		}
 	}
+
+	
 }

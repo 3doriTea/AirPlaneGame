@@ -3,7 +3,11 @@
 #include "../ImGui/imgui.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "MTImGui.h"
+#include "ImGuiRenderer.h"
+#include "Transform.h"
+#include "ShowFunc.h"
+#include "QuatToEuler.h"
+
 struct Vector3Show : refl::attr::usage::type 
 {
 	void operator()(mtgb::Vector3* vec, const char* name) const
@@ -12,7 +16,7 @@ struct Vector3Show : refl::attr::usage::type
 	}
 };
 
-struct QuaternionSHow : refl::attr::usage::any
+struct QuaternionSHow : refl::attr::usage::type
 {
 	void operator()(DirectX::XMVECTORF32* vec, const char* name) const
 	{
@@ -34,6 +38,10 @@ struct Range : refl::attr::usage::member
 		ShowRange(instance, name, Min, Max);
 	}
 };
+
+template <typename T>
+struct ProxyFor : refl::attr::usage::type
+{ using TargetType = T; };
 
 
 
