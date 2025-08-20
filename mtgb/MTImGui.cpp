@@ -12,20 +12,24 @@ void mtgb::MTImGui::Initialize()
 
 void mtgb::MTImGui::Update()
 {
+    
+    updatingImGuiShowable_ = true;
+
+    //ImGui::BeginChild("left")
     for (ImGuiShowable* obj : showableObjs_)
     {
         DirectShow([=]()
             {
                 ImGui::PushID(obj);
 
-                if (ImGui::CollapsingHeader(obj->displayName_.c_str()))
-                {
-                    obj->ShowImGui();
-                }
+                obj->ShowImGui();
 
                 ImGui::PopID();
-            }, obj->show_);
+
+            }, obj->displayName_, obj->show_);
     }
+
+    updatingImGuiShowable_ = false;
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
@@ -38,15 +42,64 @@ void mtgb::MTImGui::SetupShowFunc()
             TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
         });
 }
+void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start + _dir);
+
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+    }
+}
+void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_from);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_to);
+
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+    }
+}
 void mtgb::MTImGui::ShowAll(ShowType show)
 {
     if (show == ShowType::Inspector)
     {
+        static std::string selectedName;
+        static std::function<void()> selectedFunc = nullptr;
+
+        bool isSelected = false;
+        ImGui::BeginChild("List", ImVec2(200, 0), true);
         while (!inspectorShowList_.empty())
         {
-            inspectorShowList_.front()();
+            const std::string& name = inspectorShowList_.front().first;
+            auto& func = inspectorShowList_.front().second;
+
+            if (!isSelected)
+            {
+                isSelected = selectedName == name;
+            }
+
+            if (ImGui::Selectable(name.c_str(),selectedName == name))
+            {
+                isSelected = true;
+                selectedName = name;
+                selectedFunc = func;
+            }
+
             inspectorShowList_.pop();
         }
+        ImGui::EndChild();
+
+        ImGui::SameLine();
+
+        ImGui::BeginChild("property", ImVec2(0, 0), true);
+        if (selectedFunc && isSelected)
+        {
+            selectedFunc();
+        }
+        ImGui::EndChild();
     }
     else if (show == ShowType::SceneView)
     {
@@ -71,11 +124,11 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
     }
 }
 
-void mtgb::MTImGui::DirectShow(std::function<void()> func, ShowType show)
+void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
     if (show == ShowType::Inspector)
     {
-        inspectorShowList_.push(func);
+        inspectorShowList_.emplace(name,func);
     }
     else if (show == ShowType::SceneView)
     {
@@ -86,12 +139,13 @@ void mtgb::MTImGui::DirectShow(std::function<void()> func, ShowType show)
 
 void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to, float _thickness)
 {
-    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_from);
-    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_to);
-
-    if (p1 && p2)
+    if (updatingImGuiShowable_)
     {
-        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+        DrawLineImpl(_from, _to, _thickness);
+    }
+    else
+    {
+        sceneViewShowList_.push([=]() {DrawLineImpl(_from, _to, _thickness); });
     }
 }
 
@@ -103,11 +157,12 @@ void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to, float _th
 /// <param name="_thickness">ƒŒƒC‚Ì‘¾‚³</param>
 void mtgb::MTImGui::DrawRay(const Vector3& _start, const Vector3& _dir, float _thickness)
 {
-    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start);
-    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start + _dir);
-
-    if (p1 && p2)
+    if (updatingImGuiShowable_)
     {
-        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+        DrawRayImpl(_start, _dir, _thickness);
+    }
+    else
+    {
+        sceneViewShowList_.push([=]() {DrawRayImpl(_start, _dir, _thickness); });
     }
 }

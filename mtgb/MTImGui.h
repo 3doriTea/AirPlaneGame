@@ -7,6 +7,7 @@
 #include "ImGuiShowable.h"
 #include "TypeRegistry.h"
 #include <optional>
+#include <tuple>
 
 namespace mtgb
 {
@@ -63,7 +64,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="func">コールバック</param>
 		/// <param name="show">表示場所</param>
-		void DirectShow(std::function<void()> func, ShowType show);
+		void DirectShow(std::function<void()> func, const std::string& name, ShowType show);
 
 		/// <summary>
 		/// ImGuiWindowに線を描画
@@ -105,9 +106,14 @@ namespace mtgb
 		void SetupShowFunc();
 
 		std::vector<ImGuiShowable*> showableObjs_;
-		std::queue<std::function<void()>> inspectorShowList_;
+		std::queue<std::pair<std::string,std::function<void()>>> inspectorShowList_;
 		std::queue<std::function<void()>> sceneViewShowList_;
 
+		void DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness);
+		void DrawLineImpl(const Vector3& _from, const Vector3& _to, float _thickness);
+
+
+		bool updatingImGuiShowable_;
 	};
 
 	template<typename T>
@@ -115,6 +121,6 @@ namespace mtgb
 	{
 		using Type = std::remove_pointer_t<std::remove_cvref_t<T>>;
 		//PushShowFunc( [=] {proxy->ShowImGui(std::any(target), name); }, show);
-		DirectShow([=]() {TypeRegistry::Instance().CallFunc<Type>(target, name.c_str()); }, show);
+		DirectShow([=]() {TypeRegistry::Instance().CallFunc<Type>(target, name.c_str()); }, name, show);
 	}
 }
