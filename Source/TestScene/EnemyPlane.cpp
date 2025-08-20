@@ -48,10 +48,7 @@ void EnemyPlane::Update()
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 	MTImGui::Instance().TypedShow(pTransform_, std::to_string(entityId_));
-	MTImGui::Instance().DirectShow([this]()
-		{
-			MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_,2.0f);
-		}, ShowType::SceneView);
+	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
 }
 
 void EnemyPlane::Draw() const
