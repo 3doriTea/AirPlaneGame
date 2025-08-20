@@ -266,7 +266,7 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 	MTImGui::Instance().DirectShow([this]()
 		{
 			ImGui::InputFloat4("quat", pCameraTransform_->rotate.f);
-		},ShowType::Inspector);
+		}, "CameraQuat", ShowType::Inspector);
 }
 
 void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)

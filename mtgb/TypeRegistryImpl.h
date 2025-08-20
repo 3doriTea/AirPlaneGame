@@ -62,8 +62,7 @@ void TypeRegistry::RegisterType()
 
 				if (!showFuncExecuted)
 				{
-					if (ImGui::CollapsingHeader(name))
-					{
+					
 						ImGui::PushID(registerInstance);
 						//ÉÅÉìÉoÇ≤Ç∆Ç…ëñç∏
 						refl::util::for_each(type.members, [&](auto&& member)
@@ -120,7 +119,7 @@ void TypeRegistry::RegisterType()
 							});
 
 						ImGui::PopID();
-					}
+					
 				}
 			}
 			else
