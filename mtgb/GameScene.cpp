@@ -10,6 +10,7 @@ mtgb::GameScene::GameScene()
 
 mtgb::GameScene::~GameScene()
 {
+	SAFE_CLEAR_CONTAINER_DELETE(pGameObjects_);
 }
 
 mtgb::CameraHandleInScene mtgb::GameScene::RegisterCameraGameObject(GameObject* _pGameObject) const

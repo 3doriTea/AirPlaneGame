@@ -13,6 +13,7 @@
 #include "TransformProxy.h"
 #include "TransformGuizmo.h"
 #include "Easing.h"
+#include "Mathf.h"
 
 #pragma endregion
 

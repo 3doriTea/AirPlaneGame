@@ -697,11 +697,11 @@
     <ClCompile Include="Source\PlayerProxy.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TestScene\UI\EventPopup.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp">
+      <Filter>01Game\05TestScene\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1155,9 +1155,6 @@
     <ClInclude Include="Source\PlayerProxy.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\TestScene\UI\SpeedMeter.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\Observer.h">
       <Filter>03mtgb\Utility</Filter>
     </ClInclude>
@@ -1166,6 +1163,12 @@
     </ClInclude>
     <ClInclude Include="mtgb\Easing.h">
       <Filter>03mtgb\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Mathf.h">
+      <Filter>03mtgb\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\UI\SpeedMeter.h">
+      <Filter>01Game\05TestScene\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

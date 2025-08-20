@@ -187,6 +187,7 @@
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
