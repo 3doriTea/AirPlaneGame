@@ -56,7 +56,7 @@ void EnemyPlane::Update()
 
 void EnemyPlane::Draw() const
 {
-	Draw::SetShaderOnce(ShaderType::Unlit3D);
+	//Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
 	//Game::System<ColliderCP>().TestDraw();

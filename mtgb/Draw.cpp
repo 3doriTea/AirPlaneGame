@@ -108,7 +108,7 @@ void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int si
 
 void mtgb::Draw::GroundPlane()
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	CheckSetShader(ShaderType::Ground);
 
 	Game::System<Draw>().pGround_->Draw();
