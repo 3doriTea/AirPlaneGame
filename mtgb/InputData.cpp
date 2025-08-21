@@ -88,8 +88,8 @@ const bool mtgb::InputUtil::GetGamePad(const PadCode _padButtonCode, const size_
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
 
-		// ? padIdï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Äwï¿½è‚·ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
-		// staticï¿½Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
+		// ? padId‚ğ‚Ç‚±‚©‚ç‘I‘ğ‚·‚é‚©•ª‚©‚ç‚È‚¢B
+		// static•Ï”‚Å‚½‚¹‚é‚Ì‚ª—Ç‚¢H
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
 	}
@@ -104,8 +104,8 @@ const bool mtgb::InputUtil::GetGamePadDown(const PadCode _padButtonCode, const s
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
 
-		// ? padIdï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Äwï¿½è‚·ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
-		// staticï¿½Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
+		// ? padId‚ğ‚Ç‚±‚©‚ç‘I‘ğ‚·‚é‚©•ª‚©‚ç‚È‚¢B
+		// static•Ï”‚Å‚½‚¹‚é‚Ì‚ª—Ç‚¢H
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
 	}
@@ -124,11 +124,11 @@ const bool mtgb::InputUtil::GetGamePadUp(const PadCode _padButtonCode, const siz
 	{
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
-
-		// ? padIdï¿½ï¿½WindowContextï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Ñ‚Â‚ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
-		// inputdataï¿½É•Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
-		// GetContextPadIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Í“nï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½Î—Ç‚ï¿½ï¿½B
-		// DispatchPadIDï¿½Öï¿½ï¿½Æ‚ï¿½ï¿½H
+		
+		// ? padId‚ğWindowContext‚©‚ç‚Ç‚±‚Åæ“¾‚·‚é‚©•ª‚©‚ç‚È‚¢B
+		// inputdata‚É•Ï”‚Æ‚µ‚Ä‚½‚¹‚é‚Ì‚ª—Ç‚¢H
+		// GetContextPadID‚ğg‚Á‚ÄA‘Î‰‚·‚éID‚Í•Ï‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚é‚×‚«‚©B
+		// DispatchPadIDŠÖ”‚Æ‚·‚éH
 
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
