@@ -2,7 +2,7 @@
 #include "ISystem.h"
 #include "cmtgb.h"
 #include "IncludingInput.h"
-#include <wrl/client.h> // �ǉ�
+#include <wrl/client.h> // 追加
 #include <functional>
 #include <vector>
 #include <tuple>
@@ -15,7 +15,7 @@
 #pragma comment(lib, "dInput8.lib")
 
 typedef struct HWND__* HWND;
-using Microsoft::WRL::ComPtr; // �ǉ�
+using Microsoft::WRL::ComPtr; // 追加
 
 
 
@@ -34,7 +34,7 @@ namespace mtgb
 	};
 
 	/// <summary>
-	/// �W���C�X�e�B�b�N�̊��蓖�ėv��
+	/// ジョイスティックの割り当て要求
 	/// </summary>
 	struct JoystickReservation
 	{
@@ -58,76 +58,76 @@ namespace mtgb
 		void Release();
 
 		/// <summary>
-		/// �}�E�X�̍��W�f�[�^���X�V����
+		/// マウスの座標データを更新する
 		/// </summary>
-		/// <param name="_x">���W x</param>
-		/// <param name="_y">���W y</param>
+		/// <param name="_x">座標 x</param>
+		/// <param name="_y">座標 y</param>
 		void UpdateMousePositionData(const int32_t _x, const int32_t _y);
 
 		void CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice);
 		void CreateMouseDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppMouseDevice);
 		/// <summary>
-		/// ���͏�Ԃ��擾����Ώۂ̃f�o�C�X��؂�ւ���
+		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
-		/// <param name="_pJoystickDevice">�؂�ւ��Ώۂ̃L�[�{�[�h�f�o�C�X</param>
+		/// <param name="_pJoystickDevice">切り替え対象のキーボードデバイス</param>
 		void ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice);
 
 		void SetJoystickGuid(GUID _guid);
 
 		/// <summary>
-		/// ���͏�Ԃ��擾����Ώۂ̃f�o�C�X��؂�ւ���
+		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
-		/// <param name="_pJoystickDevice">�؂�ւ��Ώۂ̃}�E�X�f�o�C�X</param>
+		/// <param name="_pJoystickDevice">切り替え対象のマウスデバイス</param>
 		void ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice);
 		/// <summary>
-		/// ���͏�Ԃ��i�[����Ώۂ�؂�Ԃ�
+		/// 入力状態を格納する対象を切り返す
 		/// </summary>
-		/// <param name="_pJoystickDevice">�؂�ւ��Ώۂ̓��͏�Ԃ��i�[���镨</param>
+		/// <param name="_pJoystickDevice">切り替え対象の入力状態を格納する物</param>
 		void ChangeInputData(InputData* _pInputData);
 		/// <summary>
-		/// ���͏�Ԃ��擾����Ώۂ̃f�o�C�X��؂�ւ���
+		/// 入力状態を取得する対象のデバイスを切り替える
 		/// </summary>
-		/// <param name="_pJoystickDevice">�؂�ւ��Ώۂ̃W���C�X�e�B�b�N�f�o�C�X</param>
+		/// <param name="_pJoystickDevice">切り替え対象のジョイスティックデバイス</param>
 		void ChangeJoystickDevice(ComPtr<IDirectInputDevice8> _pJoystickDevice);
 
 		/// <summary>
-		/// �ڑ�����Ă���W���C�X�e�B�b�N�̗񋓁A�\��f�o�C�X�ւ̊��蓖�Ă��s��
+		/// 接続されているジョイスティックの列挙、予約デバイスへの割り当てを行う
 		/// </summary>
 		void EnumJoystick();
 
 		/// <summary>
-		/// �W���C�X�e�B�b�N���ڑ����ꂽ�ꍇ�Ɋ��蓖�Ă���悤�\�񂷂�
-		/// �撅���Ŋ��蓖�Ă��܂�
+		/// ジョイスティックが接続された場合に割り当てられるよう予約する
+		/// 先着順で割り当てられます
 		/// </summary>
-		/// <param name="_pJoystickDevice">���蓖�Ċ�]�̃f�o�C�X</param>
+		/// <param name="_pJoystickDevice">割り当て希望のデバイス</param>
 		void RequestJoystickDevice(JoystickReservation* _reservation);
 
 		/// <summary>
-		/// �ڑ�����Ă���W���C�X�e�B�b�N�����蓖�ė\�񂵂Ă�f�o�C�X�Ɋ��蓖�Ă�
+		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
 		/// </summary>
 		/// <param name="_pJoystickDevice"></param>
 		void AssignJoystick(IDirectInputDevice8* _pJoystickDevice);
 
 		/// <summary>
-		/// �o�^���ꂽ�W���C�X�e�B�b�N����������
+		/// 登録されたジョイスティックを解除する
 		/// </summary>
-		/// <param name="_guid">�o�^��������GUID</param>
+		/// <param name="_guid">登録解除するGUID</param>
 		/// <returns></returns>
 		void UnregisterJoystickGuid(GUID _guid);
 
 		/// <summary>
-		/// ���蓖�Ă�ꂽ�W���C�X�e�B�b�N��GUID��o�^����
+		/// 割り当てられたジョイスティックのGUIDを登録する
 		/// </summary>
-		/// <param name="_guid">�o�^����W���C�X�e�B�b�N��GUID</param>
-		/// <returns>�o�^�ς݂̏ꍇ��false��Ԃ�</returns>
+		/// <param name="_guid">登録するジョイスティックのGUID</param>
+		/// <returns>登録済みの場合はfalseを返す</returns>
 		bool RegisterJoystickGuid(GUID _guid);
 
 		/// <summary>
-		/// �擾���o��ݒ肷��
+		/// 取得感覚を設定する
 		/// </summary>
 		void SetAcquireInterval(GUID _guid, ComPtr<IDirectInputDevice8> _device);
 		/// <summary>
-		/// ���蓖�ė\�񂪂���Ă��Ȃ����ۂ�
+		/// 割り当て予約がされていないか否か
 		/// </summary>
 		/// <returns>/returns>
 		bool IsNotSubscribed();
@@ -141,17 +141,23 @@ namespace mtgb
 		bool IsJoystickAssigned(GUID guid) const;
 
 	private:
+
+		/// <summary>
+		/// アクティブなコントローラのIDを調べる
+		/// </summary>
+		void CheckValidPadID();
+
 		void AcquireJoystick(ComPtr<IDirectInputDevice8> _pJoystickDevice);
 		GUID GetDeviceGuid(ComPtr<IDirectInputDevice8> _pInputDevice);
 		void SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig);
-		InputData* pInputData_;				 // ���͂̏��
-		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input �{��k
-		ComPtr<IDirectInputDevice8> pKeyDevice_;    // �L�[�f�o�C�X
-		ComPtr<IDirectInputDevice8> pMouseDevice_;  // �}�E�X�f�o�C�X
-		ComPtr<IDirectInputDevice8> pJoystickDevice_;  // �W���C�X�e�B�b�N�f�o�C�X
+		InputData* pInputData_;				 // 入力の状態
+		ComPtr<IDirectInput8> pDirectInput_;        // Direct Input 本体k
+		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
+		ComPtr<IDirectInputDevice8> pJoystickDevice_;  // ジョイスティックデバイス
 		 
-		std::vector<JoystickReservation*> requestedJoystickDevices_;//���蓖�ė\�񂳂ꂽ�W���C�X�e�B�b�N�f�o�C�X
-		std::set<GUID> assignedJoystickGuids_;//���Ɋ��蓖�čς݂̃W���C�X�e�B�b�N
+		std::vector<JoystickReservation*> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
+		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
 		
 		std::map<GUID, JoystickContext> joystickContext_;
 		GUID currJoystickGuid_;
