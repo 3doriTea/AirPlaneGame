@@ -8,6 +8,7 @@ namespace
 }
 
 Radar::Radar(const EntityId _playerId) : GameObject(GameObjectBuilder()
+	.SetLayerFlag(GameObjectLayer::A)
 	.Build()),
 	pPlayerTransform_{ &Transform::Get(_playerId) }
 {

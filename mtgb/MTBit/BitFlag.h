@@ -1,6 +1,8 @@
 #pragma once
 #include <type_traits>
 #include <bitset>
+#include <concepts>
+
 
 namespace mtbit
 {
@@ -118,30 +120,36 @@ namespace mtbit
 	private:
 		std::bitset<BIT_COUNT> value_;  // ビットフラグ
 	};
-}
 
-template<mtbit::IsEnumStruct EnumStructT>
-mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e1, const EnumStructT _e2)
-{
-	return mtbit::BitFlag<EnumStructT>{ _e1 } | _e2;
-}
-
-template<typename EnumStructT>
-mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag1, const mtbit::BitFlag<EnumStructT> _flag2)
-{
-	return mtbit::BitFlag<EnumStructT>{ _flag1 }.BeginEdit().Add(_flag2).EndEdit();
-}
-
-template<typename EnumStructT>
-mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e, const mtbit::BitFlag<EnumStructT> _flag)
-{
-	return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
-}
-
-template<typename EnumStructT>
-mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag, const EnumStructT _e)
-{
-	return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
+	template<typename T>
+	concept BitFlagEnumStruct = IsEnumStruct<T> && requires(T t)
+	{
+		static_cast<mtbit::BitFlag<T>>(t);
+	};
+	
+	template<BitFlagEnumStruct EnumStructT>
+	inline mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e1, const EnumStructT _e2) 
+	{
+		return mtbit::BitFlag<EnumStructT>{ _e1 } | _e2;
+	}
+	
+	template<typename EnumStructT>
+	inline mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag1, const mtbit::BitFlag<EnumStructT> _flag2)
+	{
+		return mtbit::BitFlag<EnumStructT>{ _flag1 }.BeginEdit().Add(_flag2).EndEdit();
+	}
+	
+	template<typename EnumStructT>
+	inline mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e, const mtbit::BitFlag<EnumStructT> _flag)
+	{
+		return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
+	}
+	
+	template<typename EnumStructT>
+	inline mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag, const EnumStructT _e)
+	{
+		return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
+	}
 }
 
 template<typename EnumStructT>
