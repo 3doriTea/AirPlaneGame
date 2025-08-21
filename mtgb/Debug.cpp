@@ -36,7 +36,7 @@ std::list<mtgb::LogEntry> mtgb::Debug::GetLog()
 
 mtgb::Debug::LogItr mtgb::Debug::RemoveLog(LogItr itr)
 {
-	logMap_.erase(itr->msg);
+	logMap_.erase(itr->msgDetail);
 	return logs_.erase(itr);
 }
 
