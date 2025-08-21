@@ -142,6 +142,7 @@
     <ClCompile Include="Source\TheMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
