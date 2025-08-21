@@ -22,6 +22,7 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
+#if 1
 	//if (InputUtil::GetKey(KeyCode::Up))
 	{
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
@@ -46,6 +47,28 @@ void PlayerPlane::Update()
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
+#else
+	if (InputUtil::GetKey(KeyCode::Up))
+	{
+		pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Down))
+	{
+		pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Left))
+	{
+		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Right))
+	{
+		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+	}
+#endif
+
+
+	//curr = RemoveZRotation(curr);
+
 	pTransform_->rotate = curr;
 	pRB_->velocity_ = (pTransform_->Forward()) * 3.0f;
 
@@ -55,4 +78,39 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
+}
+
+Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const
+{
+	using DirectX::XMMatrixRotationQuaternion;
+	using DirectX::XMVector3Cross;
+	using DirectX::XMQuaternionRotationMatrix;
+
+	// 回転行列
+	Matrix4x4 mRot{ XMMatrixRotationQuaternion(_q) };
+
+	Vector3 vUp{ mRot.r[1] };  // 上方向のベクトル
+
+	// z軸を0にした上方向ベクトル
+	Vector3 projectedUp{ vUp.x, vUp.y, 0 };
+	projectedUp.Normalize();
+
+	// z軸+方向のベクトル
+	Vector3 forward{ mRot.r[2] };
+
+	Vector3 right{ XMVector3Cross(forward, projectedUp) };
+	right.Normalize();
+
+	Matrix4x4 mNewRot
+	{
+		DirectX::XMMATRIX
+		{
+			right,
+			projectedUp,
+			forward,
+			{ 0, 0, 0, 1 }
+		}
+	};
+
+	return XMQuaternionRotationMatrix(mNewRot);
 }
