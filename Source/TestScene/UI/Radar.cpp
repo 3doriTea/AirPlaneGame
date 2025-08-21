@@ -30,13 +30,15 @@ void Radar::Update()
 	for (auto& pGameObject : pEnemies)
 	{
 		Transform& enemyTransform{ Transform::Get(pGameObject->GetEntityId()) };
-		Vector3 diff{ pPlayerTransform_->position - enemyTransform.position };
+		//Vector3 diff{ enemyTransform.position - pPlayerTransform_->GetWorldPosition() };
+		Vector3 diff{ enemyTransform.position };
 		Matrix4x4 mPlayerWorld{};
 		pPlayerTransform_->GenerateWorldMatrix(&mPlayerWorld);
+		mPlayerWorld = DirectX::XMMatrixInverse(nullptr, mPlayerWorld);
 		diff *= mPlayerWorld;
 		//Vector3 diff{ enemyTransform.position * mPlayerWorld };
 
-		enemyMarkPos_.emplace_back(static_cast<int>(diff.x), static_cast<int>(diff.z));
+		enemyMarkPos_.emplace_back(static_cast<int>(diff.x), -static_cast<int>(diff.z));
 	}
 }
 
