@@ -141,7 +141,7 @@ void mtgb::Draw::ChangeTextAlignment(TextAlignment _alignment)
 
 void mtgb::Draw::GroundPlane()
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
 	CheckSetShader(ShaderType::Ground);
 
 	Game::System<Draw>().pGround_->Draw();
