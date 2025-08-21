@@ -126,8 +126,8 @@ void Player::Draw() const
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
 	
-	Game::System<Text>().ChangeFontSize(100);
-	Draw::ImmediateText(std::to_string(timer),0,0);
+	
+	Draw::ImmediateText(std::to_string(timer),0,0,100);
 	
 	//LOGF("PlayerDraw\n");
 	/*Inspector::Instance().ShowInspector(proxy_, name_.c_str());
