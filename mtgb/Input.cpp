@@ -191,7 +191,7 @@ void mtgb::Input::UpdateMouseDevice()
 	{
 		bool IS_GAMEPAD_DETECTED = std::any_of(pInputData_->activeGamePadID.begin(),
 											   pInputData_->activeGamePadID.end(),
-											   [](int _id) { return _id != -1; });
+											   [](std::pair<const PadIDState, int> _id) { return _id.second != -1; });
 		if (not(IS_GAMEPAD_DETECTED))
 		{
 			CheckValidPadID();
