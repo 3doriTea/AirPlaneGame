@@ -9,6 +9,8 @@
 
 #include "InputKeyCode.h"
 #include "InputMouseCode.h"
+#include "InputPadCode.h"
+
 #include "cmtgb.h"
 #include "WindowContext.h"
 
@@ -74,7 +76,7 @@ namespace mtgb
 		friend Input;
 		friend InputUtil;
 	private:  // Data
-		static const size_t KEY_COUNT{ 256 };             // キーの数
+		static const size_t KEY_COUNT{ 256 };      // キーの数
 		std::bitset<KEY_COUNT> keyStateCurrent_;   // キーの状態現在
 		std::bitset<KEY_COUNT> keyStatePrevious_;  // キーの状態前回
 
@@ -82,10 +84,12 @@ namespace mtgb
 		_DIMOUSESTATE mouseStatePrevious_;  // マウスの状態前回
 		Vector2Int mousePosition_;          // マウスカーソルの座標
 
-		static const size_t GAME_PAD_COUNT{ 4 };  // ゲームパッドの最大接続可能数
+		static const size_t GAME_PAD_COUNT{ XUSER_MAX_COUNT };            // ゲームパッドの最大接続可能数
 		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStateCurrent_;   // ゲームパッドの状態現在
 		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStatePrevious_;  // ゲームパッドの状態前回
-
+		std::map<PadIDState ,int> activeGamePadID;                     // 有効なコントローラのID(0~3が入る)
+		int gamePadID;                                                    // コンテキストに割り当てられたコントローラのID
+	
 	public:
 		//InputData();
 		//~InputData();
