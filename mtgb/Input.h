@@ -54,6 +54,7 @@ namespace mtgb
 		void UpdateKeyDevice();
 		void UpdateMouseDevice();
 		void UpdateJoystickDevice();
+		void UpdateGamePadDevice();
 
 		void Release();
 
