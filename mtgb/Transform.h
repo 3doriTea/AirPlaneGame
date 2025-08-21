@@ -69,6 +69,8 @@ namespace mtgb
 		Vector3 Back() const { return Vector3::Back() * matrixWorldRot_; }
 		Vector3 Forward() const;
 
+		Vector3 GetWorldPosition() const { return position * matrixWorld_; }
+
 	//public:
 	//	Vector3 position{ Vector3::Zero() };          // ローカル座標
 	//	Vector3 scale{ Vector3::One() };              // ローカル大きさ

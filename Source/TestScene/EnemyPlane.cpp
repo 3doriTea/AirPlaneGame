@@ -38,6 +38,7 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
+	return;
 	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
 	//DirectX::XMQuaternionBaryCentric

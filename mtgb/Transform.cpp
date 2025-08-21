@@ -19,7 +19,7 @@ void mtgb::Transform::Compute()
 	matrixRotate_ = XMMatrixRotationQuaternion(rotate);
 	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
 
-	GenerateWorldMatrix(&matrixWorld_);           // ワールド行列更新
+	GenerateWorldMatrix(&matrixWorld_);             // ワールド行列更新
 	GenerateWorldRotationMatrix(&matrixWorldRot_);  // ワールド回転行列更新
 }
 
