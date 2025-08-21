@@ -74,6 +74,10 @@ namespace mtgb
 		/// </summary>
 		/// <returns>Transformのポインタ</returns>
 		Transform* GetParent() const;
+		/// <summary>
+		/// 親のTransformを設定
+		/// </summary>
+		/// <param name="_entityId">親にするエンティティ識別子</param>
 		void SetParent(const EntityId _entityId) { parent = _entityId; }
 
 		/// <summary>
