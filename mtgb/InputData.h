@@ -59,7 +59,16 @@ namespace mtgb
 		}
 
 		static const InputData& GetInput(WindowContext _context);
+	
+		static inline const int padXOR(const PadCode _padCode, const _XINPUT_STATE& _padStateCurrent, const _XINPUT_STATE& _padStatePrevious)
+		{
+			WORD buttonPrev = _padStatePrevious.Gamepad.wButtons; // 0000
+			WORD buttonCurr = _padStateCurrent.Gamepad.wButtons;  // 1000
+			WORD padCode    = static_cast<WORD>(_padCode);        // 0x08
+			return (buttonCurr & padCode) ^ (buttonPrev & padCode); // 1 ^ 0 = 1
+		}
 	};
+
 	class InputData final
 	{
 		friend Input;
