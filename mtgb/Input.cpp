@@ -213,3 +213,20 @@ void mtgb::Input::ChangeInputData(InputData* _pInputData)
 {
 	pInputData_ = _pInputData;
 }
+
+void mtgb::Input::CheckValidPadID()
+{
+	for (int i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		DWORD result = XInputGetState(i, &pInputData_->gamePadStateCurrent_[i]);
+
+		if (result == ERROR_SUCCESS)
+		{
+			pInputData_->activeGamePadID.insert(std::make_pair(PadIDState::UNASSIGNED, i));
+		}
+		else
+		{
+			pInputData_->activeGamePadID.insert(std::make_pair(PadIDState::INVALID, i));
+		}
+	}
+}

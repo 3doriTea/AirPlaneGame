@@ -1,14 +1,8 @@
 #pragma once
 #include "ISystem.h"
 #include "cmtgb.h"
-#include <dinput.h>
 #include <wrl/client.h> // 追加
-#include <Xinput.h>
-
-
-#pragma comment(lib, "dxguid.lib")
-#pragma comment(lib, "dInput8.lib")
-#pragma comment(lib, "xinput.lib")
+#include "IncludingInput.h"
 
 typedef struct HWND__* HWND;
 using Microsoft::WRL::ComPtr; // 追加
@@ -43,6 +37,10 @@ namespace mtgb
 		ComPtr<IDirectInput8>       pDirectInput_;  // Direct Input 本体
 		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
 		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
-		PXINPUT_STATE               pXInputData_;   // XInputデバイスの入力状態
+
+		/// <summary>
+		/// アクティブなコントローラのIDを調べる
+		/// </summary>
+		void CheckValidPadID();
 	};
 }
