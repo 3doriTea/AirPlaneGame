@@ -16,6 +16,7 @@ const bool mtgb::InputUtil::GetKey(const KeyCode _keyCode, WindowContext _contex
 
 	return GetInput(_context).keyStateCurrent_[Index(_keyCode)];
 }
+
 const bool mtgb::InputUtil::GetKeyDown(const KeyCode _keyCode, WindowContext _context)
 {
 	if (_context == WindowContext::Both)
@@ -30,6 +31,7 @@ const bool mtgb::InputUtil::GetKeyDown(const KeyCode _keyCode, WindowContext _co
 	const InputData& input = GetInput(_context);
 	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & static_cast<int>(input.keyStateCurrent_[Index(_keyCode)]));
 }
+
 const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _context)
 {
 	if (_context == WindowContext::Both)
@@ -44,30 +46,81 @@ const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _cont
 	const InputData& input = GetInput(_context);
 	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & input.keyStatePrevious_[Index(_keyCode)]);
 }
+
 const bool mtgb::InputUtil::GetMouse(const MouseCode _mouseCode, WindowContext _context)
 {
 	return false;
 }
+
 const bool mtgb::InputUtil::GetMouseDown(const MouseCode _mouseCode, WindowContext _context)
 {
 	return false;
 }
+
 const bool mtgb::InputUtil::GetMouseUp(const MouseCode _mouseCode, WindowContext _context)
 {
 	return false;
 }
-const bool mtgb::InputUtil::GetGamePad(const MouseCode _mouseCode, WindowContext _context)
+
+const bool mtgb::InputUtil::GetGamePad(const PadCode _padButtonCode, const size_t _padID, WindowContext _context)
 {
-	return false;
+
+	if (_context == WindowContext::Both)
+	{
+		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
+		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
+
+		// ? padIdをどうやって指定すればいいかわかんない。
+		// static変数で持てばいいのか？
+
+		// return inputFirstWnd.gamePadStateCurrent_[;
+	}
+
+	return GetInput(_context).gamePadStateCurrent_[_padID].Gamepad.wButtons & static_cast<WORD>(_padButtonCode);
 }
-const bool mtgb::InputUtil::GetGamePadDown(const MouseCode _mouseCode, WindowContext _context)
+
+const bool mtgb::InputUtil::GetGamePadDown(const PadCode _padButtonCode, const size_t _padID, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
+		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
+
+		// ? padIdをどうやって指定すればいいかわかんない。
+		// static変数で持てばいいのか？
+
+		// return inputFirstWnd.gamePadStateCurrent_[;
+	}
+
+	const InputData& input = GetInput(_context);
+	int padXor = padXOR(_padButtonCode, input.gamePadStateCurrent_[_padID], input.gamePadStatePrevious_[_padID]);
+	int buttonCurr = static_cast<int>(input.gamePadStateCurrent_[_padID].Gamepad.wButtons & static_cast<WORD>(_padButtonCode));
+	
+	return static_cast<bool>(padXor & buttonCurr);
 }
-const bool mtgb::InputUtil::GetGamePadUp(const MouseCode _mouseCode, WindowContext _context)
+
+const bool mtgb::InputUtil::GetGamePadUp(const PadCode _padButtonCode, const size_t _padID, WindowContext _context)
 {
-	return false;
+
+	if (_context == WindowContext::Both)
+	{
+		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
+		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
+
+		// ? padIdとWindowContextをどう結びつければいいかわかんない。
+		// inputdataに変数で持てばいいのか？
+		// GetContextPadIDを作って、引数でIDは渡さないようにすれば良い。
+		// DispatchPadID関数とか？
+
+
+		// return inputFirstWnd.gamePadStateCurrent_[;
+	}
+	const InputData& input = GetInput(_context);
+	int padXor = padXOR(_padButtonCode, input.gamePadStateCurrent_[_padID], input.gamePadStatePrevious_[_padID]);
+	int buttonPrev = static_cast<int>(input.gamePadStatePrevious_[_padID].Gamepad.wButtons & static_cast<WORD>(_padButtonCode));
+	return static_cast<bool>(padXor & buttonPrev);
 }
+
 const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 {
 	if (_context == WindowContext::Both)
@@ -95,7 +148,3 @@ const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)
 		static_cast<float>(InputUtil::GetInput(_context).mouseStateCurrent_.lZ),
 	};
 }
-
-
-
-
