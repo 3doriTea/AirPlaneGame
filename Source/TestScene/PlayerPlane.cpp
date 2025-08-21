@@ -22,25 +22,25 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
-	if (InputUtil::GetKey(KeyCode::Up))
+	//if (InputUtil::GetKey(KeyCode::Up))
 	{
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::Y, WindowContext::Second));
 	}
-	if (InputUtil::GetKey(KeyCode::Down))
+	//if (InputUtil::GetKey(KeyCode::Down))
 	{
 		//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * InputUtil::GetAxis(Axis::Y, WindowContext::Second));
 	}
-	if (InputUtil::GetKey(KeyCode::Left))
+	//if (InputUtil::GetKey(KeyCode::Left))
 	{
 		//pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
-	if (InputUtil::GetKey(KeyCode::Right))
+	//if (InputUtil::GetKey(KeyCode::Right))
 	{
 		//pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
 	pTransform_->rotate = curr;
 	pRB_->velocity_ = (pTransform_->Forward()) * 10.0f;
