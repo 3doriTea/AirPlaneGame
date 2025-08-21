@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "DoubleWindow.h"
 #include "InputResource.h"
+#include <algorithm>
 
 namespace
 {
@@ -17,8 +18,7 @@ mtgb::Input::Input() :
 	pInputData_  { nullptr },
 	pDirectInput_{ nullptr },
 	pKeyDevice_  { nullptr },
-	pMouseDevice_{ nullptr },
-	pXInputData_ { nullptr }
+	pMouseDevice_{ nullptr }
 {
 }
 
@@ -27,7 +27,6 @@ mtgb::Input::~Input()
 	pMouseDevice_.Reset();
 	pKeyDevice_.Reset();
 	pDirectInput_.Reset();
-	SAFE_DELETE(pXInputData_);
 }
 
 void mtgb::Input::Initialize()
@@ -48,46 +47,7 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	//#pragma region キーボード
-	//// キーデバイス作成
-	//hResult = pDirectInput_->CreateDevice(GUID_SysKeyboard, &pKeyDevice_, nullptr);
-
-	//massert(SUCCEEDED(hResult)  // キーボードデバイスの作成に成功
-	//	&& "キーボードデバイスの作成に失敗 @Input::Initialize");
-
-	//// キーボード用にフォーマット
-	//hResult = pKeyDevice_->SetDataFormat(&c_dfDIKeyboard);
-
-	//massert(SUCCEEDED(hResult)  // キーボードフォーマットに成功
-	//	&& "キーボードフォーマットに失敗 @Input::Initialize");
-
-	//// キーボードのアプリ間共有レベルを設定
-	////  REF: https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/ee417921(v=vs.85)
-	//hResult = pKeyDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-	//
-	//massert(SUCCEEDED(hResult)  // キーボードアプリ間共有レベル設定に成功
-	//	&& "キーボードアプリ間共有レベル設定に失敗 @Input::Initialize");
-	//#pragma endregion
-
-	//#pragma region マウス
-	//// マウスデバイス作成
-	//hResult = pDirectInput_->CreateDevice(GUID_SysMouse, &pMouseDevice_, nullptr);
-
-	//massert(SUCCEEDED(hResult)  // マウスデバイスの作成に成功
-	//	&& "マウスデバイスの作成に失敗 @Input::Initialize");
-
-	//// マウス用にフォーマット
-	//hResult = pMouseDevice_->SetDataFormat(&c_dfDIMouse);
-
-	//massert(SUCCEEDED(hResult)  // マウスフォーマットに成功
-	//	&& "マウスフォーマットに失敗 @Input::Initialize");
-
-	//// マウスのアプリ間共有レベルの設定
-	//hResult = pMouseDevice_->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
-
-	//massert(SUCCEEDED(hResult)  // マウスアプリ間共有レベル設定に成功
-	//	&& "マウスアプリ間共有レベル設定に失敗 @Input::Initialize");
-	//#pragma endregion
+	CheckValidPadID();
 }
 
 void mtgb::Input::Update()
@@ -141,6 +101,41 @@ void mtgb::Input::Update()
 
 	massert(SUCCEEDED(hResult)  // マウス操作の取得に成功
 		&& "マウス操作の取得に失敗 @Input::Update");
+#pragma endregion
+
+
+#pragma region ゲームパッド
+	// TODO: 関数化せよ！
+
+	// アクティブなコントローラがなければ、リターン。
+	{
+		bool IS_GAMEPAD_DETECTED = std::any_of(pInputData_->activeGamePadID.begin(),
+											   pInputData_->activeGamePadID.end(),
+											   [](int _id) { return _id != -1; });
+		if (not(IS_GAMEPAD_DETECTED))
+		{
+			CheckValidPadID();
+		}
+	}
+
+	// コントローラの割り当て
+	// 無効なIDであれば書き換え
+	// 割り当てたIDのキーをASSIGNEDにする
+	// 
+
+	for (int i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		// PreviousにCurrentの状態をコピー
+		memcpy(
+			&pInputData_->gamePadStatePrevious_[i],
+			&pInputData_->gamePadStateCurrent_[i],
+			sizeof(_XINPUT_STATE));
+
+		// 現在のコントローラーの状態を取得
+		XInputGetState(i, &pInputData_->gamePadStateCurrent_[i]); // ここでエラー処理!
+	}
+
+
 #pragma endregion
 }
 
