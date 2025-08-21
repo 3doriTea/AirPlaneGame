@@ -153,6 +153,23 @@ void mtgb::DirectWrite::CreateTextFormat(int size, IDWriteTextFormat** ppTextFor
 	outMetrics.textTopOffset = -outMetrics.ascentPx + (outMetrics.ascentPx - outMetrics.descentPx) - outMetrics.lineGapPx;
 }
 
+void mtgb::DirectWrite::SetTextAlignment(TextAlignment alignment, IDWriteTextFormat* format)
+{
+	switch (alignment)
+	{
+	case TextAlignment::topLeft:
+		format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		break;
+	case TextAlignment::center:
+		format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+		format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		break;
+	}
+}
+
+
+
 
 
 
@@ -161,16 +178,19 @@ void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, int size, IDWr
 {
 	//テキストレイアウト作成
 	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
+	CreateTextLayout(str, rtSize.width, rtSize.height, size, format, ppTextLayout);
+}
 
+void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, float width, float height, int size, IDWriteTextFormat* format, IDWriteTextLayout** ppTextLayout)
+{
 	static const float dip = 96.0f;
 	FLOAT dpiX, dpiY;
 	Game::System<Direct2D>().pDefRenderTarget_->GetDpi(&dpiX, &dpiY);
-	
-	rtSize.width = rtSize.width / dpiX * dip;
-	rtSize.height = rtSize.height / dpiY * dip;
 
-	//IDWriteTextLayout* layout;
-	HRESULT hResult = pDWriteFactory_->CreateTextLayout(str.data(), static_cast<uint32_t>(str.size()), format, rtSize.width, rtSize.height, ppTextLayout);
+	width = width / dpiX * dip;
+	height = height / dpiY * dip;
+
+	HRESULT hResult = pDWriteFactory_->CreateTextLayout(str.data(), static_cast<uint32_t>(str.size()), format, width, height, ppTextLayout);
 
 	massert(SUCCEEDED(hResult)
 		&& "CreateTextLayoutに失敗 @DirectWrite::RegisterText");
@@ -197,33 +217,11 @@ void mtgb::DirectWrite::Draw(IDWriteTextLayout* textLayout, float x, float y)
 
 void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y)
 {
-	/*D2D1_SIZE_F rtSize = mtgb::Direct2D::pDefRenderTarget_->GetSize();
-
-	mtgb::Direct2D::pDefRenderTarget_->BeginDraw();
-
-	mtgb::Direct2D::pDefRenderTarget_->DrawText(
-		text.c_str(),
-		static_cast<uint32_t>(text.length()),
-		pTextFormat_,
-		D2D1::RectF(x, y + pixelFontMetrics_.textTopOffset, rtSize.width, rtSize.height),
-		mtgb::Direct2D::pDefD2DBrush_
-	);
-
-	mtgb::Direct2D::pDefRenderTarget_->EndDraw();*/
 	ImmediateDraw(text, pTextFormat_, pixelFontMetrics_, x, y);
 }
 
-
-
-
-
-void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, int x, int y)
+void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y, float width, float height)
 {
-	
-	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
-
-	
-
 	Game::System<Direct2D>().pDefRenderTarget_->BeginDraw();
 
 	Game::System<Direct2D>().pDefRenderTarget_->DrawText(
@@ -231,13 +229,24 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text,IDWriteTextFormat
 		static_cast<uint32_t>(text.length()),
 		format,
 		D2D1::RectF(
-			static_cast<float>(x),
-			y + pixelFontMetrics.textTopOffset, rtSize.width, rtSize.height),
+			x,
+			y + pixelFontMetrics.textTopOffset,
+			x + width,
+			y + pixelFontMetrics.textTopOffset + height),
 		Game::System<Direct2D>().pDefD2DBrush_.Get()
 	);
 
 	Game::System<Direct2D>().pDefRenderTarget_->EndDraw();
 }
+
+void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y)
+{
+	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
+
+	ImmediateDraw(text, format, pixelFontMetrics, x, y, rtSize.width, rtSize.height);
+}
+
+
 
 void mtgb::DirectWrite::Release()
 {

@@ -6,8 +6,9 @@
 #include <tuple>
 #include <cmath>
 
+#include "RectInt.h"
 #include "ReleaseUtility.h"
-
+#include "TextAlignment.h"
 
 struct IDWriteFactory;
 struct IDWriteTextFormat;
@@ -48,11 +49,13 @@ namespace mtgb
 	{
 		std::wstring str;
 		int fontSize;
+		float width, height;
+
 		IDWriteTextLayout* layout;
 		int handle;
 		
-		TextLayoutData(const std::wstring& text, int size, IDWriteTextLayout* lay, int h)
-			: str(text), fontSize(size), layout(lay), handle(h) {}
+		TextLayoutData(const std::wstring& text, int size,float width,float height, IDWriteTextLayout* lay, int h)
+			: str(text), fontSize(size), width(width),height(height), layout(lay), handle(h) { }
 		
 		~TextLayoutData();
 	};
@@ -90,6 +93,8 @@ namespace mtgb
 		//void Draw(int handle, float x, float y);
 
 		void Draw(IDWriteTextLayout* textLayout, float x, float y);
+
+
 		/// <summary>
 		/// 即時描画
 		/// 文字列だけが頻繁に変化する場合に適している
@@ -102,8 +107,10 @@ namespace mtgb
 
 		
 		//void ImmediateDraw(const std::string& text, float x, float y, int size);
+		void ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x,float y,float width,float height);
 
-		void ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, int x, int y);
+		void ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y);
+		
 		/// <summary>
 		/// デフォルトフォントサイズを変更
 		/// </summary>
@@ -126,6 +133,7 @@ namespace mtgb
 		/// <param name="format"></param>
 		/// <param name="ppTextLayout">作成されるIDWriteTextLayout</param>
 		void CreateTextLayout(const std::wstring& str, int size, IDWriteTextFormat* format,IDWriteTextLayout** ppTextLayout);
+		void CreateTextLayout(const std::wstring& str, float width, float height, int size, IDWriteTextFormat* format,IDWriteTextLayout** ppTextLayout);
 
 		
 
@@ -136,10 +144,10 @@ namespace mtgb
 		/// <param name="ppTextFormat">作成されるIDWriteTextFormat</param>
 		/// <param name="outMetrics">計算されるPixelFontMetrics</param>
 		void CreateTextFormat(int size, IDWriteTextFormat** ppTextFormat, PixelFontMetrics& outMetrics);
+
+		void SetTextAlignment(TextAlignment alignment, IDWriteTextFormat* format);
 	private:
-
 	
-
 		static DWRITE_FONT_METRICS fontMetrics_;
 		static PixelFontMetrics pixelFontMetrics_;
 		static IDWriteFactory* pDWriteFactory_;
@@ -148,8 +156,6 @@ namespace mtgb
 		static IDWriteFontCollection* pFontCollection_;
 		static IDWriteFontFamily* pFontFamily_;
 		static IDWriteFont* pDWriteFont_;
-		
-		
 		
 		//static int currentDefaultFontSize_; // 現在のデフォルトフォントサイズ
 	};

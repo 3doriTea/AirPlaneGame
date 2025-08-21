@@ -2,18 +2,17 @@
 #include "DirectX11Draw.h"
 #include "DirectWrite.h"
 #include "MTStringUtility.h"
-#include "DirectX11Draw.h"
-int mtgb::Text::currentDefaultFontSize_{ 72 };
-int mtgb::Text::nextHandle_{ 0 };
+#include <dwrite.h> 
+#include "Direct2D/Direct2D.h"
 const wchar_t* mtgb::Text::DEFAULT_FONT_FAMILY_NAME{ L"Noto Sans JP" };
-TextLayoutDatas* mtgb::Text::textLayoutDatas_{ nullptr };
-FontFormatDatas* mtgb::Text::fontFormatDatas_{ nullptr };
+
 
 namespace
 {
-	DirectWrite instance;
 }
 mtgb::Text::Text()
+	:nextHandle_{0}
+	,currentDefaultFontSize_{72}
 {
 	textLayoutDatas_ = new TextLayoutDatas();
 	fontFormatDatas_ = new FontFormatDatas();
@@ -25,8 +24,6 @@ mtgb::Text::~Text()
 
 void mtgb::Text::Initialize()
 {
-	instance= Game::System<DirectWrite>();
-	
 }
 
 void mtgb::Text::Release()
@@ -58,9 +55,20 @@ void mtgb::Text::Update()
 
 int mtgb::Text::Load(const std::string& str, int size)
 {
-	return GetOrCreateTextLayout(ToWString(str), size);
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), size);
 }
 
+int mtgb::Text::Load(const std::string& str, int fontSize, float layoutBoxWidth, float layoutBoxHeight)
+{
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize,layoutBoxWidth,layoutBoxHeight);
+}
+
+int mtgb::Text::Load(const std::string& str, int fontSize, Vector2Int layoutBoxSize)
+{
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize, layoutBoxSize.y, layoutBoxSize.x);
+}
+
+#if false
 void mtgb::Text::Draw(int handle, float x, float y)
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
@@ -74,19 +82,16 @@ void mtgb::Text::Draw(int handle, float x, float y)
 	// そのテキストレイアウトに対応するフォントサイズのメトリクスを取得
 	auto formatData = GetOrCreateTextFormat(entry->fontSize);
 	PixelFontMetrics metrics = formatData.second;
-
-	instance.Draw(entry->layout, x, y + metrics.textTopOffset);
+	
+	Game::System<DirectWrite>().SetTextAlignment(currentTextAlignment_, entry->layout);
+	Game::System<DirectWrite>().Draw(entry->layout, x, y + metrics.textTopOffset);
 }
 
 
 
 void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y, int size)
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
-	// 指定サイズのフォーマットを取得または作成
-	auto formatData = GetOrCreateTextFormat(size);	
-	
-	instance.ImmediateDraw(text,formatData.first,formatData.second, static_cast<int>(x), static_cast<int>(y));
+	D2D1_SIZE_F layoutBox = Game::System<Direct2D>().GetRenderTargetSize();
 }
 
 void mtgb::Text::ImmediateDraw(const std::string& text, float x, float y, int size)
@@ -94,29 +99,85 @@ void mtgb::Text::ImmediateDraw(const std::string& text, float x, float y, int si
 	ImmediateDraw(ToWString(text), x, y, size);
 }
 
-
-
-int mtgb::Text::GetOrCreateTextLayout(const std::wstring& text, int size)
+void mtgb::Text::ImmediateDraw(const std::string& text, RectInt rect, int size)
 {
-	// 文字列+サイズの複合キーで検索
-	auto& layout_index = textLayoutDatas_->get<text_layout_order>();
-	auto it = layout_index.find(std::make_tuple(text, size));
+}
 
-	if (it != layout_index.end())
+void mtgb::Text::ImmediateDraw(const std::string& text, float x, float y)
+{
+	ImmediateDraw(text, x, y, currentDefaultFontSize_);
+}
+
+void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y)
+{
+	ImmediateDraw(text, x, y, currentDefaultFontSize_);
+
+}
+
+void mtgb::Text::ImmediateDraw(const std::wstring& text, float x, float y, float width, float height, int size)
+{
+	// 指定サイズのフォーマットを取得または作成
+	auto formatData = GetOrCreateTextFormat(size);
+
+	Game::System<DirectWrite>().SetTextAlignment(currentTextAlignment_, formatData.first);
+	Game::System<DirectWrite>().ImmediateDraw(text, formatData.first, formatData.second, x, y, width,height);
+}
+
+void mtgb::Text::ChangeFontSize(int size)
+{
+	currentDefaultFontSize_ = size;
+	auto fontFormatData = GetOrCreateTextFormat(size);
+	Game::System<DirectWrite>().ChangeFormat(fontFormatData.first, fontFormatData.second);
+}
+
+void mtgb::Text::ChangeTextAlignment(TextAlignment alignment)
+{
+	currentTextAlignment_ = alignment;
+}
+
+#endif
+
+int mtgb::Text::GetOrCreateTextLayoutHandle(const std::wstring& text, int size)
+{
+	D2D1_SIZE_F layoutBoxSize = Game::System<Direct2D>().GetRenderTargetSize();
+	return GetOrCreateTextLayoutHandle(text, size, layoutBoxSize.width, layoutBoxSize.height);
+}
+
+int mtgb::Text::GetOrCreateTextLayoutHandle(const std::wstring& text, int size, float width, float height)
+{
+	// text + size の範囲を取得
+	auto& text_index = textLayoutDatas_->get<text_layout_order>();
+	auto range = text_index.equal_range(std::make_tuple(text, size));
+	for (auto it = range.first; it != range.second; ++it)
 	{
-		// 既に同一のテキスト+サイズがあるのでそのハンドルを返す
-		return (*it)->handle;
+		// width / height も一致するものを探す
+		TextLayoutData* data = *it;
+		if (data->width == width && data->height == height)
+		{
+			return data->handle; // 完全一致があれば再利用
+		}
 	}
 
+	// 新規作成する
 	auto formatData = GetOrCreateTextFormat(size);
 
 	IDWriteTextLayout* pTextLayout = nullptr;
-	instance.CreateTextLayout(text, size, formatData.first, &pTextLayout);
+	Game::System<DirectWrite>().CreateTextLayout(text, width, height, size, formatData.first, &pTextLayout);
 
 	int handle = ++nextHandle_;
-	TextLayoutData* layoutData = new TextLayoutData{ text,size,pTextLayout,handle};
+	TextLayoutData* layoutData = new TextLayoutData{ text,size, width,height,pTextLayout,handle };
 	textLayoutDatas_->insert(layoutData);
 	return handle;
+}
+
+TextLayoutData* mtgb::Text::GetTextLayoutData(int handle)
+{
+	auto& handle_index = textLayoutDatas_->get<handle_order>();
+	auto it = handle_index.find(handle);
+
+	if (it == handle_index.end()) return nullptr;
+
+	return *it;
 }
 
 std::pair<IDWriteTextFormat*, mtgb::PixelFontMetrics> mtgb::Text::GetOrCreateTextFormat(int size)
@@ -131,17 +192,12 @@ std::pair<IDWriteTextFormat*, mtgb::PixelFontMetrics> mtgb::Text::GetOrCreateTex
 	}
 
 	FontFormatData* fontFormatData = nullptr;
-	instance.CreateFontFormatData(DEFAULT_FONT_FAMILY_NAME, currentDefaultFontSize_, &fontFormatData);
+	Game::System<DirectWrite>().CreateFontFormatData(DEFAULT_FONT_FAMILY_NAME, size, &fontFormatData);
 
-	instance.ChangeFormat(fontFormatData->format, fontFormatData->pixelFontMetrics);
+	Game::System<DirectWrite>().ChangeFormat(fontFormatData->format, fontFormatData->pixelFontMetrics);
 	fontFormatDatas_->insert(fontFormatData);
 
 	return std::make_pair(fontFormatData->format, fontFormatData->pixelFontMetrics);
 }
 
-void mtgb::Text::ChangeFontSize(int size)
-{
-	currentDefaultFontSize_ = size;
-	auto fontFormatData = GetOrCreateTextFormat(size);
-	instance.ChangeFormat(fontFormatData.first,fontFormatData.second);
-}
+

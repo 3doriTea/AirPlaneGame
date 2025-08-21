@@ -100,3 +100,8 @@ void mtgb::Direct2D::Release()
 	pDefRenderTarget_.Reset();
 
 }
+
+D2D1_SIZE_F mtgb::Direct2D::GetRenderTargetSize()
+{
+	return pDefRenderTarget_->GetSize();
+}

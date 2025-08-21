@@ -3,6 +3,7 @@
 #include "cmtgb.h"
 #include <string>
 #include "DirectWrite.h"
+#include "TextAlignment.h"
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -21,20 +22,25 @@ struct text_layout_order {}; // 文字列+サイズをキーとするタグ
 struct handle_order {}; // ハンドルをキーとするタグ
 struct random {}; // 添え字でアクセスするタグ
 struct font_size_order {}; // フォントサイズをキーとするタグ
+struct layout_box_size_order {};// レイアウトボックスのサイズをキーとするタグ
 
 // テキストレイアウトの多重インデックスコンテナ
 using TextLayoutDatas = multi_index_container<
 	TextLayoutData*,
 	indexed_by<
-	// 文字列+サイズの複合キー
-	ordered_unique<tag<text_layout_order>,
-	composite_key<
-	TextLayoutData,
+	// 文字列+サイズの複合キー（複数のレイアウトボックスで同じ場合があるので non_unique）
+	ordered_non_unique<tag<text_layout_order>,
+	composite_key<TextLayoutData,
 	member<TextLayoutData, std::wstring, &TextLayoutData::str>,
-	member<TextLayoutData, int, &TextLayoutData::fontSize>
-	>
-	>,
-	// ハンドルをキー
+	member<TextLayoutData, int, &TextLayoutData::fontSize>>>,
+
+	// レイアウトボックスの幅+高さの複合キー（複数テキストで同じ場合があるので non_unique）
+	ordered_non_unique<tag<layout_box_size_order>,
+	composite_key<TextLayoutData,
+	member<TextLayoutData,float,&TextLayoutData::width>,
+	member<TextLayoutData, float, &TextLayoutData::height>>>,
+
+	// ハンドルをキーとする
 	ordered_unique<tag<handle_order>,
 	member<TextLayoutData, int, &TextLayoutData::handle>
 	>,
@@ -56,8 +62,12 @@ using FontFormatDatas = multi_index_container<
 
 namespace mtgb
 {
+
+	
+
 	class Text : public ISystem
 	{
+		friend class Draw;
 	public:
 		Text();
 		~Text();
@@ -66,22 +76,41 @@ namespace mtgb
 		void Update() override;
 
 		void Release();
+		
 		/// <summary>
-		/// テキストを読み込んでそのハンドルを返す
+		/// <para> テキストを読み込んでそのハンドルを返す </para>
+		/// <para> 文字列内容、サイズが変化しない場合に適している </para>
 		/// </summary>
-		/// <param name="str">読み込むテキスト</param>
-		/// <returns>描画時に渡すハンドル</returns>
-		//static int Load(const std::string& str);
-
-		/// <summary>
-		/// テキストを読み込んでそのハンドルを返す
-		/// サイズを指定しない場合デフォルト値に設定される
-		/// </summary>
-		/// <param name="str">文字列</param>
-		/// <param name="size">大きさ</param>
+		/// <param name="str">読み込む文字列</param>
+		/// <param name="size">テキストのフォントサイズ</param>
 		/// <returns></returns>
-		static int Load(const std::string& str, int size = currentDefaultFontSize_);
+		static int Load(const std::string& str, int size);
 
+		/// <summary>
+		/// <para> テキストを読み込んでそのハンドルを返す </para>
+		/// <para> 文字列内容、サイズが変化しない場合に適している </para>
+		/// <para> 描画される矩形領域の幅と高さを予め指定する</para>
+		/// </summary>
+		/// <param name="str">読み込む文字列</param>
+		/// <param name="fontSize">テキストのフォントサイズ</param>
+		/// <param name="layoutBoxWidth">矩形領域の幅</param>
+		/// <param name="layoutBoxHeight">矩形領域の高さ</param>
+		/// <returns></returns>
+		static int Load(const std::string& str, int fontSize, float layoutBoxWidth, float layoutBoxHeight);
+
+		/// <summary>
+		/// <para> テキストを読み込んでそのハンドルを返す </para>
+		/// <para> 文字列内容、サイズが変化しない場合に適している </para>
+		/// <para> 描画される矩形領域の幅と高さを予め指定する</para>
+		/// </summary>
+		/// <param name="str">読み込む文字列</param>
+		/// <param name="fontSize">テキストのフォントサイズ</param>
+		/// <param name="layoutBoxSize">矩形領域の幅、高さ</param>
+		/// <returns></returns>
+		static int Load(const std::string& str, int fontSize,Vector2Int layoutBoxSize);
+		
+
+#if false
 		/// <summary>
 		/// ハンドルに応じたテキストを描画
 		/// 完全に同じ文字列を描画し続ける場合に適している
@@ -98,10 +127,12 @@ namespace mtgb
 		/// <param name="text">描画するテキスト</param>
 		/// <param name="x">テキストの左端</param>
 		/// <param name="y">テキストの上端</param>
-		void ImmediateDraw(const std::string& text, float x, float y,int size = currentDefaultFontSize_);
+		void ImmediateDraw(const std::string& text, float x, float y);
+		void ImmediateDraw(const std::string& text, float x, float y,int size);
+		void ImmediateDraw(const std::string& text, RectInt rect,int size);
+
 
 		//void ImmediateDraw(const std::wstring& text, float x, float y);
-		//void ImmediateDraw(const std::string& text, float x, float y);
 
 		/// <summary>
 		/// サイズを指定して即時描画
@@ -111,13 +142,19 @@ namespace mtgb
 		/// <param name="x"></param>
 		/// <param name="y"></param>
 		/// <param name="size"></param>
-		void ImmediateDraw(const std::wstring& text, float x, float y,int size = currentDefaultFontSize_);
+		void ImmediateDraw(const std::wstring& text, float x, float y,int size);
+		void ImmediateDraw(const std::wstring& text, float x, float y);
+		void ImmediateDraw(const std::wstring& text, float x,float y,float width,float height,int size);
+
 
 		/// <summary>
 		/// 以降のデフォルトのフォントサイズを変更する
 		/// </summary>
 		/// <param name="size"></param>
 		void ChangeFontSize(int size);
+
+		void ChangeTextAlignment(TextAlignment alignment);
+#endif
 	private:
 
 		/// <summary>
@@ -126,25 +163,30 @@ namespace mtgb
 		/// <param name="text"></param>
 		/// <param name="size"></param>
 		/// <returns></returns>
-		static int GetOrCreateTextLayout(const std::wstring& text, int size);
+		int GetOrCreateTextLayoutHandle(const std::wstring& text, int size);
+		int GetOrCreateTextLayoutHandle(const std::wstring& text, int size,float width,float height);
+
+		TextLayoutData* GetTextLayoutData(int handle);
 
 		/// <summary>
 		/// 指定サイズのIDWriteTextFormatを取得または作成
 		/// </summary>
 		/// <param name="size">フォントサイズ</param>
 		/// <returns>IDWriteTextFormatとPixelFontMetricsのペア</returns>
-		static std::pair<IDWriteTextFormat*, PixelFontMetrics> GetOrCreateTextFormat(int size);
+		std::pair<IDWriteTextFormat*, PixelFontMetrics> GetOrCreateTextFormat(int size);
 
 		//現在のデフォルトのフォントサイズ
-		static int currentDefaultFontSize_;
+		int currentDefaultFontSize_;
+
+		TextAlignment currentTextAlignment_;
 
 		//デフォルトのフォントファミリー
 		const static wchar_t* DEFAULT_FONT_FAMILY_NAME;
 
-		static TextLayoutDatas* textLayoutDatas_; // テキストレイアウトのキャッシュ
-		static FontFormatDatas* fontFormatDatas_; // フォントフォーマットのキャッシュ
+		TextLayoutDatas* textLayoutDatas_; // テキストレイアウトのキャッシュ
+		FontFormatDatas* fontFormatDatas_; // フォントフォーマットのキャッシュ
 
-		static int nextHandle_; // 次に割り当てるハンドル番号
+		int nextHandle_; // 次に割り当てるハンドル番号
 		
 	};
 }

@@ -2,6 +2,11 @@
 
 using namespace mtgb;
 
+namespace
+{
+	TextHandle hText;
+}
+
 EnemyPlane::EnemyPlane(
 	const Vector3& _worldPosition,
 	const EntityId _playerPlane) : GameObject(GameObjectBuilder()
@@ -18,6 +23,8 @@ EnemyPlane::EnemyPlane(
 	pCollider_->sphere_.offset_ = Vector3::Zero();
 	pCollider_->sphere_.radius_ = 1.0f;
 	
+	
+	//hText = Text::Load("apple", 72);
 	hModel_ = Fbx::Load("Model/AirPlene.fbx");
 	massert(hModel_ >= 0 && "“G”òs‹@ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 
@@ -47,7 +54,7 @@ void EnemyPlane::Update()
 	
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
-	MTImGui::Instance().TypedShow(pTransform_, std::to_string(entityId_));
+	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
 }
 
@@ -56,5 +63,11 @@ void EnemyPlane::Draw() const
 	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
+	Vector2Int pos = InputUtil::GetMousePosition();
+	
+	/*Draw::ChangeTextAlignment(TextAlignment::center);
+	Draw::Text(hText, 0, 0);
+	Draw::ImmediateText("Banana", 0, 0, 72, TextAlignment::topLeft);*/
+	//Draw::ImmediateText("hello world",0,0);
 	//Game::System<ColliderCP>().TestDraw();
 }
