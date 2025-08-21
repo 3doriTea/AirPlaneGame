@@ -61,6 +61,12 @@ namespace mtgb
 		void SetParent(const EntityId _entityId) { parent = _entityId; }
 
 		void Rotation(const Vector3& _rotate);
+		/// <summary>
+		/// 軸ベクトルで回転する
+		/// </summary>
+		/// <param name="_axis">軸のベクトル</param>
+		/// <param name="_angle">回転角度(ラジアン)</param>
+		void Rotation(const Vector3& _axis, const float _angle);
 
 		Vector3 Up() const { return Vector3::Up() * matrixWorldRot_; }
 		Vector3 Down() const { return Vector3::Down() * matrixWorldRot_; }
@@ -70,6 +76,7 @@ namespace mtgb
 		Vector3 Forward() const;
 
 		Vector3 GetWorldPosition() const { return position * matrixWorld_; }
+		Quaternion GetWorldRotate() const;
 
 	//public:
 	//	Vector3 position{ Vector3::Zero() };          // ローカル座標

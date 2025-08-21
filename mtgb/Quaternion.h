@@ -96,7 +96,9 @@ namespace mtgb
 		std::string ToString() const;
 
 		inline Quaternion& operator*= (const Quaternion& _other) { *this = DirectX::XMQuaternionMultiply(*this, _other); return *this; };
-		inline Quaternion& operator+=(const Quaternion& _other) { f[0] += f[0]; f[1] += f[1]; f[2] += f[2]; f[3] += f[3]; return *this; }
-		inline Quaternion& operator-=(const Quaternion& _other) { f[0] -= f[0]; f[1] -= f[1]; f[2] -= f[2]; f[3] -= f[3]; return *this; }
+		//inline Quaternion& operator+=(const Quaternion& _other) { f[0] += f[0]; f[1] += f[1]; f[2] += f[2]; f[3] += f[3]; return *this; }
+		//inline Quaternion& operator-=(const Quaternion& _other) { f[0] -= f[0]; f[1] -= f[1]; f[2] -= f[2]; f[3] -= f[3]; return *this; }
 	};
+
+	inline Quaternion operator* (const Quaternion& _q1, const Quaternion& _q2) { return Quaternion{ _q1 } *= _q2; };
 }

@@ -64,7 +64,7 @@ void PlayerGunner::Update()
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	//if (InputUtil::GetMouseDown(MouseCode::Left))
 	{
-		Instantiate<PlayerBullet>(pTransform_->position + Vector3::Down() * 1.0f, pTransform_->rotate);
+		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		LOGIMGUI("Gunner:shoot");
 	}
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };

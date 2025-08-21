@@ -72,9 +72,24 @@ void mtgb::Transform::Rotation(const Vector3& _rotate)
 		XMQuaternionRotationRollPitchYaw(_rotate.x, _rotate.y, _rotate.z));
 }
 
+void mtgb::Transform::Rotation(const Vector3& _axis, const float _angle)
+{
+	using DirectX::XMQuaternionRotationAxis;
+
+	rotate *= XMQuaternionRotationAxis(_axis, _angle);
+}
+
 mtgb::Vector3 mtgb::Transform::Forward() const
 {
 	return Vector3::Forward() * matrixWorldRot_;
+}
+
+mtgb::Quaternion mtgb::Transform::GetWorldRotate() const
+{
+	using DirectX::XMQuaternionRotationMatrix;
+	using DirectX::XMQuaternionMultiply;
+
+	return XMQuaternionMultiply(rotate, XMQuaternionRotationMatrix(matrixWorldRot_));
 }
 
 void mtgb::Transform::GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const
