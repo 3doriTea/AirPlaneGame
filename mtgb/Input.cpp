@@ -95,8 +95,7 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	CheckValidPadID();
-
+	//CheckValidPadID();
 }
 
 void mtgb::Input::Update()
@@ -125,6 +124,10 @@ void mtgb::Input::Update()
 	{
 		EnumJoystick();
 	}
+
+#pragma region ゲームパッド
+	UpdateGamePadDevice();
+#pragma endregion
 }
 
 void mtgb::Input::UpdateKeyDevice()
@@ -182,41 +185,6 @@ void mtgb::Input::UpdateMouseDevice()
 		&& "マウス操作の取得に失敗 @Input::Update");
 
 #pragma endregion
-
-
-#pragma region ゲームパッド
-	// TODO: 関数化せよ！
-
-	// アクティブなコントローラがなければ、リターン。
-	{
-		bool IS_GAMEPAD_DETECTED = std::any_of(pInputData_->activeGamePadID.begin(),
-											   pInputData_->activeGamePadID.end(),
-											   [](std::pair<const PadIDState, int> _id) { return _id.second != -1; });
-		if (not(IS_GAMEPAD_DETECTED))
-		{
-			CheckValidPadID();
-		}
-	}
-
-	// コントローラの割り当て
-	// 無効なIDであれば書き換え
-	// 割り当てたIDのキーをASSIGNEDにする
-	// 
-
-	for (int i = 0; i < XUSER_MAX_COUNT; i++)
-	{
-		// PreviousにCurrentの状態をコピー
-		memcpy(
-			&pInputData_->gamePadStatePrevious_[i],
-			&pInputData_->gamePadStateCurrent_[i],
-			sizeof(_XINPUT_STATE));
-
-		// 現在のコントローラーの状態を取得
-		XInputGetState(i, &pInputData_->gamePadStateCurrent_[i]); // ここでエラー処理!
-	}
-
-
-#pragma endregion
 }
 
 void mtgb::Input::UpdateJoystickDevice()
@@ -252,6 +220,39 @@ void mtgb::Input::UpdateJoystickDevice()
 	}
 	/*massert(false
 		&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");*/
+	}
+}
+
+void mtgb::Input::UpdateGamePadDevice()
+{
+	// TODO: 関数化せよ！
+
+	// アクティブなコントローラがなければ、リターン。
+	{
+		bool IS_GAMEPAD_DETECTED = std::any_of(pInputData_->activeGamePadID.begin(),
+											   pInputData_->activeGamePadID.end(),
+											   [](std::pair<const PadIDState, int> _id) { return _id.second != -1; });
+		if (not(IS_GAMEPAD_DETECTED))
+		{
+			CheckValidPadID();
+		}
+	}
+
+	// コントローラの割り当て
+	// 無効なIDであれば書き換え
+	// 割り当てたIDのキーをASSIGNEDにする
+	// 
+
+	for (int i = 0; i < XUSER_MAX_COUNT; i++)
+	{
+		// PreviousにCurrentの状態をコピー
+		memcpy(
+			&pInputData_->gamePadStatePrevious_[i],
+			&pInputData_->gamePadStateCurrent_[i],
+			sizeof(_XINPUT_STATE));
+
+		// 現在のコントローラーの状態を取得
+		XInputGetState(i, &pInputData_->gamePadStateCurrent_[i]); // ここでエラー処理!
 	}
 }
 
