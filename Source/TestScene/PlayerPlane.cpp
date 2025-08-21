@@ -26,24 +26,28 @@ void PlayerPlane::Update()
 	{
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::Y, WindowContext::Second));
+		//curr *= XMQuaternionRotationAxis(Vector3::Right(), -ROT_ANGLE * InputUtil::GetAxis(Axis::Y, WindowContext::Second));
 	}
 	//if (InputUtil::GetKey(KeyCode::Down))
 	{
 		//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * InputUtil::GetAxis(Axis::Y, WindowContext::Second));
+		//curr *= XMQuaternionRotationAxis(Vector3::Right(), ROT_ANGLE * -InputUtil::GetAxis(Axis::Y, WindowContext::Second));
 	}
 	//if (InputUtil::GetKey(KeyCode::Left))
 	{
 		//pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		//curr *= XMQuaternionRotationAxis(Vector3::Up(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
 	//if (InputUtil::GetKey(KeyCode::Right))
 	{
 		//pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
 	pTransform_->rotate = curr;
-	pRB_->velocity_ = (pTransform_->Forward()) * 10.0f;
+	pRB_->velocity_ = (pTransform_->Forward()) * 3.0f;
 
 	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/
