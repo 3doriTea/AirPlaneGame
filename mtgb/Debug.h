@@ -94,7 +94,7 @@ namespace mtgb
 
 		::sprintf_s<BUFFER_SIZE>(buffer, _format, _args...);
 		
-		std::string msg = buffer;
+		std::string msg = mtgb::MultiToUTF8(buffer);
 		std::string key = Debug::MakeKey(object, _location.file_name(), _location.line(), _location.function_name(), msg);
 		key = mtgb::MultiToUTF8(key);
 		auto itr = logMap_.find(key);

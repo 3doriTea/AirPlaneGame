@@ -68,7 +68,8 @@ void PlayerGunner::Update()
 		LOGIMGUI("Gunner:shoot");
 	}
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
-	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
+	
+	MTImGui::Instance().TypedShow(pTransform_, "PlayerGunner");
 }
 
 void PlayerGunner::Draw() const

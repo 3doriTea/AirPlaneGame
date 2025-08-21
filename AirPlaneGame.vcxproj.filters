@@ -1191,6 +1191,15 @@
     <ClInclude Include="mtgb\Axis.h">
       <Filter>03mtgb\System\Input</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\InputPadCode.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CameraSystem.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\WorldToScreenData.h">
+      <Filter>03mtgb\System\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />

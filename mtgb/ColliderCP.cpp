@@ -5,6 +5,10 @@
 #include "Fbx.h"
 #include "Debug.h"
 
+#include "GameObject.h"
+#include "RectInt.h"
+#include "SceneSystem.h"
+#include "CameraSystem.h"
 
 mtgb::ColliderCP::ColliderCP()
 {
@@ -113,4 +117,27 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector
 		}
 	}
 	return nearestEntity;
+}
+
+void mtgb::ColliderCP::RectContains(const RectInt& _rect, const std::string& _name, std::vector<GameObject*>* _pRectContainsGameObject, WindowContext _context)
+{
+	_pRectContainsGameObject->clear();
+
+	std::vector<GameObject*> pFoundGameObjects;
+	Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, &pFoundGameObjects);
+	if (pFoundGameObjects.empty()) return;
+
+	CameraSystem& camSys = Game::System<CameraSystem>();
+	const WorldToScreenData& data = camSys.GetWorldToScreenData(_context);
+
+	for (auto& object : pFoundGameObjects)
+	{
+		Vector2Int screenPos = camSys.WorldToScreen(object->Component<Transform>()->position, data);
+		if (screenPos.x < 0 || screenPos.y < 0)
+			continue;
+		if (RectInt::Contains(screenPos, _rect))
+		{
+			_pRectContainsGameObject->push_back(object);
+		}
+	}
 }

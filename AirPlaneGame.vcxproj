@@ -205,6 +205,7 @@
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
+    <ClInclude Include="mtgb\WorldToScreenData.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />

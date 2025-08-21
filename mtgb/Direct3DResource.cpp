@@ -59,6 +59,11 @@ void mtgb::Direct3DResource::SetResource()
 	dx11Manager.ChangeRenderTargets(pRenderTargetView_, pDepthStencilView_);
 }
 
+const D3D11_VIEWPORT& mtgb::Direct3DResource::GetViewport()
+{
+	return viewPort_;
+}
+
 Direct3DResource* mtgb::Direct3DResource::Clone() const
 {
 	return new Direct3DResource(*this);

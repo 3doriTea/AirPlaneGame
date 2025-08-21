@@ -6,8 +6,11 @@
 #include <DirectXMath.h>
 
 #include "Debug.h"
-
-
+#include "WindowContextUtil.h"
+#include "Vector2Int.h"
+#include "Direct3DResource.h"
+#include "CameraResource.h"
+#include "MTImGui.h"
 namespace
 {
 	static const float DEFAULT_FOV{ 60.0f };  // デフォルトの視野角 (Field Of View)
@@ -20,7 +23,8 @@ mtgb::CameraSystem::CameraSystem() :
 	fov_{ DEFAULT_FOV },
 	near_{ DEFAULT_NEAR },
 	far_{ DEFAULT_FAR },
-	hCurrentCamera_{ INVALID_HANDLE }
+	hCurrentCamera_{ INVALID_HANDLE },
+	currentFrameId_{0}
 {
 }
 
@@ -34,6 +38,7 @@ void mtgb::CameraSystem::Initialize()
 
 void mtgb::CameraSystem::Update()
 {
+	currentFrameId_++;
 }
 
 mtgb::CameraHandleInScene mtgb::CameraSystem::RegisterDrawCamera(Transform* pCameraTransform_)
@@ -83,9 +88,55 @@ void mtgb::CameraSystem::UnregisterDrawCamera(const Transform* pCameraTransform_
 	}
 }
 
+
+mtgb::Vector2Int mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScreenData& _data) const
+{
+	Vector3 screenPos = DirectX::XMVector3Project(
+		_pos,
+		_data.viewport.TopLeftX,
+		_data.viewport.TopLeftY,
+		_data.viewport.Width,
+		_data.viewport.Height,
+		_data.viewport.MinDepth,
+		_data.viewport.MaxDepth,
+		_data.projMat,
+		_data.viewMat,
+		DirectX::XMMatrixIdentity());
+	
+	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
+		return Vector2Int(-1, -1);
+	return Vector2Int(screenPos.x, screenPos.y);
+}
+
+mtgb::Vector2Int mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _context)
+{
+	const D3D11_VIEWPORT& viewport = WinCtxRes::Get<Direct3DResource>(_context).GetViewport();
+	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_context).GetHCamera();
+
+	Matrix4x4 projMat,viewMat;
+	GetProjMatrix(&projMat);
+	GetViewMatrix(&viewMat,hCamera);
+
+	Vector3 screenPos = DirectX::XMVector3Project(
+		_pos,
+		viewport.TopLeftX,
+		viewport.TopLeftY,
+		viewport.Width,
+		viewport.Height,
+		viewport.MinDepth,
+		viewport.MaxDepth,
+		viewMat,
+		projMat,
+		DirectX::XMMatrixIdentity());
+	
+	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
+		return Vector2Int(-1, -1);
+	return Vector2Int(screenPos.x, screenPos.y);
+}
+
 const mtgb::Transform& mtgb::CameraSystem::GetTransform() const
 {
-	massert(0 <= hCurrentCamera_ && hCurrentCamera_ < pTransforms_.size()
+	/*massert(0 <= hCurrentCamera_ && hCurrentCamera_ < pTransforms_.size()
 		&& "カメラハンドルが無効です。");
 
 	Transform* pTransform{ pTransforms_[hCurrentCamera_] };
@@ -93,12 +144,31 @@ const mtgb::Transform& mtgb::CameraSystem::GetTransform() const
 	massert(pTransform != nullptr
 		&& "既に無効化されたカメラが参照されました。");
 
+	return *pTransform;*/
+	return GetTransform(hCurrentCamera_);
+}
+
+const mtgb::Transform& mtgb::CameraSystem::GetTransform(CameraHandleInScene _hCamera) const
+{
+	massert(0 <= _hCamera && _hCamera < pTransforms_.size()
+		&& "カメラハンドルが無効です。");
+
+	Transform* pTransform{ pTransforms_[_hCamera] };
+
+	massert(pTransform != nullptr
+	&& "既に無効化されたカメラが参照されました。");
+
 	return *pTransform;
 }
 
 void mtgb::CameraSystem::GetViewMatrix(Matrix4x4* _pView) const
 {
-	const Transform& cameraTransform{ GetTransform() };
+	GetViewMatrix(_pView,hCurrentCamera_);
+}
+
+void mtgb::CameraSystem::GetViewMatrix(Matrix4x4* _pView, CameraHandleInScene _hCamera) const
+{
+	const Transform& cameraTransform{ GetTransform(_hCamera) };
 
 	Vector4 vEyePt{ cameraTransform.GetWorldPosition() };  // カメラ（視点）位置
 	Vector4 vLookatPt{ cameraTransform.Forward() + vEyePt };  // 注視位置
@@ -121,6 +191,8 @@ void mtgb::CameraSystem::GetProjMatrix(Matrix4x4* _pProj) const
 		far_);
 }
 
+
+
 void mtgb::CameraSystem::GetPosition(Vector4* _pPosition) const
 {
 	*_pPosition = GetTransform().GetWorldPosition();
@@ -139,4 +211,33 @@ float mtgb::CameraSystem::GetFar() const
 float mtgb::CameraSystem::GetFov() const
 {
 	return fov_;
+}
+
+const mtgb::WorldToScreenData& mtgb::CameraSystem::GetWorldToScreenData(WindowContext _context)
+{
+	auto itr = worldToScreenDatas_.find(_context);
+
+	//新しく作成
+	if (itr == worldToScreenDatas_.end())
+	{
+		WorldToScreenData data;
+		CalculateWorldToScreenData(&data, _context);
+		//作成したものを返す
+		return worldToScreenDatas_.insert(std::make_pair(_context, data)).first->second;
+	}
+	if (currentFrameId_ != itr->second.frameId)
+	{
+		CalculateWorldToScreenData(&itr->second, itr->first);
+	}
+	
+	return itr->second;
+}
+
+void mtgb::CameraSystem::CalculateWorldToScreenData(WorldToScreenData* _data, WindowContext _context)
+{
+	_data->frameId = currentFrameId_;
+	_data->viewport = WinCtxRes::Get<Direct3DResource>(_context).GetViewport();
+
+	GetProjMatrix(&_data->projMat);
+	GetViewMatrix(&_data->viewMat,WinCtxRes::Get<CameraResource>(_context).GetHCamera());
 }
