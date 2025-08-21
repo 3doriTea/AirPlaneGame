@@ -102,7 +102,7 @@ void mtgb::CameraSystem::GetViewMatrix(Matrix4x4* _pView) const
 
 	Vector4 vEyePt{ cameraTransform.GetWorldPosition() };  // カメラ（視点）位置
 	Vector4 vLookatPt{ cameraTransform.Forward() + vEyePt };  // 注視位置
-	Vector4 vUpVec{ Vector3::Up() };  // 上方位置
+	Vector4 vUpVec{ cameraTransform.Up() };  // 上方位置
 
 	*_pView = XMMatrixLookAtLH(vEyePt, vLookatPt, vUpVec);
 }
