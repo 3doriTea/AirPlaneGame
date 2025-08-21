@@ -31,5 +31,11 @@ namespace mtgb
 			Vector4{ 0.0f, 0.0f, 0.0f, 0.0f }
 		{
 		}
+
+		static inline auto Zero() { return Vector4{ 0,  0,  0,  0 }; }
+		static inline auto One()  { return Vector4{ 1,  1,  1,  1 }; }
+
+		inline Vector4& operator+=(const Vector3& _other) { f[0] += _other.x; f[1] += _other.y; f[2] += _other.z; return *this; }
+		inline Vector4& operator-=(const Vector3& _other) { f[0] -= _other.x; f[1] -= _other.y; f[2] -= _other.z; return *this; }
 	};
 }

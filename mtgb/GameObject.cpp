@@ -10,13 +10,14 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 		.isActive_ = _desc.isActive,
 		.callUpdate_ = _desc.callUpdate,
 		.callDraw_ = _desc.callDraw,
-		.toDestory_ = FALSE,  // ç≈èâÇÕçÌèúÇµÇ»Ç¢
-	}
+		.toDestroy_ = FALSE,  // ç≈èâÇÕçÌèúÇµÇ»Ç¢
+	},
+	layerFlag_{ _desc.layerFlag }
 {
 	Transform* pTransform_{ Component<Transform>() };
-	pTransform_->position_ = _desc.position;
-	pTransform_->rotate_ = _desc.rotate;
-	pTransform_->scale_ = _desc.scale;
+	pTransform_->position = _desc.position;
+	pTransform_->rotate = _desc.rotate;
+	pTransform_->scale = _desc.scale;
 }
 
 mtgb::GameObject::GameObject(const GameObject& _other)
@@ -33,4 +34,14 @@ mtgb::GameObject::~GameObject()
 mtgb::GameObject* mtgb::GameObject::FindGameObject(const std::string& _name)
 {
 	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_name);
+}
+
+void mtgb::GameObject::FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects)
+{
+	mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, _pFoundGameObjects);
+}
+
+mtgb::GameObject* mtgb::GameObject::FindGameObject(const EntityId _entityId)
+{
+	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_entityId);
 }

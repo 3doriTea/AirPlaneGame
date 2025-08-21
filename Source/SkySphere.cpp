@@ -22,7 +22,7 @@ SkySphere::SkySphere() : GameObject(GameObjectBuilder()
 		.Build()),
 	pTransform_{ Component<Transform>() }
 {
-	pTransform_->rotate_ = Quaternion(DirectX::XMConvertToRadians(-90), 0, 0, 0);
+	pTransform_->rotate = Quaternion(DirectX::XMConvertToRadians(-90), 0, 0, 0);
 	hModel_ = Fbx::Load("Model/sky_sphere.fbx");
 }
 
@@ -42,5 +42,6 @@ void SkySphere::Update()
 
 void SkySphere::Draw() const
 {
+	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 }

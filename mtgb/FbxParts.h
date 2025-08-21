@@ -86,6 +86,8 @@ namespace mtgb
 		FbxParts(FbxNode* _parent);
 		~FbxParts();
 
+		FbxNode* GetNode() const { return pNode_; }
+
 		void Initialize() override;
 		void Release() override;
 

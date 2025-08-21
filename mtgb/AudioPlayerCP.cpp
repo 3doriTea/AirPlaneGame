@@ -9,10 +9,6 @@ mtgb::AudioPlayerCP::~AudioPlayerCP()
 {
 }
 
-void mtgb::AudioPlayerCP::Initialize()
-{
-}
-
 void mtgb::AudioPlayerCP::Update()
 {
 }

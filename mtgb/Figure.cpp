@@ -25,7 +25,6 @@ void mtgb::Figure::Draw(
 	using DirectX::XMMatrixIdentity;     // 単位行列
 
 	DirectX11Draw::SetBlendMode(BlendMode::Default);  // ブレンドモードデフォルト
-	DirectX11Draw::SetShader(ShaderType::Figure);     // 図形シェーダ
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);    // 深度バッファへの書き込みなし
 
 	IShader::Draw<ConstantBuffer, Vertex>(

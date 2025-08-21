@@ -24,24 +24,23 @@ Camera::~Camera()
 
 void Camera::Update()
 {
-	LOGF("%s\n", this->GetName());
 	const float MOVE{ MOVE_SPEED * Time::DeltaTimeF() };
 	
 		if (InputUtil::GetKey(KeyCode::Up, context_))
 		{
-			pTransform_->position_.z += MOVE;
+			pTransform_->position.z += MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Down, context_))
 		{
-			pTransform_->position_.z -= MOVE;
+			pTransform_->position.z -= MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Left, context_))
 		{
-			pTransform_->position_.x -= MOVE;
+			pTransform_->position.x -= MOVE;
 		}
 		if (InputUtil::GetKey(KeyCode::Right, context_))
 		{
-			pTransform_->position_.x += MOVE;
+			pTransform_->position.x += MOVE;
 		}
 }
 

@@ -16,4 +16,6 @@ namespace mtgb
 		Both,
 		None
 	};
+	WindowContext CurrContext();
+	
 }

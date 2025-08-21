@@ -2,6 +2,8 @@
 #include <string>
 #include "Vector3.h"
 #include "Quaternion.h"
+#include "GameObjectLayer.h"
+
 
 namespace mtgb
 {
@@ -15,10 +17,11 @@ namespace mtgb
 		Vector3 position{ Vector3::Zero() };
 		Vector3 scale{ Vector3::One() };
 		Quaternion rotate{ Quaternion::Identity() };
+		GameObjectLayerFlag layerFlag{ GameObjectLayerFlag::New().BeginEdit().OnAll().EndEdit() };
 		bool isActive{ true };
 		bool callUpdate{ true };
 		bool callDraw{ true };
-		// padding 13byte
+		// padding 10byte
 	};
 
 	// MEMO: 構造体のそのまま初期化では、順番が固定されているが、
@@ -40,13 +43,14 @@ namespace mtgb
 		~GameObjectBuilder()
 		{}
 
-		GameObjectBuilder& SetName(const std::string& _name)     { desc_.name = _name;             return *this; }
-		GameObjectBuilder& SetPosition(const Vector3& _position) { desc_.position = _position;     return *this; }
-		GameObjectBuilder& SetRotate(const Quaternion& _rotate)  { desc_.rotate = _rotate;         return *this; }
-		GameObjectBuilder& SetScale(const Vector3& _scale)       { desc_.scale = _scale;           return *this; }
-		GameObjectBuilder& SetIsActive(const bool _isActive)     { desc_.isActive = _isActive;     return *this; }
-		GameObjectBuilder& SetCallUpdate(const bool _callUpdate) { desc_.callUpdate = _callUpdate; return *this; }
-		GameObjectBuilder& SetCallDraw(const bool _callDraw)     { desc_.callDraw = _callDraw;     return *this; }
+		GameObjectBuilder& SetName(const std::string& _name)              { desc_.name = _name;             return *this; }
+		GameObjectBuilder& SetPosition(const Vector3& _position)          { desc_.position = _position;     return *this; }
+		GameObjectBuilder& SetRotate(const Quaternion& _rotate)           { desc_.rotate = _rotate;         return *this; }
+		GameObjectBuilder& SetScale(const Vector3& _scale)                { desc_.scale = _scale;           return *this; }
+		GameObjectBuilder& SetIsActive(const bool _isActive)              { desc_.isActive = _isActive;     return *this; }
+		GameObjectBuilder& SetCallUpdate(const bool _callUpdate)          { desc_.callUpdate = _callUpdate; return *this; }
+		GameObjectBuilder& SetCallDraw(const bool _callDraw)              { desc_.callDraw = _callDraw;     return *this; }
+		GameObjectBuilder& SetLayerFlag(const GameObjectLayerFlag& _flag) { desc_.layerFlag = _flag;        return *this; }
 
 		/// <summary>
 		/// 設定をビルドする

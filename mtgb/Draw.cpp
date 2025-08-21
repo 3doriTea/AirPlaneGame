@@ -1,27 +1,53 @@
 #include "Draw.h"
-#include "Figure.h"
 #include "ReleaseUtility.h"
 #include "Game.h"
 #include "Image.h"
 #include "Sprite.h"
 #include "OBJ.h"
 #include "Fbx.h"
+#include "FbxParts.h"
 #include "Text.h"
 #include "Model.h"
 #include "Transform.h"
 #include "CameraSystem.h"
 #include "DirectWrite.h"
+#include "MTAssert.h"
+#include "ImGuiRenderer.h"
+#include "MTStringUtility.h"
+#include <dwrite.h>
+#include "Ground.h"
+#include "Figure.h"
+
+
+void mtgb::Draw::CheckSetShader(const ShaderType _default)
+{
+	if (onceShaderType_ == ShaderType::Max)
+	{
+		// シェーダがセットされていないなら既定シェーダ
+		DirectX11Draw::SetShader(_default);
+	}
+	else
+	{
+		// シェーダがセットされているなら優先
+		DirectX11Draw::SetShader(onceShaderType_);
+		onceShaderType_ = ShaderType::Max;  // 一度使ったら外す
+	}
+}
 
 void mtgb::Draw::Box(
 	const Vector2Int& _begin,
 	const Vector2Int& _end,
 	const Color& _color)
 {
+	CheckSetShader(ShaderType::Figure);
+
 	Box(RectInt::FromLine(_begin, _end), _color);
 }
 
 void mtgb::Draw::Box(const RectInt& _rect, const Color& _color)
 {
+	CheckSetShader(ShaderType::Figure);
+
 	Game::System<Draw>().pFigure_->Draw(_rect, _color);
 }
 
@@ -31,6 +57,8 @@ void mtgb::Draw::Image(
 	const RectInt& _cut,
 	const float _rotationZ)
 {
+	CheckSetShader(ShaderType::Sprite2D);
+
 	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
 	pSprite->Draw(_draw, _rotationZ, _cut, Color::WHITE);
 }
@@ -39,6 +67,8 @@ void mtgb::Draw::Image(
 	const ImageHandle _hImage,
 	const Transform* _pTransform)
 {
+	CheckSetShader(ShaderType::Sprite2D);
+
 	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
 
 	const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
@@ -47,59 +77,121 @@ void mtgb::Draw::Image(
 
 void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
 {
+	// TODO: FbxとObjをモデルとしてハンドル含め統合、自動分岐する
+	massert(false && "Draw::Modelが呼ばれていますが未実装です。FbxとObjで別関数を呼んでください。 @Draw::Model");
 }
 
-void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin)
+void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin,TextAlignment alignment)
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
-
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);
-	Game::System<mtgb::Text>().Draw(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y));
+	Text(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y), alignment);
 }
 
-void mtgb::Draw::ImmediateText(const std::string& text, float x, float y)
+void mtgb::Draw::Text(const TextHandle _hText, float x, float y, TextAlignment alignment)
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
+	CheckSetShader(ShaderType::Sprite2D);
 
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+	TextLayoutData* layoutData =  Game::System<mtgb::Text>().GetTextLayoutData(_hText);
+	auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
 
-	Game::System<mtgb::Text>().ImmediateDraw(text, x, y);
+	Game::System<mtgb::DirectWrite>().SetTextAlignment(alignment, layoutData->layout);
+	Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, x, y + formatData.second.textTopOffset);
 }
 
-void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int size)
+void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int size, TextAlignment alignment)
+{
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	ImmediateText(text, x, y,static_cast<float>(layoutBoxSize.x),static_cast<float>(layoutBoxSize.y),size,alignment);
+}
+
+void mtgb::Draw::ImmediateText(const std::string& text, RectInt rect, int size, TextAlignment alignment)
+{
+	ImmediateText(text,
+		static_cast<float>(rect.x),
+		static_cast<float>(rect.y),
+		static_cast<float>(rect.width),
+		static_cast<float>(rect.height),
+		size,
+		alignment
+		);
+}
+
+void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, float width, float height, int size, TextAlignment alignment)
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);
-	DirectX11Draw::SetShader(ShaderType::Sprite2D);
+	CheckSetShader(ShaderType::Sprite2D);
 
-	Game::System<mtgb::Text>().ImmediateDraw(text, x, y, size);
+	auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(size);
+	Game::System<DirectWrite>().SetTextAlignment(alignment, formatData.first);
+	Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData.first, formatData.second, x, y, width,height);
+
+}
+
+void mtgb::Draw::ChangeFontSize(int size)
+{
+	currentDefaultFontSize_ = size;
+	auto fontFormatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(size);
+	Game::System<DirectWrite>().ChangeFormat(fontFormatData.first, fontFormatData.second);
+}
+
+void mtgb::Draw::ChangeTextAlignment(TextAlignment _alignment)
+{
+	currentDefaultTextAlignment_ = _alignment;
+}
+
+void mtgb::Draw::GroundPlane()
+{
+	DirectX11Draw::SetIsWriteToDepthBuffer(true);
+	CheckSetShader(ShaderType::Ground);
+
+	Game::System<Draw>().pGround_->Draw();
 }
 
 void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTransform)
 {
+	CheckSetShader(ShaderType::FbxParts);
+
 	Game::System<mtgb::OBJ>().Draw((int)_hOBJModel, _pTransform);
 }
 
 void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame)
 {
+	CheckSetShader(ShaderType::FbxParts);
+
 	Game::System<mtgb::Fbx>().Draw(_hFBXModel, _pTransform, _frame);
 }
 
 mtgb::Draw::Draw() :
-	pFigure_{ nullptr }
+	pFigure_{ nullptr },
+	pGround_{ nullptr },
+	pFbxModel_{ nullptr }
 {
 }
 
 mtgb::Draw::~Draw()
 {
 	SAFE_DELETE(pFigure_);
+	SAFE_RELEASE(pFbxModel_);
+	SAFE_DELETE(pGround_);
 }
 
 void mtgb::Draw::Initialize()
 {
 	pFigure_ = new Figure{};
 	pFigure_->Initialize();
+
+	pFbxModel_ = new FbxModel{};
+	pFbxModel_->Load("Model/GroundPlane.fbx");
+	FbxParts* pParts{ pFbxModel_->GetFbxParts(0) };
+
+	pGround_ = new Ground{ pParts->GetNode() };
+	pGround_->Initialize();
 }
 
 void mtgb::Draw::Update()
 {
 }
+
+ShaderType mtgb::Draw::onceShaderType_{ ShaderType::Max };
+int mtgb::Draw::currentDefaultFontSize_{ 36 };
+TextAlignment mtgb::Draw::currentDefaultTextAlignment_{ TextAlignment::center };

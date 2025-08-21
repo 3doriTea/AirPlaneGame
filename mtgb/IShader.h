@@ -54,7 +54,14 @@ namespace mtgb
 		template<typename ConstantBufferT, typename VertexT>
 		void Draw(
 			const std::function<void(ConstantBufferT* _pConstantBuffer)>& _makeConstantBufferCallback,
-			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback);
+			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback,
+			const int _drawIndexCount = 6);
+		template<typename ConstantBufferT, typename VertexT>
+		void Draw(
+			const std::function<void(VertexT* _pVertex)>& _makeVertexBufferCallback,
+			const std::function<void(ConstantBufferT* _pConstantBuffer)>& _makeConstantBufferCallback,
+			const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback,
+			const int _drawIndexCount = 6);
 
 		/// <summary>
 		/// カメラの座標系を取得
@@ -71,7 +78,8 @@ namespace mtgb
 	template<typename ConstantBufferT, typename VertexT>
 	inline void IShader::Draw(
 		const std::function<void(ConstantBufferT*)>& _makeConstantBufferCallback,
-		const std::function<void(ID3D11DeviceContext*)>& _contextSetterCallback)
+		const std::function<void(ID3D11DeviceContext*)>& _contextSetterCallback,
+		const int _drawIndexCount)
 	{
 		UINT stride{ 0U };
 		UINT offset{ 0U };
@@ -115,6 +123,82 @@ namespace mtgb
 
 		_contextSetterCallback(DirectX11Draw::pContext_.Get());
 
-		DirectX11Draw::pContext_->DrawIndexed(6, 0, 0);
+		DirectX11Draw::pContext_->DrawIndexed(_drawIndexCount, 0, 0);
+	}
+
+	template<typename ConstantBufferT, typename VertexT>
+	inline void IShader::Draw(
+		const std::function<void(VertexT* _pVertex)>& _makeVertexBufferCallback,
+		const std::function<void(ConstantBufferT* _pConstantBuffer)>& _makeConstantBufferCallback,
+		const std::function<void(ID3D11DeviceContext* _pContext)>& _contextSetterCallback,
+		const int _drawIndexCount)
+	{
+		UINT stride{ 0U };
+		UINT offset{ 0U };
+
+		stride = sizeof(VertexT);
+		offset = 0;
+		DirectX11Draw::pContext_->IASetVertexBuffers(0U, 1U, &pVertexBuffer_, &stride, &offset);  // 頂点バッファをセット
+		DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);  // インデックスバッファをセット
+		DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);  // 頂点シェーダのコンスタントバッファをセット
+		DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);  // ピクセルシェーダのコンスタントバッファをセット
+
+		ConstantBufferT constantBuffer{};
+
+		_makeConstantBufferCallback(&constantBuffer);
+
+		HRESULT hResult{};
+
+		// シェーダに渡すためのデータ
+		D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+
+		// GPUからのデータアクセスをせき止める
+		hResult = DirectX11Draw::pContext_->Map(
+			pConstantBuffer_,
+			NULL,
+			D3D11_MAP_WRITE_DISCARD,
+			NULL,
+			&mappedSubresource);
+
+		massert(SUCCEEDED(hResult)  // GPUデータアクセスせき止めに成功
+			&& "GPUデータアクセスせき止めに失敗");
+
+		// データ書き込み
+		memcpy_s(
+			mappedSubresource.pData,
+			mappedSubresource.RowPitch,
+			static_cast<void*>(&constantBuffer),
+			sizeof(ConstantBufferT));
+
+		// GPUデータアクセスせき止め解除
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+
+		// シェーダに渡すためのデータ
+		D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
+
+		// GPUからのデータアクセスをせき止める
+		hResult = DirectX11Draw::pContext_->Map(
+			pConstantBuffer_,
+			NULL,
+			D3D11_MAP_WRITE_DISCARD,
+			NULL,
+			&mappedSubresource);
+
+		massert(SUCCEEDED(hResult)  // GPUデータアクセスせき止めに成功
+			&& "GPUデータアクセスせき止めに失敗");
+
+		// データ書き込み
+		memcpy_s(
+			mappedSubresource.pData,
+			mappedSubresource.RowPitch,
+			static_cast<void*>(&constantBuffer),
+			sizeof(ConstantBufferT));
+
+		// GPUデータアクセスせき止め解除
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+
+		_contextSetterCallback(DirectX11Draw::pContext_.Get());
+
+		DirectX11Draw::pContext_->DrawIndexed(_drawIndexCount, 0, 0);
 	}
 }

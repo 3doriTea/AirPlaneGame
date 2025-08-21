@@ -48,6 +48,7 @@ mtgb::FbxParts::~FbxParts()
 
 void mtgb::FbxParts::Initialize()
 {
+	// MEMO: テクスチャUVが異なる頂点を分割&複製 → UV情報と頂点情報の一致調整
 	pMesh_->SplitPoints(FbxLayerElement::eTextureDiffuse);
 	//各情報の個数を取得
 	vertexCount_ = pMesh_->GetControlPointsCount();         // 頂点の数
@@ -96,7 +97,6 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	using namespace DirectX;
 
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
-	DirectX11Draw::SetShader(ShaderType::FbxParts);
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };
@@ -132,12 +132,12 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_matrixWorld = XMMatrixTranspose(mWorld);
 
 		XMMATRIX matRotate_, rotateX_, rotateY_, rotateZ_;
-		rotateX_ = XMMatrixRotationX(XMConvertToRadians(_transform.rotate_.f[0]));
-		rotateY_ = XMMatrixRotationY(XMConvertToRadians(_transform.rotate_.f[1]));
-		rotateZ_ = XMMatrixRotationZ(XMConvertToRadians(_transform.rotate_.f[2]));
+		rotateX_ = XMMatrixRotationX(XMConvertToRadians(_transform.rotate.f[0]));
+		rotateY_ = XMMatrixRotationY(XMConvertToRadians(_transform.rotate.f[1]));
+		rotateZ_ = XMMatrixRotationZ(XMConvertToRadians(_transform.rotate.f[2]));
 		matRotate_ = rotateZ_ * rotateY_ * rotateX_   ;
 		
-		XMMATRIX matScale_ = XMMatrixScaling(_transform.scale_.x, _transform.scale_.y, _transform.scale_.z);
+		XMMATRIX matScale_ = XMMatrixScaling(_transform.scale.x, _transform.scale.y, _transform.scale.z);
 
 		cb.g_matrixNormalTrans = XMMatrixTranspose(matRotate_ * XMMatrixInverse(nullptr, matScale_));
 		cb.g_ambient = pMaterial_[i].ambient;

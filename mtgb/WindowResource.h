@@ -6,8 +6,8 @@
 #include "MTAssert.h"
 #include "WindowContext.h"
 #include "WindowManager.h"
-#include "WindowContextResourceManager.h"
-#include <Windows.h>
+
+#include "includingWindows.h"
 
 #include <map>
 #include <typeindex>

@@ -26,6 +26,8 @@ namespace mtgb
 
 		virtual void Initialize() {}
 
+		const EntityId GetEntityId() const { return entityId_; }
+
 	private:
 		EntityId entityId_;
 	};

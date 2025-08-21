@@ -1,5 +1,6 @@
 #include "Direct3DResource.h"
 #include "ReleaseUtility.h"
+#include "Screen.h"
 using namespace mtgb;
 
 mtgb::Direct3DResource::Direct3DResource()
@@ -38,15 +39,17 @@ void mtgb::Direct3DResource::Initialize(WindowContext _windowContext)
 	pRenderTargetView_.Attach(pRawRenderTargetView);
 
 	// ビューポートを作成
-	dx11Manager.CreateViewport(viewPort_);
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	dx11Manager.CreateViewport(SCREEN_SIZE, viewPort_);
 
 	// 深度ステンシルと深度ステンシルビューを作成
 	ID3D11Texture2D* pRawDepthStencil = nullptr;
 	ID3D11DepthStencilView* pRawDepthStencilView = nullptr;
-	dx11Manager.CreateDepthStencilAndDepthStencilView(&pRawDepthStencil, &pRawDepthStencilView);
+
+	dx11Manager.CreateDepthStencilAndDepthStencilView(SCREEN_SIZE, &pRawDepthStencil, &pRawDepthStencilView);
 	pDepthStencil_.Attach(pRawDepthStencil);
 	pDepthStencilView_.Attach(pRawDepthStencilView);
-
+	
 }
 
 void mtgb::Direct3DResource::SetResource()

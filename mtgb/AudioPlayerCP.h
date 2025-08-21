@@ -8,7 +8,6 @@ namespace mtgb
 	class AudioPlayer;
 
 	class AudioPlayerCP :
-		public ISystem,
 		public ComponentPool<AudioPlayer>
 	{
 	public:
@@ -16,7 +15,6 @@ namespace mtgb
 		AudioPlayerCP(const AudioPlayerCP&) = default;
 		~AudioPlayerCP();
 
-		void Initialize() override;
 		void Update() override;
 	};
 }

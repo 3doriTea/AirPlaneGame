@@ -18,11 +18,10 @@ Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRb_{ Component<RigidBody>() }
 {
-	LOGF("(%f, %f, %f)\n", _position.x, _position.y, _position.z);
 	//hImage_ = Image::Load("Image/bullet.png");
 	hModel_ = Fbx::Load("Model/gCube.fbx");
 	pRb_->velocity_ = { 0, 0, 0 };
-	pTransform_->scale_ = Vector3(1.f, 1.f, 1.f);
+	pTransform_->scale = Vector3(1.f, 1.f, 1.f);
 }
 
 Bullet::~Bullet()
@@ -31,7 +30,6 @@ Bullet::~Bullet()
 
 void Bullet::Update()
 {
-	//LOGF("bullet‚¾‚æ imagehandle:%d\n", hImage_);
 	timer += 1;
 	if (timer >= 300)
 	{

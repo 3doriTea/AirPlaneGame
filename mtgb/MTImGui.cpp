@@ -1,99 +1,168 @@
 #include "MTImGui.h"
-#include "Game.h"
-#include "WindowContextResourceManager.h"
-#include "WindowContextUtil.h"
-#include "DirectX11Draw.h"
-mtgb::MTImGui::~MTImGui()
-{
-}
+#include "Transform.h"
+#include "Vector3.h"
+#include "ImGuiRenderer.h"
+#include "../ImGui/imgui.h"
+#include "../ImGui/ImGuizmo.h"
 
 void mtgb::MTImGui::Initialize()
 {
-	IMGUI_CHECKVERSION();
-
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO();(void)io;
-
-	io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;
-	io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
-
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-	//ImGui_ImplWin32_EnableDpiAwareness();
-	//float main_scale = ImGui_ImplWin32_GetDpiScaleForMonitor(::MonitorFromPoint(POINT{ 0, 0 }, MONITOR_DEFAULTTOPRIMARY));
-	//// Setup scaling
-	//ImGuiStyle& style = ImGui::GetStyle();
-	//style.ScaleAllSizes(main_scale);        // Bake a fixed style scale. (until we have a solution for dynamic style scaling, changing this requires resetting Style + calling this again)
-	//style.FontScaleDpi = main_scale;        // Set initial font scale. (using 
-
-	//io.ConfigDpiScaleFonts = true;
-	//io.ConfigDpiScaleViewports = true;
-	
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-
-	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-
-	
-	
-	ImGui_ImplWin32_Init(WinCtxRes::GetHWND(WindowContext::First));
-	ImGui_ImplDX11_Init(mtgb::DirectX11Draw::pDevice_.Get(), mtgb::DirectX11Draw::pContext_.Get());
+    SetupShowFunc();
 }
 
 void mtgb::MTImGui::Update()
 {
-	//EndFrame();
-	//BeginFrame();
-	//ImGui::ShowDemoWindow();
+    
+    updatingImGuiShowable_ = true;
+
+    //ImGui::BeginChild("left")
+    for (ImGuiShowable* obj : showableObjs_)
+    {
+        DirectShow([=]()
+            {
+                ImGui::PushID(obj);
+
+                obj->ShowImGui();
+
+                ImGui::PopID();
+
+            }, obj->displayName_, obj->show_);
+    }
+
+    updatingImGuiShowable_ = false;
+}
+void mtgb::MTImGui::SetupShowFunc()
+{
+    using RegisterShowFuncHolder::Set;
+
+    Set<Transform>([](Transform* _target, const char* _name)
+        {
+            TypeRegistry::Instance().CallFunc(&_target->position, "Position");
+            TypeRegistry::Instance().CallFunc(&_target->rotate, "Rotation");
+            TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
+        });
+}
+void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_start + _dir);
+
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+    }
+}
+void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float _thickness)
+{
+    std::optional<ImVec2> p1 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_from);
+    std::optional<ImVec2> p2 = Game::System<mtgb::ImGuiRenderer>().Manipulator().WorldToImGui(_to);
+
+    if (p1 && p2)
+    {
+        ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
+    }
+}
+void mtgb::MTImGui::ShowAll(ShowType show)
+{
+    if (show == ShowType::Inspector)
+    {
+        static std::string selectedName;
+        static std::function<void()> selectedFunc = nullptr;
+
+        bool isSelected = false;
+        ImGui::BeginChild("List", ImVec2(200, 0), true);
+        while (!inspectorShowList_.empty())
+        {
+            const std::string& name = inspectorShowList_.front().first;
+            auto& func = inspectorShowList_.front().second;
+
+            if (!isSelected)
+            {
+                isSelected = selectedName == name;
+            }
+
+            if (ImGui::Selectable(name.c_str(),selectedName == name))
+            {
+                isSelected = true;
+                selectedName = name;
+                selectedFunc = func;
+            }
+
+            inspectorShowList_.pop();
+        }
+        ImGui::EndChild();
+
+        ImGui::SameLine();
+
+        ImGui::BeginChild("property", ImVec2(0, 0), true);
+        if (selectedFunc && isSelected)
+        {
+            selectedFunc();
+        }
+        ImGui::EndChild();
+    }
+    else if (show == ShowType::SceneView)
+    {
+        while (!sceneViewShowList_.empty())
+        {
+            sceneViewShowList_.front()();
+            sceneViewShowList_.pop();
+        }
+    }
 }
 
-void mtgb::MTImGui::BeginFrame()
+void mtgb::MTImGui::Register(ImGuiShowable* obj)
 {
-	mtgb::DirectX11Draw::SetIsWriteToDepthBuffer(true);
-	ImGui::SetCurrentContext(ImGui::GetCurrentContext());
-	ImGui_ImplDX11_NewFrame();
-	ImGui_ImplWin32_NewFrame();
-	ImGui::NewFrame();
-	
-}
-void mtgb::MTImGui::Begin(std::string str)
-{
-	ImGui::Begin(str.c_str());
-}
-void mtgb::MTImGui::Draw()
-{
-
+    showableObjs_.push_back(obj);
 }
 
-void mtgb::MTImGui::EndFrame()
+void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 {
-	ImGui::Render();
-	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-	}
-	//BeginFrame()
-	
-	//EndDraw
-	//BeginDraw
-	//EndFrame
-	//BeginFrame()
+    auto it = std::find(showableObjs_.begin(), showableObjs_.end(), obj);
+    if (it != showableObjs_.end()) {
+        showableObjs_.erase(it);
+    }
 }
 
-void mtgb::MTImGui::End()
+void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
-	ImGui::End();
-}
-void mtgb::MTImGui::Release()
-{
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+    if (show == ShowType::Inspector)
+    {
+        inspectorShowList_.emplace(name,func);
+    }
+    else if (show == ShowType::SceneView)
+    {
+        sceneViewShowList_.push(func);
+    }
 }
 
+
+void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to, float _thickness)
+{
+    if (updatingImGuiShowable_)
+    {
+        DrawLineImpl(_from, _to, _thickness);
+    }
+    else
+    {
+        sceneViewShowList_.push([=]() {DrawLineImpl(_from, _to, _thickness); });
+    }
+}
+
+/// <summary>
+/// レイを表示
+/// </summary>
+/// <param name="_start">レイ始点</param>
+/// <param name="_dir">レイの向きと長さ</param>
+/// <param name="_thickness">レイの太さ</param>
+void mtgb::MTImGui::DrawRay(const Vector3& _start, const Vector3& _dir, float _thickness)
+{
+    if (updatingImGuiShowable_)
+    {
+        DrawRayImpl(_start, _dir, _thickness);
+    }
+    else
+    {
+        sceneViewShowList_.push([=]() {DrawRayImpl(_start, _dir, _thickness); });
+    }
+}

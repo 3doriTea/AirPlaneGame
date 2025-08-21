@@ -4,7 +4,7 @@
 class Enemy : public GameObject
 {
 public:
-	Enemy();
+	Enemy(const Vector3& _position);
 	~Enemy();
 
 	void Update() override;
@@ -15,5 +15,6 @@ private:
 	Transform* pTransform_;
 	//OBJModelHandle hModel_;
 	FBXModelHandle hModel_;
+	FBXModelHandle hModelCollider_;
 	float radius_;
 };

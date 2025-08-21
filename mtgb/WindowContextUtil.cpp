@@ -1,12 +1,13 @@
 #include "WindowContextUtil.h"
-
+#include "Game.h"
+#include "WindowResource.h"
 using namespace mtgb;
 
 /// <summary>
 /// 現在有効なウィンドウの識別子を返す
 /// </summary>
 /// <returns>現在のWindowContext</returns>
-WindowContext WinCtxRes::Current()
+WindowContext WinCtxRes::CurrContext()
 {
 	return Game::System<WinCtxResManager>().CurrCtx();
 }

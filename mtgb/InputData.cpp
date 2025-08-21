@@ -5,6 +5,7 @@
 #include "InputResource.h"
 #include "Game.h"
 #include "ISystem.h"
+#include "JoystickProxy.h"
 
 
 const bool mtgb::InputUtil::GetKey(const KeyCode _keyCode, WindowContext _context)
@@ -44,22 +45,39 @@ const bool mtgb::InputUtil::GetKeyUp(const KeyCode _keyCode, WindowContext _cont
 	}
 
 	const InputData& input = GetInput(_context);
-	return static_cast<bool>(KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & input.keyStatePrevious_[Index(_keyCode)]);
+	int result{ KeyXOR(_keyCode, input.keyStateCurrent_, input.keyStatePrevious_) & static_cast<int>(input.keyStatePrevious_[Index(_keyCode)]) };
+	return static_cast<bool>(result);
 }
 
 const bool mtgb::InputUtil::GetMouse(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+	//	return GetInput(WindowContext::First).mouseStateCurrent_.rgbButtons[static_cast<LONG>(_mouseCode)] || 
+		return GetMouse(_mouseCode, WindowContext::First) || GetMouse(_mouseCode, WindowContext::Second);
+	}
+	return GetInput(_context).mouseStateCurrent_.rgbButtons[Index(_mouseCode)] & 0x80;
 }
 
 const bool mtgb::InputUtil::GetMouseDown(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+		return GetMouseDown(_mouseCode, WindowContext::First) || GetMouseDown(_mouseCode, WindowContext::Second);
+	}
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(MouseXOR(_mouseCode, input.mouseStateCurrent_, input.mouseStatePrevious_) & static_cast<int>(input.mouseStateCurrent_.rgbButtons[Index(_mouseCode)]));
 }
 
 const bool mtgb::InputUtil::GetMouseUp(const MouseCode _mouseCode, WindowContext _context)
 {
-	return false;
+	if (_context == WindowContext::Both)
+	{
+		return GetMouseUp(_mouseCode, WindowContext::First) || GetMouseUp(_mouseCode, WindowContext::Second);
+	}
+
+	const InputData& input = GetInput(_context);
+	return static_cast<bool>(MouseXOR(_mouseCode, input.mouseStateCurrent_, input.mouseStatePrevious_) & static_cast<int>(input.mouseStatePrevious_.rgbButtons[Index(_mouseCode)]));
 }
 
 const bool mtgb::InputUtil::GetGamePad(const PadCode _padButtonCode, const size_t _padID, WindowContext _context)
@@ -70,8 +88,8 @@ const bool mtgb::InputUtil::GetGamePad(const PadCode _padButtonCode, const size_
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
 
-		// ? padId‚ğ‚Ç‚¤‚â‚Á‚Äw’è‚·‚ê‚Î‚¢‚¢‚©‚í‚©‚ñ‚È‚¢B
-		// static•Ï”‚Å‚Ä‚Î‚¢‚¢‚Ì‚©H
+		// ? padIdï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Äwï¿½è‚·ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
+		// staticï¿½Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
 	}
@@ -86,8 +104,8 @@ const bool mtgb::InputUtil::GetGamePadDown(const PadCode _padButtonCode, const s
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
 
-		// ? padId‚ğ‚Ç‚¤‚â‚Á‚Äw’è‚·‚ê‚Î‚¢‚¢‚©‚í‚©‚ñ‚È‚¢B
-		// static•Ï”‚Å‚Ä‚Î‚¢‚¢‚Ì‚©H
+		// ? padIdï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½Äwï¿½è‚·ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
+		// staticï¿½Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
 	}
@@ -107,10 +125,10 @@ const bool mtgb::InputUtil::GetGamePadUp(const PadCode _padButtonCode, const siz
 		const InputData& inputFirstWnd{ GetInput(WindowContext::First) };
 		const InputData& inputSecondWnd{ GetInput(WindowContext::Second) };
 
-		// ? padId‚ÆWindowContext‚ğ‚Ç‚¤Œ‹‚Ñ‚Â‚¯‚ê‚Î‚¢‚¢‚©‚í‚©‚ñ‚È‚¢B
-		// inputdata‚É•Ï”‚Å‚Ä‚Î‚¢‚¢‚Ì‚©H
-		// GetContextPadID‚ğì‚Á‚ÄAˆø”‚ÅID‚Í“n‚³‚È‚¢‚æ‚¤‚É‚·‚ê‚Î—Ç‚¢B
-		// DispatchPadIDŠÖ”‚Æ‚©H
+		// ? padIdï¿½ï¿½WindowContextï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Ñ‚Â‚ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½í‚©ï¿½ï¿½È‚ï¿½ï¿½B
+		// inputdataï¿½É•Ïï¿½ï¿½Åï¿½ï¿½Ä‚Î‚ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½H
+		// GetContextPadIDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÄAï¿½ï¿½ï¿½ï¿½ï¿½ï¿½IDï¿½Í“nï¿½ï¿½ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½Î—Ç‚ï¿½ï¿½B
+		// DispatchPadIDï¿½Öï¿½ï¿½Æ‚ï¿½ï¿½H
 
 
 		// return inputFirstWnd.gamePadStateCurrent_[;
@@ -132,11 +150,23 @@ const mtgb::InputData& mtgb::InputUtil::GetInput(WindowContext _context)
 
 
 
+const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context)
+{
+	const InputData& input = GetInput(_context);
+	float value = 0.0f;
+	switch (axis)
+	{
+	case Axis::X: value = input.joyStateCurrent_.lX / input.config_.xRange; break;
+	case Axis::Y: value = input.joyStateCurrent_.lY / input.config_.yRange; break;
+	case Axis::Z: value = input.joyStateCurrent_.lZ / input.config_.zRange; break;
+	default: return 0.0f;
+	}
+	return input.config_.ApplyDeadZone(value);
+}
+
 const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
 {
-	
 	return InputUtil::GetInput(_context).mousePosition_;
-	
 }
 
 const mtgb::Vector3 mtgb::InputUtil::GetMouseMove(WindowContext _context)

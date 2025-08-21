@@ -13,13 +13,14 @@
 
 #include "cmtgb.h"
 #include "WindowContext.h"
-
+#include "InputConfig.h"
 #include "Input.h"
-
+#include "Axis.h"
 
 typedef struct HWND__* HWND;
 namespace mtgb
 {
+	
 	class Input;
 	class InputUtil final
 	{
@@ -35,31 +36,49 @@ namespace mtgb
 		static const bool GetGamePadUp(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
 		//static inline const size_t* GetActiveGamePadID() { return activeGamepadID.data(); }
 
-		static const Vector2Int GetMousePosition(WindowContext _context);
-		static const Vector3 GetMouseMove(WindowContext _context);
+		static const float GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both);
+
+
+		static const Vector2Int GetMousePosition(WindowContext _context = mtgb::WindowContext::Both);
+		static const Vector3 GetMouseMove(WindowContext _context = mtgb::WindowContext::Both);
 
 	private:  // Utilities
-		static const size_t KEY_COUNT{ 256 };             // ƒL[‚Ì”
+		static const size_t KEY_COUNT{ 256 };             // ã‚­ãƒ¼ã®æ•°
 		/// <summary>
-		/// curr‚Æprev‚Ìxor‚ğæ“¾
+		/// currã¨prevã®xorã‚’å–å¾—
 		/// </summary>
-		/// <param name="_keyCode">ƒL[ƒR[ƒh</param>
-		/// <returns>0: ·–³‚µ, 1: ·—L‚è</returns>
+		/// <param name="_keyCode">ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰</param>
+		/// <returns>0: å·®ç„¡ã—, 1: å·®æœ‰ã‚Š</returns>
 		static inline const int KeyXOR(const KeyCode _keyCode,const std::bitset<KEY_COUNT>& _keyStateCurrent, const std::bitset<KEY_COUNT>& _keyStatePrevious)
 		{
 			return _keyStateCurrent[Index(_keyCode)] ^ _keyStatePrevious[Index(_keyCode)];
 		}
 		
+		static inline const int MouseXOR(const MouseCode _mouseCode, const _DIMOUSESTATE& _mouseStateCurrent, const _DIMOUSESTATE& _mouseStatePrevious)
+		{
+			return _mouseStateCurrent.rgbButtons[Index(_mouseCode)] ^ _mouseStatePrevious.rgbButtons[Index(_mouseCode)];
+		}
+
 		/// <summary>
-		/// ƒL[ƒR[ƒh\‘¢‘Ì—ñ‹“Œ^‚ğƒCƒ“ƒfƒbƒNƒX‚É•ÏŠ·
+		/// ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰æ§‹é€ ä½“åˆ—æŒ™å‹ã‚’ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«å¤‰æ›
 		/// </summary>
-		/// <param name="_keyCode">ƒL[ƒR[ƒh</param>
-		/// <returns>ƒL[”z—ñ‚ÌƒCƒ“ƒfƒbƒNƒX</returns>
+		/// <param name="_keyCode">ã‚­ãƒ¼ã‚³ãƒ¼ãƒ‰</param>
+		/// <returns>ã‚­ãƒ¼é…åˆ—ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹</returns>
 		static inline const size_t Index(const KeyCode _keyCode)
 		{
 			return static_cast<size_t>(_keyCode);
 		}
 
+		static inline const size_t Index(const MouseCode _moudeCode)
+		{
+			return static_cast<size_t>(_moudeCode);
+		}
+		/// <summary>
+		/// å…¥åŠ›çŠ¶æ…‹ã‚’å–å¾—
+		/// ã©ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§ã‚‚æ§‹ã‚ãªã„å ´åˆã¯WindowContext::Firstã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãŒå–å¾—ã•ã‚Œã‚‹
+		/// </summary>
+		/// <param name="_context">ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’æŒ‡å®š</param>
+		/// <returns></returns>
 		static const InputData& GetInput(WindowContext _context);
 	
 		static inline const int padXOR(const PadCode _padCode, const _XINPUT_STATE& _padStateCurrent, const _XINPUT_STATE& _padStatePrevious)
@@ -75,23 +94,31 @@ namespace mtgb
 	{
 		friend Input;
 		friend InputUtil;
+		friend class InputResource;
 	private:  // Data
-		static const size_t KEY_COUNT{ 256 };      // ƒL[‚Ì”
-		std::bitset<KEY_COUNT> keyStateCurrent_;   // ƒL[‚Ìó‘ÔŒ»İ
-		std::bitset<KEY_COUNT> keyStatePrevious_;  // ƒL[‚Ìó‘Ô‘O‰ñ
+		static const size_t KEY_COUNT{ 256 };      // ã‚­ãƒ¼ã®æ•°
+		std::bitset<KEY_COUNT> keyStateCurrent_;   // ã‚­ãƒ¼ã®çŠ¶æ…‹ç¾åœ¨
+		std::bitset<KEY_COUNT> keyStatePrevious_;  // ã‚­ãƒ¼ã®çŠ¶æ…‹å‰å›
+		
+		_DIMOUSESTATE mouseStateCurrent_;   // ãƒã‚¦ã‚¹ã®çŠ¶æ…‹ç¾åœ¨
+		_DIMOUSESTATE mouseStatePrevious_;  // ãƒã‚¦ã‚¹ã®çŠ¶æ…‹å‰å›
+		DIJOYSTATE joyStateCurrent_;		// ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®çŠ¶æ…‹ç¾åœ¨
+		DIJOYSTATE joyStatePrevious_;		// ã‚¸ãƒ§ã‚¤ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®çŠ¶æ…‹ç¾åœ¨
 
-		_DIMOUSESTATE mouseStateCurrent_;   // ƒ}ƒEƒX‚Ìó‘ÔŒ»İ
-		_DIMOUSESTATE mouseStatePrevious_;  // ƒ}ƒEƒX‚Ìó‘Ô‘O‰ñ
-		Vector2Int mousePosition_;          // ƒ}ƒEƒXƒJ[ƒ\ƒ‹‚ÌÀ•W
+		InputConfig config_;//å…¥åŠ›ã®å–ã‚Šæ–¹ã®è¨­å®š
 
-		static const size_t GAME_PAD_COUNT{ XUSER_MAX_COUNT };            // ƒQ[ƒ€ƒpƒbƒh‚ÌÅ‘åÚ‘±‰Â”\”
-		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStateCurrent_;   // ƒQ[ƒ€ƒpƒbƒh‚Ìó‘ÔŒ»İ
-		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStatePrevious_;  // ƒQ[ƒ€ƒpƒbƒh‚Ìó‘Ô‘O‰ñ
-		std::map<PadIDState ,int> activeGamePadID;                     // —LŒø‚ÈƒRƒ“ƒgƒ[ƒ‰‚ÌID(0~3‚ª“ü‚é)
-		int gamePadID;                                                    // ƒRƒ“ƒeƒLƒXƒg‚ÉŠ„‚è“–‚Ä‚ç‚ê‚½ƒRƒ“ƒgƒ[ƒ‰‚ÌID
+		Vector2Int mousePosition_;          // ãƒã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«ã®åº§æ¨™
+
+		static const size_t GAME_PAD_COUNT{ XUSER_MAX_COUNT };            // ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®æœ€å¤§æ¥ç¶šå¯èƒ½æ•°
+		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStateCurrent_;   // ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®çŠ¶æ…‹ç¾åœ¨
+		std::array<_XINPUT_STATE, GAME_PAD_COUNT> gamePadStatePrevious_;  // ã‚²ãƒ¼ãƒ ãƒ‘ãƒƒãƒ‰ã®çŠ¶æ…‹å‰å›
+		std::map<PadIDState ,int> activeGamePadID;                     // æœ‰åŠ¹ãªã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®ID(0~3ãŒå…¥ã‚‹)
+		int gamePadID;                                                    // ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã«å‰²ã‚Šå½“ã¦ã‚‰ã‚ŒãŸã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ©ã®ID
 	
 	public:
 		//InputData();
 		//~InputData();
 	};
+
+	
 }

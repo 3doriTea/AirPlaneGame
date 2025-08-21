@@ -10,6 +10,7 @@ mtgb::GameScene::GameScene()
 
 mtgb::GameScene::~GameScene()
 {
+	SAFE_CLEAR_CONTAINER_DELETE(pGameObjects_);
 }
 
 mtgb::CameraHandleInScene mtgb::GameScene::RegisterCameraGameObject(GameObject* _pGameObject) const
@@ -44,6 +45,33 @@ mtgb::GameObject* mtgb::GameScene::GetGameObject(std::string _name) const
 		}
 		return object;
 	}
+	return nullptr;
+}
+
+void mtgb::GameScene::GetGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects) const
+{
+	_pFoundGameObjects->clear();
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetName() != _name)
+		{
+			continue;
+		}
+		_pFoundGameObjects->push_back(object);
+	}
+}
+
+mtgb::GameObject* mtgb::GameScene::GetGameObject(const EntityId _entityId) const
+{
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetEntityId() != _entityId)
+		{
+			continue;
+		}
+		return object;
+	}
+
 	return nullptr;
 }
 

@@ -1,8 +1,7 @@
 #pragma once
 #include "WindowContextResourceManager.h"
-#include "WindowResource.h"
-
-
+#include "Game.h"
+#include "ISystem.h"
 namespace mtgb
 {
 	using WinCtxResManager = WindowContextResourceManager;
@@ -35,7 +34,7 @@ namespace mtgb
 		/// 現在有効なウィンドウの識別子を返す
 		/// </summary>
 		/// <returns>現在のWindowContext</returns>
-		WindowContext Current();
+		WindowContext CurrContext();
 
 		/// <summary>
 		/// そのウィンドウのHWNDを取得する

@@ -7,13 +7,12 @@ namespace mtgb
 {
 	class RigidBody;
 
-	class RigidBodyCP : public ISystem, public ComponentPool<RigidBody>
+	class RigidBodyCP : public ComponentPool<RigidBody>
 	{
 	public:
 		RigidBodyCP();
 		~RigidBodyCP();
 
-		void Initialize() override;
 		void Update() override;
 	};
 }

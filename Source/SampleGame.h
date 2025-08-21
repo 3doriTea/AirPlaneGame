@@ -10,7 +10,7 @@ public:
 private:
 	void SetupSystems(const RegisterSystemFuncHolder& _register) override;
 
-	inline std::string_view GetVarsion() const override
+	inline std::string_view GetVersion() const override
 	{
 		return "0.0.1";
 	};

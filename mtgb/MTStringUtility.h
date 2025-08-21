@@ -34,4 +34,13 @@ namespace mtgb
 	{
 		return { _stringView.begin(), _stringView.end() };
 	}
+
+	std::wstring MultiToWide(const std::string& _string);
+	std::string WideToMulti(const std::wstring& _wstring);
+
+	std::string MultiToUTF8(const std::string& _sjisStr);
+
+	std::wstring UTF8ToWide(const std::string& _string);
+	std::string WideToUTF8(const std::wstring& _wstring);
+	std::string UTF8ToMulti(const std::string& _utf8Str);
 }

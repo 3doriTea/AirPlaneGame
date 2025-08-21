@@ -19,8 +19,27 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ImGui\GraphEditor.cpp" />
+    <ClCompile Include="ImGui\ImCurveEdit.cpp" />
+    <ClCompile Include="ImGui\ImGradient.cpp" />
+    <ClCompile Include="ImGui\ImGuizmo.cpp" />
+    <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
+    <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
+    <ClCompile Include="mtgb\Collider.cpp" />
+    <ClCompile Include="mtgb\ColliderCP.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
+    <ClCompile Include="mtgb\Ground.cpp" />
+    <ClCompile Include="mtgb\ImGuiShowable.cpp" />
+    <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
+    <ClCompile Include="mtgb\InputConfig.cpp" />
+    <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\MTStringUtility.cpp" />
+    <ClCompile Include="mtgb\QuatToEuler.cpp" />
+    <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\TransformGuizmo.cpp" />
+    <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -70,7 +89,6 @@
     <ClCompile Include="mtgb\Input.cpp" />
     <ClCompile Include="mtgb\InputData.cpp" />
     <ClCompile Include="mtgb\InputResource.cpp" />
-    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\IShader.cpp" />
     <ClCompile Include="mtgb\ISystem.cpp" />
     <ClCompile Include="mtgb\MainWindow.cpp" />
@@ -78,7 +96,7 @@
     <ClCompile Include="mtgb\Model.cpp" />
     <ClCompile Include="mtgb\MTBin\MemoryStream.cpp" />
     <ClCompile Include="mtgb\mtgb.cpp" />
-    <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\ImGuiRenderer.cpp" />
     <ClCompile Include="mtgb\MTNet\BinaryReader.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -115,7 +133,7 @@
     <ClCompile Include="mtgb\Timer.cpp" />
     <ClCompile Include="mtgb\Transform.cpp" />
     <ClCompile Include="mtgb\TransformCP.cpp" />
-    <ClCompile Include="mtgb\TypeRegistry.cpp" />
+    <ClCompile Include="mtgb\Inspector.cpp" />
     <ClCompile Include="mtgb\Vector2.cpp" />
     <ClCompile Include="mtgb\Vector2Int.cpp" />
     <ClCompile Include="mtgb\Vector3.cpp" />
@@ -134,19 +152,59 @@
     </ClCompile>
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
-    <ClCompile Include="Source\registerRefl.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
     <ClCompile Include="Source\SampleGame.cpp" />
     <ClCompile Include="Source\SkySphere.cpp" />
+    <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
+    <ClCompile Include="Source\TestScene\Terrain.cpp" />
+    <ClCompile Include="Source\TestScene\UI\EventPopup.cpp" />
+    <ClCompile Include="Source\TestScene\UI\Radar.cpp" />
+    <ClCompile Include="Source\TestScene\UI\SpeedMeter.cpp" />
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
+    <ClCompile Include="Source\TestScene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />
+    <ClInclude Include="ImGui\GraphEditor.h" />
+    <ClInclude Include="ImGui\ImCurveEdit.h" />
+    <ClInclude Include="ImGui\ImGradient.h" />
+    <ClInclude Include="ImGui\ImGuizmo.h" />
+    <ClInclude Include="ImGui\ImSequencer.h" />
+    <ClInclude Include="ImGui\ImZoomSlider.h" />
+    <ClInclude Include="minimp3.h" />
+    <ClInclude Include="minimp3_ex.h" />
+    <ClInclude Include="mtgb\Axis.h" />
+    <ClInclude Include="mtgb\Collider.h" />
+    <ClInclude Include="mtgb\DefaultShow.h" />
+    <ClInclude Include="mtgb\Easing.h" />
     <ClInclude Include="mtgb\FbxModel.h" />
+    <ClInclude Include="mtgb\GameObjectLayer.h" />
+    <ClInclude Include="mtgb\Ground.h" />
+    <ClInclude Include="mtgb\ImGuiShowable.h" />
+    <ClInclude Include="mtgb\ImGuizmoManipulator.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
-    <ClInclude Include="mtgb\MTBit\BitFlag.h" />
+    <ClInclude Include="mtgb\InputConfig.h" />
+    <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\Mathf.h" />
+    <ClInclude Include="mtgb\Observer.h" />
+    <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\QuatToEuler.h" />
+    <ClInclude Include="mtgb\ReflectionInfo.h" />
+    <ClInclude Include="mtgb\RenderSystem.h" />
+    <ClInclude Include="mtgb\ShowAttributes.h" />
+    <ClInclude Include="mtgb\ShowFunc.h" />
+    <ClInclude Include="mtgb\ShowType.h" />
+    <ClInclude Include="mtgb\TextAlignment.h" />
+    <ClInclude Include="mtgb\TransformCore.h" />
+    <ClInclude Include="mtgb\TransformGuizmo.h" />
+    <ClInclude Include="mtgb\TypeRegistry.h" />
+    <ClInclude Include="mtgb\TypeRegistryImpl.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -205,7 +263,6 @@
     <ClInclude Include="mtgb\InputKeyCode.h" />
     <ClInclude Include="mtgb\InputMouseCode.h" />
     <ClInclude Include="mtgb\InputResource.h" />
-    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\IShader.h" />
     <ClInclude Include="mtgb\ISystem.h" />
     <ClInclude Include="mtgb\MainWindow.h" />
@@ -215,7 +272,7 @@
     <ClInclude Include="mtgb\MTBin\Common.h" />
     <ClInclude Include="mtgb\MTBin\MemoryStream.h" />
     <ClInclude Include="mtgb\mtgb.h" />
-    <ClInclude Include="mtgb\MTImGui.h" />
+    <ClInclude Include="mtgb\ImGuiRenderer.h" />
     <ClInclude Include="mtgb\MTNet\BinaryReader.h" />
     <ClInclude Include="mtgb\MTNet\BinaryWriter.h" />
     <ClInclude Include="mtgb\MTNet\Common.h" />
@@ -259,7 +316,7 @@
     <ClInclude Include="mtgb\Timer.h" />
     <ClInclude Include="mtgb\Transform.h" />
     <ClInclude Include="mtgb\TransformCP.h" />
-    <ClInclude Include="mtgb\TypeRegistry.h" />
+    <ClInclude Include="mtgb\Inspector.h" />
     <ClInclude Include="mtgb\Vector2.h" />
     <ClInclude Include="mtgb\Vector2Int.h" />
     <ClInclude Include="mtgb\Vector3.h" />
@@ -283,12 +340,24 @@
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
+    <ClInclude Include="mtgb\ShaderType.h" />
     <ClInclude Include="Source\SkySphere.h" />
+    <ClInclude Include="Source\TestScene\EnemyPlane.h" />
+    <ClInclude Include="Source\TestScene\PlayerBullet.h" />
+    <ClInclude Include="Source\TestScene\PlayerGunner.h" />
+    <ClInclude Include="Source\TestScene\PlayerPilot.h" />
+    <ClInclude Include="Source\TestScene\PlayerPlane.h" />
+    <ClInclude Include="Source\TestScene\Terrain.h" />
+    <ClInclude Include="Source\TestScene\UI\EventPopup.h" />
+    <ClInclude Include="Source\TestScene\UI\Radar.h" />
+    <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
+    <ClInclude Include="Source\TestScene\TestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
+    <None Include="mtgb\DefaultShow.inl" />
     <None Include="Other\History\log20250720.md">
       <SubType>
       </SubType>
@@ -297,6 +366,24 @@
     <None Include="通信体系.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shader\Debug3D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -312,10 +399,34 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\Ground.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\Sprite.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Unlit3D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -30,7 +30,7 @@ namespace mtgb
 			}
 			return *this;
 		}
-
+		
 		std::string ToString();
 	};
 }
