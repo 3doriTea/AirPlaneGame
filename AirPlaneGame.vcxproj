@@ -169,6 +169,8 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mtgb\InputPadCode.h" />
+    <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="ImGui\GraphEditor.h" />
     <ClInclude Include="ImGui\ImCurveEdit.h" />
     <ClInclude Include="ImGui\ImGradient.h" />
