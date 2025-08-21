@@ -28,10 +28,10 @@ namespace mtgb
 		static const bool GetMouse(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
 		static const bool GetMouseDown(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
 		static const bool GetMouseUp(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePad(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePadDown(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePadUp(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
-
+		static const bool GetGamePad(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadDown(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadUp(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
+		//static inline const size_t* GetActiveGamePadID() { return activeGamepadID.data(); }
 
 		static const Vector2Int GetMousePosition(WindowContext _context);
 		static const Vector3 GetMouseMove(WindowContext _context);
