@@ -12,18 +12,14 @@ void mtgb::Transform::Compute()
 {
 	using DirectX::XMMatrixTranslation;
 	using DirectX::XMMatrixRotationQuaternion;
+	using DirectX::XMQuaternionNormalize;
 	using DirectX::XMConvertToRadians;
 	using DirectX::XMMatrixScaling;
 
 	matrixTranslate_ = XMMatrixTranslation(position.x, position.y, position.z);
-	matrixRotate_ = XMMatrixRotationQuaternion(rotate);  // TODO: ここでマトリクススケールが-1になる
+	matrixRotate_ = XMMatrixRotationQuaternion(
+		XMQuaternionNormalize(rotate));  // TODO: ここでマトリクススケールが-1になる
 	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
-
-	if (matrixRotate_.r[0].m128_f32[0] < 0)
-	{
-		
-		printf("");
-	}
 
 	GenerateWorldMatrix(&matrixWorld_);             // ワールド行列更新
 	GenerateWorldRotationMatrix(&matrixWorldRot_);  // ワールド回転行列更新
@@ -94,8 +90,9 @@ mtgb::Quaternion mtgb::Transform::GetWorldRotate() const
 {
 	using DirectX::XMQuaternionRotationMatrix;
 	using DirectX::XMQuaternionMultiply;
+	using DirectX::XMQuaternionIdentity;
 
-	return XMQuaternionMultiply(rotate, XMQuaternionRotationMatrix(matrixWorldRot_));
+	return XMQuaternionMultiply(XMQuaternionRotationMatrix(matrixWorldRot_), XMQuaternionIdentity());
 }
 
 void mtgb::Transform::GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const
@@ -103,24 +100,24 @@ void mtgb::Transform::GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const
 	if (parent != INVALD_ENTITY)
 	{
 		GetParent()->GenerateWorldMatrixSelf(_pMatrix);
+		*_pMatrix = matrixScale_ * matrixRotate_ * matrixTranslate_ * (*_pMatrix);
 	}
-	*_pMatrix *= matrixScale_;
-	*_pMatrix *= matrixRotate_;
-	*_pMatrix *= matrixTranslate_;
-
-
-	if (_pMatrix->r[0].m128_f32[0] < 0)
+	else
 	{
-		printf("");
+		*_pMatrix = matrixScale_ * matrixRotate_ * matrixTranslate_;
 	}
-
 }
 
 void mtgb::Transform::GenerateWorldRotMatrixSelf(Matrix4x4* _pMatrix) const
 {
 	if (parent != INVALD_ENTITY)
 	{
-		GetParent()->GenerateWorldRotMatrixSelf(_pMatrix);
+		Matrix4x4 mWorldRotParent{};
+		GetParent()->GenerateWorldRotMatrixSelf(&mWorldRotParent);
+		*_pMatrix = matrixRotate_ * mWorldRotParent;
 	}
-	*_pMatrix *= matrixRotate_;
+	else
+	{
+		*_pMatrix = matrixRotate_;
+	}
 }

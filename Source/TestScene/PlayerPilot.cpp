@@ -70,6 +70,4 @@ void PlayerPilot::LockOnShoot()
 	Vector3 toTarget = Vector3::Normalize(targetPos - pTransform->position);
 	Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
 	Instantiate<PlayerBullet>(pTransform->position + Vector3::Forward() * 1.0f, shootDir);
-
-
 }

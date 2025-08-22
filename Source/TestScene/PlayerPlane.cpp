@@ -69,20 +69,8 @@ void PlayerPlane::Update()
 		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
 	}
 #endif
-
-	DirectX::XMVECTOR axis{};
-	float localZAngle{};
-
-
-	DirectX::XMQuaternionToAxisAngle(&axis, &localZAngle, pTransform_->rotate);
-
-
-	Vector3 eul{};
-	using namespace DirectX;
-
+	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ pTransform_->Forward() };
-	//XMQuaternionRotationRollPitchYaw(forward.x, forward.y, forward.z);
-
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
 	//curr = RemoveZRotation(curr);
@@ -93,11 +81,7 @@ void PlayerPlane::Update()
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
-	LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
-	if (DirectX::XMVector3Length(axis).__X > 0)
-	{
-		//pTransform_->rotate = DirectX::XMQuaternionRotationAxis(axis, 0.0f);
-	}
+	//LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
 
 	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/
