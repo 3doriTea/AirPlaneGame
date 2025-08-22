@@ -1,6 +1,7 @@
 #include "WindowContextUtil.h"
 #include "Game.h"
 #include "WindowResource.h"
+#include "Direct3DResource.h"
 using namespace mtgb;
 
 /// <summary>
@@ -21,6 +22,8 @@ HWND WinCtxRes::GetHWND(WindowContext ctx)
 {
 	return WinCtxRes::Get<WindowResource>(ctx).GetHWND();
 }
+
+
 
 void WinCtxRes::ChangeResource(WindowContext ctx)
 {

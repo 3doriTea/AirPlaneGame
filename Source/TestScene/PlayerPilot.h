@@ -11,5 +11,12 @@ public:
 	void Draw() const override;
 
 private:
-	Transform* pTransform_;
+	//ロックオンの正方形の一辺の長さ
+	int lockOnSide_;
+	Vector2Int rectCenter_;
+	RectInt lockOnRect_;
+	float rockOnDistance_;//前方幾つまでロックオン有効か
+	void LockOnShoot();
+	Transform* pTransform;
+	ImageHandle hImage_;
 };

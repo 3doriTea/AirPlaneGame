@@ -54,7 +54,7 @@ void mtgb::ImGuiRenderer::Initialize()
 	io.BackendFlags |= ImGuiBackendFlags_PlatformHasViewports;
 	io.BackendFlags |= ImGuiBackendFlags_RendererHasViewports;
 
-	//io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls

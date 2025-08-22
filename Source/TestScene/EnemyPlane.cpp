@@ -45,15 +45,15 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	return;
+	
 	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
 	//DirectX::XMQuaternionBaryCentric
-	Vector3 diffDir{ pTarget_->position - pTransform_->position };
-	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
-	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+	/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
+	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };*/
+	//pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
 	
-	pRB_->velocity_ = pTransform_->Forward() * speed_;
+	//pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
@@ -71,4 +71,5 @@ void EnemyPlane::Draw() const
 	Draw::ImmediateText("Banana", 0, 0, 72, TextAlignment::topLeft);*/
 	//Draw::ImmediateText("hello world",0,0);
 	//Game::System<ColliderCP>().TestDraw();
+	
 }

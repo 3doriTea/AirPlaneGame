@@ -3,21 +3,26 @@
 
 std::wstring mtgb::MultiToWide(const std::string& _string)
 {
+    return MultiToWide(_string.c_str());
+}
+
+std::wstring mtgb::MultiToWide(const char* _string)
+{
     int wlen = MultiByteToWideChar(
         CP_ACP,//変換に使用するコードページを指定(システムの既定コードページを使用)
         0,//変換の種類
-        _string.c_str(),//変換する文字列
+        _string,//変換する文字列
         -1,//文字列のサイズ。-1の場合終端のnull文字を含む文字列全体
         NULL, //変換された文字列を受け取る
         0);//文字列を受け取るバッファのサイズ,-1の場合文字列全体
 
     std::wstring wstr(wlen, L'\0');
     MultiByteToWideChar(
-        CP_ACP, 
-        0, 
-        _string.c_str(), 
-        -1, 
-        &wstr[0], 
+        CP_ACP,
+        0,
+        _string,
+        -1,
+        &wstr[0],
         wlen);
 
     return wstr;
@@ -25,10 +30,15 @@ std::wstring mtgb::MultiToWide(const std::string& _string)
 
 std::string mtgb::WideToMulti(const std::wstring& _wstring)
 {
+    return WideToMulti(_wstring.c_str());
+}
+
+std::string mtgb::WideToMulti(const wchar_t* _wstring)
+{
     int len = WideCharToMultiByte(
         CP_ACP,
         0,
-        _wstring.c_str(),
+        _wstring,
         -1,
         NULL,
         0,
@@ -40,7 +50,7 @@ std::string mtgb::WideToMulti(const std::wstring& _wstring)
     WideCharToMultiByte(
         CP_ACP,
         0,
-        _wstring.c_str(),
+        _wstring,
         -1,
         &str[0],
         len,
@@ -57,10 +67,15 @@ std::string mtgb::WideToMulti(const std::wstring& _wstring)
 
 std::wstring mtgb::UTF8ToWide(const std::string& _string)
 {
+    return UTF8ToWide(_string.c_str());
+}
+
+std::wstring mtgb::UTF8ToWide(const char* _string)
+{
     int wlen = MultiByteToWideChar(
         CP_UTF8,
         0,
-        _string.c_str(),
+        _string,
         -1,
         NULL,
         0);
@@ -69,25 +84,30 @@ std::wstring mtgb::UTF8ToWide(const std::string& _string)
     MultiByteToWideChar(
         CP_UTF8,
         0,
-        _string.c_str(),
+        _string,
         -1,
         &wstr[0],
         wlen);
-    
+
     return wstr;
 }
 
 std::string mtgb::WideToUTF8(const std::wstring& _wstring)
 {
+    return WideToUTF8(_wstring.c_str());
+}
+
+std::string mtgb::WideToUTF8(const wchar_t* _wstring)
+{
     //utf16→utf8
     int u8len = WideCharToMultiByte(
         CP_UTF8,
         0,
-        _wstring.c_str(),
+        _wstring,
         -1,
-        NULL, 
-        0, 
-        NULL, 
+        NULL,
+        0,
+        NULL,
         NULL);
 
     std::string utf8str(u8len, '\0');
@@ -95,13 +115,13 @@ std::string mtgb::WideToUTF8(const std::wstring& _wstring)
     WideCharToMultiByte(
         CP_UTF8,
         0,
-        _wstring.c_str(),//変換する文字列
+        _wstring,//変換する文字列
         -1,//文字列のサイズ。終端がnull文字の場合-1
         &utf8str[0],//変換された文字列を受け取る
         u8len, //文字列を受け取るバッファのサイズ
         NULL, //指定したコードページで表すことができない場合に使用する文字へのポインタ
         NULL);//表すことができずに既定の文字(?)を使用したかどうかを示すフラグへのポインタ
-    
+
     //末尾の'\0'を除去
     if (!utf8str.empty() && utf8str.back() == '\0')
     {
@@ -111,13 +131,23 @@ std::string mtgb::WideToUTF8(const std::wstring& _wstring)
     return utf8str;
 }
 
-std::string mtgb::MultiToUTF8(const std::string& _sjisStr)
+std::string mtgb::MultiToUTF8(const std::string& _string)
 {
     //Shitf-JIS → UTF-16 → UTF-8
-    return WideToUTF8(MultiToWide(_sjisStr));
+    return WideToUTF8(MultiToWide(_string));
 }
 
-std::string mtgb::UTF8ToMulti(const std::string& _utf8Str)
+std::string mtgb::MultiToUTF8(const char* _string)
 {
-    return WideToMulti(UTF8ToWide(_utf8Str));
+    return WideToUTF8(MultiToWide(_string));
+}
+
+std::string mtgb::UTF8ToMulti(const std::string& _string)
+{
+    return WideToMulti(UTF8ToWide(_string));
+}
+
+std::string mtgb::UTF8ToMulti(const char* _string)
+{
+    return WideToMulti(UTF8ToWide(_string));
 }

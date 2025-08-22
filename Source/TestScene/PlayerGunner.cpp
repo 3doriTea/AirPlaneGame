@@ -83,6 +83,8 @@ void PlayerGunner::Update()
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}
+	
+	MTImGui::Instance().TypedShow(pTransform_, "PlayerGunner");
 }
 
 void PlayerGunner::Draw() const

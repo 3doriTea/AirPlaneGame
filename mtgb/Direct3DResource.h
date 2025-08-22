@@ -18,6 +18,7 @@ namespace mtgb
 		Direct3DResource(const Direct3DResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
+		const D3D11_VIEWPORT& GetViewport();
 	private:
 		D3D11_VIEWPORT viewPort_;
 		

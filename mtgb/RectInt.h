@@ -125,5 +125,26 @@ namespace mtgb
 				_end - _begin
 			};
 		}
+
+		/// <summary>
+		/// <para> 点が矩形の範囲に含まれているか </para>
+		/// <para> 右端、下端は含まれない </para>
+		/// </summary>
+		/// <param name="_pos"></param>
+		/// <param name="_rect"></param>
+		/// <returns>矩形の範囲に含まれているなら true</returns>
+		static inline bool Contains(
+			const Vector2Int& _pos,
+			const RectInt& _rect)
+		{
+			Vector2Int begin = _rect.GetBegin();
+			Vector2Int end = _rect.GetEnd();
+			return (
+				_pos.x >= begin.x &&
+				_pos.y >= begin.y &&
+				_pos.x < end.x &&
+				_pos.y < end.y
+				);
+		}
 	};
 }

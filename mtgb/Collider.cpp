@@ -82,11 +82,6 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 
 bool mtgb::Collider::IsHit(const Vector3& _origin, const Vector3& _dir, float* dist)
 {
-
-	//TODO
-	//1 : Scene ViewでなくWindow1の画面で判定してしまっている
-	//2 : 球の中心座標(computeSphere_.Center)が3Dモデルの上にずれている?
-
 	using namespace DirectX;
 	// まずBoundingSphereを最新状態に更新
 	const_cast<Collider*>(this)->InitializeBoundingSphere();

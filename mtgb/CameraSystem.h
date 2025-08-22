@@ -4,7 +4,8 @@
 #include "Matrix4x4.h"
 #include "Handlers.h"
 #include "Vector4.h"
-
+#include "WorldToScreenData.h"
+#include "WindowContext.h"
 
 namespace mtgb
 {
@@ -49,19 +50,26 @@ namespace mtgb
 		/// <returns>ÉJÉÅÉâÇÃÉnÉìÉhÉã</returns>
 		const CameraHandleInScene GetDrawCamera() const { return hCurrentCamera_; }
 
-
+		mtgb::Vector2Int WorldToScreen(Vector3 _pos,const WorldToScreenData& _data) const;
+		mtgb::Vector2Int WorldToScreen(Vector3 _pos,WindowContext _context);
 		const Transform& GetTransform() const;
+		const Transform& GetTransform(CameraHandleInScene _hCamera) const;
 		void GetViewMatrix(Matrix4x4* _pView) const;
+		void GetViewMatrix(Matrix4x4* _pView, CameraHandleInScene _hCamera) const;
 		void GetProjMatrix(Matrix4x4* _pProj) const;
 		void GetPosition(Vector4* _pPosition) const;
 		float GetNear() const;
 		float GetFar() const;
 		float GetFov() const;
+		const WorldToScreenData& GetWorldToScreenData(WindowContext _context);
 	private:
+		void CalculateWorldToScreenData(WorldToScreenData* _data, WindowContext _context);
 		std::vector<Transform*> pTransforms_;
 		float fov_;
 		float near_;
 		float far_;
 		CameraHandleInScene hCurrentCamera_;
+		std::map<WindowContext, WorldToScreenData> worldToScreenDatas_;
+		uint64_t currentFrameId_;
 	};
 }

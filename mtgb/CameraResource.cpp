@@ -52,6 +52,11 @@ void mtgb::CameraResource::SetHCamera(CameraHandleInScene _hCamera)
     hCamera_ = _hCamera;
 }
 
+mtgb::CameraHandleInScene mtgb::CameraResource::GetHCamera()
+{
+    return hCamera_;
+}
+
 //void mtgb::CameraResource::SetCamera(GameObject* obj)
 //{
 //    pCamera_ = obj;

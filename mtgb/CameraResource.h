@@ -22,6 +22,7 @@ namespace mtgb
 		WindowContextResource* Clone() const override;
 
 		void SetHCamera(CameraHandleInScene _hCamera);
+		CameraHandleInScene GetHCamera();
 		//void SetCamera(GameObject* obj);
 	private:
 		//GameObject* pCamera_;

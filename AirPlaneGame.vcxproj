@@ -146,6 +146,7 @@
     <ClCompile Include="mtgb\World.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\EndScene.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Network\PIIO.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -205,6 +206,7 @@
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
+    <ClInclude Include="mtgb\WorldToScreenData.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -331,6 +333,7 @@
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\EndScene.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\JsonUtility.h" />
     <ClInclude Include="Source\Network\PIIO.h">

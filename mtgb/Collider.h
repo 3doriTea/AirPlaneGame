@@ -63,10 +63,10 @@ namespace mtgb
 		std::set<Collider*> onColliders_;
 
 	private:
-		//union
-		//{
+		union
+		{
 			DirectX::BoundingSphere computeSphere_;
-		//};
+		};
 
 		Transform* pTransform_;  // TODO: Šë‚È‚¢Transform
 

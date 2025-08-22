@@ -41,7 +41,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	>();
 
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
-	_register.Set<CameraSystem>(SystemUpdateType::DontCallMe);
+	_register.Set<CameraSystem>(SystemUpdateType::Frame);
 
 	
 
