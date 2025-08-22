@@ -63,6 +63,34 @@ void PlayerGunner::Update()
 			angleY_ += DirectX::XM_2PI;
 		}
 	}
+
+	using DirectX::XMQuaternionRotationAxis;
+
+	const float ROT_ANGLE{ Time::DeltaTimeF() };
+	Quaternion curr{ pTransform_->rotate };
+
+	if (InputUtil::GetKey(KeyCode::Up))
+	{
+		pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Down))
+	{
+		pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Left))
+	{
+		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Right))
+	{
+		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+	}
+
+
+	//curr = RemoveZRotation(curr);
+
+	pTransform_->rotate = curr;
+
 	//LOGF("ANGLE(%f, %f)\n", angleX_, angleY_);
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
@@ -74,7 +102,7 @@ void PlayerGunner::Update()
 	}
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	Vector3 parentWorldPos{ pTransform_->GetParent()->GetWorldPosition() };
-	LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
+	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
 
 	if (pRadarUI_)
 	{
