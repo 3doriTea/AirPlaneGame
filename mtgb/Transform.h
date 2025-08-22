@@ -127,7 +127,7 @@ namespace mtgb
 		/// ワールド座標を取得
 		/// </summary>
 		/// <returns>ワールド座標のベクトル</returns>
-		Vector3 GetWorldPosition() const { return position * matrixWorld_; }
+		Vector3 GetWorldPosition() const { return Vector3::Zero() * matrixWorld_; }
 		/// <summary>
 		/// ワールド回転を取得
 		/// </summary>
@@ -154,7 +154,7 @@ namespace mtgb
 		/// <param name="_pMatrix">行列のポインタ渡し</param>
 		void GenerateWorldRotMatrixSelf(Matrix4x4* _pMatrix) const;
 
-	private:
+	public://private:
 		Matrix4x4 matrixTranslate_{};         // 計算された移動行列
 		Matrix4x4 matrixRotate_{};            // 計算された回転行列
 		Matrix4x4 matrixScale_{};             // 計算された拡縮行列

@@ -70,7 +70,10 @@ void PlayerPlane::Update()
 	//curr = RemoveZRotation(curr);
 
 	pTransform_->rotate = curr;
-	pRB_->velocity_ = (pTransform_->Forward()) * 3.0f;
+	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
+
+	Vector3 worldPos{ pTransform_->GetWorldPosition() };
+	LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 
 	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/

@@ -101,7 +101,6 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 		ImGui::Text("Line: %d", it->line);
 		ImGui::Text("Function: %s", it->func.c_str());
 		ImGui::End();
-
 	}
 
 	imGui.End();

@@ -11,5 +11,5 @@ public:
 	void Draw() const override;
 
 private:
-	Transform* pTransform;
+	Transform* pTransform_;
 };
