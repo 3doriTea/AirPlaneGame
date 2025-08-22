@@ -12,10 +12,11 @@ public:
 
 private:
 	//ロックオンの正方形の一辺の長さ
-	int rockOnSide_;
+	int lockOnSide_;
 	Vector2Int rectCenter_;
-	RectInt rockOnRect_;
+	RectInt lockOnRect_;
 	float rockOnDistance_;//前方幾つまでロックオン有効か
 	void LockOnShoot();
 	Transform* pTransform;
+	ImageHandle hImage_;
 };
