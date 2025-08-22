@@ -16,8 +16,14 @@ void mtgb::Transform::Compute()
 	using DirectX::XMMatrixScaling;
 
 	matrixTranslate_ = XMMatrixTranslation(position.x, position.y, position.z);
-	matrixRotate_ = XMMatrixRotationQuaternion(rotate);
+	matrixRotate_ = XMMatrixRotationQuaternion(rotate);  // TODO: ここでマトリクススケールが-1になる
 	matrixScale_ = XMMatrixScaling(scale.x, scale.y, scale.z);
+
+	if (matrixRotate_.r[0].m128_f32[0] < 0)
+	{
+		
+		printf("");
+	}
 
 	GenerateWorldMatrix(&matrixWorld_);             // ワールド行列更新
 	GenerateWorldRotationMatrix(&matrixWorldRot_);  // ワールド回転行列更新
@@ -101,6 +107,13 @@ void mtgb::Transform::GenerateWorldMatrixSelf(Matrix4x4* _pMatrix) const
 	*_pMatrix *= matrixScale_;
 	*_pMatrix *= matrixRotate_;
 	*_pMatrix *= matrixTranslate_;
+
+
+	if (_pMatrix->r[0].m128_f32[0] < 0)
+	{
+		printf("");
+	}
+
 }
 
 void mtgb::Transform::GenerateWorldRotMatrixSelf(Matrix4x4* _pMatrix) const

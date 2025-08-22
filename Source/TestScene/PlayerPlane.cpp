@@ -2,6 +2,10 @@
 
 using namespace mtgb;
 
+#define __X m128_f32[0]
+#define __Y m128_f32[1]
+#define __Z m128_f32[2]
+
 PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
 	.Build()),
@@ -22,6 +26,7 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
+#if 1
 	//if (InputUtil::GetKey(KeyCode::Up))
 	{
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
@@ -46,8 +51,53 @@ void PlayerPlane::Update()
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
+#else
+	if (InputUtil::GetKey(KeyCode::Up))
+	{
+		pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Down))
+	{
+		pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Left))
+	{
+		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Right))
+	{
+		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+	}
+#endif
+
+	DirectX::XMVECTOR axis{};
+	float localZAngle{};
+
+
+	DirectX::XMQuaternionToAxisAngle(&axis, &localZAngle, pTransform_->rotate);
+
+
+	Vector3 eul{};
+	using namespace DirectX;
+
+	Vector3 forward{ pTransform_->Forward() };
+	//XMQuaternionRotationRollPitchYaw(forward.x, forward.y, forward.z);
+
+	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+
+	//curr = RemoveZRotation(curr);
+
 	pTransform_->rotate = curr;
-	pRB_->velocity_ = (pTransform_->Forward()) * 3.0f;
+	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
+
+	Vector3 worldPos{ pTransform_->GetWorldPosition() };
+	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
+	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
+	LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
+	if (DirectX::XMVector3Length(axis).__X > 0)
+	{
+		//pTransform_->rotate = DirectX::XMQuaternionRotationAxis(axis, 0.0f);
+	}
 
 	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/
@@ -55,4 +105,39 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
+}
+
+Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const
+{
+	using DirectX::XMMatrixRotationQuaternion;
+	using DirectX::XMVector3Cross;
+	using DirectX::XMQuaternionRotationMatrix;
+
+	// 回転行列
+	Matrix4x4 mRot{ XMMatrixRotationQuaternion(_q) };
+
+	Vector3 vUp{ mRot.r[1] };  // 上方向のベクトル
+
+	// z軸を0にした上方向ベクトル
+	Vector3 projectedUp{ vUp.x, vUp.y, 0 };
+	projectedUp.Normalize();
+
+	// z軸+方向のベクトル
+	Vector3 forward{ mRot.r[2] };
+
+	Vector3 right{ XMVector3Cross(forward, projectedUp) };
+	right.Normalize();
+
+	Matrix4x4 mNewRot
+	{
+		DirectX::XMMATRIX
+		{
+			right,
+			projectedUp,
+			forward,
+			{ 0, 0, 0, 1 }
+		}
+	};
+
+	return XMQuaternionRotationMatrix(mNewRot);
 }

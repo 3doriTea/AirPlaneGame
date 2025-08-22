@@ -10,6 +10,8 @@ public:
 	void Update() override;
 	void Draw() const override;
 
+	Quaternion RemoveZRotation(Quaternion _q) const;
+
 private:
 	RigidBody* pRB_;
 	Transform* pTransform_;

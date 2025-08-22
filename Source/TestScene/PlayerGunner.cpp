@@ -1,5 +1,6 @@
 #include "PlayerGunner.h"
 #include "PlayerBullet.h"
+#include "UI/Radar.h"
 
 using namespace mtgb;
 
@@ -10,11 +11,13 @@ namespace
 }
 
 PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder()
+	.SetPosition({ 0, 0, 0 })
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	angleX_{ 0.0f },
-	angleY_{ 0.0f }
-	
+	angleY_{ 0.0f },
+	pRadarUI_{ nullptr },
+	pPlaneTransform_{ &Transform::Get(_plane) }
 {
 	pTransform_->SetParent(_plane);
 }
@@ -60,6 +63,36 @@ void PlayerGunner::Update()
 			angleY_ += DirectX::XM_2PI;
 		}
 	}
+
+	using DirectX::XMQuaternionRotationAxis;
+
+	const float ROT_ANGLE{ Time::DeltaTimeF() };
+	Quaternion curr{ pTransform_->rotate };
+
+	if (InputUtil::GetKey(KeyCode::Up))
+	{
+		pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Down))
+	{
+		pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Left))
+	{
+		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+	}
+	if (InputUtil::GetKey(KeyCode::Right))
+	{
+		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+	}
+
+
+	//curr = RemoveZRotation(curr);
+
+	pTransform_->rotate = curr;
+
+	//LOGF("ANGLE(%f, %f)\n", angleX_, angleY_);
+
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	//if (InputUtil::GetMouseDown(MouseCode::Left))
@@ -68,6 +101,16 @@ void PlayerGunner::Update()
 		LOGIMGUI("Gunner:shoot");
 	}
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
+	Vector3 parentWorldPos{ pTransform_->GetParent()->GetWorldPosition() };
+	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
+
+	if (pRadarUI_)
+	{
+		float angle{};
+		angle = DirectX::XMVector3Dot(pTransform_->Forward(), pPlaneTransform_->Forward()).m128_f32[0];
+		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
+		pRadarUI_->SetViewAngle(angle);
+	}
 	
 	MTImGui::Instance().TypedShow(pTransform_, "PlayerGunner");
 }

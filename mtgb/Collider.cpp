@@ -49,12 +49,9 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 			float distance{ (otherWorldPosition - worldPosition).Size() };
 			float hitDistance{ sphere_.radius_ + _other.sphere_.radius_ };
 
-			//LOGF("distance: %f <= %f :hit\n", distance, hitDistance);
-
-			// ‹——£‚ª‘o•û‚Ì‹…‚Ì”¼Œa‚æ‚è‚à¬‚³‚¯‚ê‚Î“–‚½‚Á‚Ä‚¢‚é
-
 			//return computeSphere_.Intersects(_other.computeSphere_);
 
+			// ‹——£‚ª‘o•û‚Ì‹…‚Ì”¼Œa‚æ‚è‚à¬‚³‚¯‚ê‚Î“–‚½‚Á‚Ä‚¢‚é
 			return (distance <= hitDistance);
 
 			//DirectX::ContainmentType type{ computeSphere_.Contains(_other.computeSphere_) };

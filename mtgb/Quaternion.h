@@ -6,6 +6,9 @@
 
 namespace mtgb
 {
+	/// <summary>
+	/// 四元数の構造体
+	/// </summary>
 	struct Quaternion : DirectX::XMVECTORF32
 	{
 		static const size_t COUNT{ 4 };
@@ -52,9 +55,27 @@ namespace mtgb
 		/// <param name="_vec">オイラー角のベクトル</param>
 		/// <returns>四元数</returns>
 		static Quaternion Euler(const Vector3& _vec) { return DirectX::XMQuaternionRotationRollPitchYaw(_vec.x, _vec.y, _vec.z); }
+		/// <summary>
+		/// 逆四元数/共役を取得
+		/// </summary>
+		/// <returns>逆四元数</returns>
 		Quaternion GetInverse() const { return { -X(), -Y(), -Z(), W() }; }
+		/// <summary>
+		/// 逆四元数/共役を取得
+		/// </summary>
+		/// <param name="_q">取得する四元数</param>
+		/// <returns>逆四元数</returns>
 		static Quaternion GetInverse(const Quaternion& _q) { return _q.GetInverse(); }
+		/// <summary>
+		/// 四元数のサイズを取得する
+		/// </summary>
+		/// <returns>四元数のサイズ</returns>
 		float GetSize() const { return X() * X() + Y() * Y() + Z() * Z() + W() * W(); }
+		/// <summary>
+		/// 四元数のサイズを取得する
+		/// </summary>
+		/// <param name="_q">取得する四元数</param>
+		/// <returns>四元数のサイズ</returns>
 		static float GetSize(const Quaternion& _q) { return _q.GetSize(); }
 
 		static Quaternion SLerp(const Quaternion& _self, const Quaternion& _to, float _lerp)
@@ -62,6 +83,12 @@ namespace mtgb
 			return DirectX::XMQuaternionSlerp(_self, _to, _lerp);
 		}
 
+		/// <summary>
+		/// ある方向への回転を取得する
+		/// </summary>
+		/// <param name="_dir">方向ベクトル</param>
+		/// <param name="_upVec">上方向のベクトル</param>
+		/// <returns>回転の四元数</returns>
 		static Quaternion LookRotation(const Vector3& _dir, const Vector3& _upVec);
 
 		/// <summary>

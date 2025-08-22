@@ -2,9 +2,12 @@
 #include "ISystem.h"
 #include "GameScene.h"
 #include "ReleaseUtility.h"
+#include <functional>  // header ‚Å GameObjectLayerFlag ‚ªŽg‚¦‚È‚¢‚½‚ß
 
 namespace mtgb
 {
+	class GameObject;
+
 	class RenderSystem : public ISystem
 	{
 	public:
@@ -15,6 +18,6 @@ namespace mtgb
 		void RenderDirectXWindows(GameScene& _scene);
 		void RenderImGuiWindows(GameScene& _scene);
 		void RenderGameView(GameScene& _scene);
-		void DrawGameObjects(GameScene& _scene);
+		void DrawGameObjects(GameScene& _scene, const std::function<bool(GameObject*)> _isDrawTargetCallback);
 	};
 }
