@@ -302,14 +302,15 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, DirectX11Draw::pDefaultSamplerState_.GetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "デフォルトのサンプラ作成に失敗 @DirectX11Manager::InitializeCommonResources");
+#pragma region 深度ステンシルステート作成
 
-	// 深度ステンシルの
-	const D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
+	// BlendMode::Defaultの作成
+	D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
 	{
-		.DepthEnable = TRUE,
+		.DepthEnable = TRUE,	//深度テストを行うかどうか
 		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
 		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
-		.StencilEnable = TRUE,
+		.StencilEnable = TRUE,  //ステンシルテストを行うかどうか
 		.StencilReadMask = {},
 		.StencilWriteMask = {},
 		.FrontFace
@@ -333,9 +334,43 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)]);
 
 	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
-		&& "深度ステンシルステートの作成に失敗");
+		&& "BlendMode::Defaultの深度ステンシルステートの作成に失敗 @DirectX11Manager::InitializeCommonResources");
 
+	// BlendMode::Spriteの作成
+	DEPTH_STENCIL_DESC =
+	{
+		.DepthEnable = FALSE,	//深度テストを行うかどうか
+		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO,
+		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
+		.StencilEnable = FALSE,  //ステンシルテストを行うかどうか
+		.StencilReadMask = {},
+		.StencilWriteMask = {},
+		.FrontFace
+		{
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
+			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+		},
+		.BackFace
+		{
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
+			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+		}
+	};
+
+	hResult = DirectX11Draw::pDevice_->CreateDepthStencilState(
+		&DEPTH_STENCIL_DESC,
+		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Sprite)]);
+
+	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
+		&& "BlendMode::Spriteの深度ステンシルステートの作成に失敗 @DirectX11Manager::InitializeCommonResources");
+#pragma endregion
 #pragma region ブレンドステート作成
+
+	// BlendMode::Defaultの作成
 	const D3D11_BLEND_DESC BLEND_DESC
 	{
 		.AlphaToCoverageEnable = FALSE,
@@ -361,7 +396,17 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)]);
 
 	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
-		&& "ブレンドステート作成に失敗");
+		&& "BlendMode::Defaultのブレンドステート作成に失敗 @DirectX11Manager::InitializeCommonResources");
+
+	// BlendMode::Spriteの作成
+	// 設定はBlendMode::Defaultと同じ
+	hResult = DirectX11Draw::pDevice_->CreateBlendState(
+		&BLEND_DESC,
+		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Sprite)]);
+
+	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
+		&& "ブレンドステート作成に失敗 @DirectX11Manager::InitializeCommonResources");
+	
 #pragma endregion
 	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 

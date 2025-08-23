@@ -13,10 +13,18 @@ public:
 private:
 	//ロックオンの正方形の一辺の長さ
 	int lockOnSide_;
-	Vector2Int rectCenter_;
-	RectInt lockOnRect_;
-	float rockOnDistance_;//前方幾つまでロックオン有効か
-	void LockOnShoot();
+	int enemyFrameSideExtents_;
+	Vector2F rectCenter_;
+	RectF lockOnRect_;
+	RectF enemyFrameRect_;
+	bool lockOnAny;
+	float lockOnDistance_;//前方幾つまでロックオン有効か
+	void LockOn();
+	void Shoot();
 	Transform* pTransform;
-	ImageHandle hImage_;
+	ImageHandle lockOnFrame_;
+	ImageHandle lockOnEnemyFrame_;
+	
+	UIParams uiParams_;
+	RectContainsInfo targetInfo_;
 };

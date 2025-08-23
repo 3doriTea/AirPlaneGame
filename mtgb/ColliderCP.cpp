@@ -119,9 +119,9 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector
 	return nearestEntity;
 }
 
-void mtgb::ColliderCP::RectContains(const RectInt& _rect, const std::string& _name, std::vector<GameObject*>* _pRectContainsGameObject, WindowContext _context)
+void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
 {
-	_pRectContainsGameObject->clear();
+	_info->clear();
 
 	std::vector<GameObject*> pFoundGameObjects;
 	Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, &pFoundGameObjects);
@@ -132,12 +132,13 @@ void mtgb::ColliderCP::RectContains(const RectInt& _rect, const std::string& _na
 
 	for (auto& object : pFoundGameObjects)
 	{
-		Vector2Int screenPos = camSys.WorldToScreen(object->Component<Transform>()->position, data);
+		Vector3 worldPos = object->Component<Transform>()->position;
+		Vector2F screenPos = camSys.WorldToScreen(worldPos, data);
 		if (screenPos.x < 0 || screenPos.y < 0)
 			continue;
-		if (RectInt::Contains(screenPos, _rect))
+		if (RectF::Contains(screenPos, _rect))
 		{
-			_pRectContainsGameObject->push_back(object);
+			_info->emplace_back(worldPos,screenPos);
 		}
 	}
 }

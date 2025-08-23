@@ -195,6 +195,9 @@
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
+    <ClInclude Include="mtgb\RectF.h" />
+    <ClInclude Include="mtgb\RectT.h" />
+    <ClInclude Include="mtgb\RectContainsInfo.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
@@ -205,6 +208,9 @@
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
+    <ClInclude Include="mtgb\UIDrawCommand.h" />
+    <ClInclude Include="mtgb\Vector2F.h" />
+    <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />

@@ -6,7 +6,7 @@
 #include "Vector4.h"
 #include "WorldToScreenData.h"
 #include "WindowContext.h"
-
+#include "Vector2F.h"
 namespace mtgb
 {
 	class CameraSystem : public ISystem
@@ -50,8 +50,8 @@ namespace mtgb
 		/// <returns>ÉJÉÅÉâÇÃÉnÉìÉhÉã</returns>
 		const CameraHandleInScene GetDrawCamera() const { return hCurrentCamera_; }
 
-		mtgb::Vector2Int WorldToScreen(Vector3 _pos,const WorldToScreenData& _data) const;
-		mtgb::Vector2Int WorldToScreen(Vector3 _pos,WindowContext _context);
+		Vector2F WorldToScreen(Vector3 _pos,const WorldToScreenData& _data) const;
+		Vector2F WorldToScreen(Vector3 _pos,WindowContext _context);
 		const Transform& GetTransform() const;
 		const Transform& GetTransform(CameraHandleInScene _hCamera) const;
 		void GetViewMatrix(Matrix4x4* _pView) const;

@@ -191,6 +191,9 @@
     <Filter Include="04Library\ImGui\ImGuizmo">
       <UniqueIdentifier>{7aa07b0e-8966-4bc9-b776-dffd543bd617}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03mtgb\System\Collider\ColliderInfo">
+      <UniqueIdentifier>{94a10e42-91ba-48c8-8387-b63ce42fc08f}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -1199,6 +1202,24 @@
     </ClInclude>
     <ClInclude Include="mtgb\WorldToScreenData.h">
       <Filter>03mtgb\System\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RectContainsInfo.h">
+      <Filter>03mtgb\System\Collider\ColliderInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\UIDrawCommand.h">
+      <Filter>03mtgb\System\Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RectT.h">
+      <Filter>03mtgb\CoreType</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector2T.h">
+      <Filter>03mtgb\CoreType</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\Vector2F.h">
+      <Filter>03mtgb\CoreType</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RectF.h">
+      <Filter>03mtgb\CoreType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

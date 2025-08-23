@@ -75,6 +75,6 @@ void TextBox::Draw() const
 {
     if (currentIndex_ > 0 && !testtext_.empty())
     {
-        Draw::ImmediateText(testtext_.substr(0, currentIndex_), 400.0f, 400.0f, 48);
+        Draw::ImmediateText(testtext_.substr(0, currentIndex_), {400,400}, 48,TextAlignment::topLeft);
     }
 }

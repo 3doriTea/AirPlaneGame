@@ -42,8 +42,8 @@ void Radar::Update()
 
 void Radar::Draw() const
 {
-	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	const Vector2Int RADAR_OFFSET{ SCREEN_SIZE.x - IMAGE_SIZE_PX / 2, IMAGE_SIZE_PX / 2 };
+	const Vector2F SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+	const Vector2F RADAR_OFFSET{ SCREEN_SIZE.x - IMAGE_SIZE_PX / 2, IMAGE_SIZE_PX / 2 };
 
 	Draw::Image(
 		hBack_,

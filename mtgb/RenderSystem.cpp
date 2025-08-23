@@ -8,7 +8,7 @@
 #include "Debug.h"
 #include "MTImGui.h"
 #include "../ImGui/imgui.h"
-
+#include "Draw.h"
 void mtgb::RenderSystem::Initialize()
 {
 }
@@ -30,13 +30,18 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	WinCtxRes::ChangeResource(WindowContext::First);
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene);
+	Draw::FlushUIDrawCommands(GameObjectLayer::A);
 	DirectX11Draw::End();
+	Draw::ClearUICommands();
 
 	//二つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::Second);
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene);
+	Draw::FlushUIDrawCommands(GameObjectLayer::B);
 	DirectX11Draw::End();
+	Draw::ClearUICommands();
+
 }
 
 void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
@@ -52,6 +57,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	DirectX11Draw::Begin();
 	imGui.SetGameViewCamera();
 	DrawGameObjects(_scene);
+	Draw::FlushUIDrawCommands(GameObjectLayer::All);
 
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
@@ -123,3 +129,5 @@ void mtgb::RenderSystem::DrawGameObjects(GameScene& _scene)
 		gameObject->Draw();
 	}
 }
+
+

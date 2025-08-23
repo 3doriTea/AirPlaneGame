@@ -65,7 +65,7 @@ namespace mtgb
 		/// <returns>レイヤーフラグを取得する</returns>
 		GameObjectLayerFlag GetLayerFlag() const { return layerFlag_; }
 
-	private:
+	protected:
 
 		std::string name_;
 

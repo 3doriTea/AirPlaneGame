@@ -4,6 +4,7 @@
 #include <string>
 #include "DirectWrite.h"
 #include "TextAlignment.h"
+#include "Vector2F.h"
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -107,7 +108,7 @@ namespace mtgb
 		/// <param name="fontSize">テキストのフォントサイズ</param>
 		/// <param name="layoutBoxSize">矩形領域の幅、高さ</param>
 		/// <returns></returns>
-		static int Load(const std::string& str, int fontSize,Vector2Int layoutBoxSize);
+		static int Load(const std::string& str, int fontSize,Vector2F layoutBoxSize);
 		
 
 #if false

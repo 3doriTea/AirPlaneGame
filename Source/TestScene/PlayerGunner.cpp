@@ -74,6 +74,7 @@ void PlayerGunner::Update()
 
 void PlayerGunner::Draw() const
 {
+	
 }
 
 //void PlayerGunner::ShowImGui()

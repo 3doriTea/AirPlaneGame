@@ -42,3 +42,9 @@ const mtgb::Vector2Int mtgb::Image::GetSize(const ImageHandle _imageHandle)
 {
 	return Game::System<Image>().GetSprite(_imageHandle)->GetSize();
 }
+
+const mtgb::Vector2F mtgb::Image::GetSizeF(const ImageHandle _imageHandle)
+{
+	mtgb::Vector2Int size = Game::System<Image>().GetSprite(_imageHandle)->GetSize();
+	return mtgb::Vector2F(size.x,size.y);
+}
