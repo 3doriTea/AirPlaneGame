@@ -21,5 +21,5 @@ void EndText::Update()
 
 void EndText::Draw() const
 {
-	Draw::ImmediateText("tekitaugogo", 0, 0, 100);
+	Draw::ImmediateText("tekitaugogo", {0,0}, 100);
 }
