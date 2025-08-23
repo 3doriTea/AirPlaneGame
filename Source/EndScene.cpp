@@ -25,7 +25,7 @@ void EndScene::Initialize()
 
 	Instantiate<SkySphere>();
 //	Instantiate<EndText>();
-	Instantiate<TextBox>("tekita ");
+	Instantiate<TextBox>("tekita", 0.1f);
 }
 
 void EndScene::Update()

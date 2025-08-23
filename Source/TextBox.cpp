@@ -14,7 +14,8 @@ TextBox::TextBox() : GameObject(GameObjectBuilder()
 TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
 {
     testtext_ = _testText;
-    TextSec_ = _textsec;
+    SetTextSpeedSec(_textsec);
+    Show(testtext_);
 }
 
 TextBox::~TextBox()
@@ -79,15 +80,14 @@ bool TextBox::IsFinished()
 
 void TextBox::Update()
 {
-    Show(testtext_);
 }
 
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
 {
-    /*if (currentIndex_ > 0 && !testtext_.empty())
+    if (currentIndex_ > 0 && !testtext_.empty())
     {
         Draw::ImmediateText(testtext_.substr(0, currentIndex_), 0.0f, 0.0f, 48);
-    }*/
-    Draw::ImmediateText(testtext_, 0, 30, 100);
+    }
+    //Draw::ImmediateText(testtext_, 0, 30, 100);
 }
