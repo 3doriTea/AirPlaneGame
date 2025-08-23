@@ -3,6 +3,7 @@
 #include <bitset>
 #include <concepts>
 
+
 namespace mtbit
 {
 	// 列挙型 かつ size_t型の暗黙的型変換ができない！ = enum struct
@@ -120,37 +121,37 @@ namespace mtbit
 		std::bitset<BIT_COUNT> value_;  // ビットフラグ
 	};
 
-
 	template<typename T>
-	concept BitFlagEnumStruct = mtbit::IsEnumStruct<T> && requires(T t)
+	concept BitFlagEnumStruct = IsEnumStruct<T> && requires(T t)
 	{
 		static_cast<mtbit::BitFlag<T>>(t);
 	};
-
+	
 	template<BitFlagEnumStruct EnumStructT>
-	inline mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e1, const EnumStructT _e2)
+	inline mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e1, const EnumStructT _e2) 
 	{
 		return mtbit::BitFlag<EnumStructT>{ _e1 } | _e2;
 	}
-
+	
 	template<typename EnumStructT>
 	inline mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag1, const mtbit::BitFlag<EnumStructT> _flag2)
 	{
 		return mtbit::BitFlag<EnumStructT>{ _flag1 }.BeginEdit().Add(_flag2).EndEdit();
 	}
-
+	
 	template<typename EnumStructT>
 	inline mtbit::BitFlag<EnumStructT> operator|(const EnumStructT _e, const mtbit::BitFlag<EnumStructT> _flag)
 	{
 		return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
 	}
-
+	
 	template<typename EnumStructT>
 	inline mtbit::BitFlag<EnumStructT> operator|(const mtbit::BitFlag<EnumStructT> _flag, const EnumStructT _e)
 	{
 		return mtbit::BitFlag<EnumStructT>{ _flag }.BeginEdit().On(_e).EndEdit();
 	}
 }
+
 template<typename EnumStructT>
 inline mtbit::BitFlag<EnumStructT>::BitFlag(const EnumStructT _e)
 {

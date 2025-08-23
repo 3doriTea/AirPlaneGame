@@ -51,8 +51,11 @@ void mtgb::Ground::Draw()
 	IShader::Draw<ConstantBuffer, Vertex>(
 		[&, this](ConstantBuffer* _pCB)
 		{
+			CAMERA.GetPosition(&_pCB->g_cameraPosition);
+			Vector3 cameraWorldPos{ CAMERA.GetTransform().GetWorldPosition() };
+			
 			// TODO: 地形位置を別クラスから操作
-			Matrix4x4 mWorld{ XMMatrixTranslation(WORLD_POSITION.x, WORLD_POSITION.y, WORLD_POSITION.z) };
+			Matrix4x4 mWorld{ XMMatrixTranslationFromVector(cameraWorldPos + WORLD_POSITION) };
 			//_transform.GenerateWorldMatrix(&mWorld);
 
 			Matrix4x4 mView{};  // ビュー行列
@@ -61,10 +64,9 @@ void mtgb::Ground::Draw()
 			Matrix4x4 mProj{};  // プロジェクション行列
 			CAMERA.GetProjMatrix(&mProj);
 
-			_pCB->g_matrixWorldViewProj = XMMatrixTranspose(mWorld * mView * mProj);
-			_pCB->g_matrixWorld = XMMatrixTranspose(mWorld);
+			_pCB->g_matrixWorldViewProj = XMMatrixTranspose(mView * mProj);
+			//_pCB->g_matrixWorld = XMMatrixTranspose(mWorld);
 
-			CAMERA.GetPosition(&_pCB->g_cameraPosition);
 			// TODO: ライトの向きはLightSystemから操作
 			_pCB->g_lightDirection = LIGHT_DIRECTION; // ライトの向き
 			_pCB->g_isTexture = (false);

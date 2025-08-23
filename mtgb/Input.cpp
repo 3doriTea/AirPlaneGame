@@ -204,7 +204,7 @@ void mtgb::Input::UpdateJoystickDevice()
 	switch (hResult)
 	{
 	case DI_OK:
-		LOGF("OK\n");
+		//LOGF("OK\n");
 		break;
 	case DIERR_INPUTLOST://入力ロスト、一時的なアクセス不可
 		AcquireJoystick(joystickContext_[currJoystickGuid_].device);

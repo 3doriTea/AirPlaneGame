@@ -29,7 +29,8 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	//一つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::First);
 	DirectX11Draw::Begin();
-	DrawGameObjects(_scene);
+	
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A); });
 	Draw::FlushUIDrawCommands(GameObjectLayer::A);
 	DirectX11Draw::End();
 	Draw::ClearUICommands();
@@ -37,7 +38,7 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	//二つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::Second);
 	DirectX11Draw::Begin();
-	DrawGameObjects(_scene);
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::B); });
 	Draw::FlushUIDrawCommands(GameObjectLayer::B);
 	DirectX11Draw::End();
 	Draw::ClearUICommands();
@@ -46,6 +47,8 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 
 void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 {
+	using mtbit::operator|;
+
 	// ImGuiは一つ目のウィンドウに依存している
 	WinCtxRes::ChangeResource(WindowContext::First);
 
@@ -56,7 +59,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 	DirectX11Draw::Begin();
 	imGui.SetGameViewCamera();
-	DrawGameObjects(_scene);
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
 	Draw::FlushUIDrawCommands(GameObjectLayer::All);
 
 	imGui.BeginFrame();
@@ -105,7 +108,6 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 		ImGui::Text("Line: %d", it->line);
 		ImGui::Text("Function: %s", it->func.c_str());
 		ImGui::End();
-
 	}
 
 	imGui.End();
@@ -121,13 +123,14 @@ void mtgb::RenderSystem::RenderGameView(GameScene& _scene)
 
 }
 
-void mtgb::RenderSystem::DrawGameObjects(GameScene& _scene)
+void mtgb::RenderSystem::DrawGameObjects(GameScene& _scene, const std::function<bool(GameObject*)> _isDrawTargetCallback)
 {
 	_scene.Draw();
 	for (auto&& gameObject : _scene.pGameObjects_)
 	{
-		gameObject->Draw();
+		if (_isDrawTargetCallback(gameObject))
+		{
+			gameObject->Draw();
+		}
 	}
 }
-
-

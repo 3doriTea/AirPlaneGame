@@ -39,8 +39,8 @@ void TestScene::Initialize()
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(
 		Instantiate<PlayerPilot>(eIdPlayer));
 
-	CameraHandleInScene hCamera2 = RegisterCameraGameObject(
-		Instantiate<PlayerGunner>(eIdPlayer));
+	PlayerGunner* pGunner{ Instantiate<PlayerGunner>(eIdPlayer) };
+	CameraHandleInScene hCamera2 = RegisterCameraGameObject(pGunner);
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
@@ -50,7 +50,10 @@ void TestScene::Initialize()
 	Instantiate<EnemyPlane>(Vector3{ 0, 0, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 
-	Instantiate<Radar>(eIdPlayer);
+	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
+
+	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
+	pGunner->SetRadarUI(pGunnerRader);
 }
 
 void TestScene::Update()

@@ -4,6 +4,8 @@
 using namespace mtgb;
 
 PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
+	.SetPosition({ 0, 0, 0 })
+
 	.Build()),
 	pTransform{ Component<Transform>() },
 	lockOnSide_{400},

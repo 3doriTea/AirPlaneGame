@@ -7,6 +7,7 @@
 #include "Background.h"
 #include "SkySphere.h"
 #include "TestScene/TestScene.h"
+#include "EndScene.h"
 
 using namespace mtgb;
 using Network::PIIO;
@@ -62,7 +63,7 @@ void PlayScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<TestScene>();
+		Game::System<SceneSystem>().Move<EndScene>();
 	}
 
 	using LED_STATUS = Network::PIIO::LED_STATUS;
