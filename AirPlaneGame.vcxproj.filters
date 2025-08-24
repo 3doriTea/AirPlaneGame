@@ -191,6 +191,9 @@
     <Filter Include="04Library\ImGui\ImGuizmo">
       <UniqueIdentifier>{7aa07b0e-8966-4bc9-b776-dffd543bd617}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\01Common\Shader">
+      <UniqueIdentifier>{5e6abeed-62f1-4946-a766-a626106da289}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -712,6 +715,9 @@
     <ClCompile Include="mtgb\InputConfig.cpp">
       <Filter>03mtgb\System\Input</Filter>
     </ClCompile>
+    <ClCompile Include="Source\EndScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1200,6 +1206,18 @@
     <ClInclude Include="mtgb\WorldToScreenData.h">
       <Filter>03mtgb\System\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="Source\EndScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WingEffect.h">
+      <Filter>01Game\01Common\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IOriginalShader.h">
+      <Filter>03mtgb\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShaderCommon.h">
+      <Filter>01Game\01Common\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -1237,6 +1255,9 @@
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Ground.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\WingEffect.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
   </ItemGroup>
