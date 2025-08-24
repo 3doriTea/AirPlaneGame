@@ -174,7 +174,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="size">フォントサイズ</param>
 		/// <returns>IDWriteTextFormatとPixelFontMetricsのペア</returns>
-		std::pair<IDWriteTextFormat*, PixelFontMetrics> GetOrCreateTextFormat(int size);
+		FontFormatData* GetOrCreateTextFormat(int size);
 
 		//現在のデフォルトのフォントサイズ
 		int currentDefaultFontSize_;
