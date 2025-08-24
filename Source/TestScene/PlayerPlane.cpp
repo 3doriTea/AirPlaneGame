@@ -71,7 +71,18 @@ void PlayerPlane::Update()
 #endif
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ pTransform_->Forward() };
+	//Vector3 forward = XMVector3Cross(pTransform_->Right(), Vector3::Down());
+	//pTransform_->Right()
+	Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
+
+	LOGF("PLANEDIFF(%f, %f, %f)\n", forward - angleForward);
+
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+
+
+
+
+	//curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
 	//curr = RemoveZRotation(curr);
 

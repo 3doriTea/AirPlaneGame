@@ -71,12 +71,12 @@ void PlayerGunner::Update()
 
 	if (InputUtil::GetKey(KeyCode::W))
 	{
-		curr *= XMQuaternionRotationAxis(Vector3::Right(), -ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
 	}
 	if (InputUtil::GetKey(KeyCode::S))
 	{
-		curr *= XMQuaternionRotationAxis(Vector3::Right(), ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
 		//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
 	}
 	if (InputUtil::GetKey(KeyCode::A))
@@ -114,12 +114,18 @@ void PlayerGunner::Update()
 	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
 	//LOGF("G:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	Vector3 worldDiff{ worldPos - parentWorldPos };
-	LOGF("DIFF(%f, %f, %f)\n", worldDiff.x, worldDiff.y, worldDiff.z);
+	//LOGF("DIFF(%f, %f, %f)\n", worldDiff.x, worldDiff.y, worldDiff.z);
 
 	if (pRadarUI_)
 	{
 		float angle{};
-		angle = DirectX::XMVector3Dot(pTransform_->Forward(), pPlaneTransform_->Forward()).m128_f32[0];
+		using namespace DirectX;
+
+		Vector3 forward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
+		//Vector3 
+
+		angle = DirectX::XMVector3Dot(forward, pPlaneTransform_->Forward()).m128_f32[0];
+
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}
