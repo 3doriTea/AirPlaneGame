@@ -159,10 +159,10 @@ int mtgb::Text::GetOrCreateTextLayoutHandle(const std::wstring& text, int size, 
 	}
 
 	// 新規作成する
-	auto formatData = GetOrCreateTextFormat(size);
+	FontFormatData* formatData = GetOrCreateTextFormat(size);
 
 	IDWriteTextLayout* pTextLayout = nullptr;
-	Game::System<DirectWrite>().CreateTextLayout(text, width, height, size, formatData.first, &pTextLayout);
+	Game::System<DirectWrite>().CreateTextLayout(text, width, height, size, formatData->format, &pTextLayout);
 
 	int handle = ++nextHandle_;
 	TextLayoutData* layoutData = new TextLayoutData{ text,size, width,height,pTextLayout,handle };
@@ -180,7 +180,7 @@ TextLayoutData* mtgb::Text::GetTextLayoutData(int handle)
 	return *it;
 }
 
-std::pair<IDWriteTextFormat*, mtgb::PixelFontMetrics> mtgb::Text::GetOrCreateTextFormat(int size)
+FontFormatData* mtgb::Text::GetOrCreateTextFormat(int size)
 {
 	auto& size_index = fontFormatDatas_->get<font_size_order>();
 	auto it = size_index.find(size);
@@ -188,7 +188,7 @@ std::pair<IDWriteTextFormat*, mtgb::PixelFontMetrics> mtgb::Text::GetOrCreateTex
 	if (it != size_index.end())
 	{
 		// 既存のフォーマットを返す
-		return std::make_pair((*it)->format, (*it)->pixelFontMetrics);
+		return *it;
 	}
 
 	FontFormatData* fontFormatData = nullptr;
@@ -197,7 +197,7 @@ std::pair<IDWriteTextFormat*, mtgb::PixelFontMetrics> mtgb::Text::GetOrCreateTex
 	Game::System<DirectWrite>().ChangeFormat(fontFormatData->format, fontFormatData->pixelFontMetrics);
 	fontFormatDatas_->insert(fontFormatData);
 
-	return std::make_pair(fontFormatData->format, fontFormatData->pixelFontMetrics);
+	return fontFormatData;
 }
 
 

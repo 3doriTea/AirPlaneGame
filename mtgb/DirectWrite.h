@@ -9,6 +9,9 @@
 #include "RectInt.h"
 #include "ReleaseUtility.h"
 #include "TextAlignment.h"
+#include <wrl/client.h>
+
+using Microsoft::WRL::ComPtr;
 
 struct IDWriteFactory;
 struct IDWriteTextFormat;
@@ -35,11 +38,10 @@ namespace mtgb
 	struct FontFormatData
 	{
 		int fontSize;
-		IDWriteTextFormat* format;
+		ComPtr<IDWriteTextFormat> format;
 		PixelFontMetrics pixelFontMetrics;
 		
-		FontFormatData(int size, IDWriteTextFormat* fmt, const PixelFontMetrics& metrics)
-			: fontSize(size), format(fmt), pixelFontMetrics(metrics) {}
+		FontFormatData(int size, IDWriteTextFormat* fmt, const PixelFontMetrics& metrics);
 		
 		~FontFormatData();
 	};
@@ -51,11 +53,10 @@ namespace mtgb
 		int fontSize;
 		float width, height;
 
-		IDWriteTextLayout* layout;
+		ComPtr<IDWriteTextLayout> layout;
 		int handle;
 		
-		TextLayoutData(const std::wstring& text, int size,float width,float height, IDWriteTextLayout* lay, int h)
-			: str(text), fontSize(size), width(width),height(height), layout(lay), handle(h) { }
+		TextLayoutData(const std::wstring& _str, int _size, float _width, float _height, IDWriteTextLayout* _layout, int _handle);
 		
 		~TextLayoutData();
 	};
@@ -92,7 +93,7 @@ namespace mtgb
 		/// <param name="y">テキストの上端</param>
 		//void Draw(int handle, float x, float y);
 
-		void Draw(IDWriteTextLayout* textLayout, float x, float y);
+		void Draw(ComPtr<IDWriteTextLayout> textLayout, float x, float y);
 
 
 		/// <summary>
@@ -107,9 +108,9 @@ namespace mtgb
 
 		
 		//void ImmediateDraw(const std::string& text, float x, float y, int size);
-		void ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x,float y,float width,float height);
+		void ImmediateDraw(const std::wstring& text, ComPtr<IDWriteTextFormat> format, const PixelFontMetrics& pixelFontMetrics, float x,float y,float width,float height);
 
-		void ImmediateDraw(const std::wstring& text,IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y);
+		void ImmediateDraw(const std::wstring& text, ComPtr<IDWriteTextFormat> format, const PixelFontMetrics& pixelFontMetrics, float x, float y);
 		
 		/// <summary>
 		/// デフォルトフォントサイズを変更
@@ -117,7 +118,7 @@ namespace mtgb
 		/// <param name="size">新しいデフォルトサイズ</param>
 		//void ChangeFontSize(int size);
 
-		void ChangeFormat(IDWriteTextFormat* format, mtgb::PixelFontMetrics& metrics);
+		void ChangeFormat(ComPtr<IDWriteTextFormat> format, mtgb::PixelFontMetrics& metrics);
 
 		void Release() override;
 
@@ -132,8 +133,8 @@ namespace mtgb
 		/// <param name="size">大きさ</param>
 		/// <param name="format"></param>
 		/// <param name="ppTextLayout">作成されるIDWriteTextLayout</param>
-		void CreateTextLayout(const std::wstring& str, int size, IDWriteTextFormat* format,IDWriteTextLayout** ppTextLayout);
-		void CreateTextLayout(const std::wstring& str, float width, float height, int size, IDWriteTextFormat* format,IDWriteTextLayout** ppTextLayout);
+		void CreateTextLayout(const std::wstring & _str, int  _size, ComPtr<IDWriteTextFormat> _format, IDWriteTextLayout ** _ppTextLayout);
+		void CreateTextLayout(const std::wstring & _str, float  _width, float _height, int  _size, ComPtr<IDWriteTextFormat> _format, IDWriteTextLayout ** _ppTextLayout);
 
 		
 
@@ -145,17 +146,17 @@ namespace mtgb
 		/// <param name="outMetrics">計算されるPixelFontMetrics</param>
 		void CreateTextFormat(int size, IDWriteTextFormat** ppTextFormat, PixelFontMetrics& outMetrics);
 
-		void SetTextAlignment(TextAlignment alignment, IDWriteTextFormat* format);
+		void SetTextAlignment(TextAlignment alignment, ComPtr<IDWriteTextFormat> format);
 	private:
 	
 		static DWRITE_FONT_METRICS fontMetrics_;
 		static PixelFontMetrics pixelFontMetrics_;
-		static IDWriteFactory* pDWriteFactory_;
-		static IDWriteTextFormat* pTextFormat_; // デフォルトフォーマット
+		static ComPtr<IDWriteFactory> pDWriteFactory_;
+		static ComPtr<IDWriteTextFormat> pTextFormat_; // デフォルトフォーマット
 		//static IDWriteTextLayout* pTextLayout_;
-		static IDWriteFontCollection* pFontCollection_;
-		static IDWriteFontFamily* pFontFamily_;
-		static IDWriteFont* pDWriteFont_;
+		static ComPtr<IDWriteFontCollection> pFontCollection_;
+		static ComPtr<IDWriteFontFamily> pFontFamily_;
+		static ComPtr<IDWriteFont> pDWriteFont_;
 		
 		//static int currentDefaultFontSize_; // 現在のデフォルトフォントサイズ
 	};

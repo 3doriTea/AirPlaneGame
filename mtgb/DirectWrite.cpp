@@ -21,12 +21,12 @@ namespace
 	const wchar_t* fontFamilyName = L"Noto Sans JP";
 }
 
-IDWriteFactory* mtgb::DirectWrite::pDWriteFactory_{ nullptr };
-IDWriteTextFormat* mtgb::DirectWrite::pTextFormat_{ nullptr };
+ComPtr<IDWriteFactory> mtgb::DirectWrite::pDWriteFactory_{ nullptr };
+ComPtr<IDWriteTextFormat> mtgb::DirectWrite::pTextFormat_{ nullptr };
 //IDWriteTextLayout* mtgb::DirectWrite::pTextLayout_{ nullptr };
-IDWriteFontCollection* mtgb::DirectWrite::pFontCollection_{ nullptr };
-IDWriteFontFamily* mtgb::DirectWrite::pFontFamily_{nullptr};
-IDWriteFont* mtgb::DirectWrite::pDWriteFont_{ nullptr };
+ComPtr<IDWriteFontCollection> mtgb::DirectWrite::pFontCollection_{ nullptr };
+ComPtr<IDWriteFontFamily> mtgb::DirectWrite::pFontFamily_{nullptr};
+ComPtr<IDWriteFont> mtgb::DirectWrite::pDWriteFont_{ nullptr };
 DWRITE_FONT_METRICS mtgb::DirectWrite::fontMetrics_{};
 mtgb::PixelFontMetrics mtgb::DirectWrite::pixelFontMetrics_;
 //int mtgb::DirectWrite::currentDefaultFontSize_{ DEFAULT_FONT_SIZE };
@@ -34,20 +34,31 @@ static std::wstring StrToWStr(const std::string& str);
 
 
 
+mtgb::FontFormatData::FontFormatData(int size, IDWriteTextFormat* fmt, const PixelFontMetrics& metrics)
+	: fontSize(size)
+	, pixelFontMetrics(metrics)
+{
+	format.Attach(fmt);
+}
+
 mtgb::FontFormatData::~FontFormatData()
 {
-	SAFE_RELEASE(format);
+	format.Reset();
+}
+
+mtgb::TextLayoutData::TextLayoutData(const std::wstring& _str, int _size, float _width, float _height, IDWriteTextLayout* _layout, int _handle)
+	: str(_str), fontSize(_size), width(_width), height(_height), handle(_handle)
+{
+	layout.Attach(_layout);
 }
 
 mtgb::TextLayoutData::~TextLayoutData()
 {
-	SAFE_RELEASE(layout);
+	layout.Reset();
 }
 
 mtgb::DirectWrite::DirectWrite()
 {
-	
-	//currentDefaultFontSize_ = DEFAULT_FONT_SIZE;
 }
 
 mtgb::DirectWrite::~DirectWrite()
@@ -59,7 +70,7 @@ void mtgb::DirectWrite::Initialize()
 	HRESULT hResult = DWriteCreateFactory(
 		DWRITE_FACTORY_TYPE_SHARED,
 		_uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**>(&pDWriteFactory_)
+		reinterpret_cast<IUnknown**>(pDWriteFactory_.GetAddressOf())
 	);
 	massert(SUCCEEDED(hResult)
 		&& "DWriteCreateFactoryに失敗 @DirectWrite::Initialize");
@@ -69,8 +80,10 @@ void mtgb::DirectWrite::Initialize()
 
 void mtgb::DirectWrite::CreateFontFormatData(const std::wstring& fileName, int fontSize, FontFormatData** ppFontFormatData)
 {
+	IDWriteFontCollection* fontCollection = nullptr;
 	//フォントコレクション取得
-	HRESULT hResult = pDWriteFactory_->GetSystemFontCollection(&pFontCollection_);
+	HRESULT hResult = pDWriteFactory_->GetSystemFontCollection(&fontCollection);
+	pFontCollection_.Attach(fontCollection);
 
 	UINT32 index;
 	BOOL exists;
@@ -80,18 +93,22 @@ void mtgb::DirectWrite::CreateFontFormatData(const std::wstring& fileName, int f
 		&& "FindFamilyNameに失敗 @DirectWrite::FindFamilyName");
 
 	//ファミリーからIDWriteFontFamilyを取得
-	hResult = pFontCollection_->GetFontFamily(index, &pFontFamily_);
+	IDWriteFontFamily* fontFamily = nullptr;
+	hResult = pFontCollection_->GetFontFamily(index, &fontFamily);
+	pFontFamily_.Attach(fontFamily);
 
 	massert(SUCCEEDED(hResult)
 		&& "GetFontFamilyに失敗 @DirectWrite::GetFontFamily");
 
 	//IDWriteFontを取得
+	IDWriteFont* font = nullptr;
 	hResult = pFontFamily_->GetFirstMatchingFont(
 		DWRITE_FONT_WEIGHT_REGULAR,
 		DWRITE_FONT_STRETCH_NORMAL,//フォントのストレッチ。拡大縮小の度合い
 		DWRITE_FONT_STYLE_NORMAL,//フォントスタイル
-		&pDWriteFont_
+		&font
 	);
+	pDWriteFont_.Attach(font);
 	massert(SUCCEEDED(hResult)
 		&& "GetFirstMatchingFontに失敗 @DirectWrite::Initialize");
 
@@ -153,7 +170,7 @@ void mtgb::DirectWrite::CreateTextFormat(int size, IDWriteTextFormat** ppTextFor
 	outMetrics.textTopOffset = -outMetrics.ascentPx + (outMetrics.ascentPx - outMetrics.descentPx) - outMetrics.lineGapPx;
 }
 
-void mtgb::DirectWrite::SetTextAlignment(TextAlignment alignment, IDWriteTextFormat* format)
+void mtgb::DirectWrite::SetTextAlignment(TextAlignment alignment, ComPtr<IDWriteTextFormat>format)
 {
 	switch (alignment)
 	{
@@ -168,50 +185,40 @@ void mtgb::DirectWrite::SetTextAlignment(TextAlignment alignment, IDWriteTextFor
 	}
 }
 
-
-
-
-
-
-
-void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, int size, IDWriteTextFormat* format, IDWriteTextLayout** ppTextLayout)
+void mtgb::DirectWrite::CreateTextLayout(const std::wstring& _str, int  _size, ComPtr<IDWriteTextFormat> _format, IDWriteTextLayout** _ppTextLayout)
 {
 	//テキストレイアウト作成
 	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
-	CreateTextLayout(str, rtSize.width, rtSize.height, size, format, ppTextLayout);
+	CreateTextLayout(_str, rtSize.width, rtSize.height, _size, _format, _ppTextLayout);
 }
 
-void mtgb::DirectWrite::CreateTextLayout(const std::wstring& str, float width, float height, int size, IDWriteTextFormat* format, IDWriteTextLayout** ppTextLayout)
+void mtgb::DirectWrite::CreateTextLayout(const std::wstring& _str, float  _width, float _height, int  _size, ComPtr<IDWriteTextFormat> _format, IDWriteTextLayout** _ppTextLayout)
 {
 	static const float dip = 96.0f;
 	FLOAT dpiX, dpiY;
 	Game::System<Direct2D>().pDefRenderTarget_->GetDpi(&dpiX, &dpiY);
 
-	width = width / dpiX * dip;
-	height = height / dpiY * dip;
+	_width = _width / dpiX * dip;
+	_height = _height / dpiY * dip;
 
-	HRESULT hResult = pDWriteFactory_->CreateTextLayout(str.data(), static_cast<uint32_t>(str.size()), format, width, height, ppTextLayout);
+	HRESULT hResult = pDWriteFactory_->CreateTextLayout(_str.data(), static_cast<uint32_t>(_str.size()), _format.Get(), _width, _height, _ppTextLayout);
 
 	massert(SUCCEEDED(hResult)
 		&& "CreateTextLayoutに失敗 @DirectWrite::RegisterText");
 }
 
-
-
-void mtgb::DirectWrite::ChangeFormat(IDWriteTextFormat* format, mtgb::PixelFontMetrics& metrics)
+void mtgb::DirectWrite::ChangeFormat(ComPtr<IDWriteTextFormat> format, mtgb::PixelFontMetrics& metrics)
 {
 	pTextFormat_ = format;
 	pixelFontMetrics_ = metrics;
 }
 
-
-
-void mtgb::DirectWrite::Draw(IDWriteTextLayout* textLayout, float x, float y)
+void mtgb::DirectWrite::Draw(ComPtr<IDWriteTextLayout> textLayout, float x, float y)
 {
-	D2D1_POINT_2F origin = { x, y  };
+	D2D1_POINT_2F origin = { x, y };
 
 	Game::System<Direct2D>().pDefRenderTarget_->BeginDraw();
-	Game::System<Direct2D>().pDefRenderTarget_->DrawTextLayout(origin, textLayout, Game::System<Direct2D>().pDefD2DBrush_.Get());
+	Game::System<Direct2D>().pDefRenderTarget_->DrawTextLayout(origin, textLayout.Get(), Game::System<Direct2D>().pDefD2DBrush_.Get());
 	Game::System<Direct2D>().pDefRenderTarget_->EndDraw();
 }
 
@@ -220,14 +227,14 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, float x, float y
 	ImmediateDraw(text, pTextFormat_, pixelFontMetrics_, x, y);
 }
 
-void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y, float width, float height)
+void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, ComPtr<IDWriteTextFormat> format, const PixelFontMetrics& pixelFontMetrics, float x, float y, float width, float height)
 {
 	Game::System<Direct2D>().pDefRenderTarget_->BeginDraw();
 
 	Game::System<Direct2D>().pDefRenderTarget_->DrawText(
 		text.c_str(),
 		static_cast<uint32_t>(text.length()),
-		format,
+		format.Get(),
 		D2D1::RectF(
 			x,
 			y + pixelFontMetrics.textTopOffset,
@@ -239,7 +246,7 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextForma
 	Game::System<Direct2D>().pDefRenderTarget_->EndDraw();
 }
 
-void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextFormat* format, const PixelFontMetrics& pixelFontMetrics, float x, float y)
+void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, ComPtr<IDWriteTextFormat> format, const PixelFontMetrics& pixelFontMetrics, float x, float y)
 {
 	D2D1_SIZE_F rtSize = Game::System<Direct2D>().pDefRenderTarget_->GetSize();
 
@@ -250,29 +257,11 @@ void mtgb::DirectWrite::ImmediateDraw(const std::wstring& text, IDWriteTextForma
 
 void mtgb::DirectWrite::Release()
 {
-	//SAFE_RELEASE(pTextLayout_);
-	SAFE_RELEASE(pTextFormat_);
-	SAFE_RELEASE(pDWriteFactory_);
-
-	/*if (textLayoutDatas_ != nullptr)
-	{
-		for (auto entry : *textLayoutDatas_)
-		{
-			SAFE_DELETE(entry);
-		}
-		textLayoutDatas_->clear();
-		SAFE_DELETE(textLayoutDatas_);
-	}
-
-	if (fontFormatDatas_ != nullptr)
-	{
-		for (auto entry : *fontFormatDatas_)
-		{
-			SAFE_DELETE(entry);
-		}
-		fontFormatDatas_->clear();
-		SAFE_DELETE(fontFormatDatas_);
-	}*/
+	pDWriteFont_.Reset();
+	pFontFamily_.Reset();
+	pFontCollection_.Reset();
+	pTextFormat_.Reset();
+	pDWriteFactory_.Reset();
 
 	ID3D11Debug* pDebug = nullptr;
 	

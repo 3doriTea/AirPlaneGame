@@ -123,10 +123,10 @@ void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlign
 		CheckSetShader(ShaderType::Sprite2D);
 
 		TextLayoutData* layoutData = Game::System<mtgb::Text>().GetTextLayoutData(_hText);
-		auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
+		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
 
 		Game::System<mtgb::DirectWrite>().SetTextAlignment(_alignment, layoutData->layout);
-		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x, _origin.y + formatData.second.textTopOffset);
+		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x, _origin.y + formatData->pixelFontMetrics.textTopOffset);
 		} });
 }
 
@@ -150,9 +150,9 @@ void mtgb::Draw::ImmediateText(const std::string& _text, RectF _rect, int _size,
 			DirectX11Draw::SetIsWriteToDepthBuffer(false);
 			CheckSetShader(ShaderType::Sprite2D);
 
-			auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
-			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData.first);
-			Game::System<DirectWrite>().ImmediateDraw(ToWString(_text), formatData.first, formatData.second, 
+			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+			Game::System<DirectWrite>().ImmediateDraw(ToWString(_text), formatData->format, formatData->pixelFontMetrics,
 				_rect.x,
 				_rect.y,
 				_rect.width,
@@ -170,9 +170,9 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 		DirectX11Draw::SetIsWriteToDepthBuffer(false);
 		CheckSetShader(ShaderType::Sprite2D);
 
-		auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
-		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData.first);
-		Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData.first, formatData.second,
+		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+		Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData->format, formatData->pixelFontMetrics,
 			_rect.x,
 			_rect.y,
 			_rect.width,
@@ -186,8 +186,8 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 void mtgb::Draw::ChangeFontSize(int _size)
 {
 	currentDefaultFontSize_ = _size;
-	auto fontFormatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
-	Game::System<DirectWrite>().ChangeFormat(fontFormatData.first, fontFormatData.second);
+	FontFormatData* fontFormatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+	Game::System<DirectWrite>().ChangeFormat(fontFormatData->format, fontFormatData->pixelFontMetrics);
 }
 
 void mtgb::Draw::ChangeTextAlignment(TextAlignment _alignment)
