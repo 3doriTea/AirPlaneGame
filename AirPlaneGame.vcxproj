@@ -192,6 +192,7 @@
     <ClInclude Include="mtgb\ImGuizmoManipulator.h" />
     <ClInclude Include="mtgb\IncludingInput.h" />
     <ClInclude Include="mtgb\InputConfig.h" />
+    <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\Observer.h" />
@@ -352,6 +353,7 @@
     <ClInclude Include="Source\Reticle.h" />
     <ClInclude Include="Source\SampleGame.h" />
     <ClInclude Include="mtgb\ShaderType.h" />
+    <ClInclude Include="Source\ShaderCommon.h" />
     <ClInclude Include="Source\SkySphere.h" />
     <ClInclude Include="Source\TestScene\EnemyPlane.h" />
     <ClInclude Include="Source\TestScene\PlayerBullet.h" />
@@ -364,6 +366,7 @@
     <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
+    <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -438,6 +441,24 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\WingEffect.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

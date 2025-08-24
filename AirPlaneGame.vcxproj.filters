@@ -194,6 +194,9 @@
     <Filter Include="03mtgb\System\Collider\ColliderInfo">
       <UniqueIdentifier>{94a10e42-91ba-48c8-8387-b63ce42fc08f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\01Common\Shader">
+      <UniqueIdentifier>{5e6abeed-62f1-4946-a766-a626106da289}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -715,12 +718,6 @@
     <ClCompile Include="mtgb\InputConfig.cpp">
       <Filter>03mtgb\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EndText.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EndScene.cpp">
-      <Filter>01Game\04EndScene</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1209,30 +1206,6 @@
     <ClInclude Include="mtgb\WorldToScreenData.h">
       <Filter>03mtgb\System\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EndText.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EndScene.h">
-      <Filter>01Game\04EndScene</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\RectContainsInfo.h">
-      <Filter>03mtgb\System\Collider\ColliderInfo</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\UIDrawCommand.h">
-      <Filter>03mtgb\System\Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\RectT.h">
-      <Filter>03mtgb\CoreType</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Vector2T.h">
-      <Filter>03mtgb\CoreType</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\Vector2F.h">
-      <Filter>03mtgb\CoreType</Filter>
-    </ClInclude>
-    <ClInclude Include="mtgb\RectF.h">
-      <Filter>03mtgb\CoreType</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -1270,6 +1243,9 @@
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Ground.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\WingEffect.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
   </ItemGroup>

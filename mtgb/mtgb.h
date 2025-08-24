@@ -77,6 +77,12 @@
 //
 #pragma endregion
 
+#pragma region Shaders
+
+#include "IOriginalShader.h"
+
+#pragma endregion
+
 #pragma region Unname
 
 using mtgb::ImageHandle;
