@@ -4,11 +4,11 @@
 
 #include <vector>
 #include "WindowContext.h"
+#include "RectContainsInfo.h"
+#include "RectF.h"
 namespace mtgb
 {
 	class Collider;
-	struct Vector3;
-	struct RectInt;
 	class GameObject;
 	class ColliderCP : public ComponentPool<Collider, false>
 	{
@@ -21,6 +21,6 @@ namespace mtgb
 
 		void TestDraw() const;
 		EntityId RaycastHit(const Vector3& _origin, const Vector3& _dir, float dist);
-		void RectContains(const RectInt& _rect, const std::string& _name, std::vector<GameObject*>* _pRectContainsGameObject, WindowContext _context);
+		void RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context);
 	};
 }

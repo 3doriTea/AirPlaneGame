@@ -7,8 +7,13 @@
 
 #include "Vector3.h"
 #include "Vector2.h"
+#include "Vector2T.h"
+#include "Vector2F.h"
 #include "Vector2Int.h"
+
+#include "RectT.h"
 #include "RectInt.h"
+#include "RectF.h"
 #include "WindowContextUtil.h"
 
 #include "Easing.h"
@@ -68,6 +73,7 @@
 #pragma region Data
 
 #include "InputData.h"
+#include "RectContainsInfo.h"
 //
 #pragma endregion
 
@@ -87,7 +93,9 @@ using mtgb::FBXModelHandle;
 using mtgb::Vector3;
 using mtgb::Vector2;
 using mtgb::Vector2Int;
+using mtgb::Vector2F;
 using mtgb::RectInt;
+using mtgb::RectF;
 
 using mtgb::GameObject;
 using mtgb::Transform;

@@ -125,14 +125,4 @@ void Player::Draw() const
 	//Draw::OBJModel(hModel_, pTransform_);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 	static int speed = 0;
-	
-	
-	Draw::ImmediateText(std::to_string(timer),0,0,100);
-	
-	//LOGF("PlayerDraw\n");
-	/*Inspector::Instance().ShowInspector(proxy_, name_.c_str());
-	if (CurrContext() == WindowContext::First)
-	{
-		Draw::TransformGuizmo(pTransform_);
-	}*/
 }

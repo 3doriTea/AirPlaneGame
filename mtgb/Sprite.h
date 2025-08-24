@@ -8,7 +8,8 @@
 #include "Color.h"
 #include <string>
 #include "Texture2D.h"
-
+#include "RectF.h"
+#include "Vector2F.h"
 
 namespace mtgb
 {
@@ -56,9 +57,9 @@ namespace mtgb
 		/// <param name="_rotationZ">âÒì]äpìx(Degree)</param>
 		/// <param name="_color">ï`âÊêF</param>
 		void Draw(
-			const RectInt& _draw,
+			const RectF& _draw,
 			const float _rotationZ,
-			const RectInt& _cut,
+			const RectF& _cut,
 			const Color& _color);
 
 		/// <summary>

@@ -18,9 +18,9 @@ void mtgb::Sprite::Load(const std::wstring& _fileName)
 }
 
 void mtgb::Sprite::Draw(
-	const RectInt& _draw,
+	const RectF& _draw,
 	const float _rotationZ,
-	const RectInt& _cut,
+	const RectF& _cut,
 	const Color& _color)
 {
 	using DirectX::XMMatrixScaling;      // 拡縮
@@ -29,7 +29,7 @@ void mtgb::Sprite::Draw(
 	using DirectX::XMMatrixIdentity;     // 単位行列
 	using DirectX::XMMatrixRotationZ;    // Z軸の回転行列
 
-	DirectX11Draw::SetBlendMode(BlendMode::Default);  // ブレンドモードデフォルト
+	DirectX11Draw::SetBlendMode(BlendMode::Sprite);  // ブレンドモードデフォルト
 	DirectX11Draw::SetIsWriteToDepthBuffer(false);    // 深度バッファへの書き込みなし
 
 	IShader::Draw<ConstantBuffer, Vertex>(
@@ -47,12 +47,12 @@ void mtgb::Sprite::Draw(
 			static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 			// 数学座標と描画座標のy軸差異解消
-			RectInt cartesianBox{ _draw };
+			RectF cartesianBox{ _draw };
 			cartesianBox.y = SCREEN_SIZE.y - cartesianBox.y;
 			cartesianBox.height *= -1;
 
-			const Vector2Int VIEW_BEGIN{ cartesianBox.GetBegin() };
-			const Vector2Int VIEW_END{ cartesianBox.GetEnd() };
+			const Vector2F VIEW_BEGIN{ cartesianBox.GetBegin() };
+			const Vector2F VIEW_END{ cartesianBox.GetEnd() };
 
 			// 表示するサイズに合わせる
 			Matrix4x4 scalingBox = XMMatrixScaling(
@@ -90,8 +90,8 @@ void mtgb::Sprite::Draw(
 #pragma region UV計算
 			// トリミング計算
 
-			const Vector2Int CUT_BEGIN{ _cut.GetBegin() };
-			const Vector2Int CUT_END{ _cut.GetEnd() };
+			const Vector2F CUT_BEGIN{ _cut.GetBegin() };
+			const Vector2F CUT_END{ _cut.GetEnd() };
 
 			// トリミング矩形の左上点を並行移動
 			Matrix4x4 uvMove = XMMatrixTranslation(

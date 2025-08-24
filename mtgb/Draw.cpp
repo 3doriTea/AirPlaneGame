@@ -53,26 +53,59 @@ void mtgb::Draw::Box(const RectInt& _rect, const Color& _color)
 
 void mtgb::Draw::Image(
 	const ImageHandle _hImage,
-	const RectInt& _draw,
-	const RectInt& _cut,
-	const float _rotationZ)
+	const RectF& _draw,
+	const RectF& _cut,
+	const float _rotationZ,
+	const UIParams& _uiParams)
 {
-	CheckSetShader(ShaderType::Sprite2D);
+	uiDrawCommands_.insert({
+		_uiParams,
+		[=]()
+		{
+			CheckSetShader(ShaderType::Sprite2D);
+			Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
+			pSprite->Draw(_draw, _rotationZ, _cut, Color::WHITE);
+		}
+		});
+}
 
-	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
-	pSprite->Draw(_draw, _rotationZ, _cut, Color::WHITE);
+void mtgb::Draw::Image(const ImageHandle _hImage, const RectF& _draw, const UIParams& _uiParams)
+{
+	Image(_hImage, _draw, { Vector2F::Zero(), Image::GetSizeF(_hImage) }, 0.0f, _uiParams);
 }
 
 void mtgb::Draw::Image(
 	const ImageHandle _hImage,
-	const Transform* _pTransform)
+	const Transform& _transform,
+	const UIParams& _uiParams)
 {
-	CheckSetShader(ShaderType::Sprite2D);
+	uiDrawCommands_.insert({
+		_uiParams,
+		[=]() {
+			CheckSetShader(ShaderType::Sprite2D);
 
 	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
 
 	const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
-	pSprite->Draw(_pTransform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+	pSprite->Draw(&_transform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+		} });
+	
+}
+
+void mtgb::Draw::Image(const ImageHandle _hImage, Transform&& _transform, const UIParams& _uiParams)
+{
+
+	uiDrawCommands_.insert({
+	_uiParams,
+	[=,transform = std::move(_transform)]() mutable {
+		CheckSetShader(ShaderType::Sprite2D);
+
+	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
+
+	const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
+	pSprite->Draw(&transform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+	} });
+
 }
 
 void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
@@ -81,56 +114,79 @@ void mtgb::Draw::Model(const ModelHandle _hModel, const Transform* _pTransform)
 	massert(false && "Draw::ModelÇ™åƒÇŒÇÍÇƒÇ¢Ç‹Ç∑Ç™ñ¢é¿ëïÇ≈Ç∑ÅBFbxÇ∆ObjÇ≈ï ä÷êîÇåƒÇÒÇ≈Ç≠ÇæÇ≥Ç¢ÅB @Draw::Model");
 }
 
-void mtgb::Draw::Text(const TextHandle _hText, const Vector2Int& origin,TextAlignment alignment)
+void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlignment _alignment, const UIParams& _uiParams)
 {
-	Text(_hText, static_cast<float>(origin.x), static_cast<float>(origin.y), alignment);
+	uiDrawCommands_.insert({
+	_uiParams,
+	[=]() {
+		DirectX11Draw::SetIsWriteToDepthBuffer(false);
+		CheckSetShader(ShaderType::Sprite2D);
+
+		TextLayoutData* layoutData = Game::System<mtgb::Text>().GetTextLayoutData(_hText);
+		auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
+
+		Game::System<mtgb::DirectWrite>().SetTextAlignment(_alignment, layoutData->layout);
+		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x, _origin.y + formatData.second.textTopOffset);
+		} });
 }
 
-void mtgb::Draw::Text(const TextHandle _hText, float x, float y, TextAlignment alignment)
-{
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
-	CheckSetShader(ShaderType::Sprite2D);
-
-	TextLayoutData* layoutData =  Game::System<mtgb::Text>().GetTextLayoutData(_hText);
-	auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
-
-	Game::System<mtgb::DirectWrite>().SetTextAlignment(alignment, layoutData->layout);
-	Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, x, y + formatData.second.textTopOffset);
-}
-
-void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, int size, TextAlignment alignment)
+void mtgb::Draw::ImmediateText(const std::string& _text, Vector2F _topLeft, int _size, TextAlignment _alignment,  const UIParams& _uiParams)
 {
 	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
-	ImmediateText(text, x, y,static_cast<float>(layoutBoxSize.x),static_cast<float>(layoutBoxSize.y),size,alignment);
+	ImmediateText(_text, { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment, _uiParams);
 }
 
-void mtgb::Draw::ImmediateText(const std::string& text, RectInt rect, int size, TextAlignment alignment)
+void mtgb::Draw::ImmediateText(std::string&& _text, Vector2F _topLeft, int _size, TextAlignment _alignment, const UIParams& _uiParams)
 {
-	ImmediateText(text,
-		static_cast<float>(rect.x),
-		static_cast<float>(rect.y),
-		static_cast<float>(rect.width),
-		static_cast<float>(rect.height),
-		size,
-		alignment
-		);
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	ImmediateText(std::move(_text), { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment,_uiParams);
 }
 
-void mtgb::Draw::ImmediateText(const std::string& text, float x, float y, float width, float height, int size, TextAlignment alignment)
+void mtgb::Draw::ImmediateText(const std::string& _text, RectF _rect, int _size, TextAlignment _alignment, const UIParams& _uiParams)
 {
-	DirectX11Draw::SetIsWriteToDepthBuffer(false);
-	CheckSetShader(ShaderType::Sprite2D);
+	uiDrawCommands_.insert({
+		_uiParams,
+		[=]() {
+			DirectX11Draw::SetIsWriteToDepthBuffer(false);
+			CheckSetShader(ShaderType::Sprite2D);
 
-	auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(size);
-	Game::System<DirectWrite>().SetTextAlignment(alignment, formatData.first);
-	Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData.first, formatData.second, x, y, width,height);
-
+			auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData.first);
+			Game::System<DirectWrite>().ImmediateDraw(ToWString(_text), formatData.first, formatData.second, 
+				_rect.x,
+				_rect.y,
+				_rect.width,
+				_rect.height);
+		}
+		});
 }
 
-void mtgb::Draw::ChangeFontSize(int size)
+void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, TextAlignment _alignment, const UIParams& _uiParams)
 {
-	currentDefaultFontSize_ = size;
-	auto fontFormatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(size);
+
+	uiDrawCommands_.insert({
+	_uiParams,
+	[=, text = std::move(_text)]() mutable {
+		DirectX11Draw::SetIsWriteToDepthBuffer(false);
+		CheckSetShader(ShaderType::Sprite2D);
+
+		auto formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData.first);
+		Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData.first, formatData.second,
+			_rect.x,
+			_rect.y,
+			_rect.width,
+			_rect.height);
+	}
+		});
+}
+
+
+
+void mtgb::Draw::ChangeFontSize(int _size)
+{
+	currentDefaultFontSize_ = _size;
+	auto fontFormatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 	Game::System<DirectWrite>().ChangeFormat(fontFormatData.first, fontFormatData.second);
 }
 
@@ -192,6 +248,25 @@ void mtgb::Draw::Update()
 {
 }
 
+void mtgb::Draw::FlushUIDrawCommands(GameObjectLayer _layer)
+{
+	using mtbit::operator|;
+	for (auto& drawCommand : uiDrawCommands_)
+	{
+		if (drawCommand.params.layerFlag.Has(GameObjectLayer::All | _layer))
+		{
+			drawCommand.drawFunction();
+		}
+	}
+}
+
+void mtgb::Draw::ClearUICommands()
+{
+	uiDrawCommands_.clear();
+}
+
 ShaderType mtgb::Draw::onceShaderType_{ ShaderType::Max };
 int mtgb::Draw::currentDefaultFontSize_{ 36 };
 TextAlignment mtgb::Draw::currentDefaultTextAlignment_{ TextAlignment::center };
+mtgb::UIParams mtgb::Draw::defaultUIParams_{};
+std::multiset<mtgb::UIDrawCommand> mtgb::Draw::uiDrawCommands_{};

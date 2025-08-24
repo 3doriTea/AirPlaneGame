@@ -38,7 +38,7 @@ namespace mtgb
 	enum struct BlendMode : int8_t
 	{
 		Default,
-
+		Sprite,
 		Max,
 	};
 

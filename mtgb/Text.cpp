@@ -63,9 +63,9 @@ int mtgb::Text::Load(const std::string& str, int fontSize, float layoutBoxWidth,
 	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize,layoutBoxWidth,layoutBoxHeight);
 }
 
-int mtgb::Text::Load(const std::string& str, int fontSize, Vector2Int layoutBoxSize)
+int mtgb::Text::Load(const std::string& str, int fontSize, Vector2F layoutBoxSize)
 {
-	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize, layoutBoxSize.y, layoutBoxSize.x);
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize, layoutBoxSize.x, layoutBoxSize.y);
 }
 
 #if false

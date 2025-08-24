@@ -8,7 +8,7 @@
 #include "Debug.h"
 #include "MTImGui.h"
 #include "../ImGui/imgui.h"
-
+#include "Draw.h"
 void mtgb::RenderSystem::Initialize()
 {
 }
@@ -29,14 +29,20 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	//一つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::First);
 	DirectX11Draw::Begin();
+	
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A); });
+	Draw::FlushUIDrawCommands(GameObjectLayer::A);
 	DirectX11Draw::End();
+	Draw::ClearUICommands();
 
 	//二つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::Second);
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::B); });
+	Draw::FlushUIDrawCommands(GameObjectLayer::B);
 	DirectX11Draw::End();
+	Draw::ClearUICommands();
+
 }
 
 void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
@@ -54,6 +60,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	DirectX11Draw::Begin();
 	imGui.SetGameViewCamera();
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
+	Draw::FlushUIDrawCommands(GameObjectLayer::All);
 
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();

@@ -1,11 +1,15 @@
 ﻿#pragma once
 #include "Vector2Int.h"
 #include "RectInt.h"
+#include "RectF.h"
+#include "Vector2F.h"
 #include "Color.h"
 #include "ISystem.h"
 #include "ShaderType.h"
 #include "TextAlignment.h"
-
+#include <set>
+#include "UIDrawCommand.h"
+#include <type_traits>
 namespace mtgb
 {
 	class Figure;
@@ -14,11 +18,14 @@ namespace mtgb
 	class Ground;
 	//enum struct ShaderType : int8_t;
 	
+	
+
 	/// <summary>
 	/// 描画する系
 	/// </summary>
 	class Draw final : public ISystem
 	{
+		friend class RenderSystem;
 	public:
 		enum struct Pivot
 		{
@@ -27,6 +34,7 @@ namespace mtgb
 			BottomMiddle,
 		};
 
+		
 	public:
 		static void SetShaderOnce(const ShaderType _type) { Draw::onceShaderType_ = _type; }
 		/// <summary>
@@ -34,6 +42,15 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_default">セットされていない場合のデフォルトシェーダ</param>
 		static void CheckSetShader(const ShaderType _default);
+
+
+		/*static void Image(
+			const Vector2Int& _position,
+			const ImageHandle _hImage);
+
+		static void Image(
+			const RectInt& _draw,
+			const ImageHandle _hImage);*/
 
 		static void Box(
 			const Vector2Int& _begin,
@@ -44,23 +61,27 @@ namespace mtgb
 			const RectInt& _rect,
 			const Color& _color);
 
-		/*static void Image(
-			const Vector2Int& _position,
-			const ImageHandle _hImage);
-
 		static void Image(
-			const RectInt& _draw,
-			const ImageHandle _hImage);*/
+			const ImageHandle _hImage,
+			const RectF& _draw,
+			const RectF& _cut,
+			const float _rotationZ,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		static void Image(
 			const ImageHandle _hImage,
-			const RectInt& _draw,
-			const RectInt& _cut,
-			const float _rotationZ);
+			const RectF& _draw,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		static void Image(
 			const ImageHandle _hImage,
-			const Transform* _pTransform);
+			const Transform&  _transform,
+			const UIParams& _uiParams = defaultUIParams_);
+
+		static void Image(
+			const ImageHandle _hImage,
+			Transform&& _transform,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		static void Model(
 			const ModelHandle _hModel,
@@ -81,79 +102,78 @@ namespace mtgb
 		/// <para> 矩形領域に描画される 幅と高さはLoad時に指定したもの </para>
 		/// </summary>
 		/// <param name="_hText">テキストのハンドル</param>
-		/// <param name="origin">矩形領域の左上</param>
-		/// <param name="alignment">テキストの配置</param>
+		/// <param name="_origin">矩形領域の左上</param>
+		/// <param name="_alignment">テキストの配置</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
 		static void Text(
 			const TextHandle _hText, 
-			const Vector2Int& origin,
-			TextAlignment alignment = currentDefaultTextAlignment_);
+			const Vector2F& _origin,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
 
-		static void Text(
-			const TextHandle _hText, 
-			float x, float y,
-			TextAlignment alignment = currentDefaultTextAlignment_);
-
+	
 		/// <summary>
-		/// 頻繫に変わるテキストを描画する
+		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
+		/// <para> 矩形領域に描画される 幅と高さはウィンドウのサイズ </para> 
 		/// </summary>
-		/// <param name="text">描画する文字列</param>
-		/// <param name="x">描画座標ピクセル x</param>
-		/// <param name="y">描画座標ピクセル y</param>
-		/*static void ImmediateText(
-			const std::string& text,
-			float x,
-			float y
-		);*/
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_topLeft">矩形の左上</param>
+		/// <param name="_size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateText(const std::string& _text,
+			Vector2F _topLeft,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		/// <summary>
 		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
-		/// <para> 矩形領域に描画される 幅と高さはウィンドウのサイズ </para>
+		/// <para> 矩形領域に描画される 幅と高さはウィンドウのサイズ </para> 
 		/// </summary>
-		/// <param name="text">描画する文字列</param>
-		/// <param name="x">矩形領域の左端</param>
-		/// <param name="y">矩形領域の上端</param>
-		/// <param name="size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
-		/// <param name="alignment">テキストの配置（省略時は設定中の配置）</param>
-		static void ImmediateText(
-			const std::string& text,
-			float x,
-			float y,
-			int size = currentDefaultFontSize_,
-			TextAlignment alignment = currentDefaultTextAlignment_
-		);
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_topLeft">矩形の左上</param>
+		/// <param name="_size"></param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateText(std::string&& _text,
+			Vector2F _topLeft,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
+		
 		
 		/// <summary>
 		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
 		/// <para> 矩形領域に描画される </para>
 		/// </summary>
-		/// <param name="text">描画する文字列</param>
-		/// <param name="rect">矩形</param>
-		/// <param name="size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
-		/// <param name="alignment">テキストの配置（省略時は設定中の配置）</param>
-		static void ImmediateText(
-			const std::string& text,
-			RectInt rect,
-			int size = currentDefaultFontSize_,
-			TextAlignment alignment = currentDefaultTextAlignment_
-		);
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_rect">矩形</param>
+		/// <param name="_size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateText(const std::string& _text,
+			RectF _rect,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		/// <summary>
 		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
 		/// <para> 矩形領域に描画される </para>
 		/// </summary>
-		/// <param name="text">描画する文字列</param>
-		/// <param name="x">矩形領域の左端</param>
-		/// <param name="y">矩形領域の上端</param>
-		/// <param name="width">矩形領域の幅</param>
-		/// <param name="height">矩形領域の幅</param>
-		/// <param name="size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
-		/// <param name="alignment">テキストの配置（省略時は設定中の配置）</param>
-		static void ImmediateText(
-			const std::string& text,
-			float x, float y,float width,float height,
-			int size = currentDefaultFontSize_,
-			TextAlignment alignment = currentDefaultTextAlignment_
-		);
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_rect">矩形</param>
+		/// <param name="_size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateText(std::string&& _text,
+			RectF _rect,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
+
+		
 
 		/// <summary>
 		/// テキストの配置を設定
@@ -165,8 +185,8 @@ namespace mtgb
 		/// フォント、というか文字のサイズを設定
 		/// 以降テキスト描画時に省略すると適用される
 		/// </summary>
-		/// <param name="size"></param>
-		static void ChangeFontSize(int size);
+		/// <param name="_size"></param>
+		static void ChangeFontSize(int _size);
 		static void GroundPlane();
 
 	public:
@@ -174,13 +194,17 @@ namespace mtgb
 		~Draw();
 		void Initialize() override;
 		void Update() override;
-
+		static void FlushUIDrawCommands(GameObjectLayer _layer);
+		static void ClearUICommands();
 	private:
 		FbxModel* pFbxModel_;
 		Figure* pFigure_;
 		Ground* pGround_;
 		static int currentDefaultFontSize_;
 		static TextAlignment currentDefaultTextAlignment_;
+		static UIParams defaultUIParams_;
 		static ShaderType onceShaderType_;
+		static std::multiset<UIDrawCommand> uiDrawCommands_;
+
 	};
 }

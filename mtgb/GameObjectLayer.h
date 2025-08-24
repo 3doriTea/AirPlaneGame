@@ -7,6 +7,7 @@ namespace mtgb
 	{
 		A,
 		B,
+		All,
 	};
 
 	using GameObjectLayerFlag = mtbit::BitFlag<GameObjectLayer>;

@@ -5,8 +5,17 @@
 
 using namespace mtgb;
 
-TextBox::TextBox() : TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
+TextBox::TextBox() : GameObject(GameObjectBuilder()
+    .Build()),
+    TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
 {
+}
+
+TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
+{
+    testtext_ = _testText;
+    SetTextSpeedSec(_textsec);
+    Show(testtext_);
 }
 
 TextBox::~TextBox()
@@ -22,7 +31,6 @@ void TextBox::SetTextSpeedSec(const float _sec)
 // 文字列をいざ表示する
 void TextBox::Show(const std::string& _text)
 {
-    testtext_ = _text;
     currentIndex_ = 0;
     finished_ = false;
 
@@ -70,11 +78,17 @@ bool TextBox::IsFinished()
     return finished_;
 }
 
+void TextBox::Update()
+{
+}
+
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
 {
     if (currentIndex_ > 0 && !testtext_.empty())
     {
-        Draw::ImmediateText(testtext_.substr(0, currentIndex_), 400.0f, 400.0f, 48);
+        Draw::ChangeTextAlignment(TextAlignment::topLeft);
+        Draw::ImmediateText(testtext_.substr(0, currentIndex_), {400.0f,400.0f}, 48);
     }
+    //Draw::ImmediateText(testtext_, 0, 30, 100);
 }

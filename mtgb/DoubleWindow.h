@@ -15,7 +15,7 @@ namespace mtgb
 		void Update() override;
 
 		
-		void RegisterFirstWindowCamera();
+		void SetDoubleWindowPos();
 	private:
 		WindowContext context1_;
 		WindowContext context2_;

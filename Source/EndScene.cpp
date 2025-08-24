@@ -1,6 +1,8 @@
 #include "EndScene.h"
 #include "SkySphere.h"
 #include "TestScene/TestScene.h"
+#include "Draw.h"
+#include "EndText.h"
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
@@ -16,23 +18,14 @@ EndScene::~EndScene()
 
 void EndScene::Initialize()
 {
-	MTImGui::Instance().Initialize();
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
+
 	Audio::Clear();
 
 	Instantiate<SkySphere>();
-
-	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
-	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
-
-	CameraHandleInScene hCamera1 = RegisterCameraGameObject(
-		Instantiate<PlayerPilot>(eIdPlayer));
-
-	CameraHandleInScene hCamera2 = RegisterCameraGameObject(
-		Instantiate<PlayerGunner>(eIdPlayer));
-
-	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
-	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
-
+//	Instantiate<EndText>();
+	Instantiate<TextBox>("tekita", 0.1f);
 }
 
 void EndScene::Update()

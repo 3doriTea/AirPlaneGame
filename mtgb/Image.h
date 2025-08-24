@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include "Vector2Int.h"
+#include "Vector2F.h"
 
 namespace mtgb
 {
@@ -47,7 +48,7 @@ namespace mtgb
 		/// <param name="_imageHandle">画像のハンドル</param>
 		/// <returns>画像の縦横サイズ</returns>
 		static const Vector2Int GetSize(const ImageHandle _imageHandle);
-
+		static const Vector2F GetSizeF(const ImageHandle _imageHandle);
 	private:
 		ImageHandle handleCounter_;               // ハンドラの加算用
 		std::map<ImageHandle, Sprite*> sprites_;  // 読み込まれたスプライト

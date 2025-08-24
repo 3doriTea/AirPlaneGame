@@ -147,6 +147,7 @@
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\EndScene.cpp" />
+    <ClCompile Include="Source\EndText.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Network\PIIO.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -197,6 +198,9 @@
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
+    <ClInclude Include="mtgb\RectF.h" />
+    <ClInclude Include="mtgb\RectT.h" />
+    <ClInclude Include="mtgb\RectContainsInfo.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
@@ -207,6 +211,9 @@
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
     <ClInclude Include="mtgb\TypeRegistryImpl.h" />
+    <ClInclude Include="mtgb\UIDrawCommand.h" />
+    <ClInclude Include="mtgb\Vector2F.h" />
+    <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
@@ -335,6 +342,7 @@
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\EndScene.h" />
+    <ClInclude Include="Source\EndText.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\JsonUtility.h" />
     <ClInclude Include="Source\Network\PIIO.h">

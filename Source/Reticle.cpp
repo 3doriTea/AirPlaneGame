@@ -52,10 +52,11 @@ void Reticle::Update()
 
 void Reticle::Draw() const
 {
-	const Vector2Int IMAGE_SIZE{ Image::GetSize(hImage_) };
+	const Vector2F IMAGE_SIZE{ Image::GetSizeF(hImage_) };
 	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	const Vector2Int DRAW_SIZE{ IMAGE_SIZE };
-	const Vector2Int DRAW_POSITION{ SCREEN_SIZE / 2 - DRAW_SIZE / 2 };
-
-	Draw::Image(hImage_, { DRAW_POSITION, DRAW_SIZE }, { Vector2Int::Zero(), IMAGE_SIZE }, 0.0f);
+	
+	const Vector2F DRAW_SIZE{ IMAGE_SIZE };
+	const Vector2F DRAW_POSITION{ SCREEN_SIZE / 2.0f - DRAW_SIZE / 2.0f };
+	const UIParams UI_PARAM{ .layerFlag = layerFlag_ };
+	Draw::Image(hImage_, { DRAW_POSITION, DRAW_SIZE }, { Vector2F::Zero(), IMAGE_SIZE }, 0.0f);
 }

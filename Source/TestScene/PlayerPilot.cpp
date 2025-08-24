@@ -8,12 +8,13 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 
 	.Build()),
 	pTransform{ Component<Transform>() },
-	lockOnSide_{400}
+	lockOnSide_{400},
+	enemyFrameSideExtents_{15}
 {
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 
-	rectCenter_.x = screenSize.x / 2;
-	rectCenter_.y = screenSize.y / 2;
+	rectCenter_.x = screenSize.x / 2.0f;
+	rectCenter_.y = screenSize.y / 2.0f;
 
 	lockOnRect_.x = rectCenter_.x - lockOnSide_ / 2;
 	lockOnRect_.width = lockOnSide_;
@@ -21,7 +22,13 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	lockOnRect_.height = lockOnSide_;
 
 	pTransform->SetParent(_plane);
-	hImage_ = Image::Load("Image/lockOnFrame.png");
+	lockOnFrame_ = Image::Load("Image/lockOnFrame.png");
+	lockOnEnemyFrame_ = Image::Load("Image/lockOnEnemyFrame.png");
+
+	enemyFrameRect_.size = { enemyFrameSideExtents_ * 2,enemyFrameSideExtents_ * 2};
+	
+
+	uiParams_.layerFlag = GameObjectLayer::A;
 }
 
 PlayerPilot::~PlayerPilot()
@@ -30,10 +37,11 @@ PlayerPilot::~PlayerPilot()
 
 void PlayerPilot::Update()
 {
+	LockOn();
 	if (InputUtil::GetKeyDown(KeyCode::Space))
 	{
 		LOGIMGUI("Pilot:shoot");
-		LockOnShoot();
+		Shoot();
 	}
 
 	MTImGui::Instance().TypedShow(pTransform, "PlayerPilot");
@@ -41,24 +49,36 @@ void PlayerPilot::Update()
 
 void PlayerPilot::Draw() const
 {
+	//©“®‚Å‘_‚¢‚ğ’è‚ß‚é”ÍˆÍ‚ğ•`‰æ
 	const Vector2Int DRAW_SIZE{ lockOnSide_ ,lockOnSide_ };
-	Draw::Image(hImage_, lockOnRect_, { Vector2Int::Zero(),Image::GetSize(hImage_) }, 0.0f);
+	Draw::Image(lockOnFrame_, lockOnRect_,uiParams_);
+
+	//‘_‚¢‚ª’è‚Ü‚Á‚Ä‚¢‚é“G‚ğ‹­’²•\¦
+	if (lockOnAny)
+	{
+		Draw::Image(lockOnEnemyFrame_, enemyFrameRect_,uiParams_);
+	}
+	Draw::ImmediateText("apple", { 0,0 });
 }
 
-void PlayerPilot::LockOnShoot()
+void PlayerPilot::LockOn()
 {
-	static std::vector<GameObject*> enemies;
+	static std::vector<RectContainsInfo> enemies;
 	// TODO : WindowContext‚ğ‚×‚½‘‚«‚Å‚È‚­PlayerPilot‚ª©g‚Ì‚ğ•Û‚·‚é‚æ‚¤‚É!!!
 	Game::System<ColliderCP>().RectContains(lockOnRect_, "Enemy", &enemies, WindowContext::First);
 	if (enemies.empty())
+	{
+		lockOnAny = false;
 		return;
+	}
+	lockOnAny = true;
 
 	// ƒ[ƒ‹ƒhÀ•WŒn‚Åˆê”Ô‹ß‚¢“G‚ğ‘_‚¤
-	GameObject* nearestEnemy = enemies.front();
+	RectContainsInfo& nearestEnemy = enemies.front();
 	for (auto& enemy : enemies)
 	{
-		float enemyDis = (pTransform->position - enemy->Component<Transform>()->position).Size();
-		float nearestDis = (pTransform->position - nearestEnemy->Component<Transform>()->position).Size();
+		float enemyDis = (pTransform->position - enemy.worldPos).Size();
+		float nearestDis = (pTransform->position - nearestEnemy.worldPos).Size();
 
 		if (enemyDis < nearestDis)
 		{
@@ -66,8 +86,15 @@ void PlayerPilot::LockOnShoot()
 		}
 	}
 
-	Vector3 targetPos = nearestEnemy->Component<Transform>()->position;
-	Vector3 toTarget = Vector3::Normalize(targetPos - pTransform->position);
+	targetInfo_ = nearestEnemy;
+
+	enemyFrameRect_.x = targetInfo_.screenPos.x - enemyFrameSideExtents_;
+	enemyFrameRect_.y = targetInfo_.screenPos.y - enemyFrameSideExtents_;
+}
+
+void PlayerPilot::Shoot()
+{
+	Vector3 toTarget = Vector3::Normalize(targetInfo_.worldPos - pTransform->position);
 	Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
 	Instantiate<PlayerBullet>(pTransform->position + Vector3::Forward() * 1.0f, shootDir);
 }
