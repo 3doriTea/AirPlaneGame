@@ -20,7 +20,6 @@ namespace
 
 PlayScene::PlayScene()
 {
-	tBox_ = new TextBox();
 	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
 
@@ -53,8 +52,6 @@ void PlayScene::Initialize()
 	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
 
 	// 表示したいテキストを開始
-	tBox_->SetTextSpeedSec(0.1f);
-	tBox_->Show("hello this test");
 
 	ppiio_->Start(SERVER_IPEP);
 }
@@ -123,7 +120,6 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
-	tBox_->Draw();
 }
 
 void PlayScene::End()

@@ -20,6 +20,7 @@ TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
 
 TextBox::~TextBox()
 {
+    testtext_ = "";
 }
 
 // 1文字あたりの表示秒数
@@ -78,9 +79,6 @@ bool TextBox::IsFinished()
     return finished_;
 }
 
-void TextBox::Update()
-{
-}
 
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const

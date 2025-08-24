@@ -19,7 +19,6 @@ public:
 	void End() override;
 
 private:
-	TextBox* tBox_;
 	Network::PIIO* ppiio_;
 	int val_;
 
