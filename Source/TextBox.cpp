@@ -20,6 +20,9 @@ TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
 
 TextBox::~TextBox()
 {
+    mtgb::Timer::Remove(hTimer_);
+    
+    mtgb::Timer::Remove(cTimer_);
 }
 
 // 1ï∂éöÇ†ÇΩÇËÇÃï\é¶ïbêî
@@ -62,7 +65,7 @@ void TextBox::Show(const std::string& _text)
                         testtext_.clear();
                         currentIndex_ = 0;
                         finished_ = false;
-                        cTimer_ = nullptr;
+                        //cTimer_ = nullptr;
                     });
             }
         });
