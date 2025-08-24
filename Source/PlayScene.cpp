@@ -25,7 +25,6 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
-	delete tBox_;
 	//delete ppiio_;
 }
 
