@@ -20,7 +20,8 @@ namespace mtgb
 		void Update() override;
 
 		void TestDraw() const;
-		EntityId RaycastHit(const Vector3& _origin, const Vector3& _dir, float dist);
+		EntityId RaycastHitAll(const Vector3& _origin, const Vector3& _dir, float dist);
+		bool RaycastHit(const Vector3& _origin, const Vector3& _dir, float* dist, EntityId _entityId);
 		void RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context);
 	};
 }

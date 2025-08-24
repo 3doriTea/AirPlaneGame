@@ -16,6 +16,7 @@ struct Vector3Show : refl::attr::usage::type
 	}
 };
 
+
 struct QuaternionSHow : refl::attr::usage::type
 {
 	void operator()(DirectX::XMVECTORF32* vec, const char* name) const

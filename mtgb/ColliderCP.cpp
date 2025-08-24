@@ -87,7 +87,7 @@ void mtgb::ColliderCP::TestDraw() const
 	}
 	LOGF("ColliderCP END\n");
 }
-mtgb::EntityId mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, float dist)
+mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vector3& _dir, float dist)
 {
 	EntityId nearestEntity = INVALD_ENTITY;
 
@@ -95,28 +95,42 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector
 	{
 		if (poolId_[i] != INVALD_ENTITY)
 		{
-			std::vector<Collider*> colliders{};
-			Game::System<ColliderCP>().TryGet(&colliders, poolId_[i]);
+			/*std::vector<Collider*> colliders{};
+			Game::System<ColliderCP>().TryGet(&colliders, poolId_[i]);*/
 
 			float nearest = dist;
 			Transform* pTransform;
 			float distance = 0.0f;
 			//pool_[i]
-			for (auto& collider : colliders)
+			//for (auto& collider : colliders)
 			{
-				if (collider->IsHit(_origin, _dir, &distance))
+				//if (collider->IsHit(_origin, _dir, &distance))
+				EntityId id = poolId_[i];
+				if(RaycastHit(_origin,_dir,&distance,id))
 				{
-					Game::System<TransformCP>().TryGet(pTransform, collider->GetEntityId());
+					Game::System<TransformCP>().TryGet(pTransform, id);
 					if(distance < nearest)
 					{
 						nearest = distance;
-						nearestEntity = collider->GetEntityId();
+						nearestEntity = id;
 					}
 				}
 			}
 		}
 	}
 	return nearestEntity;
+}
+
+bool mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, float* dist, EntityId _entityId)
+{
+	std::vector<Collider*> colliders{};
+	if (!TryGet(&colliders, _entityId))
+		return false;
+
+	for (auto& collider : colliders)
+	{
+		return collider->IsHit(_origin, _dir, dist);
+	}
 }
 
 void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
@@ -138,7 +152,7 @@ void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name
 			continue;
 		if (RectF::Contains(screenPos, _rect))
 		{
-			_info->emplace_back(worldPos,screenPos);
+			_info->emplace_back(worldPos,screenPos,object->GetEntityId());
 		}
 	}
 }

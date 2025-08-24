@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "Vector2F.h"
+#include "Entity.h"
 namespace mtgb
 {
 	/// <summary>
@@ -10,10 +11,12 @@ namespace mtgb
 	{
 		Vector3 worldPos{};//ワールド座標での座標
 		Vector2F screenPos{};//スクリーン座標系での座標
+		EntityId entityId;
 		RectContainsInfo() = default;
-		RectContainsInfo(Vector3 _worldPos, Vector2F _screenPos)
+		RectContainsInfo(Vector3 _worldPos, Vector2F _screenPos,EntityId _entityId)
 			:worldPos{ _worldPos }
 			,screenPos{ _screenPos}
+			,entityId{_entityId}
 		{ }
 	};
 }

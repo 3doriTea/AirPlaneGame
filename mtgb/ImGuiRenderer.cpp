@@ -88,7 +88,7 @@ void mtgb::ImGuiRenderer::Initialize()
 
 	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	winWidth_ = SCREEN_SIZE.x;
-	winHeight_ = SCREEN_SIZE.y;
+	winHeight_ = 270;
 	Game::System<DirectX11Manager>().CreateViewport(SCREEN_SIZE, viewport_);
 
 	//テクスチャ作成
@@ -159,7 +159,7 @@ void mtgb::ImGuiRenderer::BeginImGuizmoFrame()
 
 void mtgb::ImGuiRenderer::Begin(const char* _str)
 {
-	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Always);
+	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
 
 	ImGui::Begin(_str);
 }
@@ -174,7 +174,7 @@ void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
 			flags |= ImGuiWindowFlags_NoMove;
 		}
 	}
-	ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Always);
+	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
 	
 	ImGui::Begin(_str,0,flags);
 }
@@ -294,7 +294,7 @@ void mtgb::ImGuizmoManipulator::SelectTransform()
 	const CameraSystem& camera = Game::System<CameraSystem>();
 	float distance = camera.GetFar() - camera.GetNear();          // 元の長さを計算
 
-	EntityId entityId = Game::System<ColliderCP>().RaycastHit(origin, direction, distance);
+	EntityId entityId = Game::System<ColliderCP>().RaycastHitAll(origin, direction, distance);
 	if (entityId != INVALD_ENTITY)
 	{
 		pTargetTransform_ = &Game::System<TransformCP>().Get(entityId);

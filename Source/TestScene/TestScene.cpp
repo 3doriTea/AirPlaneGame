@@ -10,6 +10,7 @@
 #include "EnemyPlane.h"
 #include "Terrain.h"
 #include "UI/Radar.h"
+#include "HighlightEnemy.h"
 
 using namespace mtgb;
 
@@ -54,6 +55,8 @@ void TestScene::Initialize()
 
 	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
 	pGunner->SetRadarUI(pGunnerRader);
+
+	Instantiate<HighlightEnemy>();
 }
 
 void TestScene::Update()

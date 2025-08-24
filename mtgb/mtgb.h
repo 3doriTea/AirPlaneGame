@@ -18,6 +18,7 @@
 
 #include "Easing.h"
 #include "Mathf.h"
+#include "RectDetector.h"
 
 #pragma endregion
 

@@ -41,6 +41,10 @@ void mtgb::MTImGui::SetupShowFunc()
             TypeRegistry::Instance().CallFunc(&_target->rotate, "Rotation");
             TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
         });
+    Set<DirectX::XMVECTOR>([](DirectX::XMVECTOR* _target, const char* _name)
+        {
+            ImGui::InputFloat4(_name, _target->m128_f32);
+        });
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
 {

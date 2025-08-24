@@ -1,33 +1,57 @@
 #include "PlayerPilot.h"
 #include "PlayerBullet.h"
+#include <algorithm>
 
 using namespace mtgb;
 
+namespace
+{
+	
+}
 PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
 
 	.Build()),
 	pTransform{ Component<Transform>() },
-	lockOnSide_{400},
-	enemyFrameSideExtents_{15}
+	lockOnSide_{400.0f},
+	enemyFrameSideExtents_{30.0f},
+	lockOnAny_{ false },
+	lockOnDistance_{30.0f},
+	pTargetInfo_{nullptr}
 {
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 
-	rectCenter_.x = screenSize.x / 2.0f;
-	rectCenter_.y = screenSize.y / 2.0f;
-
-	lockOnRect_.x = rectCenter_.x - lockOnSide_ / 2;
-	lockOnRect_.width = lockOnSide_;
-	lockOnRect_.y = rectCenter_.y - lockOnSide_ / 2;
-	lockOnRect_.height = lockOnSide_;
-
-	pTransform->SetParent(_plane);
-	lockOnFrame_ = Image::Load("Image/lockOnFrame.png");
-	lockOnEnemyFrame_ = Image::Load("Image/lockOnEnemyFrame.png");
-
-	enemyFrameRect_.size = { enemyFrameSideExtents_ * 2,enemyFrameSideExtents_ * 2};
+	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
 	
+	lockOnRect_ = 
+	{
+		rectCenter.x - lockOnSide_ / 2.0f,
+		rectCenter.y - lockOnSide_ / 2.0f,
+		lockOnSide_,
+		lockOnSide_ 
+	};
 
+
+	rectDetector.config = 
+	{
+		.targetName = "Enemy",
+		.windowContext = WindowContext::First,
+		.detectionRect
+			{
+				rectCenter.x - lockOnSide_ / 2.0f,
+				rectCenter.y - lockOnSide_ / 2.0f,
+				lockOnSide_,
+				lockOnSide_
+			},
+		.maxDistance = 300.0f,
+	};
+	pTransform->SetParent(_plane);
+
+	lockOnFrame_ = Image::Load("Image/lockOnFrame.png");
+	lockOnReticle_ = Image::Load("Image/lockOnReticle.png");
+
+	enemyFrameRect_.size = { enemyFrameSideExtents_ * 2.0f,enemyFrameSideExtents_ * 2.0f};
+	
 	uiParams_.layerFlag = GameObjectLayer::A;
 }
 
@@ -54,47 +78,47 @@ void PlayerPilot::Draw() const
 	Draw::Image(lockOnFrame_, lockOnRect_,uiParams_);
 
 	//狙いが定まっている敵を強調表示
-	if (lockOnAny)
+	if (rectDetector.HasDetectedTargets())
 	{
-		Draw::Image(lockOnEnemyFrame_, enemyFrameRect_,uiParams_);
+		Draw::Image(lockOnReticle_, enemyFrameRect_, uiParams_);
 	}
-	Draw::ImmediateText("apple", { 0,0 });
 }
 
 void PlayerPilot::LockOn()
 {
-	static std::vector<RectContainsInfo> enemies;
-	// TODO : WindowContextをべた書きでなくPlayerPilotが自身のを保持するように!!!
-	Game::System<ColliderCP>().RectContains(lockOnRect_, "Enemy", &enemies, WindowContext::First);
-	if (enemies.empty())
-	{
-		lockOnAny = false;
-		return;
-	}
-	lockOnAny = true;
+	rectDetector.UpdateDetection();
 
 	// ワールド座標系で一番近い敵を狙う
-	RectContainsInfo& nearestEnemy = enemies.front();
-	for (auto& enemy : enemies)
-	{
-		float enemyDis = (pTransform->position - enemy.worldPos).Size();
-		float nearestDis = (pTransform->position - nearestEnemy.worldPos).Size();
 
-		if (enemyDis < nearestDis)
+	auto it = std::min_element(
+		rectDetector.detectedTargets.begin(),
+		rectDetector.detectedTargets.end(),
+		[this](const RectContainsInfo& a, const RectContainsInfo& b)
 		{
-			nearestEnemy = enemy;
+			float da = (pTransform->position - a.worldPos).Size();
+			float db = (pTransform->position - b.worldPos).Size();
+			return da < db;
 		}
+	);
+	
+	if (it != rectDetector.detectedTargets.end()) {
+		pTargetInfo_ = &(*it); // アドレスを代入
+		enemyFrameRect_.x = pTargetInfo_->screenPos.x - enemyFrameSideExtents_ ;
+		enemyFrameRect_.y = pTargetInfo_->screenPos.y - enemyFrameSideExtents_ ;
+	}
+	else {
+		pTargetInfo_ = nullptr; // 見つからなかった場合はnullptr
 	}
 
-	targetInfo_ = nearestEnemy;
-
-	enemyFrameRect_.x = targetInfo_.screenPos.x - enemyFrameSideExtents_;
-	enemyFrameRect_.y = targetInfo_.screenPos.y - enemyFrameSideExtents_;
+	
 }
 
 void PlayerPilot::Shoot()
 {
-	Vector3 toTarget = Vector3::Normalize(targetInfo_.worldPos - pTransform->position);
-	Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
-	Instantiate<PlayerBullet>(pTransform->position + Vector3::Forward() * 1.0f, shootDir);
+	if (rectDetector.HasDetectedTargets())
+	{
+		Vector3 toTarget = Vector3::Normalize(pTargetInfo_->worldPos - pTransform->position);
+		Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
+		Instantiate<PlayerBullet>(pTransform->position + Vector3::Forward() * 1.0f, shootDir);
+	}
 }
