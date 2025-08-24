@@ -15,8 +15,6 @@ public:
 	void End() override;
 
 private:
-	TextBox* tBox_;
-	EndText* testMoji_;
 
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;

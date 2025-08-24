@@ -13,7 +13,6 @@ public:
 	void SetTextSpeedSec(const float _sec);
 	void Show(const std::string& _text);  // 文字列をいざ表示する
 	bool IsFinished();  // 表示し終わっている true / false
-	void Update() override;
 	void Draw() const override;  // 所属するゲームオブジェクトから呼ぶ
 
 private:

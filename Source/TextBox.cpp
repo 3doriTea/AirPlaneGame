@@ -23,6 +23,7 @@ TextBox::~TextBox()
     mtgb::Timer::Remove(hTimer_);
     
     mtgb::Timer::Remove(cTimer_);
+    testtext_ = "";
 }
 
 // 1文字あたりの表示秒数
@@ -81,9 +82,6 @@ bool TextBox::IsFinished()
     return finished_;
 }
 
-void TextBox::Update()
-{
-}
 
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
