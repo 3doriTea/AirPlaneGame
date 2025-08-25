@@ -67,7 +67,7 @@ void PlayerPilot::Update()
 		LOGIMGUI("Pilot:shoot");
 		Shoot();
 	}
-
+	
 	MTImGui::Instance().TypedShow(pTransform, "PlayerPilot");
 }
 
@@ -101,7 +101,8 @@ void PlayerPilot::LockOn()
 		}
 	);
 	
-	if (it != rectDetector.detectedTargets.end()) {
+	if (it != rectDetector.detectedTargets.end()) 
+	{
 		pTargetInfo_ = &(*it); // ƒAƒhƒŒƒX‚ð‘ã“ü
 		enemyFrameRect_.x = pTargetInfo_->screenPos.x - enemyFrameSideExtents_ ;
 		enemyFrameRect_.y = pTargetInfo_->screenPos.y - enemyFrameSideExtents_ ;

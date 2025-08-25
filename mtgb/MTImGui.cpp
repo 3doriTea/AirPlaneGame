@@ -5,7 +5,8 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/ImGuizmo.h"
 #include "SceneSystem.h"
-
+#include "RectContainsInfo.h"
+#include "RectDetector.h"
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -49,6 +50,22 @@ void mtgb::MTImGui::SetupShowFunc()
     Set<DirectX::XMVECTOR>([](DirectX::XMVECTOR* _target, const char* _name)
         {
             ImGui::InputFloat4(_name, _target->m128_f32);
+        });
+
+    Set<RectContainsInfo>([](RectContainsInfo* _target, const char* _name)
+        {
+            TypeRegistry::Instance().CallFunc(&_target->worldPos, "WorldPos");
+            ImGui::Text("ScreenPos (%.3f,%.3f)", _target->screenPos.x, _target->screenPos.y);
+        
+            ImGui::Text("EntityId : %lld", _target->entityId);
+        });
+
+    Set<RectDetector>([](RectDetector* _target, const char* _name)
+        {
+            for (auto& target : _target->detectedTargets)
+            {
+                TypeRegistry::Instance().CallFunc(&target, "RectContains:" + target.entityId);
+            }
         });
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)

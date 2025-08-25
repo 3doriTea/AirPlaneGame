@@ -55,6 +55,18 @@ void HighlightEnemy::Update()
 {
 	firstWndRectDetector_.UpdateDetection();
 	secondWndRectDetector_.UpdateDetection();
+
+	/*MTImGui::Instance().DirectShow([this]() {
+		for (const auto& target : secondWndRectDetector_.detectedTargets)
+		{
+			ImGui::Text("%lld", target.entityId);
+		}
+		}, "Contains", ShowType::Inspector);*/
+	/*for (const auto& target : secondWndRectDetector_.detectedTargets)
+	{
+		MTImGui::Instance().TypedShow(&secondWndRectDetector_.detectedTargets, "SecondWndRectDetector", ShowType::Inspector);
+	}*/
+	MTImGui::Instance().TypedShow(&secondWndRectDetector_, "SecondWndRectDetector", ShowType::Inspector);
 }
 
 void HighlightEnemy::Draw() const
@@ -77,7 +89,7 @@ void HighlightEnemy::Draw() const
 	// 二つ目のウィンドウ
 	const RectDetectorConfig& secondConfig = secondWndRectDetector_.config;
 
-	firstWndRectDetector_.ForEach([this](const RectContainsInfo& _info)
+	secondWndRectDetector_.ForEach([this](const RectContainsInfo& _info)
 		{
 			RectF targetRect
 			{
