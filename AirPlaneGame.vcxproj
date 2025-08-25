@@ -356,6 +356,7 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Health.h" />
     <ClInclude Include="Source\JsonUtility.h" />
+    <ClInclude Include="Source\Library\YzTrailEmitter.h" />
     <ClInclude Include="Source\Network\PIIO.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
