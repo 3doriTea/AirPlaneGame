@@ -1,5 +1,6 @@
 #pragma once
 #include <mtgb.h>
+#include "../Health.h"
 
 class EnemyPlane : public GameObject
 {
@@ -17,6 +18,7 @@ private:
 	Transform* pTransform_;
 	Transform* pTarget_;
 	
-	float speed_;
+	Health health_;   // ‘Ì—Í
+	float speed_;  // ˆÚ“®‘¬“x m/s
 	bool broken_;  // ‰ó‚ê‚Ä‚¢‚é‚©
 };

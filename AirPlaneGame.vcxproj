@@ -148,9 +148,12 @@
     <ClCompile Include="mtgb\World.cpp" />
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
+    <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
+    <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\EndScene.cpp" />
     <ClCompile Include="Source\EndText.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\Health.cpp" />
     <ClCompile Include="Source\Network\PIIO.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -171,6 +174,7 @@
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
+    <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\HighlightEnemy.h" />
@@ -344,10 +348,14 @@
     <ClInclude Include="mtgb\ProfileUtlity.h" />
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
+    <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
+    <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\EndScene.h" />
     <ClInclude Include="Source\EndText.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\Health.h" />
     <ClInclude Include="Source\JsonUtility.h" />
+    <ClInclude Include="Source\Library\YzTrailEmitter.h" />
     <ClInclude Include="Source\Network\PIIO.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -369,6 +377,7 @@
     <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
+    <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
