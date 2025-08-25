@@ -40,6 +40,7 @@
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\TimeLimit.cpp" />
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Source\Network\PIIO.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Source\OverScene.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\PlayScene.cpp" />
     <ClCompile Include="Source\Reticle.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\ShowType.h" />
     <ClInclude Include="mtgb\TextAlignment.h" />
+    <ClInclude Include="mtgb\TimeLimit.h" />
     <ClInclude Include="mtgb\TransformCore.h" />
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
@@ -359,6 +362,7 @@
     <ClInclude Include="Source\Network\PIIO.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\OverScene.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\PlayScene.h" />
     <ClInclude Include="Source\Reticle.h" />

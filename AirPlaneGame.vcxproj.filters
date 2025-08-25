@@ -197,6 +197,9 @@
     <Filter Include="01Game\01Common\Shader">
       <UniqueIdentifier>{5e6abeed-62f1-4946-a766-a626106da289}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\06OverScene">
+      <UniqueIdentifier>{e4f96919-f9b0-4a21-a1de-3d2628ba1b16}</UniqueIdentifier>
+    </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
     </Filter>
@@ -730,6 +733,24 @@
     <ClCompile Include="mtgb\RectDetector.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\TimeLimit.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DemoScene\DemoScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Health.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutorialScene\TutorialScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OverScene.cpp">
+      <Filter>01Game\06OverScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1253,6 +1274,27 @@
     </ClInclude>
     <ClInclude Include="Source\WingEffect.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\TimeLimit.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DemoScene\DemoScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Health.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Library\YzTrailEmitter.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialScene\TutorialScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\OverScene.h">
+      <Filter>01Game\06OverScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

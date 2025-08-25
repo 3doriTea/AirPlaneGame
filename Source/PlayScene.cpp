@@ -8,7 +8,8 @@
 #include "SkySphere.h"
 #include "TestScene/TestScene.h"
 #include "EndScene.h"
-
+#include "TimeLimit.h"
+#include "OverScene.h"
 using namespace mtgb;
 using Network::PIIO;
 
@@ -25,6 +26,7 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
+	
 	//delete ppiio_;
 }
 
@@ -51,7 +53,11 @@ void PlayScene::Initialize()
 	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
 	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
-
+	timeLimit_ = Instantiate<TimeLimit>();
+	timeLimit_->RegisterOnEndTimerCallback([]() 
+		{
+			Game::System<SceneSystem>().Move<OverScene>();
+		});
 	// 表示したいテキストを開始
 
 	ppiio_->Start(SERVER_IPEP);
@@ -62,6 +68,19 @@ void PlayScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
 		Game::System<SceneSystem>().Move<EndScene>();
+	}
+
+	if (InputUtil::GetKeyDown(KeyCode::O))
+	{
+		timeLimit_->StartTimer();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::P))
+	{
+		timeLimit_->PauseTimer();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::I))
+	{
+		timeLimit_->ResumeTimer();
 	}
 
 	using LED_STATUS = Network::PIIO::LED_STATUS;

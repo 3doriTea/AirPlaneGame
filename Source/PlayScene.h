@@ -6,6 +6,7 @@ namespace Network
 {
 	class PIIO;
 }
+class TimeLimit;
 
 class PlayScene : public mtgb::GameScene
 {
@@ -19,6 +20,7 @@ public:
 	void End() override;
 
 private:
+	TimeLimit* timeLimit_;
 	Network::PIIO* ppiio_;
 	int val_;
 
