@@ -19,10 +19,10 @@
 #pragma comment(lib,"d3dCompiler.lib")
 #pragma comment(lib,"winmm.lib")
 
-ID3D11InputLayout* mtgb::OBJ::pInputLayout_{ nullptr };
-ID3D11VertexShader* mtgb::OBJ::pVertexShader_{ nullptr };
-ID3D11PixelShader* mtgb::OBJ::pPixelShader_{ nullptr };
-ID3D11Buffer* mtgb::OBJ::pConstantBuffer_{ nullptr };
+ComPtr<ID3D11InputLayout> mtgb::OBJ::pInputLayout_{ nullptr };
+ComPtr<ID3D11VertexShader> mtgb::OBJ::pVertexShader_{ nullptr };
+ComPtr<ID3D11PixelShader> mtgb::OBJ::pPixelShader_{ nullptr };
+ComPtr<ID3D11Buffer> mtgb::OBJ::pConstantBuffer_{ nullptr };
 
 
 void mtgb::OBJ::Initialize()
@@ -36,7 +36,7 @@ void mtgb::OBJ::Initialize()
 	massert(SUCCEEDED(hResult)
 		&& "頂点シェーダのコンパイルに失敗 @OBJ::Initialize");
 
-	hResult = DirectX11Draw::pDevice_->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &pVertexShader_);
+	hResult = DirectX11Draw::pDevice_->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, pVertexShader_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "頂点シェーダの作成に失敗 @OBJ::Initialize");
 
@@ -49,7 +49,7 @@ void mtgb::OBJ::Initialize()
 	int numElements = sizeof(layout) / sizeof(layout[0]);
 
 	//頂点インプットレイアウトを作成
-	hResult = DirectX11Draw::pDevice_->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), &pInputLayout_);
+	hResult = DirectX11Draw::pDevice_->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), pInputLayout_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "頂点インプットレイアウトの作成に失敗 @OBJ::Initialize");
 
@@ -58,7 +58,7 @@ void mtgb::OBJ::Initialize()
 	massert(SUCCEEDED(hResult)
 		&& "ピクセルシェーダの作成に失敗 @OBJ::Initialize");
 
-	hResult = DirectX11Draw::pDevice_->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, &pPixelShader_);
+	hResult = DirectX11Draw::pDevice_->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, pPixelShader_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "ピクセルシェーダの作成に失敗 @OBJ::Initialize");
 
@@ -72,7 +72,7 @@ void mtgb::OBJ::Initialize()
 	cb.MiscFlags = 0;
 	cb.Usage = D3D11_USAGE_DYNAMIC;
 
-	hResult = DirectX11Draw::pDevice_->CreateBuffer(&cb, NULL, &pConstantBuffer_);
+	hResult = DirectX11Draw::pDevice_->CreateBuffer(&cb, NULL, pConstantBuffer_.ReleaseAndGetAddressOf());
 		massert(SUCCEEDED(hResult)
 			&& "コンスタントバッファの作成に失敗 @OBJ::Initialize");
 }
@@ -122,6 +122,18 @@ void mtgb::OBJ::Update()
 {
 }
 
+void mtgb::OBJ::Release()
+{
+
+	SAFE_CLEAR_CONTAINER_DELETE(datas_);
+
+	pInputLayout_.Reset();
+	pVertexShader_.Reset();
+	pPixelShader_.Reset();
+	pConstantBuffer_.Reset();
+
+}
+
 void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
@@ -132,7 +144,7 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 	Matrix4x4 mView;
 	// ビュートランスフォーム（視点座標変換）
 	
-	Transform cameraTransform = Game::System<CameraSystem>().GetTransform();
+	const Transform& cameraTransform = Game::System<CameraSystem>().GetTransform();
 	Game::System<CameraSystem>().GetViewMatrix(&mView);
 
 	Matrix4x4 mProj;
@@ -140,15 +152,14 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 	static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 	ID3D11DeviceContext* tmpContext = DirectX11Draw::pContext_.Get();
-	tmpContext->VSSetShader(pVertexShader_, NULL, 0);
-	tmpContext->PSSetShader(pPixelShader_, NULL, 0);
+	tmpContext->VSSetShader(pVertexShader_.Get(), NULL, 0);
+	tmpContext->PSSetShader(pPixelShader_.Get(), NULL, 0);
 
 	//シェーダーのコンスタントバッファーに各種データを渡す	
 	D3D11_MAPPED_SUBRESOURCE pData;
 	SimpleConstantBuffer cb;
 
-
-	HRESULT hResult = DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+	HRESULT hResult = DirectX11Draw::pContext_->Map(pConstantBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
 	massert(SUCCEEDED(hResult)
 		&& "Mapに失敗 @OBJ::Draw");
 	if (SUCCEEDED(hResult))
@@ -159,23 +170,23 @@ void mtgb::OBJ::Draw(int hModel, const Transform* transform)
 
 		memcpy_s(pData.pData, pData.RowPitch, (void*)&cb, sizeof(cb));
 
-		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
 		int slot = 0;
-		tmpContext->VSSetConstantBuffers(slot, 1, &pConstantBuffer_);
-		tmpContext->PSSetConstantBuffers(slot, 1, &pConstantBuffer_);
+		tmpContext->VSSetConstantBuffers(slot, 1, pConstantBuffer_.GetAddressOf());
+		tmpContext->PSSetConstantBuffers(slot, 1, pConstantBuffer_.GetAddressOf());
 
-		tmpContext->IASetInputLayout(pInputLayout_);
+		tmpContext->IASetInputLayout(pInputLayout_.Get());
 
 		tmpContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		//頂点バッファセット
 		UINT stride = sizeof(SimpleVertex);
 		UINT offset = 0;
-		tmpContext->IASetVertexBuffers(slot, 1, &(datas_[hModel]->mesh->pVertexBuffer), &stride, &offset);
+		tmpContext->IASetVertexBuffers(slot, 1, datas_[hModel]->mesh->pVertexBuffer.GetAddressOf(), &stride, &offset);
 
 		//インデックスバッファセット
-		tmpContext->IASetIndexBuffer(datas_[hModel]->mesh->pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+		tmpContext->IASetIndexBuffer(datas_[hModel]->mesh->pIndexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 		//プリミティブをレンダリング
 		tmpContext->DrawIndexed(datas_[hModel]->mesh->numFace * 3, 0, 0);
 
@@ -270,7 +281,7 @@ void mtgb::OBJ::InitMesh(const std::string& fileName, SimpleMesh* mesh)
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
 
-	HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(&bd, &initData, &mesh->pVertexBuffer);
+	HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(&bd, &initData, mesh->pVertexBuffer.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "頂点バッファの作成に失敗しました @OBJ::InitStaticMesh");
 
@@ -283,7 +294,7 @@ void mtgb::OBJ::InitMesh(const std::string& fileName, SimpleMesh* mesh)
 	initData.pSysMem = pIndexBuffer;
 	initData.SysMemPitch = 0;
 	initData.SysMemSlicePitch = 0;
-	hResult = DirectX11Draw::pDevice_->CreateBuffer(&bd, &initData, &mesh->pIndexBuffer);
+	hResult = DirectX11Draw::pDevice_->CreateBuffer(&bd, &initData, mesh->pIndexBuffer.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 	&& "インデックスバッファの作成に失敗しました @OBJ::InitStaticMesh");
 

@@ -261,6 +261,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	
 	D3D_FEATURE_LEVEL level{};
 
+	
 	hResult = D3D11CreateDevice(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -269,14 +270,14 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 		nullptr,
 		0,
 		D3D11_SDK_VERSION,
-		&DirectX11Draw::pDevice_,
+		DirectX11Draw::pDevice_.ReleaseAndGetAddressOf(),
 		&level,
-		&DirectX11Draw::pContext_
+		DirectX11Draw::pContext_.ReleaseAndGetAddressOf()
 	);
 	massert(SUCCEEDED(hResult)
 	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
 
-	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)&(DirectX11Draw::pDXGIDevice_));
+	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)DirectX11Draw::pDXGIDevice_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterfaceに失敗 @DirectX11Manager::InitializeCommonResources");
@@ -285,7 +286,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	massert(SUCCEEDED(hResult)
 		&& "GetAdapterに失敗 @DirectX11Manager::InitializeCommonResources");
 
-	hResult = DirectX11Draw::pDXGIAdapter_->GetParent(__uuidof(IDXGIFactory2), (void**)&(DirectX11Draw::pDXGIFactory_));
+	hResult = DirectX11Draw::pDXGIAdapter_->GetParent(__uuidof(IDXGIFactory2), (void**)DirectX11Draw::pDXGIFactory_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "GetParentに失敗 @DirectX11Manager::InitializeCommonResources");
 
@@ -299,7 +300,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 		.AddressW = D3D11_TEXTURE_ADDRESS_WRAP,
 	};
 
-	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, DirectX11Draw::pDefaultSamplerState_.GetAddressOf());
+	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, DirectX11Draw::pDefaultSamplerState_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "デフォルトのサンプラ作成に失敗 @DirectX11Manager::InitializeCommonResources");
 #pragma region 深度ステンシルステート作成
@@ -331,7 +332,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 	hResult = DirectX11Draw::pDevice_->CreateDepthStencilState(
 		&DEPTH_STENCIL_DESC,
-		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)]);
+		DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)].ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
 		&& "BlendMode::Defaultの深度ステンシルステートの作成に失敗 @DirectX11Manager::InitializeCommonResources");
@@ -363,7 +364,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 	hResult = DirectX11Draw::pDevice_->CreateDepthStencilState(
 		&DEPTH_STENCIL_DESC,
-		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Sprite)]);
+		DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Sprite)].ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
 		&& "BlendMode::Spriteの深度ステンシルステートの作成に失敗 @DirectX11Manager::InitializeCommonResources");
@@ -393,7 +394,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 	hResult = DirectX11Draw::pDevice_->CreateBlendState(
 		&BLEND_DESC,
-		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)]);
+		DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)].ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
 		&& "BlendMode::Defaultのブレンドステート作成に失敗 @DirectX11Manager::InitializeCommonResources");
@@ -402,7 +403,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	// 設定はBlendMode::Defaultと同じ
 	hResult = DirectX11Draw::pDevice_->CreateBlendState(
 		&BLEND_DESC,
-		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Sprite)]);
+		DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Sprite)].ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
 		&& "ブレンドステート作成に失敗 @DirectX11Manager::InitializeCommonResources");
@@ -490,7 +491,7 @@ void mtgb::DirectX11Manager::CreateRenderTargetView(IDXGISwapChain1* pSwapChain1
 	massert(SUCCEEDED(hResult)
 		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	pBackBuffer->Release();  // バックバッファは使わないため解放する
+	SAFE_RELEASE(pBackBuffer);
 }
 
 void mtgb::DirectX11Manager::CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport)
@@ -814,7 +815,7 @@ void mtgb::DirectX11Manager::CompileShader(
 		pCompileVS->GetBufferPointer(),  // コンパイルされたバッファのポインタ
 		pCompileVS->GetBufferSize(),     // バッファのサイズ
 		nullptr,                         // リンケージクラス: 無し
-		&DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pVertexShader);
+		DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pVertexShader.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 頂点シェーダの作成に成功
 		&& "頂点シェーダの作成に失敗 @DirectX11Manager::CompileShader");
@@ -844,7 +845,7 @@ void mtgb::DirectX11Manager::CompileShader(
 		pCompilePS->GetBufferPointer(),  // コンパイルされたバッファのポインタ
 		pCompilePS->GetBufferSize(),     // バッファのサイズ
 		nullptr,                         // リンケージクラス: 無し
-		&DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pPixelShader);
+		DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pPixelShader.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // ピクセルシェーダの作成に成功
 		&& "ピクセルシェーダの作成に失敗 @DirectX11Manager::CompileShader");
@@ -857,7 +858,7 @@ void mtgb::DirectX11Manager::CompileShader(
 		_layoutLength,                   // 入力データ型配列の要素数
 		pCompileVS->GetBufferPointer(),  // コンパイルされたバッファのポインタ
 		pCompileVS->GetBufferSize(),     // バッファのサイズ
-		&DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pVertexLayout);
+		DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pVertexLayout.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 頂点レイアウトの作成に成功
 		&& "頂点レイアウトの作成に失敗 @DirectX11Manager::CompileShader");
@@ -867,7 +868,7 @@ void mtgb::DirectX11Manager::CompileShader(
 	// ラスタライザを作成し、指定タイプのバンドルに格納する
 	DirectX11Draw::pDevice_->CreateRasterizerState(
 		_pRasterizerDesc,  // ラスタライザの設定
-		&DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pRasterizerState);
+		DirectX11Draw::shaderBundle_[static_cast<int8_t>(_type)].pRasterizerState.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // ラスタライザの作成に成功
 		&& "ラスタライザの作成に失敗 @DirectX11Manager::CompileShader");
@@ -875,6 +876,6 @@ void mtgb::DirectX11Manager::CompileShader(
 
 
 	// 解放していく
-	pCompileVS->Release();
-	pCompilePS->Release();
+	SAFE_RELEASE(pCompileVS);
+	SAFE_RELEASE(pCompilePS);
 }

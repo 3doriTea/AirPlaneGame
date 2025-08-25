@@ -5,7 +5,9 @@
 #include <string>
 #include <vector>
 
+#include <wrl/client.h>
 
+using Microsoft::WRL::ComPtr;
 
 struct ID3D11Buffer;
 struct ID3D11InputLayout;
@@ -30,8 +32,8 @@ namespace mtgb
     {
         int numVert;
         int numFace;
-        ID3D11Buffer* pVertexBuffer;
-        ID3D11Buffer* pIndexBuffer;
+        ComPtr<ID3D11Buffer> pVertexBuffer;
+        ComPtr<ID3D11Buffer> pIndexBuffer;
         SimpleMesh() :numVert{ 0 }, numFace{ 0 }, pVertexBuffer{ nullptr }, pIndexBuffer{nullptr} {}
     };
 
@@ -41,6 +43,7 @@ namespace mtgb
         std::string fileName;
 
         SimpleMesh* mesh;
+
     };
 
     class OBJ : public ISystem
@@ -49,6 +52,7 @@ namespace mtgb
         
         void Initialize() override;
         void Update() override;
+        void Release() override;
 
         static int Load(const std::string& fileName);
         void Draw(int hModel, const Transform * transform);
@@ -57,10 +61,10 @@ namespace mtgb
         void InitMesh(const std::string& fileName, SimpleMesh* mesh);
 
         //↓モデルの種類ごと(モデルの構造が全て同一ならアプリにひとつ）
-        static ID3D11InputLayout* pInputLayout_;
-        static ID3D11VertexShader* pVertexShader_;
-        static ID3D11PixelShader* pPixelShader_;
-        static ID3D11Buffer* pConstantBuffer_;
+        static ComPtr<ID3D11InputLayout> pInputLayout_;
+        static ComPtr<ID3D11VertexShader> pVertexShader_;
+        static ComPtr<ID3D11PixelShader> pPixelShader_;
+        static ComPtr<ID3D11Buffer> pConstantBuffer_;
         //↓モデルごと	
         //ID3D11Buffer* pVertexBuffer_;
         //SimpleMesh mesh_;

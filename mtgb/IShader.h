@@ -4,7 +4,9 @@
 #include "DirectX11Draw.h"
 #include "Screen.h"
 #include "Transform.h"
+#include <wrl/client.h>
 
+using Microsoft::WRL::ComPtr;
 
 struct ID3D11Buffer;
 
@@ -70,9 +72,9 @@ namespace mtgb
 		//const mtgb::Transform& GetCameraTransfrom();
 
 	protected:
-		ID3D11Buffer* pVertexBuffer_;    // 頂点の位置、色
-		ID3D11Buffer* pIndexBuffer_;     // ポリゴンを結ぶ順番
-		ID3D11Buffer* pConstantBuffer_;  //　シェーダのグローバル変数
+		ComPtr<ID3D11Buffer> pVertexBuffer_;    // 頂点の位置、色
+		ComPtr<ID3D11Buffer> pIndexBuffer_;     // ポリゴンを結ぶ順番
+		ComPtr<ID3D11Buffer> pConstantBuffer_;  //　シェーダのグローバル変数
 	};
 
 	template<typename ConstantBufferT, typename VertexT>
@@ -86,10 +88,10 @@ namespace mtgb
 
 		stride = sizeof(VertexT);
 		offset = 0;
-		DirectX11Draw::pContext_->IASetVertexBuffers(0U, 1U, &pVertexBuffer_, &stride, &offset);  // 頂点バッファをセット
-		DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);  // インデックスバッファをセット
-		DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);  // 頂点シェーダのコンスタントバッファをセット
-		DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);  // ピクセルシェーダのコンスタントバッファをセット
+		DirectX11Draw::pContext_->IASetVertexBuffers(0U, 1U, pVertexBuffer_.GetAddressOf(), &stride, &offset);  // 頂点バッファをセット
+		DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_.Get(), DXGI_FORMAT_R32_UINT, 0);  // インデックスバッファをセット
+		DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());  // 頂点シェーダのコンスタントバッファをセット
+		DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());  // ピクセルシェーダのコンスタントバッファをセット
 
 		ConstantBufferT constantBuffer{};
 
@@ -102,7 +104,7 @@ namespace mtgb
 
 		// GPUからのデータアクセスをせき止める
 		hResult = DirectX11Draw::pContext_->Map(
-			pConstantBuffer_,
+			pConstantBuffer_.Get(),
 			NULL,
 			D3D11_MAP_WRITE_DISCARD,
 			NULL,
@@ -119,7 +121,7 @@ namespace mtgb
 			sizeof(ConstantBufferT));
 
 		// GPUデータアクセスせき止め解除
-		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
 		_contextSetterCallback(DirectX11Draw::pContext_.Get());
 
@@ -138,10 +140,10 @@ namespace mtgb
 
 		stride = sizeof(VertexT);
 		offset = 0;
-		DirectX11Draw::pContext_->IASetVertexBuffers(0U, 1U, &pVertexBuffer_, &stride, &offset);  // 頂点バッファをセット
+		DirectX11Draw::pContext_->IASetVertexBuffers(0U, 1U, pVertexBuffer_.Get(), &stride, &offset);  // 頂点バッファをセット
 		DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_, DXGI_FORMAT_R32_UINT, 0);  // インデックスバッファをセット
-		DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);  // 頂点シェーダのコンスタントバッファをセット
-		DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);  // ピクセルシェーダのコンスタントバッファをセット
+		DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.Get());  // 頂点シェーダのコンスタントバッファをセット
+		DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.Get());  // ピクセルシェーダのコンスタントバッファをセット
 
 		ConstantBufferT constantBuffer{};
 
@@ -154,7 +156,7 @@ namespace mtgb
 
 		// GPUからのデータアクセスをせき止める
 		hResult = DirectX11Draw::pContext_->Map(
-			pConstantBuffer_,
+			pConstantBuffer_.Get(),
 			NULL,
 			D3D11_MAP_WRITE_DISCARD,
 			NULL,
@@ -171,14 +173,14 @@ namespace mtgb
 			sizeof(ConstantBufferT));
 
 		// GPUデータアクセスせき止め解除
-		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
 		// シェーダに渡すためのデータ
 		D3D11_MAPPED_SUBRESOURCE mappedSubresource{};
 
 		// GPUからのデータアクセスをせき止める
 		hResult = DirectX11Draw::pContext_->Map(
-			pConstantBuffer_,
+			pConstantBuffer_.Get(),
 			NULL,
 			D3D11_MAP_WRITE_DISCARD,
 			NULL,
@@ -195,7 +197,7 @@ namespace mtgb
 			sizeof(ConstantBufferT));
 
 		// GPUデータアクセスせき止め解除
-		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
 		_contextSetterCallback(DirectX11Draw::pContext_.Get());
 

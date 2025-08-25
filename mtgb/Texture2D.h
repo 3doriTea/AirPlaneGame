@@ -3,6 +3,9 @@
 #include "Vector2Int.h"
 
 #pragma comment(lib, "WindowsCodecs.lib")
+#include <wrl/client.h>
+
+using Microsoft::WRL::ComPtr;
 
 struct ID3D11SamplerState;
 struct ID3D11ShaderResourceView;
@@ -29,12 +32,12 @@ namespace mtgb
 		/// サンプラーステートを取得
 		/// </summary>
 		/// <returns>サンプラーステートのポインタ</returns>
-		inline ID3D11SamplerState* GetSamplerState() { return pSamplerLinear_; }
+		inline ID3D11SamplerState* GetSamplerState() { return pSamplerLinear_.Get(); }
 		/// <summary>
 		/// シェーダリソースビュを取得
 		/// </summary>
 		/// <returns>シェーダリソースビュのポインタ</returns>
-		inline ID3D11ShaderResourceView* GetShaderResourceView() { return pShaderResourceView_; }
+		inline ID3D11ShaderResourceView* GetShaderResourceView() { return pShaderResourceView_.Get(); }
 	
 		/// <summary>
 		/// テクスチャの画像のサイズを取得
@@ -43,8 +46,8 @@ namespace mtgb
 		inline const Vector2Int GetSize() const { return size_; }
 	
 	private:
-		ID3D11SamplerState* pSamplerLinear_;  // 貼り方
-		ID3D11ShaderResourceView* pShaderResourceView_;  // シェーダに送るためのもの
+		ComPtr<ID3D11SamplerState> pSamplerLinear_;  // 貼り方
+		ComPtr<ID3D11ShaderResourceView> pShaderResourceView_;  // シェーダに送るためのもの
 		Vector2Int size_;  // 画像のサイズ
 	};
 }

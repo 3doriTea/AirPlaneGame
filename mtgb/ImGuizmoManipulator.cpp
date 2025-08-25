@@ -205,6 +205,11 @@ mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
 	hCamera_ = Game::System<CameraSystem>().RegisterDrawCamera(pCameraTransform_);
 }
 
+mtgb::ImGuizmoManipulator::~ImGuizmoManipulator()
+{
+	SAFE_DELETE(pCamera_);
+}
+
 void mtgb::ImGuizmoManipulator::SetCamera()
 {
 	Game::System<CameraSystem>().SetDrawCamera(hCamera_);

@@ -263,14 +263,7 @@ void mtgb::DirectWrite::Release()
 	pTextFormat_.Reset();
 	pDWriteFactory_.Reset();
 
-	ID3D11Debug* pDebug = nullptr;
 	
-	if (SUCCEEDED(mtgb::DirectX11Draw::pDevice_->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(& pDebug))))
-	{
-		// D3D11_RLO_DETAIL‚ÅÚ×‚ÈƒŒƒ|[ƒg
-		pDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
-		pDebug->Release();
-	}
 }
 
 static std::wstring StrToWStr(const std::string& str)

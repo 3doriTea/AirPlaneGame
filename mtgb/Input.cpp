@@ -411,7 +411,12 @@ void mtgb::Input::EnumJoystick()
 //	requestedJoystickDevices_.push_back(std::make_tuple(_hWnd, _inputConfig, _pJoystickDevice));
 //}
 
-void mtgb::Input::RequestJoystickDevice(JoystickReservation* _reservation)
+void mtgb::Input::RequestJoystickDevice(const JoystickReservation& _reservation)
+{
+	requestedJoystickDevices_.push_back(_reservation);
+}
+
+void mtgb::Input::RequestJoystickDevice(JoystickReservation&& _reservation)
 {
 	requestedJoystickDevices_.push_back(_reservation);
 }
@@ -419,12 +424,12 @@ void mtgb::Input::RequestJoystickDevice(JoystickReservation* _reservation)
 void mtgb::Input::AssignJoystick(IDirectInputDevice8* _pJoystickDevice)
 {
 	auto& front = requestedJoystickDevices_.front();
-	HWND hWnd = front->hWnd;
+	HWND hWnd = front.hWnd;
 	//_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
 	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
 	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
-	SetProperty(_pJoystickDevice, front->config);
+	SetProperty(_pJoystickDevice, front.config);
 
 	//デバイスからJoystickContext構築
 	const auto& pair = joystickContext_.emplace(GetDeviceGuid(_pJoystickDevice),_pJoystickDevice);
@@ -433,7 +438,7 @@ void mtgb::Input::AssignJoystick(IDirectInputDevice8* _pJoystickDevice)
 		//すでに登録済みのデバイス
 		return;
 	}
-	front->onAssign(pair.first->second.device, GetDeviceGuid(_pJoystickDevice));
+	front.onAssign(pair.first->second.device, GetDeviceGuid(_pJoystickDevice));
 
 	requestedJoystickDevices_.erase(requestedJoystickDevices_.begin());
 }
@@ -573,8 +578,23 @@ void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, Inpu
 #pragma endregion
 }
 
+mtgb::JoystickContext::JoystickContext()
+	:timerHandle{nullptr}
+{
+}
+
+mtgb::JoystickContext::~JoystickContext()
+{
+	Timer::Remove(timerHandle);
+	device.Reset();
+}
+
 mtgb::JoystickContext::JoystickContext(IDirectInputDevice8* _device)
+	:JoystickContext()
 {
 	device.Attach(_device);
 }
 
+mtgb::JoystickReservation::~JoystickReservation()
+{
+}

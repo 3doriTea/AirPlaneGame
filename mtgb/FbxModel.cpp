@@ -16,6 +16,7 @@ mtgb::FbxModel::FbxModel() :
 
 mtgb::FbxModel::~FbxModel()
 {
+	
 }
 
 void mtgb::FbxModel::Load(const std::string& _fileName)
@@ -112,6 +113,11 @@ void mtgb::FbxModel::Draw(const Transform& _transform, int _frame)
 
 void mtgb::FbxModel::Release()
 {
+	for (auto fbxParts : pParts_)
+	{
+		fbxParts->Release();
+		delete fbxParts;
+	}
 }
 
 mtgb::Vector3 mtgb::FbxModel::GetBonePosition(std::string _boneName)

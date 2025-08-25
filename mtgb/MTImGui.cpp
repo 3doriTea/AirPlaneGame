@@ -4,10 +4,15 @@
 #include "ImGuiRenderer.h"
 #include "../ImGui/imgui.h"
 #include "../ImGui/ImGuizmo.h"
+#include "SceneSystem.h"
 
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
+    Game::System<SceneSystem>().OnMove([]() 
+        {
+            MTImGui::Instance().showableObjs_.clear();
+        });
 }
 
 void mtgb::MTImGui::Update()
@@ -127,6 +132,8 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
         showableObjs_.erase(it);
     }
 }
+
+
 
 void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {

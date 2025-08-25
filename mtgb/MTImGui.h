@@ -111,7 +111,7 @@ namespace mtgb
 
 		void DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness);
 		void DrawLineImpl(const Vector3& _from, const Vector3& _to, float _thickness);
-
+		
 
 		bool updatingImGuiShowable_;
 	};

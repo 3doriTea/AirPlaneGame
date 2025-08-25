@@ -20,7 +20,7 @@ void mtgb::IShader::Initialize()
 
 void mtgb::IShader::Release()
 {
-	SAFE_RELEASE(pVertexBuffer_);
-	SAFE_RELEASE(pIndexBuffer_);
-	SAFE_RELEASE(pConstantBuffer_);
+	pVertexBuffer_.Reset();
+	pIndexBuffer_.Reset();
+	pConstantBuffer_.Reset();
 }

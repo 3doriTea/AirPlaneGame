@@ -36,24 +36,17 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	if (isMultiMonitor) {
 		// 将来的にマルチモニター対応する場合のoutputIndexを管理
 		int outputIndex = 0; // 仮の値
-		IDXGIOutput* pRawDXGIOutput = nullptr;
-		dx11Manager.CreateOutput(outputIndex, &pRawDXGIOutput);
-		pOutput_.Attach(pRawDXGIOutput);
+		dx11Manager.CreateOutput(outputIndex, pOutput_.ReleaseAndGetAddressOf());
 	}
 	else {
 		pOutput_ = nullptr;
 	}
 
-	IDXGISwapChain1* pRawSwapChain1 = nullptr;
 	// スワップチェーンを作成
-	dx11Manager.CreateSwapChain(hWnd, pOutput_.Get(), &pRawSwapChain1);
-	pSwapChain1_.Attach(pRawSwapChain1);
+	dx11Manager.CreateSwapChain(hWnd, pOutput_.Get(), pSwapChain1_.ReleaseAndGetAddressOf());
 
-	IDXGISurface* pRawSurface = nullptr;
 	//サーフェスとやらを作成
-	dx11Manager.CreateDXGISurface(pSwapChain1_.Get(), &pRawSurface);
-	pDXGISurface_.Attach(pRawSurface);
-
+	dx11Manager.CreateDXGISurface(pSwapChain1_.Get(), pDXGISurface_.ReleaseAndGetAddressOf());
 }
 
 void DXGIResource::SetResource()

@@ -19,6 +19,7 @@ namespace mtgb
 		friend class ImGuiRenderer;
 	public:
 		ImGuizmoManipulator();
+		~ImGuizmoManipulator();
 
 		void SetCamera();
 		void Initialize();

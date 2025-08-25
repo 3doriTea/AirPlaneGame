@@ -29,7 +29,8 @@ namespace mtgb
 		TimerHandle timerHandle;
 		HRESULT lastResult;
 		ComPtr<IDirectInputDevice8> device;
-		JoystickContext() = default;
+		JoystickContext();
+		~JoystickContext();
 		JoystickContext(IDirectInputDevice8* _device);
 	};
 
@@ -41,6 +42,7 @@ namespace mtgb
 		HWND hWnd;
 		InputConfig config;
 		std::function<void(ComPtr<IDirectInputDevice8>, GUID)> onAssign;
+		~JoystickReservation();
 	};
 
 	class Input : public ISystem
@@ -101,7 +103,9 @@ namespace mtgb
 		/// 先着順で割り当てられます
 		/// </summary>
 		/// <param name="_pJoystickDevice">割り当て希望のデバイス</param>
-		void RequestJoystickDevice(JoystickReservation* _reservation);
+		void RequestJoystickDevice(const JoystickReservation& _reservation);
+
+		void RequestJoystickDevice(JoystickReservation&& _reservation);
 
 		/// <summary>
 		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
@@ -157,7 +161,7 @@ namespace mtgb
 		ComPtr<IDirectInputDevice8> pMouseDevice_;  // マウスデバイス
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;  // ジョイスティックデバイス
 		 
-		std::vector<JoystickReservation*> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
+		std::vector<JoystickReservation> requestedJoystickDevices_;//割り当て予約されたジョイスティックデバイス
 		std::set<GUID> assignedJoystickGuids_;//既に割り当て済みのジョイスティック
 		
 		std::map<GUID, JoystickContext> joystickContext_;

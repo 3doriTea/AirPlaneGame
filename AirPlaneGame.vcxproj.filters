@@ -945,9 +945,6 @@
     <ClInclude Include="mtgb\WindowManager.h">
       <Filter>03mtgb\System\Window\WindowManager</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\AccessibleMacro.h">
-      <Filter>03mtgb\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Bullet.h">
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
@@ -1247,6 +1244,15 @@
     </ClInclude>
     <ClInclude Include="mtgb\RectDetector.h">
       <Filter>03mtgb\System\Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IOriginalShader.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShaderCommon.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\WingEffect.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

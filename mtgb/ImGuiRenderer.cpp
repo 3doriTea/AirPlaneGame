@@ -319,6 +319,7 @@ void mtgb::ImGuiRenderer::End()
 }
 void mtgb::ImGuiRenderer::Release()
 {
+	SAFE_DELETE(manipulator_);
 	ImGui_ImplDX11_Shutdown();
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();

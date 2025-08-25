@@ -229,7 +229,6 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="mtgb\AccessibleMacro.h" />
     <ClInclude Include="mtgb\AssetsManager.h" />
     <ClInclude Include="mtgb\Audio.h" />
     <ClInclude Include="mtgb\AudioClip.h" />

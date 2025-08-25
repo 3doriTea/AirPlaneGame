@@ -19,6 +19,7 @@ mtgb::InputResource::InputResource()
 mtgb::InputResource::~InputResource()
 {
 	SAFE_DELETE(pInputData_);
+	SAFE_DELETE(pProxy_);
 	pKeyDevice_.Reset();
 	pMouseDevice_.Reset();
 	pJoystickDevice_.Reset();
@@ -44,13 +45,9 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 	context_ = _windowContext;
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
-	IDirectInputDevice8* pRawKeyDevice = nullptr;
-	Game::System<Input>().CreateKeyDevice(hWnd, &pRawKeyDevice);
-	pKeyDevice_.Attach(pRawKeyDevice);
+	Game::System<Input>().CreateKeyDevice(hWnd, pKeyDevice_.ReleaseAndGetAddressOf());
 
-	IDirectInputDevice8* pRawMouseDevice = nullptr;
-	Game::System<Input>().CreateMouseDevice(hWnd, &pRawMouseDevice);
-	pMouseDevice_.Attach(pRawMouseDevice);
+	Game::System<Input>().CreateMouseDevice(hWnd, pMouseDevice_.ReleaseAndGetAddressOf());
 
 	pInputData_ = new InputData();
 	pProxy_ = new JoystickProxy(pInputData_->joyStateCurrent_);
@@ -59,6 +56,7 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 	//pProxy_->SetDisplayName("proxy:"+ id++);
 	
 	
+	JoystickReservation reservation; 
 	reservation.config = pInputData_->config_;
 	reservation.hWnd = hWnd;
 	reservation.onAssign = [this](ComPtr<IDirectInputDevice8> device,GUID guid)
@@ -70,7 +68,7 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 		};
 
-	Game::System<Input>().RequestJoystickDevice(&reservation);
+	Game::System<Input>().RequestJoystickDevice(std::move(reservation));
 
 	Game::System<Input>().EnumJoystick();
 
@@ -88,10 +86,9 @@ void mtgb::InputResource::Update()
 {
 	Input& input = Game::System<Input>();
 	
-
 	pProxy_->UpdateFromInput(assignedJoystickGuid_);
 	pProxy_->UpdateInputData(pInputData_->joyStateCurrent_);
-	//ImGui::GetWindow
+	
 	MTImGui::Instance().TypedShow<JoystickProxy>(pProxy_, name_.c_str(), ShowType::Inspector);
 	
 }
@@ -104,7 +101,6 @@ void InputResource::SetResource()
 	if (isInitialized)
 	{
 		input.SetJoystickGuid(assignedJoystickGuid_);
-
 	}
 	input.ChangeInputData(pInputData_);
 }

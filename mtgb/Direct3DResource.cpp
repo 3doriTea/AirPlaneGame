@@ -34,22 +34,14 @@ void mtgb::Direct3DResource::Initialize(WindowContext _windowContext)
 	DXGIResource& dxgi = Game::System<WindowContextResourceManager>().Get<DXGIResource>(_windowContext);
 
 	// レンダーターゲットビューを作成
-	ID3D11RenderTargetView* pRawRenderTargetView = nullptr;
-	dx11Manager.CreateRenderTargetView(dxgi.pSwapChain1_.Get(), &pRawRenderTargetView);
-	pRenderTargetView_.Attach(pRawRenderTargetView);
+	dx11Manager.CreateRenderTargetView(dxgi.pSwapChain1_.Get(), pRenderTargetView_.ReleaseAndGetAddressOf());
 
 	// ビューポートを作成
 	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	dx11Manager.CreateViewport(SCREEN_SIZE, viewPort_);
 
 	// 深度ステンシルと深度ステンシルビューを作成
-	ID3D11Texture2D* pRawDepthStencil = nullptr;
-	ID3D11DepthStencilView* pRawDepthStencilView = nullptr;
-
-	dx11Manager.CreateDepthStencilAndDepthStencilView(SCREEN_SIZE, &pRawDepthStencil, &pRawDepthStencilView);
-	pDepthStencil_.Attach(pRawDepthStencil);
-	pDepthStencilView_.Attach(pRawDepthStencilView);
-	
+	dx11Manager.CreateDepthStencilAndDepthStencilView(SCREEN_SIZE, pDepthStencil_.ReleaseAndGetAddressOf(), pDepthStencilView_.ReleaseAndGetAddressOf());	
 }
 
 void mtgb::Direct3DResource::SetResource()

@@ -31,7 +31,7 @@ mtgb::FbxParts::FbxParts(FbxNode* _parent)
 	, pWeights_(nullptr)
 	, pVertexes_(nullptr)
 	, ppIndexData_(nullptr)
-	, ppIndexBuffer_(nullptr)
+	, ppIndexBuffer_{nullptr}
 {
 	if (_parent != nullptr)
 	{
@@ -80,16 +80,20 @@ void mtgb::FbxParts::Release()
 	SAFE_DELETE_ARRAY(pVertexes_);
 	for (DWORD i = 0; i < materialCount_; i++)
 	{
-		SAFE_RELEASE(ppIndexBuffer_[i]);
+		ppIndexBuffer_[i].Reset();
 		SAFE_DELETE(ppIndexData_[i]);
 		SAFE_DELETE(pMaterial_[i].pTexture);
 	}
-	SAFE_DELETE_ARRAY(ppIndexBuffer_);
+	for (auto& indexBuffer : ppIndexBuffer_)
+	{
+		indexBuffer.Reset();
+	}
 	SAFE_DELETE_ARRAY(ppIndexData_);
 	SAFE_DELETE_ARRAY(pMaterial_);
+	
 
-	SAFE_RELEASE(pVertexBuffer_);
-	SAFE_RELEASE(pConstantBuffer_);
+	pVertexBuffer_.Reset();
+	pConstantBuffer_.Reset();
 }
 
 void mtgb::FbxParts::Draw(const Transform& _transform)
@@ -100,11 +104,11 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	// 描画情報をシェーダに渡す
 	UINT stride{ sizeof(Vertex) };
 	UINT offset{ 0 };
-	DirectX11Draw::pContext_->IASetVertexBuffers(0, 1, &pVertexBuffer_, &stride, &offset);
+	DirectX11Draw::pContext_->IASetVertexBuffers(0, 1, pVertexBuffer_.GetAddressOf(), &stride, &offset);
 
 	// 使用するコンスタントバッファをシェーダに伝える
-	DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, &pConstantBuffer_);
-	DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, &pConstantBuffer_);
+	DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
+	DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
 
 	// カメラシステムへのアクセス用
 	const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
@@ -114,7 +118,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	{
 		UINT stride{ sizeof(int) };
 		UINT offset{ 0 };
-		DirectX11Draw::pContext_->IASetIndexBuffer(ppIndexBuffer_[i], DXGI_FORMAT_R32_UINT, 0);
+		DirectX11Draw::pContext_->IASetIndexBuffer(ppIndexBuffer_[i].Get(), DXGI_FORMAT_R32_UINT, 0);
 
 		// パラメータの受け渡し
 		D3D11_MAPPED_SUBRESOURCE pdata_;
@@ -148,7 +152,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 		cb.g_lightDirection = Vector4{ 0.0f, 0.0f, 1.0f, 0.0f }; // ライトの向き
 		cb.g_isTexture = (pMaterial_[i].pTexture != nullptr);
 
-		DirectX11Draw::pContext_->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata_);
+		DirectX11Draw::pContext_->Map(pConstantBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata_);
 		memcpy_s(pdata_.pData, pdata_.RowPitch, (void*)(&cb), sizeof(cb));
 
 		if (cb.g_isTexture)
@@ -168,7 +172,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 			ID3D11ShaderResourceView* pNullSRV = nullptr;
 			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pNullSRV);
 		}
-		DirectX11Draw::pContext_->Unmap(pConstantBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
 		// ポリゴンメッシュを描画する
 		DirectX11Draw::pContext_->DrawIndexed(
@@ -234,11 +238,11 @@ void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _tim
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
-	DirectX11Draw::pContext_->Map(pVertexBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
+	DirectX11Draw::pContext_->Map(pVertexBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
 	if (mappedSubResource.pData)
 	{
 		memcpy_s(mappedSubResource.pData, mappedSubResource.RowPitch, pVertexes_, sizeof(Vertex) * vertexCount_);
-		DirectX11Draw::pContext_->Unmap(pVertexBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
 	}
 	Draw(_transform);
 }
@@ -297,11 +301,11 @@ void mtgb::FbxParts::DrawSkinAnimation(const std::string& _takeName, const Trans
 	}
 
 	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
-	DirectX11Draw::pContext_->Map(pVertexBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
+	DirectX11Draw::pContext_->Map(pVertexBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
 	if (mappedSubResource.pData)
 	{
 		memcpy_s(mappedSubResource.pData, mappedSubResource.RowPitch, pVertexes_, sizeof(Vertex) * vertexCount_);
-		DirectX11Draw::pContext_->Unmap(pVertexBuffer_, 0);
+		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
 	}
 	Draw(_transform);
 	//DirectX11Draw::
@@ -425,12 +429,14 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 		.SysMemSlicePitch = 0,
 	};
 
-	_pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, &pVertexBuffer_);
+	_pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, pVertexBuffer_.ReleaseAndGetAddressOf());
 }
 
 void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 {
-	ppIndexBuffer_ = new ID3D11Buffer* [materialCount_] ;
+	ppIndexBuffer_.resize(materialCount_);
+	//ppIndexBuffer_.resize(materialCount_);
+	//ppIndexBuffer_ = new ID3D11Buffer* [materialCount_] ;
 	ppIndexData_ = new DWORD* [materialCount_] ;
 
 	int count{ 0 };
@@ -472,7 +478,7 @@ void mtgb::FbxParts::InitializeIndexBuffer(ID3D11Device* _pDevice)
 		};
 
 		HRESULT hResult{};
-		hResult = _pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, &ppIndexBuffer_[i]);
+		hResult = _pDevice->CreateBuffer(&BUFFER_DESC, &INITIALIZE_DATA, ppIndexBuffer_[i].ReleaseAndGetAddressOf());
 
 		massert(SUCCEEDED(hResult)
 			&& "インデックスバッファの作成に失敗");
@@ -500,7 +506,7 @@ void mtgb::FbxParts::InitializeConstantBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		nullptr,  // 初期データなし
-		&pConstantBuffer_);
+		pConstantBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "コンスタントバッファの作成に失敗 @FbxParts::InitializeConstantBuffer");
@@ -683,4 +689,9 @@ void mtgb::FbxParts::InitializeSkelton()
 		pBones_[i].bindPose = DirectX::XMLoadFloat4x4(&pose);
 		boneNamePair_[ppCluster_[i]->GetLink()->GetName()] = pBones_ + i;
 	}
+}
+
+mtgb::FbxParts::Material::~Material()
+{
+	delete pTexture;
 }

@@ -14,8 +14,8 @@ mtgb::Texture2D::Texture2D() :
 
 mtgb::Texture2D::~Texture2D()
 {
-	SAFE_RELEASE(pSamplerLinear_);
-	SAFE_RELEASE(pShaderResourceView_);
+	pSamplerLinear_.Reset();
+	pShaderResourceView_.Reset();
 }
 
 void mtgb::Texture2D::Load(const std::wstring& _fileName)
@@ -160,7 +160,7 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 	hResult = DirectX11Draw::pDevice_->CreateShaderResourceView(
 		pTexture,
 		&SHADER_RESOURCE_VIEW_DESC,
-		&pShaderResourceView_);
+		pShaderResourceView_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // テクスチャ用シェーダリソースビューの作成に成功
 		&& "テクスチャ用シェーダリソースビューの作成に失敗  @Texture2D::Load");
@@ -184,16 +184,16 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 	};
 
 	// サンプラーステートを作成
-	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, &pSamplerLinear_);
+	hResult = DirectX11Draw::pDevice_->CreateSamplerState(&SAMPLER_DESC, pSamplerLinear_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "サンプラーステートの作成に失敗 @Texture2D::Load");
 
-	pTexture->Release();
-	pFormatConverter->Release();
-	pFrame->Release();
-	pDecoder->Release();
-	pFactory->Release();
+	SAFE_RELEASE(pTexture);
+	SAFE_RELEASE(pFormatConverter);
+	SAFE_RELEASE(pFrame);
+	SAFE_RELEASE(pDecoder);
+	SAFE_RELEASE(pFactory);
 
 	CoUninitialize();
 }

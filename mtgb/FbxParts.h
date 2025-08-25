@@ -7,7 +7,9 @@
 #include "Texture2D.h"
 #include <unordered_map>
 #include <fbxsdk.h>
+#include <wrl/client.h>
 
+using Microsoft::WRL::ComPtr;
 
 namespace fbxsdk
 {/*
@@ -52,6 +54,7 @@ namespace mtgb
 		/// </summary>
 		struct Material
 		{
+			~Material();
 			uint32_t polygonCount;  // ポリゴン数
 			Vector4 diffuse;  // 拡散反射光への反射強度
 			Vector4 ambient;  // 環境光への反射強度
@@ -183,7 +186,7 @@ namespace mtgb
 		Vertex* pVertexes_;  // 頂点情報
 		DWORD** ppIndexData_;  // インデックス情報
 
-		ID3D11Buffer** ppIndexBuffer_;
+		std::vector<ComPtr<ID3D11Buffer>> ppIndexBuffer_;
 	};
 
 }

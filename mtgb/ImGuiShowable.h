@@ -13,6 +13,7 @@ namespace mtgb
 {
 	
 	
+	
 	/// <summary>
 	/// 継承してShowImGuiをオーバライドして使う
 	/// これを使わなくてもImGui表示はできるので、別の箇所に分離したいときなどにどうぞ

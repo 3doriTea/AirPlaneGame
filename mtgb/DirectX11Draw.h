@@ -2,6 +2,7 @@
 #include "cmtgb.h"
 #include "Vector4.h"
 #include <wrl/client.h>
+#include <array>
 #include "ShaderType.h"
 using Microsoft::WRL::ComPtr;
 
@@ -47,29 +48,31 @@ namespace mtgb
 	/// </summary>
 	struct ShaderBundle
 	{
+		~ShaderBundle();
+
 		/// <summary>
 		/// <para>頂点レイアウト</para>
 		/// <para></para>
 		/// </summary>
-		ID3D11InputLayout* pVertexLayout;
+		ComPtr<ID3D11InputLayout> pVertexLayout;
 
 		/// <summary>
 		/// <para>頂点シェーダ</para>
 		/// <para>頂点の情報</para>
 		/// </summary>
-		ID3D11VertexShader* pVertexShader;
+		ComPtr<ID3D11VertexShader> pVertexShader;
 
 		/// <summary>
 		/// <para>ピクセルシェーダ</para>
 		/// <para></para>
 		/// </summary>
-		ID3D11PixelShader* pPixelShader;
+		ComPtr<ID3D11PixelShader> pPixelShader;
 
 		/// <summary>
 		/// <para>ラスタライザ</para>
 		/// <para>どのピクセルを光らせるかの情報</para>
 		/// </summary>
-		ID3D11RasterizerState* pRasterizerState;
+		ComPtr<ID3D11RasterizerState> pRasterizerState;
 	};
 
 	/// <summary>
@@ -137,9 +140,9 @@ namespace mtgb
 		static ComPtr<IDXGISwapChain1> pSwapChain1_;
 		static ComPtr<ID3D11RenderTargetView> pRenderTargetView_;                                         // 描画先
 		static ComPtr<ID3D11DepthStencilView> pDepthStencilView_;                                         // 深度バッファ
-		static ID3D11DepthStencilState* pDepthStencilState_[static_cast<int8_t>(BlendMode::Max)];  // ブレンドによる深度バッファへの書き込み情報
+		static std::array<ComPtr<ID3D11DepthStencilState>, static_cast<int8_t>(BlendMode::Max)> pDepthStencilState_;  // ブレンドによる深度バッファへの書き込み情報
 		static ComPtr<ID3D11Texture2D> pDepthStencil_;                                                    // 深度ステンシル
-		static ID3D11BlendState* pBlendState_[static_cast<int8_t>(BlendMode::Max)];                // ブレンドの情報
+		static std::array<ComPtr<ID3D11BlendState>, static_cast<int8_t>(BlendMode::Max)> pBlendState_;                // ブレンドの情報
 		static ShaderBundle shaderBundle_[static_cast<int8_t>(ShaderType::Max)];                   // シェーダのバンドル
 		static Vector4 backgroundColor_;
 		static ComPtr<ID3D11SamplerState> pDefaultSamplerState_;
