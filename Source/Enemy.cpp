@@ -2,7 +2,7 @@
 #include "../mtgb/DirectX11Draw.h"
 
 Enemy::Enemy(const Vector3& _position) : GameObject(GameObjectBuilder()
-	.SetName("enemy")
+	.SetName("Enemy")
 	.SetPosition(_position)
 	.SetRotate(Quaternion::Identity())
 	.SetScale(Vector3::One())

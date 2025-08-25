@@ -151,6 +151,7 @@
     <ClCompile Include="Source\EndScene.cpp" />
     <ClCompile Include="Source\EndText.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
+    <ClCompile Include="Source\Health.cpp" />
     <ClCompile Include="Source\Network\PIIO.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -348,6 +349,7 @@
     <ClInclude Include="Source\EndScene.h" />
     <ClInclude Include="Source\EndText.h" />
     <ClInclude Include="Source\Enemy.h" />
+    <ClInclude Include="Source\Health.h" />
     <ClInclude Include="Source\JsonUtility.h" />
     <ClInclude Include="Source\Network\PIIO.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

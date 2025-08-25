@@ -26,6 +26,8 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
+	
+
 #if 1
 	//if (InputUtil::GetKey(KeyCode::Up))
 	{

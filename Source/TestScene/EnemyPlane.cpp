@@ -5,6 +5,8 @@ using namespace mtgb;
 namespace
 {
 	TextHandle hText;
+	const int HIT_DAMAGE{ 10 };
+	const float BROKEN_DOWN_SPEED{ 30.0f };
 }
 
 EnemyPlane::EnemyPlane(
@@ -17,7 +19,8 @@ EnemyPlane::EnemyPlane(
 	pTransform_{ Component<Transform>() },
 	pCollider_{ Component<Collider>() },
 	pTarget_{ &Transform::Get(_playerPlane) },
-	speed_{ 10.0f }
+	speed_{ 10.0f },
+	health_{}
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->sphere_.offset_ = Vector3::Zero();
@@ -32,8 +35,17 @@ EnemyPlane::EnemyPlane(
 		{
 			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			if (FindGameObject(_targetId)->GetName() == "PlayerBullet")
+			GameObject* pTarget{ FindGameObject(_targetId) };
+
+			massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
+			if (pTarget->GetName() == "PlayerBullet")
 			{
+				pTarget->DestroyMe();
+				health_.Damage(HIT_DAMAGE);
+				if (health_.IsDead())
+				{
+					broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
+				}
 				//DestroyMe();
 			}
 		});
@@ -45,15 +57,19 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	
+	if (broken_)
+	{
+		Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
+		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
+
+		return;
+	}
 	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
-	//Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), diffDir) };
 	//DirectX::XMQuaternionBaryCentric
 	/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };*/
-	//pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
 	
-	//pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
