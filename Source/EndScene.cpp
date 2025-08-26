@@ -3,6 +3,7 @@
 #include "TestScene/TestScene.h"
 #include "Draw.h"
 #include "EndText.h"
+#include "EndLogo.h"
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
@@ -26,6 +27,7 @@ void EndScene::Initialize()
 	Instantiate<SkySphere>();
 //	Instantiate<EndText>();
 	Instantiate<TextBox>("tekita", 0.1f);
+	Instantiate<EndLogo>();
 }
 
 void EndScene::Update()

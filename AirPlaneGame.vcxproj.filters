@@ -757,6 +757,15 @@
     <ClCompile Include="mtgb\ControlTower.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\Trail.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TrailEmitterSystem.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\EndLogo.cpp">
+      <Filter>01Game\04EndScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1302,11 +1311,14 @@
     <ClInclude Include="Source\OverScene.h">
       <Filter>01Game\06OverScene</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\Trail.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Source\TrailEmitterSystem.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\ControlTower.h">
-      <Filter>01Game\05TestScene</Filter>
+    <ClInclude Include="Source\EndLogo.h">
+      <Filter>01Game\04EndScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1350,6 +1362,7 @@
     <FxCompile Include="Assets\Shader\WingEffect.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\Trail.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Object Include="Assets\Model\Test.obj" />

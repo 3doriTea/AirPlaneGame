@@ -26,7 +26,7 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 
     {
         // viewDir from camera to target
-        yz::F3 viewDir = yz::f3(gapp.camTarget.x - gapp.camPos.x,
+        /*yz::F3 viewDir = yz::f3(gapp.camTarget.x - gapp.camPos.x,
             gapp.camTarget.y - gapp.camPos.y,
             gapp.camTarget.z - gapp.camPos.z);
         std::vector<yz::Vtx> ribbon;
@@ -44,7 +44,7 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
             gdx.ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
             gdx.ctx->IASetInputLayout(gIL);
             gdx.ctx->Draw((UINT)count, 0);
-        }
+        }*/
     }
 }
 
