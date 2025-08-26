@@ -19,6 +19,9 @@ EndScene::~EndScene()
 
 void EndScene::Initialize()
 {
+	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 0, 0, -10 }, WindowContext::First));
+	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 0, 0, -10 }, WindowContext::Second));
+
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
 
