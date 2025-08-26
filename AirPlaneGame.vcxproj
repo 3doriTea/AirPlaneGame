@@ -176,6 +176,7 @@
     <ClCompile Include="Source\TextBox.cpp" />
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
+    <ClCompile Include="Source\TrailEmitterSystem.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +382,7 @@
     <ClInclude Include="Source\TestScene\UI\SpeedMeter.h" />
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
+    <ClInclude Include="Source\TrailEmitterSystem.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>

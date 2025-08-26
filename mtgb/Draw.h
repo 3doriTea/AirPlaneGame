@@ -10,6 +10,8 @@
 #include <set>
 #include "UIDrawCommand.h"
 #include <type_traits>
+
+
 namespace mtgb
 {
 	class Figure;

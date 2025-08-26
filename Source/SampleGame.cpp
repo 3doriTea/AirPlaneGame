@@ -1,6 +1,12 @@
 #include "SampleGame.h"
+
+#pragma region ÉQÅ[ÉÄë§Ç≈í«â¡
+
 #include "PlayScene.h"
 #include "TestScene/TestScene.h"
+#include "TrailEmitterSystem.h"
+
+#pragma endregion
 
 using namespace mtgb;
 
@@ -43,7 +49,6 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<DoubleWindow>(SystemUpdateType::Frame);
 	_register.Set<CameraSystem>(SystemUpdateType::Frame);
 
-	
 
 	_register.Set<ImGuiRenderer>(SystemUpdateType::Frame);
 
@@ -65,6 +70,10 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
 	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
+
+
+	_register.Set<TrailEmitterSystem>(SystemUpdateType::Frame, false);
+
 
 	_register.Set<Draw>(SystemUpdateType::DontCallMe);
 

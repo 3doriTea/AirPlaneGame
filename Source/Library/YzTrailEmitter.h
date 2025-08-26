@@ -10,6 +10,7 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
+#include <list>
 
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(p) do{ if(p){ (p)->Release(); (p)=nullptr; } }while(0)
@@ -18,6 +19,8 @@
 namespace yz
 {
     using namespace DirectX;
+
+    struct Vtx { XMFLOAT3 pos; XMFLOAT4 col; };
 
     // --------------------------------------------------
     // Math helpers
