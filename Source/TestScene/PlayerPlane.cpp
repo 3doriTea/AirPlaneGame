@@ -8,6 +8,7 @@ using namespace mtgb;
 
 PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
+	.SetName("PlayerPlane")
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() }

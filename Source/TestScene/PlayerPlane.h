@@ -13,6 +13,7 @@ public:
 	Quaternion RemoveZRotation(Quaternion _q) const;
 
 private:
+	int number;
 	RigidBody* pRB_;
 	Transform* pTransform_;
 };

@@ -39,6 +39,7 @@ namespace mtgb
 
 		bool IsHit(const Collider& _other) const;
 		bool IsHit(const Vector3& _origin, const Vector3& _dir, float* dist);
+		bool IsHit(const Vector3& _center, float _radius) const;
 		void Draw() const;
 
 		// BoundingSphere‚ğ‰Šú‰»

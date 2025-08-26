@@ -40,7 +40,7 @@ public:
 	/// 残り時間、フラグ、コールバック等すべてリセット
 	/// </summary>
 	void Reset();
-	static constexpr float PLAY_SCENE_TIMER = 180.0f; // プレイシーンの制限時間(仮)
+	static constexpr float PLAY_SCENE_TIMER = 18.0f; // プレイシーンの制限時間(仮)
 private:
 	std::queue<std::function<void()>> onEndTimerCallbacks_;
 	float remainingTime_; // 残り時間

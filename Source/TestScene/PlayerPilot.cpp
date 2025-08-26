@@ -45,6 +45,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 			},
 		.maxDistance = 300.0f,
 	};
+
 	pTransform->SetParent(_plane);
 
 	lockOnFrame_ = Image::Load("Image/lockOnFrame.png");

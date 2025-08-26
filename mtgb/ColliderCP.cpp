@@ -133,6 +133,19 @@ bool mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, f
 	}
 }
 
+void mtgb::ColliderCP::IsHitAll(const Vector3& _center, float _radius, std::vector<EntityId>* _entityIds)
+{
+	_entityIds->clear();
+
+	for (const auto& collider : pool_)
+	{
+		if (collider.IsHit(_center, _radius))
+		{
+			_entityIds->push_back(collider.GetEntityId());
+		}
+	}
+}
+
 void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
 {
 	_info->clear();

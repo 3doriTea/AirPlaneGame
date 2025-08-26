@@ -166,6 +166,32 @@ bool mtgb::Collider::IsHit(const Vector3& _origin, const Vector3& _dir, float* d
 	return false;
 }
 
+bool mtgb::Collider::IsHit(const Vector3& _center, float _radius) const
+{
+	static Matrix4x4 matrix{};
+
+	if (type_ == TYPE_SPHERE)
+	{
+		pTransform_->GenerateWorldMatrix(&matrix);
+		Vector3 worldPosition{ sphere_.offset_ * matrix };
+
+		// ˆø”‚Å‹…‚ğì‚é
+
+		float distance{ (_center - worldPosition).Size() };
+		float hitDistance{ sphere_.radius_ + _radius };
+
+		// ‹——£‚ª‘o•û‚Ì‹…‚Ì”¼Œa‚æ‚è‚à¬‚³‚¯‚ê‚Î“–‚½‚Á‚Ä‚¢‚é
+		return (distance <= hitDistance);
+	}
+	else if (type_ == TYPE_CAPSULE)
+	{
+		// TODO: ƒJƒvƒZƒ‹‚Æ‹…‚Ì“–‚½‚è”»’è
+
+	}
+
+	return false;
+}
+
 void mtgb::Collider::Draw() const
 {
 	static Transform copyTransform{};
