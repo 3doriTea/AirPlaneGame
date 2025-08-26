@@ -152,6 +152,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\EndLogo.cpp" />
     <ClCompile Include="Source\EndScene.cpp" />
     <ClCompile Include="Source\EndText.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
@@ -356,6 +357,7 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\EndLogo.h" />
     <ClInclude Include="Source\EndScene.h" />
     <ClInclude Include="Source\EndText.h" />
     <ClInclude Include="Source\Enemy.h" />
