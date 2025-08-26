@@ -23,7 +23,10 @@ void TrailEmitterSystem::Update()
 		trail.SetMaxPoints(pointsMax_);
 		trail.Update(deltaTime);
 	}
+}
 
+void TrailEmitterSystem::Render()
+{
 	Vector3 camDir = Game::System<CameraSystem>().GetTransform().Forward();
 
 	for (auto trail : trails_)

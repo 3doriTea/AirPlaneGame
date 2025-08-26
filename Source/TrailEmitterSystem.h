@@ -11,6 +11,7 @@ public:
 
 	void Initialize() override;
 	void Update() override;
+	void Render();
 
 	void Release() override;
 

@@ -131,6 +131,7 @@ bool mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, f
 	{
 		return collider->IsHit(_origin, _dir, dist);
 	}
+	return false;
 }
 
 void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
