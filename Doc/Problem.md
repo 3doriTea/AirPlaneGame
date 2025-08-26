@@ -10,5 +10,6 @@
 </br>
 しかし、機能とシェーダ毎にDrawクラスのstaticメンバ関数が増え続け、巨大化している。</br>
 巨大化はDrawクラスの結合度が上がってしまう。</br>
+また、Drawクラスはゲームベース側にあるため、ゲーム側で追加したい描画機能に対応できない。</br>
 
 <img width="922" height="681" alt="image" src="https://github.com/user-attachments/assets/8a73deb5-bf9a-4efa-9c20-0cae874e44ee" />
