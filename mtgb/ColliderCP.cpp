@@ -131,6 +131,7 @@ bool mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, f
 	{
 		return collider->IsHit(_origin, _dir, dist);
 	}
+	return false;
 }
 
 void mtgb::ColliderCP::IsHitAll(const Vector3& _center, float _radius, std::vector<EntityId>* _entityIds)

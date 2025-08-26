@@ -89,6 +89,7 @@ namespace mtgb
 		friend class OBJ;
 		friend class ImGuiRenderer;
 		friend class FbxParts;
+		friend class Trail;
 
 		friend class DoubleWindow;
 		friend class SceneSystem;

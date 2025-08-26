@@ -42,6 +42,7 @@
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
     <ClCompile Include="mtgb\TimeLimit.cpp" />
+    <ClCompile Include="mtgb\Trail.cpp" />
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="Source\Background.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="mtgb\ShowType.h" />
     <ClInclude Include="mtgb\TextAlignment.h" />
     <ClInclude Include="mtgb\TimeLimit.h" />
+    <ClInclude Include="mtgb\Trail.h" />
     <ClInclude Include="mtgb\TransformCore.h" />
     <ClInclude Include="mtgb\TransformGuizmo.h" />
     <ClInclude Include="mtgb\TypeRegistry.h" />
@@ -455,6 +457,18 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Trail.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">VS</EntryPointName>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Unlit3D.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
