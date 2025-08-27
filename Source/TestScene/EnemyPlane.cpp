@@ -20,7 +20,9 @@ EnemyPlane::EnemyPlane(
 	pCollider_{ Component<Collider>() },
 	pTarget_{ &Transform::Get(_playerPlane) },
 	speed_{ 10.0f },
-	health_{}
+	health_{},
+	lockOnAngle_{ 45.0f },
+	lockOnDistance_{ 30.0f }
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->sphere_.offset_ = Vector3::Zero();
@@ -69,7 +71,10 @@ void EnemyPlane::Update()
 	//DirectX::XMQuaternionBaryCentric
 	/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };*/
-	
+	//pTransform_->rotate = Quaternion::LookRotation(Vector3::Normalize(pTarget_->position - pTransform_->position),Vector3::Up() );
+
+
+	Search();
 
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
@@ -88,4 +93,23 @@ void EnemyPlane::Draw() const
 	//Draw::ImmediateText("hello world",0,0);
 	//Game::System<ColliderCP>().TestDraw();
 	
+}
+
+void EnemyPlane::Search()
+{
+	Vector3 forward = pTransform_->Forward();
+	Vector3 toTarget = pTarget_->position - pTransform_->position;
+	float distance = toTarget.Size();
+
+	// 内積
+	float cosTheta = DirectX::XMVector3Dot(forward, Vector3::Normalize(toTarget)).m128_f32[0];
+
+	// ロックオンする、視野に入っていると判定する角度のラジアン
+	float lockOnAngleRadian = DirectX::XMConvertToRadians(lockOnAngle_);
+
+	
+	if (cosTheta > lockOnAngleRadian && distance <= lockOnDistance_ )
+	{
+		LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
+	}
 }

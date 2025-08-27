@@ -93,6 +93,11 @@ void PlayerPlane::Update()
 	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
 
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
+
+	MTImGui::Instance().DirectShow([this]() {
+		TypeRegistry::Instance().CallFunc(&pTransform_->position, "name");
+		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "name");
+		},"PlayerPlane", ShowType::Inspector);
 	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
 	//LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);

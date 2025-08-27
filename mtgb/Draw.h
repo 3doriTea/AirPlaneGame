@@ -57,11 +57,13 @@ namespace mtgb
 		static void Box(
 			const Vector2Int& _begin,
 			const Vector2Int& _end,
-			const Color& _color);
+			const Color& _color,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		static void Box(
 			const RectInt& _rect,
-			const Color& _color);
+			const Color& _color,
+			const UIParams& _uiParams = defaultUIParams_);
 
 		static void Image(
 			const ImageHandle _hImage,

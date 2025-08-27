@@ -37,8 +37,8 @@ namespace mtgb
 		void ShowAll(ShowType show);
 
 		/// <summary>
-		/// 表示キューに積む
-		/// 事前に型に結び付けたコールバックを登録する必要あり
+		/// 型を指定して表示キューに積む
+		/// 事前にSetupShowFuncで表示方法を登録する必要あり
 		/// </summary>
 		/// <typeparam name="T">表示対象の型</typeparam>
 		/// <param name="target">表示対象のポインタ</param>
