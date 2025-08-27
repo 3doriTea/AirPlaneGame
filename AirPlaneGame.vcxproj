@@ -28,7 +28,6 @@
     <ClCompile Include="mtgb\CameraSystem.cpp" />
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
-    <ClCompile Include="mtgb\ControlTower.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\HighlightEnemy.cpp" />
@@ -152,6 +151,7 @@
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
+    <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
@@ -182,7 +182,6 @@
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="mtgb\ControlTower.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />
@@ -357,6 +356,7 @@
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
+    <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\ResultLogo.h" />
     <ClInclude Include="Source\ResultScene.h" />

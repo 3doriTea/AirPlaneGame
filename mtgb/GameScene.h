@@ -44,6 +44,10 @@ namespace mtgb
 		template<typename T>
 		T* GetGameObject() const;
 
+		template<typename T>
+		void GetGameObjects(std::vector<GameObject*>* _pFoundGameObjects) const;
+
+
 		/// <summary>
 		/// EntityIdでオブジェクトを取得
 		/// </summary>
@@ -95,5 +99,26 @@ namespace mtgb
 			}
 		}
 		return nullptr;
+	}
+	template<typename T>
+	inline void GameScene::GetGameObjects(std::vector<GameObject*>* _pFoundGameObjects) const
+	{
+		_pFoundGameObjects->clear();
+
+		// 基底クラスがGameObjectであるか
+		if (std::is_base_of<GameObject, std::remove_cvref_t<T>>().value == false)
+		{
+			return;
+		}
+
+		for (GameObject* obj : pGameObjects_)
+		{
+			T* instance = dynamic_cast<T*>(obj);
+
+			if (instance)
+			{
+				return _pFoundGameObjects->push_back(obj);
+			}
+		}
 	}
 }

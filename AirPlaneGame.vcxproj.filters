@@ -721,12 +721,6 @@
     <ClCompile Include="mtgb\InputConfig.cpp">
       <Filter>03mtgb\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EndText.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\EndScene.cpp">
-      <Filter>01Game\04EndScene</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\HighlightEnemy.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
@@ -754,17 +748,20 @@
     <ClCompile Include="Source\TrailEmitterSystem.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\ControlTower.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\Trail.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\TrailEmitterSystem.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\EndLogo.cpp">
-      <Filter>01Game\04EndScene</Filter>
+    <ClCompile Include="Source\ResultLogo.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResultScene.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ControlTower.cpp">
+      <Filter>01Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1251,12 +1248,6 @@
     <ClInclude Include="mtgb\WorldToScreenData.h">
       <Filter>03mtgb\System\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EndText.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\EndScene.h">
-      <Filter>01Game\04EndScene</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\RectContainsInfo.h">
       <Filter>03mtgb\System\Collider\ColliderInfo</Filter>
     </ClInclude>
@@ -1317,8 +1308,14 @@
     <ClInclude Include="Source\TrailEmitterSystem.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\EndLogo.h">
-      <Filter>01Game\04EndScene</Filter>
+    <ClInclude Include="Source\ResultLogo.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResultScene.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ControlTower.h">
+      <Filter>01Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

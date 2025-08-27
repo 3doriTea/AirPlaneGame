@@ -1,5 +1,5 @@
 #include "ControlTower.h"
-
+#include "Enemy.h"
 ControlTower::ControlTower(const EntityId _plane) : GameObject(GameObjectBuilder()
 	.SetPosition({ 0,0,0 })
 	.SetName("ControlTower")
@@ -24,5 +24,5 @@ void ControlTower::Draw() const
 
 void ControlTower::DetectionEnemy()
 {
-	
+	//std::vector<Enemy*> enemies
 }
