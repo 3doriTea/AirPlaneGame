@@ -158,7 +158,7 @@ void mtgb::Draw::ImmediateText(const std::string& _text, RectF _rect, int _size,
 
 			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
-			Game::System<DirectWrite>().ImmediateDraw(ToWString(_text), formatData->format, formatData->pixelFontMetrics,
+			Game::System<DirectWrite>().ImmediateDraw(MultiToWide(_text), formatData->format, formatData->pixelFontMetrics,
 				_rect.x,
 				_rect.y,
 				_rect.width,
@@ -178,7 +178,7 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 
 		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
-		Game::System<DirectWrite>().ImmediateDraw(ToWString(text), formatData->format, formatData->pixelFontMetrics,
+		Game::System<DirectWrite>().ImmediateDraw(MultiToWide(text), formatData->format, formatData->pixelFontMetrics,
 			_rect.x,
 			_rect.y,
 			_rect.width,

@@ -39,11 +39,12 @@ void mtgb::MTImGui::Update()
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
-    // Setで登録をする
+    
     using RegisterShowFuncHolder::Set;
 
     // テンプレートパラメータに型を指定
-    // 第一引数に型のポインタ、第二引数
+    // 第一引数に型のポインタ、第二引数に登録する型の名前
+
     Set<Transform>([](Transform* _target, const char* _name)
         {
             TypeRegistry::Instance().CallFunc(&_target->position, "Position");
@@ -187,14 +188,14 @@ void mtgb::MTImGui::DrawLine(const Vector3& _from, const Vector3& _to, float _th
 /// <param name="_start">レイ始点</param>
 /// <param name="_dir">レイの向きと長さ</param>
 /// <param name="_thickness">レイの太さ</param>
-void mtgb::MTImGui::DrawRay(const Vector3& _start, const Vector3& _dir, float _thickness)
+void mtgb::MTImGui::DrawVec(const Vector3& _start, const Vector3& _vec, float _thickness)
 {
     if (updatingImGuiShowable_)
     {
-        DrawRayImpl(_start, _dir, _thickness);
+        DrawRayImpl(_start, _vec, _thickness);
     }
     else
     {
-        sceneViewShowList_.push([=]() {DrawRayImpl(_start, _dir, _thickness); });
+        sceneViewShowList_.push([=]() {DrawRayImpl(_start, _vec, _thickness); });
     }
 }

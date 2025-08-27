@@ -67,7 +67,7 @@ namespace mtgb
 		void DirectShow(std::function<void()> func, const std::string& name, ShowType show);
 
 		/// <summary>
-		/// ImGuiWindowに線を描画
+		/// <para> ImGuiWindowに線分を描画 </para>
 		/// </summary>
 		/// <param name="_from">始点</param>
 		/// <param name="_to">終点</param>
@@ -76,12 +76,13 @@ namespace mtgb
 
 		
 		/// <summary>
-		/// 
+		/// <para> ImGuiWindowにベクトルを描画 </para>
+		/// <para> 始点 + ベクトルで描画される </para>
 		/// </summary>
-		/// <param name="_start"></param>
-		/// <param name="_dir"></param>
+		/// <param name="_start">始点</param>
+		/// <param name="_vec">ベクトル</param>
 		/// <param name="_thickness"></param>
-		void DrawRay(const Vector3& _start,const Vector3& _dir, float _thickness);
+		void DrawVec(const Vector3& _start, const Vector3 & _vec, float _thickness);
 
 		static constexpr std::string_view GetName(ShowType _showType)
 		{
@@ -101,7 +102,7 @@ namespace mtgb
 		MTImGui(const MTImGui& other) = delete;
 
 		/// <summary>
-		/// 型に対応する表示関数を設定する
+		/// TypedShowの_targetの型に対応する関数を登録する
 		/// </summary>
 		void SetupShowFunc();
 

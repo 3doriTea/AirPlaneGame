@@ -153,9 +153,8 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
-    <ClCompile Include="Source\EndLogo.cpp" />
-    <ClCompile Include="Source\EndScene.cpp" />
-    <ClCompile Include="Source\EndText.cpp" />
+    <ClCompile Include="Source\ResultLogo.cpp" />
+    <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Health.cpp" />
     <ClCompile Include="Source\Network\PIIO.cpp">
@@ -359,9 +358,8 @@
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
-    <ClInclude Include="Source\EndLogo.h" />
-    <ClInclude Include="Source\EndScene.h" />
-    <ClInclude Include="Source\EndText.h" />
+    <ClInclude Include="Source\ResultLogo.h" />
+    <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Health.h" />
     <ClInclude Include="Source\JsonUtility.h" />

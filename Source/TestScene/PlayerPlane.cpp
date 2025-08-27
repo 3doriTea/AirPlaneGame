@@ -2,6 +2,11 @@
 
 using namespace mtgb;
 
+namespace
+{
+	TextHandle testText_;
+}
+
 #define __X m128_f32[0]
 #define __Y m128_f32[1]
 #define __Z m128_f32[2]
@@ -13,6 +18,7 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() }
 {
+	testText_ = Text::Load("‚ ‚¢‚¤‚¦‚¨", 72);
 }
 
 PlayerPlane::~PlayerPlane()
@@ -106,6 +112,8 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
+	Draw::ImmediateText("aiueo‚ ‚¢‚¤‚¦‚¨",{0,0});
+	Draw::Text(testText_, { 0, 0 });
 }
 
 Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const

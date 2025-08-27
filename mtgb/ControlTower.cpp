@@ -6,12 +6,7 @@ ControlTower::ControlTower(const EntityId _plane) : GameObject(GameObjectBuilder
 	.Build())
 	,detectionRagius_{30.0f}
 {
-	bool getPlayerPlaneTransform = Game::System<TransformCP>().TryGet(pPlayerPlaneTransform_, _plane);
-	if (!getPlayerPlaneTransform)
-	{
-		LOGIMGUI("Failed to get PlayerPlaneTransform!!!!!");
-	}
-
+	pPlayerPlaneTransform_ = Component<Transform>();
 }
 
 ControlTower::~ControlTower()
@@ -29,5 +24,5 @@ void ControlTower::Draw() const
 
 void ControlTower::DetectionEnemy()
 {
-
+	
 }

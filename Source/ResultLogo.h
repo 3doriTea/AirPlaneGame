@@ -1,12 +1,12 @@
 #pragma once
 #include <mtgb.h>
 
-class EndLogo : public GameObject
+class ResultLogo : public GameObject
 {
 public:
-	EndLogo();
-	EndLogo(mtgb::WindowContext context);
-	~EndLogo();
+	ResultLogo();
+	ResultLogo(mtgb::WindowContext context);
+	~ResultLogo();
 
 	void Update() override;
 	void Draw() const override;

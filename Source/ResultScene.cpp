@@ -1,23 +1,23 @@
-#include "EndScene.h"
+#include "ResultScene.h"
 #include "SkySphere.h"
 #include "TestScene/TestScene.h"
 #include "Draw.h"
-#include "EndText.h"
-#include "EndLogo.h"
+#include "ResultLogo.h"
+#include <iostream>
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
 #include "../Source/TestScene/PlayerPilot.h"
 
-EndScene::EndScene()
+ResultScene::ResultScene()
 {
 }
 
-EndScene::~EndScene()
+ResultScene::~ResultScene()
 {
 }
 
-void EndScene::Initialize()
+void ResultScene::Initialize()
 {
 	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 0, 0, -10 }, WindowContext::First));
 	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 0, 0, -10 }, WindowContext::Second));
@@ -28,12 +28,12 @@ void EndScene::Initialize()
 	Audio::Clear();
 
 	Instantiate<SkySphere>();
-//	Instantiate<EndText>();
+//	Instantiate<ResultText>();
 	Instantiate<TextBox>("tekita", 0.1f);
-	Instantiate<EndLogo>();
+	Instantiate<ResultLogo>();
 }
 
-void EndScene::Update()
+void ResultScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
@@ -41,10 +41,13 @@ void EndScene::Update()
 	}
 }
 
-void EndScene::Draw() const
+void ResultScene::Draw() const
 {
+
+	Draw::ImmediateText(std::to_string(300), {0,0}, 100, TextAlignment::center);
+	Draw::ImmediateText("残念！ゲームオーバー", { 0, 100 }, 48, TextAlignment::center);
 }
 
-void EndScene::End()
+void ResultScene::End()
 {
 }
