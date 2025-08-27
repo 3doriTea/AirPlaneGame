@@ -1,4 +1,5 @@
 #include "EnemyPlane.h"
+#include "../TrailEmitterSystem.h"
 
 using namespace mtgb;
 
@@ -7,6 +8,8 @@ namespace
 	TextHandle hText;
 	const int HIT_DAMAGE{ 10 };
 	const float BROKEN_DOWN_SPEED{ 30.0f };
+	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // ’Ä—’†‚Ìz²‰ñ“](1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x)
+	const float DESTROY_HEIGHT{ -100 };  // ”òs‹@‚ğÁ‚·‚‚³
 }
 
 EnemyPlane::EnemyPlane(
@@ -47,10 +50,12 @@ EnemyPlane::EnemyPlane(
 				if (health_.IsDead())
 				{
 					broken_ = true;  // ‘Ì—Í“I‚É€‚ñ‚Å‚¢‚é‚È‚ç”òs‹@‚ğ‰ó‚·
+					SetName("EnemyBroken");
 				}
-				//DestroyMe();
 			}
 		});
+
+	//Game::System<TrailEmitterSystem>().
 }
 
 EnemyPlane::~EnemyPlane()
@@ -59,10 +64,21 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	if (broken_)
+	if (broken_)  // ”j‰ó’†‚Ìˆ—
 	{
-		Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
-		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
+		{
+			DestroyMe();
+			return;
+		}
+
+		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
+		Quaternion curr{ pTransform_->rotate };
+
+		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
+
+		Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
+		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
 		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
 
 		return;
@@ -111,5 +127,6 @@ void EnemyPlane::Search()
 	if (cosTheta > lockOnAngleRadian && distance <= lockOnDistance_ )
 	{
 		LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
+		lockOnTarget_ = true;
 	}
 }

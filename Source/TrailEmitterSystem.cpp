@@ -2,7 +2,8 @@
 
 using namespace mtgb;
 
-TrailEmitterSystem::TrailEmitterSystem()
+TrailEmitterSystem::TrailEmitterSystem() :
+	trail_{}
 {
 }
 
@@ -27,16 +28,17 @@ void TrailEmitterSystem::Update()
 
 void TrailEmitterSystem::Render()
 {
-	Vector3 camDir = Game::System<CameraSystem>().GetTransform().Forward();
+	//Vector3 camDir = Game::System<CameraSystem>().GetTransform().Forward();
 
-	for (auto trail : trails_)
+	for (const auto& trail : trails_)
 	{
-		//Vector3 viewDir{ }
-		std::vector<yz::Vtx> ribbon;
-		trail.BuildRibbon({ camDir.x, camDir.y, camDir.z }, ribbon);
-		if (ribbon.size() < 4) continue;
+		trail_.Draw(trail);
+		////Vector3 viewDir{ }
+		//std::vector<yz::Vtx> ribbon;
+		//trail.BuildRibbon({ camDir.x, camDir.y, camDir.z }, ribbon);
+		//if (ribbon.size() < 4) continue;
 
-		//D3D11_MAPPED_SUBRESOURCE
+		////D3D11_MAPPED_SUBRESOURCE
 	}
 }
 
