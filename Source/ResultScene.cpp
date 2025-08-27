@@ -31,6 +31,8 @@ void ResultScene::Initialize()
 //	Instantiate<ResultText>();
 	Instantiate<TextBox>("tekita", 0.1f);
 	Instantiate<ResultLogo>();
+
+
 }
 
 void ResultScene::Update()
@@ -43,9 +45,7 @@ void ResultScene::Update()
 
 void ResultScene::Draw() const
 {
-
-	Draw::ImmediateText(std::to_string(300), {0,0}, 100, TextAlignment::center);
-	Draw::ImmediateText("残念！ゲームオーバー", { 0, 100 }, 48, TextAlignment::center);
+	Draw::ImmediateText("あなたのスコア", { 0, 100 }, 48, TextAlignment::center);
 }
 
 void ResultScene::End()

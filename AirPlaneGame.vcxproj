@@ -358,6 +358,7 @@
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />
     <ClInclude Include="Source\ResultScene.h" />
     <ClInclude Include="Source\Enemy.h" />

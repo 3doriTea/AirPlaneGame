@@ -8,8 +8,8 @@ ResultLogo::ResultLogo() : GameObject(GameObjectBuilder()
 	.Build()),
 	pTransform_{ Component<Transform>() }
 {
-
-	fModel_ = Fbx::Load("Model/over_logo.test.fbx");
+	fModel_ = Fbx::Load("Model/result_logo.fbx");
+	pTransform_->position.y = 3.5f;
 }
 
 ResultLogo::ResultLogo(mtgb::WindowContext context) : ResultLogo()
@@ -27,6 +27,5 @@ void ResultLogo::Update()
 
 void ResultLogo::Draw() const
 {
-	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
 }
