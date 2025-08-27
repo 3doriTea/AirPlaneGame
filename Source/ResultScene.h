@@ -1,13 +1,12 @@
 #pragma once
 #include <mtgb.h>
 #include "TextBox.h"
-#include "EndText.h"
 
-class EndScene : public mtgb::GameScene
+class ResultScene : public mtgb::GameScene
 {
 public:
-	EndScene();
-	~EndScene();
+	ResultScene();
+	~ResultScene();
 
 	void Initialize() override;
 	void Update() override;

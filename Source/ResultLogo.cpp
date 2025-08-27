@@ -1,7 +1,7 @@
-#include "EndLogo.h"
+#include "ResultLogo.h"
 
-EndLogo::EndLogo() : GameObject(GameObjectBuilder()
-	.SetName("endlogo")
+ResultLogo::ResultLogo() : GameObject(GameObjectBuilder()
+	.SetName("Resultlogo")
 	.SetPosition(Vector3(0, 0, 0))
 	.SetRotate(Quaternion::Identity())
 	.SetScale({ 3.0,3.0,3.0 })
@@ -12,20 +12,20 @@ EndLogo::EndLogo() : GameObject(GameObjectBuilder()
 	fModel_ = Fbx::Load("Model/over_logo.test.fbx");
 }
 
-EndLogo::EndLogo(mtgb::WindowContext context) : EndLogo()
+ResultLogo::ResultLogo(mtgb::WindowContext context) : ResultLogo()
 {
 	context_ = context;
 }
 
-EndLogo::~EndLogo()
+ResultLogo::~ResultLogo()
 {
 }
 
-void EndLogo::Update()
+void ResultLogo::Update()
 {
 }
 
-void EndLogo::Draw() const
+void ResultLogo::Draw() const
 {
 	Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(fModel_, *pTransform_, 300);
