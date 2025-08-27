@@ -40,7 +40,7 @@ namespace mtgb
 		/// テンプレートパラメータでオブジェクトを取得
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <returns>存在、GameObjectを継承していないならnullptr</returns>
+		/// <returns>存在していない、GameObjectを継承していないならnullptr</returns>
 		template<typename T>
 		T* GetGameObject() const;
 

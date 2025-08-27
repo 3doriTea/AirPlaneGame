@@ -45,6 +45,7 @@ namespace mtgb
 		template<typename GameSceneT>
 		GameSceneT& GetScene();
 
+
 		GameObject* FindGameObject(const std::string& _name);
 		void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
 		GameObject* FindGameObject(const EntityId _entityId);

@@ -111,5 +111,6 @@ void EnemyPlane::Search()
 	if (cosTheta > lockOnAngleRadian && distance <= lockOnDistance_ )
 	{
 		LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
+		lockOnTarget_ = true;
 	}
 }
