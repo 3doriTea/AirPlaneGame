@@ -55,17 +55,17 @@ void mtgb::Text::Update()
 
 int mtgb::Text::Load(const std::string& str, int size)
 {
-	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), size);
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(MultiToWide(str), size);
 }
 
 int mtgb::Text::Load(const std::string& str, int fontSize, float layoutBoxWidth, float layoutBoxHeight)
 {
-	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize,layoutBoxWidth,layoutBoxHeight);
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(MultiToWide(str), fontSize,layoutBoxWidth,layoutBoxHeight);
 }
 
 int mtgb::Text::Load(const std::string& str, int fontSize, Vector2F layoutBoxSize)
 {
-	return Game::System<Text>().GetOrCreateTextLayoutHandle(ToWString(str), fontSize, layoutBoxSize.x, layoutBoxSize.y);
+	return Game::System<Text>().GetOrCreateTextLayoutHandle(MultiToWide(str), fontSize, layoutBoxSize.x, layoutBoxSize.y);
 }
 
 #if false

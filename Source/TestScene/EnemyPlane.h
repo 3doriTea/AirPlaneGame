@@ -23,4 +23,5 @@ private:
 	bool broken_;  // 壊れているか
 	float lockOnAngle_;// ロックオン、プレイヤーを発見する角度(degree)
 	float lockOnDistance_;// ロックオン、プレイヤーを発見する距離
+
 };

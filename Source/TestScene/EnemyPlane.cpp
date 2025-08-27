@@ -77,7 +77,7 @@ void EnemyPlane::Update()
 	Search();
 
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
-	MTImGui::Instance().DrawRay(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
+	MTImGui::Instance().DrawVec(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
 }
 
 void EnemyPlane::Draw() const

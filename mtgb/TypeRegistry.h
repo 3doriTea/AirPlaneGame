@@ -74,7 +74,7 @@ namespace RegisterShowFuncHolder
 	/// 型に対応したImGuiの表示処理をセットする
 	/// </summary>
 	/// <typeparam name="Type">表示したい型</typeparam>
-	/// <param name="_func"></param>
+	/// <param name="_func">表示したい型を使った表示関数</param>
 	template<typename Type>
 	void Set(std::function<void(Type* _target, const char* _name)> _func)
 	{
