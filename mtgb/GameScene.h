@@ -45,7 +45,7 @@ namespace mtgb
 		T* GetGameObject() const;
 
 		template<typename T>
-		void GetGameObjects(std::vector<GameObject*>* _pFoundGameObjects) const;
+		void GetGameObjects(std::vector<T*>* _pFoundGameObjects) const;
 
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace mtgb
 		return nullptr;
 	}
 	template<typename T>
-	inline void GameScene::GetGameObjects(std::vector<GameObject*>* _pFoundGameObjects) const
+	inline void GameScene::GetGameObjects(std::vector<T*>* _pFoundGameObjects) const
 	{
 		_pFoundGameObjects->clear();
 
@@ -117,7 +117,7 @@ namespace mtgb
 
 			if (instance)
 			{
-				return _pFoundGameObjects->push_back(obj);
+				return _pFoundGameObjects->push_back(instance);
 			}
 		}
 	}

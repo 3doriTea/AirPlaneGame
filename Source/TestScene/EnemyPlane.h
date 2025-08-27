@@ -11,12 +11,13 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void Search();
+	bool LockOnTarget() const;
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
 	Collider* pCollider_;
-	Transform* pTransform_;
 	Transform* pTarget_;
+	Transform* pTransform_;
 
 	Health health_;   // ‘Ì—Í
 	float speed_;  // ˆÚ“®‘¬“x m/s

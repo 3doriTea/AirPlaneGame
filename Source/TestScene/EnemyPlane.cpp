@@ -130,3 +130,8 @@ void EnemyPlane::Search()
 		lockOnTarget_ = true;
 	}
 }
+
+bool EnemyPlane::LockOnTarget() const
+{
+	return lockOnTarget_;
+}

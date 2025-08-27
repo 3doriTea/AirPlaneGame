@@ -55,7 +55,7 @@ namespace mtgb
 		T* FindGameObject() const;
 
 		template<typename T>
-		void FindGameObjects(const std::vector<GameObject*>* _pFoundGameObjects);
+		void FindGameObjects(std::vector<T*>* _pFoundGameObjects);
 
 		GameObject* FindGameObject(const std::string& _name);
 		void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
@@ -119,11 +119,11 @@ namespace mtgb
 	template<typename T>
 	inline T* GameObject::FindGameObject() const
 	{
-		return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject<T>();
+		return mtgb::Game::System<SceneSystem>().GetActiveScene()->template GetGameObject<T>();
 	}
 	template<typename T>
-	inline void GameObject::FindGameObjects(const std::vector<GameObject*>* _pFoundGameObjects)
+	inline void GameObject::FindGameObjects(std::vector<T*>* _pFoundGameObjects)
 	{
-		mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObjects<T>(_pFoundGameObjects);
+		mtgb::Game::System<SceneSystem>().GetActiveScene()->template GetGameObjects<T>(_pFoundGameObjects);
 	}
 }
