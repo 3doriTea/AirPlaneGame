@@ -779,6 +779,51 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 	}
+
+	// トレイルシェーダの読み込み
+	{
+		const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_TRAIL[]
+		{
+			{
+				.SemanticName = "POSITION",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 0,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+			{
+				.SemanticName = "COLOR",
+				.SemanticIndex = 0,
+				.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+				.InputSlot = 0,
+				.AlignedByteOffset = vectorSize * 1,
+				.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+				.InstanceDataStepRate = 0,
+			},
+		}; 
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
+				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Trail.hlsl",
+			ShaderType::Trail,
+			INPUT_ELEMENT_DESC_TRAIL,
+			sizeof(INPUT_ELEMENT_DESC_TRAIL) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
 }
 
 void mtgb::DirectX11Manager::CompileShader(
