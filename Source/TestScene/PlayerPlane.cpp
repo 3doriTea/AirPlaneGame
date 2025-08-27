@@ -33,9 +33,7 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
-	
-
-#if 1
+#if 0
 	//if (InputUtil::GetKey(KeyCode::Up))
 	{
 		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
@@ -63,19 +61,19 @@ void PlayerPlane::Update()
 #else
 	if (InputUtil::GetKey(KeyCode::Up))
 	{
-		pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
 	}
 	if (InputUtil::GetKey(KeyCode::Down))
 	{
-		pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
 	}
 	if (InputUtil::GetKey(KeyCode::Left))
 	{
-		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
 	}
 	if (InputUtil::GetKey(KeyCode::Right))
 	{
-		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
 #endif
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
