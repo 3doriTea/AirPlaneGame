@@ -1,4 +1,5 @@
 #include "EnemyPlane.h"
+#include "../TrailEmitterSystem.h"
 
 using namespace mtgb;
 
@@ -7,6 +8,8 @@ namespace
 	TextHandle hText;
 	const int HIT_DAMAGE{ 10 };
 	const float BROKEN_DOWN_SPEED{ 30.0f };
+	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // 墜落中のz軸回転(1秒間あたりの回転角度)
+	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 }
 
 EnemyPlane::EnemyPlane(
@@ -47,10 +50,12 @@ EnemyPlane::EnemyPlane(
 				if (health_.IsDead())
 				{
 					broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
+					SetName("EnemyBroken");
 				}
-				//DestroyMe();
 			}
 		});
+
+	//Game::System<TrailEmitterSystem>().
 }
 
 EnemyPlane::~EnemyPlane()
@@ -61,8 +66,13 @@ void EnemyPlane::Update()
 {
 	if (broken_)  // 破壊中の処理
 	{
+		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
+		{
+			DestroyMe();
+			return;
+		}
 
-		const float ROT_ANGLE{ Time::DeltaTimeF() * 3 };
+		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
 		Quaternion curr{ pTransform_->rotate };
 
 		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);

@@ -25,6 +25,12 @@ namespace mtgb
 		virtual inline void End() {};
 
 		/// <summary>
+		/// 名前を設定する
+		/// </summary>
+		/// <param name="_name"></param>
+		void SetName(const std::string _name) { name_ = _name; }
+
+		/// <summary>
 		/// コンポーネントを取得/追加
 		/// </summary>
 		/// <typeparam name="ComponentT">コンポーネントの型</typeparam>
