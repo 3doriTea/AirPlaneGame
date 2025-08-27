@@ -1,6 +1,6 @@
 #include "OverScene.h"
 
-#include "EndScene.h"
+#include "ResultScene.h"
 
 namespace
 {
@@ -28,7 +28,7 @@ void OverScene::Update()
 {
 	if (InputUtil::GetKey(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<EndScene>();
+		Game::System<SceneSystem>().Move<ResultScene>();
 	}
 }
 

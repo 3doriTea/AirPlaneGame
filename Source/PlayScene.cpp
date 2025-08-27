@@ -7,7 +7,7 @@
 #include "Background.h"
 #include "SkySphere.h"
 #include "TestScene/TestScene.h"
-#include "EndScene.h"
+#include "ResultScene.h"
 #include "TimeLimit.h"
 #include "OverScene.h"
 using namespace mtgb;
@@ -67,7 +67,7 @@ void PlayScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<EndScene>();
+		Game::System<SceneSystem>().Move<ResultScene>();
 	}
 
 	if (InputUtil::GetKeyDown(KeyCode::O))
