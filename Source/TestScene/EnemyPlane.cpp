@@ -59,10 +59,16 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	if (broken_)
+	if (broken_)  // ”j‰ó’†‚Ìˆ—
 	{
-		Quaternion lookQuaternion{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
-		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+
+		const float ROT_ANGLE{ Time::DeltaTimeF() * 3 };
+		Quaternion curr{ pTransform_->rotate };
+
+		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
+
+		Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
+		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
 		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
 
 		return;
