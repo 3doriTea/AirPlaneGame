@@ -37,18 +37,24 @@ void mtgb::Draw::CheckSetShader(const ShaderType _default)
 void mtgb::Draw::Box(
 	const Vector2Int& _begin,
 	const Vector2Int& _end,
-	const Color& _color)
+	const Color& _color,
+	const UIParams& _uiParams)
 {
 	CheckSetShader(ShaderType::Figure);
 
-	Box(RectInt::FromLine(_begin, _end), _color);
+	Box(RectInt::FromLine(_begin, _end), _color,_uiParams);
 }
 
-void mtgb::Draw::Box(const RectInt& _rect, const Color& _color)
+void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& _uiParams)
 {
-	CheckSetShader(ShaderType::Figure);
-
-	Game::System<Draw>().pFigure_->Draw(_rect, _color);
+	uiDrawCommands_.insert({
+		_uiParams,
+		[=]()
+		{
+			CheckSetShader(ShaderType::Figure);
+			Game::System<Draw>().pFigure_->Draw(_rect, _color);
+		}
+		});	
 }
 
 void mtgb::Draw::Image(

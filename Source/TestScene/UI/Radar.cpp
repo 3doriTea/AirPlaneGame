@@ -75,6 +75,6 @@ void Radar::Draw() const
 
 	for (auto& markPos : enemyMarkPos_)
 	{
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, 0xff0000);
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, 0xff0000, {.depth = 1});
 	}
 }

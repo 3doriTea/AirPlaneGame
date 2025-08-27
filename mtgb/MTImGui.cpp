@@ -39,14 +39,18 @@ void mtgb::MTImGui::Update()
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
+    // Setで登録をする
     using RegisterShowFuncHolder::Set;
 
+    // テンプレートパラメータに型を指定
+    // 第一引数に型のポインタ、第二引数
     Set<Transform>([](Transform* _target, const char* _name)
         {
             TypeRegistry::Instance().CallFunc(&_target->position, "Position");
             TypeRegistry::Instance().CallFunc(&_target->rotate, "Rotation");
             TypeRegistry::Instance().CallFunc(&_target->scale, "Scale");
         });
+
     Set<DirectX::XMVECTOR>([](DirectX::XMVECTOR* _target, const char* _name)
         {
             ImGui::InputFloat4(_name, _target->m128_f32);

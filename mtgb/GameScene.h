@@ -5,7 +5,7 @@
 #include <string>
 #include <cmtgb.h>
 #include <vector>
-
+#include <type_traits>
 namespace mtgb
 {
 	class GameObject;
@@ -36,7 +36,21 @@ namespace mtgb
 		GameObject* GetGameObject(std::string _name) const;
 		void GetGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects) const;
 
+		/// <summary>
+		/// テンプレートパラメータでオブジェクトを取得
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns>存在、GameObjectを継承していないならnullptr</returns>
+		template<typename T>
+		T* GetGameObject() const;
+
+		/// <summary>
+		/// EntityIdでオブジェクトを取得
+		/// </summary>
+		/// <param name="_entityId"></param>
+		/// <returns>存在しないならnullptr</returns>
 		GameObject* GetGameObject(const EntityId _entityId) const;
+
 
 	protected:
 		virtual void Initialize();
@@ -61,5 +75,25 @@ namespace mtgb
 		pGameObjects_.push_back(pInstance);
 
 		return pInstance;
+	}
+	template<typename T>
+	inline T* GameScene::GetGameObject() const
+	{
+		// 基底クラスがGameObjectであるか
+		if (std::is_base_of<GameObject, std::remove_cvref_t<T>>().value == false)
+		{
+			return nullptr;
+		}
+	
+		for (GameObject* obj : pGameObjects_)
+		{
+			T* instance = dynamic_cast<T*>(obj);
+
+			if (instance)
+			{
+				return instance;
+			}
+		}
+		return nullptr;
 	}
 }
