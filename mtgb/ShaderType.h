@@ -14,6 +14,7 @@ namespace mtgb
 		Unlit3D,
 		Debug3D,
 		Ground,
+		Trail,
 		Max,
 	};
 }

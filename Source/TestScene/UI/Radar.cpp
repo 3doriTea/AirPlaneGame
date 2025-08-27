@@ -59,19 +59,19 @@ void Radar::Draw() const
 
 	auto drawImage
 	{
-		[&, this](const ImageHandle _hImage, const float _angle = 0.0f)
+		[&, this](const ImageHandle _hImage, const int _layer, const float _angle = 0.0f)
 		{
 			Draw::Image(
 				_hImage,
 				{ SCREEN_SIZE.x - IMAGE_SIZE_PX, 0, IMAGE_SIZE_PX, IMAGE_SIZE_PX },
 				{ MARGIN_PX, MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX },
-				_angle);
+				_angle, { _layer });
 		}
 	};
 
-	drawImage(hBack_);
-	drawImage(hInView_, viewAngle_);
-	drawImage(hFrame_);
+	drawImage(hBack_, 0);
+	drawImage(hInView_, viewAngle_, 0);
+	drawImage(hFrame_, 1);
 
 	for (auto& markPos : enemyMarkPos_)
 	{
