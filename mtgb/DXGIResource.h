@@ -23,6 +23,11 @@ namespace mtgb
 		DXGIResource(const DXGIResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
+		/// <summary>
+		/// フルスクリーンの切り替え
+		/// </summary>
+		/// <param name="_fullscreen">trueならフルスクリーンになり、falseならウィンドウモード</param>
+		void SetFullscreen(bool _fullscreen);
 
 		ComPtr<IDXGISwapChain1> pSwapChain1_;
 		ComPtr<IDXGIOutput> pOutput_;
@@ -30,9 +35,10 @@ namespace mtgb
 
 		// WindowContextResource を介して継承されました
 		
-
+		unsigned int outputMonitorIndex_;
 		// WindowContextResource を介して継承されました
 		WindowContextResource* Clone() const override;
-
+	private:
+		static unsigned int outputMonitorCounter_;
 	};
 }

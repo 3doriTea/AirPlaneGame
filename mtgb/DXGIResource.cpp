@@ -1,7 +1,17 @@
 #include "DXGIResource.h"
 #include "ReleaseUtility.h"
 #include "WindowContextUtil.h"
+#include "Debug.h"
+
 using namespace mtgb;
+
+// カウントは0からスタート
+unsigned int DXGIResource::outputMonitorCounter_{ 0 };
+
+namespace
+{
+
+}
 
 mtgb::DXGIResource::DXGIResource()
 	:pSwapChain1_{nullptr}, pOutput_{nullptr}, pDXGISurface_{nullptr}
@@ -30,13 +40,13 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
-	// マルチモニター対応は今回false固定
+	// マルチモニター対応するかどうか
 	bool isMultiMonitor = false;
 
 	if (isMultiMonitor) {
 		// 将来的にマルチモニター対応する場合のoutputIndexを管理
-		int outputIndex = 0; // 仮の値
-		dx11Manager.CreateOutput(outputIndex, pOutput_.ReleaseAndGetAddressOf());
+		outputMonitorIndex_ = outputMonitorCounter_++; // 仮の値
+		dx11Manager.CreateOutput(outputMonitorIndex_, pOutput_.ReleaseAndGetAddressOf());
 	}
 	else 
 	{
@@ -53,6 +63,15 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 void DXGIResource::SetResource()
 {
 	Game::System<DirectX11Manager>().ChangeSwapChain(pSwapChain1_);
+}
+
+void mtgb::DXGIResource::SetFullscreen(bool _fullscreen)
+{
+	HRESULT hResult = pSwapChain1_->SetFullscreenState(_fullscreen, pOutput_.Get());
+	if (FAILED(hResult))
+	{
+		LOGIMGUI("WARN:%ld", hResult);
+	}
 }
 
 WindowContextResource* mtgb::DXGIResource::Clone() const

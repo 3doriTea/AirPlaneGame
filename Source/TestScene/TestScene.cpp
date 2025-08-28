@@ -12,6 +12,7 @@
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
+
 using namespace mtgb;
 
 TestScene::TestScene()
@@ -68,6 +69,22 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::J))
+	{
+		WinCtxRes::SetFullscreen(true,WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::K))
+	{
+		WinCtxRes::SetFullscreen(false, WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::N))
+	{
+		WinCtxRes::SetFullscreen(true, WindowContext::Second);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::M))
+	{
+		WinCtxRes::SetFullscreen(false, WindowContext::Second);
 	}
 }
 
