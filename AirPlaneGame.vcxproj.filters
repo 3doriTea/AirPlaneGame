@@ -763,6 +763,12 @@
     <ClCompile Include="Source\ControlTower.cpp">
       <Filter>01Game</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\MTNet\HttpClient.cpp">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1316,6 +1322,15 @@
     </ClInclude>
     <ClInclude Include="Source\ControlTower.h">
       <Filter>01Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ranking.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\HttpClient.h">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h">
+      <Filter>03mtgb\Library\MTNet</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
