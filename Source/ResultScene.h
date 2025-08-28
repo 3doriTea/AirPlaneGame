@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 #include "TextBox.h"
+#include "Ranking.h"
 
 class ResultScene : public mtgb::GameScene
 {
@@ -17,4 +18,6 @@ private:
 
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;
+	Ranking* ranking_;
+	std::vector<int> rankingList_;
 };

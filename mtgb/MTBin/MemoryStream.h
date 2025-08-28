@@ -75,6 +75,12 @@ namespace mtbin
 		/// </summary>
 		inline size_t GetLength() const { return BUFFER_SIZE; }
 
+		/// <summary>
+		/// バッファポインタを取得する
+		/// </summary>
+		/// <returns></returns>
+		inline mtbin::Byte* GetBuffer() const { return pBuffer_; }
+
 	private:
 		const size_t BUFFER_SIZE;  // バッファ配列のサイズ
 		mtbin::Byte* pBuffer_;  // 読み書きするバッファ配列
