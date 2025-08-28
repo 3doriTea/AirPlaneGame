@@ -1,5 +1,6 @@
 #include "Trail.h"
 #include "CameraSystem.h"
+#include "Debug.h"
 
 mtgb::Trail::Trail()
 {
@@ -16,7 +17,7 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 	DirectX11Draw::SetShader(ShaderType::Trail);
 
 	// •`‰æî•ñ‚ðƒVƒF[ƒ_‚É“n‚·
-	UINT stride{ sizeof(Vertex) };
+	UINT stride{ sizeof(yz::Vtx) };
 	UINT offset{ 0 };
 	DirectX11Draw::pContext_->IASetVertexBuffers(0, 1, pVertexBuffer_.GetAddressOf(), &stride, &offset);
 
@@ -63,6 +64,8 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 			mappedSubresource.RowPitch,
 			ribbon.data(),
 			sizeof(yz::Vtx) * indexCount);
+
+		LOGF("indexCount_%d\n");
 
 		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
 

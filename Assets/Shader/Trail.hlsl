@@ -20,6 +20,6 @@ VSOut VS(float4 position : POSITION, float4 color : COLOR)
 
 float4 PS(VSOut input) : SV_TARGET
 {
-    //return input.color;
-    return float4(0, 1, 0, 1);
+    return input.color;
+    //return float4(0, 1, 0, 1);
 }
