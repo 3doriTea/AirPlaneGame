@@ -10,6 +10,7 @@ namespace
 	const float BROKEN_DOWN_SPEED{ 30.0f };
 	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // ’Ä—Ž’†‚ÌzŽ²‰ñ“](1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x)
 	const float DESTROY_HEIGHT{ -100 };  // ”òs‹@‚ðÁ‚·‚‚³
+	const float CHASE_SPEED{ 3.0f }; // ƒ^[ƒQƒbƒg‚ð’Ç‚¢‚©‚¯‚é‘¬‚³
 }
 
 EnemyPlane::EnemyPlane(
@@ -83,12 +84,15 @@ void EnemyPlane::Update()
 
 		return;
 	}
+	if (lockOnTarget_)
+	{
+		Vector3 diffDir{ pTarget_->position - pTransform_->position };
+		Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
+		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
+		pRB_->velocity_ = pTransform_->Forward() * CHASE_SPEED;
+	}
 	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//DirectX::XMQuaternionBaryCentric
-	/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
-	Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };*/
-	//pTransform_->rotate = Quaternion::LookRotation(Vector3::Normalize(pTarget_->position - pTransform_->position),Vector3::Up() );
-
 
 	Search();
 
@@ -126,7 +130,7 @@ void EnemyPlane::Search()
 	
 	if (cosTheta > lockOnAngleRadian && distance <= lockOnDistance_ )
 	{
-		LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
+		//LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
 		lockOnTarget_ = true;
 	}
 }

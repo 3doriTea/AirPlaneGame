@@ -1,12 +1,16 @@
 #include "ControlTower.h"
 #include "TestScene/EnemyPlane.h"
-ControlTower::ControlTower(const EntityId _plane) : GameObject(GameObjectBuilder()
+#include "MTStringUtility.h"
+#include <format>
+ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	.SetPosition({ 0,0,0 })
 	.SetName("ControlTower")
 	.Build())
-	,detectionRagius_{30.0f}
+	,detectionRadius_{30.0f}
+	, pGunner_{nullptr,INVALD_ENTITY}
+	, pPilot_{nullptr,INVALD_ENTITY}
 {
-	pPlayerPlaneTransform_ = &Transform::Get(_plane);
+
 }
 
 ControlTower::~ControlTower()
@@ -15,40 +19,69 @@ ControlTower::~ControlTower()
 
 void ControlTower::Update()
 {
-	DetectionEnemy();
+	std::string gunnerText = "Gunner : "+ DetectionEnemy(pGunner_.first, pGunner_.second);
+	std::string pilotText = "Pilot : " + DetectionEnemy(pPilot_.first,pPilot_.second);
+
+	MTImGui::Instance().DirectShow([gunnerText,pilotText]()
+		{
+			ImGui::Text(MultiToUTF8(gunnerText).c_str());
+			ImGui::Text(MultiToUTF8(pilotText).c_str());
+		}
+	,"ControlTower",ShowType::Inspector);
 }
 
 void ControlTower::Draw() const
 {
 }
 
-void ControlTower::DetectionEnemy()
+void ControlTower::SetGunner(EntityId _id, CameraHandleInScene _hCamera)
 {
+	pGunner_.first = &Transform::Get(_id);
+	pGunner_.second = _hCamera;
+}
+
+void ControlTower::SetPilot(EntityId _id, CameraHandleInScene _hCamera)
+{
+	pPilot_.first = &Transform::Get(_id);
+	pPilot_.second = _hCamera;
+}
+
+std::string ControlTower::DetectionEnemy(Transform* _transform, CameraHandleInScene _hCamera)
+{
+	std::string ret="";
+
 	// Enemyを取得
 	std::vector<EnemyPlane*> enemies;
 	FindGameObjects<EnemyPlane>(&enemies);
 
 	// lockOn状態のものだけにする
-	std::remove_if(enemies.begin(), enemies.end(), 
-		[&](const EnemyPlane* _enemy) {
-			return !_enemy->LockOnTarget();
-		});
+	enemies.erase(
+		std::remove_if(enemies.begin(), enemies.end(),
+			[&](const EnemyPlane* _enemy) {
+				return !_enemy->LockOnTarget();
+			}),
+		enemies.end()
+		);
 
-	
 	// 方角を計算
 	// プレイヤーの上ベクトル、右ベクトル
-	Vector3 up = pPlayerPlaneTransform_->Up();
-	Vector3 right = pPlayerPlaneTransform_->Right();
-
+	Vector3 up = _transform->Up();
+	Vector3 right = _transform->Right();
+	Vector3 forward = _transform->Forward();
+	Transform camera = Game::System<CameraSystem>().GetTransform(_hCamera);
 	for (const auto& enemy : enemies)
 	{
 		Transform& enemyTransform = Transform::Get(enemy->GetEntityId());
-		Vector3 toEnemy = Vector3::Normalize(enemyTransform.position - pPlayerPlaneTransform_->position);
+		Vector3 toEnemy = Vector3::Normalize(enemyTransform.position - _transform->position);
 
 		std::string str1= "", str2 = "",str3 = "";
 		float horizontal = DirectX::XMVector3Dot((toEnemy), right).m128_f32[0];
 		// 右
-		if (horizontal > 0)
+		if (horizontal == 0)
+		{
+			//str1 = "正面";
+		}
+		else if (horizontal > 0)
 		{
 			str1 = "右";
 		}
@@ -60,7 +93,11 @@ void ControlTower::DetectionEnemy()
 		
 		float vertical = DirectX::XMVector3Dot(toEnemy, up).m128_f32[0];
 		// 上
-		if (vertical > 0)
+		if (vertical == 0)
+		{
+			//str2 = "正面";
+		}
+		else if (vertical > 0)
 		{
 			str2 = "上";
 		}
@@ -69,22 +106,25 @@ void ControlTower::DetectionEnemy()
 			str2 = "下";
 		}
 
-		bool isForward = DirectX::XMVector3Dot(toEnemy, pPlayerPlaneTransform_->Forward()).m128_f32[0] > 0;
+		float upOrBack = DirectX::XMVector3Dot(toEnemy,forward ).m128_f32[0];
 		// 正面
-		if (isForward)
+		if (upOrBack > 0)
 		{
-			str3 = "正面";
+			str3 = "前方";
 		}
-		else
+		else if(upOrBack < 0)
 		{
 			str3 = "後ろ";
 		}
-
-		LOGIMGUI("Enemy%lld:%s,%s,%s", enemy->GetEntityId(), str1, str2, str3);
-	}
-
-	MTImGui::Instance().DirectShow([this]()
+		else if (upOrBack == 0)
 		{
-
-		},"ControlTower",ShowType::Inspector);
+			str3 = "真横";
+		}
+		std::string str4 = "";
+		
+		LOGIMGUI("Camera%d,Enemy%lld:%s,%s,%s",_hCamera, enemy->GetEntityId(),str1.c_str(), str2.c_str(), str3.c_str());
+		
+		ret = std::format("{}:{},{},{}\n", enemy->GetEntityId(), str1, str2, str3);
+	}
+	return ret;
 }

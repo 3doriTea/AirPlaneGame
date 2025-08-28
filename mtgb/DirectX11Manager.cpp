@@ -257,11 +257,9 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	STARTUPINFO startupInfo{};
 	GetStartupInfo(&startupInfo);
 	int nCmdShow = startupInfo.wShowWindow;
-
 	
 	D3D_FEATURE_LEVEL level{};
 
-	
 	hResult = D3D11CreateDevice(
 		nullptr,
 		D3D_DRIVER_TYPE_HARDWARE,
@@ -282,7 +280,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterface‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
 
-	hResult = DirectX11Draw::pDXGIDevice_->GetAdapter(&(DirectX11Draw::pDXGIAdapter_));
+	hResult = DirectX11Draw::pDXGIDevice_->GetAdapter(DirectX11Draw::pDXGIAdapter_.ReleaseAndGetAddressOf());
 	massert(SUCCEEDED(hResult)
 		&& "GetAdapter‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
 

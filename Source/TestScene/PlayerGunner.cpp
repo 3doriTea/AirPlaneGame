@@ -137,9 +137,3 @@ void PlayerGunner::Draw() const
 {
 	
 }
-
-//void PlayerGunner::ShowImGui()
-//{
-//	ImGui::Text("%d,Gunner", entityId_);
-//	Inspector::Instance().ShowInspector(pTransform_, "Gunner");
-//}

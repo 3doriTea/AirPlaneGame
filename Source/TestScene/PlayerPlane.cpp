@@ -86,28 +86,20 @@ void PlayerPlane::Update()
 
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
-
-
-
 	//curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
 	//curr = RemoveZRotation(curr);
 
-	pTransform_->rotate = curr;
-	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
-
-	Vector3 worldPos{ pTransform_->GetWorldPosition() };
+	/*pTransform_->rotate = curr;
+	pRB_->velocity_ = pTransform_->Forward() * 3.0f;*/
 
 	MTImGui::Instance().DirectShow([this]() {
-		TypeRegistry::Instance().CallFunc(&pTransform_->position, "name");
-		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "name");
+		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
+		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "Rotation");
 		},"PlayerPlane", ShowType::Inspector);
 	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
 	//LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
-
-	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
-	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/
 }
 
 void PlayerPlane::Draw() const

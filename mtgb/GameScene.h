@@ -117,7 +117,7 @@ namespace mtgb
 
 			if (instance)
 			{
-				return _pFoundGameObjects->push_back(instance);
+				_pFoundGameObjects->push_back(instance);
 			}
 		}
 	}

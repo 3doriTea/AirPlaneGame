@@ -38,7 +38,8 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 		int outputIndex = 0; // ‰¼‚Ì’l
 		dx11Manager.CreateOutput(outputIndex, pOutput_.ReleaseAndGetAddressOf());
 	}
-	else {
+	else 
+	{
 		pOutput_ = nullptr;
 	}
 
