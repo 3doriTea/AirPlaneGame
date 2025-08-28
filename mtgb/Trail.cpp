@@ -96,8 +96,8 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 
 		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
-		//DirectX11Draw::pContext_->Draw(static_cast<UINT>(indexCount), 0);
-		DirectX11Draw::pContext_->DrawIndexed(static_cast<UINT>(indexCount), 0, 0);
+		DirectX11Draw::pContext_->Draw(static_cast<UINT>(indexCount), 0);
+		//DirectX11Draw::pContext_->DrawIndexed(static_cast<UINT>(indexCount), 0, 0);
 
 		//if (SUCCEEDED(DirectX11Draw::pContext_->Map(pVertexBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
 		{

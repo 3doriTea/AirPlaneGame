@@ -4,6 +4,7 @@
 #include <wrl/client.h>
 #include "Vector2Int.h"
 #pragma comment(lib, "d3d11.lib")  // DirectX11のライブラリ
+#pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")  // シェーダコンパイラ用ライブラリ
 
 using Microsoft::WRL::ComPtr;

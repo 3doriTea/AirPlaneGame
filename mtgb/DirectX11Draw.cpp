@@ -14,7 +14,7 @@ using namespace mtgb;
 ComPtr<ID3D11Device> DirectX11Draw::pDevice_{ nullptr };  // 描画を行うための環境、リソースの作成に使う
 ComPtr<ID3D11DeviceContext> DirectX11Draw::pContext_{ nullptr };
 ComPtr<IDXGIDevice1> DirectX11Draw::pDXGIDevice_{ nullptr };
-ComPtr<IDXGIAdapter> DirectX11Draw::pDXGIAdapter_{ nullptr };
+std::vector<ComPtr<IDXGIAdapter1>> DirectX11Draw::pDXGIAdapters_{};
 ComPtr<IDXGIFactory2> DirectX11Draw::pDXGIFactory_{ nullptr };
 
 IDXGISwapChain* DirectX11Draw::pSwapChain_{ nullptr };  // ダブルバッファリングするやつ
@@ -94,7 +94,10 @@ void mtgb::DirectX11Draw::Release()
 	pDepthStencilView_.Reset();
 	pRenderTargetView_.Reset();
 	pDXGIDevice_.Reset();
-	pDXGIAdapter_.Reset();
+	for (auto& adapter : pDXGIAdapters_)
+	{
+		adapter.Reset();
+	}
 	pDXGIFactory_.Reset();
 	SAFE_RELEASE(pSwapChain_);
 	pSwapChain1_.Reset();

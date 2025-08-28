@@ -4,6 +4,7 @@
 #include "IncludingWindows.h"
 #include <d3d11.h>
 #include <dxgi1_2.h> 
+#include <dxgi.h>
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
 #include "ImGuiRenderer.h"
@@ -280,13 +281,22 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterface‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
 
-	hResult = DirectX11Draw::pDXGIDevice_->GetAdapter(DirectX11Draw::pDXGIAdapter_.ReleaseAndGetAddressOf());
+	hResult = CreateDXGIFactory1(_uuidof(IDXGIFactory2), reinterpret_cast<void**>(DirectX11Draw::pDXGIFactory_.ReleaseAndGetAddressOf()));
 	massert(SUCCEEDED(hResult)
-		&& "GetAdapter‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
+		&& "CreateDXGIFactory1‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
 
-	hResult = DirectX11Draw::pDXGIAdapter_->GetParent(__uuidof(IDXGIFactory2), (void**)DirectX11Draw::pDXGIFactory_.ReleaseAndGetAddressOf());
-	massert(SUCCEEDED(hResult)
-		&& "GetParent‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");
+	UINT i = 0;
+	ComPtr<IDXGIAdapter1> pAdapter = nullptr;
+	while (DirectX11Draw::pDXGIFactory_->EnumAdapters1(i, pAdapter.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
+	{
+		DirectX11Draw::pDXGIAdapters_.push_back(pAdapter);
+		++i;
+
+		DXGI_ADAPTER_DESC1 desc;
+		pAdapter->GetDesc1(&desc);
+	}
+	/*massert(SUCCEEDED(hResult)
+		&& "EnumAdapters‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");*/
 
 	InitializeShaderBundle();  // ƒVƒF[ƒ_ƒoƒ“ƒhƒ‹‚Ì‰Šú‰»
 
@@ -434,7 +444,7 @@ void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
 {
 	HRESULT hResult{};
 	
-	hResult = DirectX11Draw::pDXGIAdapter_->EnumOutputs(index, ppOutput);
+	hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(index, ppOutput);
 	massert(SUCCEEDED(hResult)
 		&& "EnumOutputs‚ÉŽ¸”s @DirectX11Manager::CreateOutput");
 }
