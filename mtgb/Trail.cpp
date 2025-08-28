@@ -12,6 +12,7 @@ mtgb::Trail::~Trail()
 void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 {
 	DirectX11Draw::SetIsWriteToDepthBuffer(true);
+	DirectX11Draw::SetBlendMode(BlendMode::Default);
 	DirectX11Draw::SetShader(ShaderType::Trail);
 
 	// 描画情報をシェーダに渡す
@@ -21,8 +22,8 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 
 	// 使用するコンスタントバッファをシェーダに伝える
 
-	//DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
-	//DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
+	DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
+	DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
 
 	// カメラシステムへのアクセス用
 	const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
@@ -95,8 +96,8 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 
 		DirectX11Draw::pContext_->Unmap(pConstantBuffer_.Get(), 0);
 
-		DirectX11Draw::pContext_->Draw(static_cast<UINT>(indexCount), 0);
-
+		//DirectX11Draw::pContext_->Draw(static_cast<UINT>(indexCount), 0);
+		DirectX11Draw::pContext_->DrawIndexed(static_cast<UINT>(indexCount), 0, 0);
 
 		//if (SUCCEEDED(DirectX11Draw::pContext_->Map(pVertexBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &ms)))
 		{
@@ -128,7 +129,7 @@ void mtgb::Trail::InitializeVertexBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		nullptr,
-		&pVertexBuffer_);
+		pVertexBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 頂点バッファの作成に成功
 		&& "頂点バッファの作成に失敗 @Trail::InitializeVertexBuffer");
@@ -155,7 +156,7 @@ void mtgb::Trail::InitializeConstantBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		nullptr,
-		&pConstantBuffer_);
+		pConstantBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 定数バッファの作成に成功
 		&& "定数バッファの作成に失敗 @Trail::InitializeConstantBuffer");
