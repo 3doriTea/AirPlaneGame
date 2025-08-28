@@ -32,9 +32,6 @@
     <Filter Include="01Game\03PlayScene">
       <UniqueIdentifier>{787764BF-5D53-4B8B-850D-E0CA5E4F2CD8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01Game\04EndScene">
-      <UniqueIdentifier>{CC9F97F6-335F-4F3E-8243-54EDA3875C18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="02Assets">
       <UniqueIdentifier>{135DEEFF-4BB8-46CC-A5A5-E492A0B0220B}</UniqueIdentifier>
     </Filter>
@@ -199,6 +196,9 @@
     </Filter>
     <Filter Include="01Game\06OverScene">
       <UniqueIdentifier>{e4f96919-f9b0-4a21-a1de-3d2628ba1b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\04ResultScene">
+      <UniqueIdentifier>{CC9F97F6-335F-4F3E-8243-54EDA3875C18}</UniqueIdentifier>
     </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
@@ -754,14 +754,17 @@
     <ClCompile Include="Source\TrailEmitterSystem.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ResultLogo.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\ResultScene.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\ControlTower.cpp">
       <Filter>01Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResultScene.cpp">
+      <Filter>01Game\04ResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ResultLogo.cpp">
+      <Filter>01Game\04ResultScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Ranking.cpp">
+      <Filter>01Game\04ResultScene</Filter>
     </ClCompile>
     <ClCompile Include="mtgb\MTNet\HttpClient.cpp">
       <Filter>03mtgb\Library\MTNet</Filter>
@@ -1317,14 +1320,17 @@
     <ClInclude Include="Source\TrailEmitterSystem.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ResultLogo.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\ResultScene.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ControlTower.h">
       <Filter>01Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResultScene.h">
+      <Filter>01Game\04ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ResultLogo.h">
+      <Filter>01Game\04ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ranking.h">
+      <Filter>01Game\04ResultScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\Ranking.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>

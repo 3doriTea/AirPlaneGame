@@ -69,41 +69,17 @@ void PlayerGunner::Update()
 	const float ROT_ANGLE{ Time::DeltaTimeF() };
 	Quaternion curr{ pTransform_->rotate };
 
-	//if (InputUtil::GetKey(KeyCode::W))
-	//{
-	//	curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
-	//	//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
-	//}
-	//if (InputUtil::GetKey(KeyCode::S))
-	//{
-	//	curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
-	//	//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
-	//}
-	//if (InputUtil::GetKey(KeyCode::A))
-	//{
-	//	curr *= XMQuaternionRotationAxis(Vector3::Up(), -ROT_ANGLE);
-	//	pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
-	//}
-	//if (InputUtil::GetKey(KeyCode::D))
-	//{
-	//	curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE);
-	//	pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
-	//}
-
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ Vector3::Forward() };
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.001f);
 
 
-	//curr = RemoveZRotation(curr);
 
 	pTransform_->rotate = curr;
 
-	//LOGF("ANGLE(%f, %f)\n", angleX_, angleY_);
 
 	//pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	if (InputUtil::GetKeyDown(KeyCode::Space))
-	//if (InputUtil::GetMouseDown(MouseCode::Left))
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RStick))
 	{
 		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		LOGIMGUI("Gunner:shoot");
@@ -114,7 +90,6 @@ void PlayerGunner::Update()
 	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
 	//LOGF("G:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	Vector3 worldDiff{ worldPos - parentWorldPos };
-	//LOGF("DIFF(%f, %f, %f)\n", worldDiff.x, worldDiff.y, worldDiff.z);
 
 	if (pRadarUI_)
 	{

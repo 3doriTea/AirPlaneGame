@@ -294,6 +294,7 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 		DXGI_ADAPTER_DESC1 desc;
 		pAdapter->GetDesc1(&desc);
+		WCHAR* s = desc.Description;
 	}
 	/*massert(SUCCEEDED(hResult)
 		&& "EnumAdapters‚ÉŽ¸”s @DirectX11Manager::InitializeCommonResources");*/

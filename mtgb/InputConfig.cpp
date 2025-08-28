@@ -30,11 +30,12 @@ void mtgb::InputConfig::SetDeadZone(float _deadZone)
 
 float mtgb::InputConfig::ApplyDeadZone(const float value) const
 {
+	// â‘Î’l‚ªƒfƒbƒhƒ][ƒ“‚É–‚½‚È‚¢‚È‚ç0
 	if (std::abs(value) < deadZone)
 	{
 		return 0.0f;
 	}
-	//0`1‚Ì”ÍˆÍ‚É’¼‚·
+	// 0`1‚Ì”ÍˆÍ‚É³‹K‰»‚·‚é
 	float sign = (value > 0) ? 1.0f : -1.0f;
 	return sign * (std::abs(value) - deadZone) / (1.0f - deadZone);
 }

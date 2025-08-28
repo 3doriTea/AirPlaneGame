@@ -64,12 +64,18 @@ PlayerPilot::~PlayerPilot()
 void PlayerPilot::Update()
 {
 	LockOn();
-	if (InputUtil::GetKeyDown(KeyCode::Space))
+	if (InputUtil::GetKeyDown(KeyCode::Space),InputUtil::GetGamePadDown(PadCode::A))
 	{
 		LOGIMGUI("Pilot:shoot");
 		Shoot();
 	}
 	
+	MTImGui::Instance().DirectShow([]() 
+		{
+			float xAxis	 = InputUtil::GetAxis(Axis::X,WindowContext::First);
+			float yAxis  = InputUtil::GetAxis(Axis::Y,WindowContext::First);
+			ImGui::Text("x,y(%.3f,%.3f)", xAxis, yAxis);
+		},"PilotJoystick",ShowType::Inspector);
 	MTImGui::Instance().TypedShow(pTransform, "PlayerPilot");
 }
 

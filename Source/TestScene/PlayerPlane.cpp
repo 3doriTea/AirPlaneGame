@@ -34,31 +34,28 @@ void PlayerPlane::Update()
 
 	Quaternion curr{ pTransform_->rotate };
 
-#if 0
-	//if (InputUtil::GetKey(KeyCode::Up))
+#if 1
+	// WindowContext‚ð’¼ÚŽw’è‚µ‚È‚¢•û‚¢‚¢
+	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
+	// ã
+	if (axis.y > 0)
 	{
-		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::Y, WindowContext::Second));
-		//curr *= XMQuaternionRotationAxis(Vector3::Right(), -ROT_ANGLE * InputUtil::GetAxis(Axis::Y, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
 	}
-	//if (InputUtil::GetKey(KeyCode::Down))
+	else if (axis.y < 0)
 	{
-		//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * InputUtil::GetAxis(Axis::Y, WindowContext::Second));
-		//curr *= XMQuaternionRotationAxis(Vector3::Right(), ROT_ANGLE * -InputUtil::GetAxis(Axis::Y, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
 	}
-	//if (InputUtil::GetKey(KeyCode::Left))
+	// ‰E
+	if (axis.x > 0)
 	{
-		//pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
-		//curr *= XMQuaternionRotationAxis(Vector3::Up(), -ROT_ANGLE * -InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
-	//if (InputUtil::GetKey(KeyCode::Right))
+	else if (axis.x < 0)
 	{
-		//pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
-		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
+		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
 	}
+
 #else
 	if (InputUtil::GetKey(KeyCode::W))
 	{
@@ -89,13 +86,7 @@ void PlayerPlane::Update()
 	//pTransform_->Right()
 	Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
 
-	//LOGF("PLANEDIFF(%f, %f, %f)\n", forward - angleForward);
-
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
-
-	//curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
-
-	//curr = RemoveZRotation(curr);
 
 	pTransform_->rotate = curr;
 	pRB_->velocity_ = pTransform_->Forward() * 3.0f;

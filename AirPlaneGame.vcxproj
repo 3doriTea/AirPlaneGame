@@ -155,6 +155,7 @@
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
