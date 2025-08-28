@@ -16,7 +16,8 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.SetName("PlayerPlane")
 	.Build()),
 	pTransform_{ Component<Transform>() },
-	pRB_{ Component<RigidBody>() }
+	pRB_{ Component<RigidBody>() },
+	vVPlayer_{}
 {
 	testText_ = Text::Load("‚ ‚¢‚¤‚¦‚¨", 72);
 }
@@ -76,6 +77,12 @@ void PlayerPlane::Update()
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
 #endif
+
+	if (InputUtil::GetKeyDown(KeyCode::F))
+	{
+		vVPlayer_.Play(u8"³–Ê‚É“G‚ª102‘Ì‚¢‚Ü‚·");
+	}
+
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ pTransform_->Forward() };
 	//Vector3 forward = XMVector3Cross(pTransform_->Right(), Vector3::Down());

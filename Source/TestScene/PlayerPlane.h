@@ -1,5 +1,6 @@
 #pragma once
 #include <mtgb.h>
+#include "../VVPlayer.h"
 
 class PlayerPlane : public mtgb::GameObject
 {
@@ -16,4 +17,6 @@ private:
 	int number;
 	RigidBody* pRB_;
 	Transform* pTransform_;
+
+	VVPlayer vVPlayer_;
 };
