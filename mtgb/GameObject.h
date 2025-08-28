@@ -119,11 +119,13 @@ namespace mtgb
 	template<typename T>
 	inline T* GameObject::FindGameObject() const
 	{
+		// templateキーワードを付けないと<T>の<が小なりと区別がつかない?
 		return mtgb::Game::System<SceneSystem>().GetActiveScene()->template GetGameObject<T>();
 	}
 	template<typename T>
 	inline void GameObject::FindGameObjects(std::vector<T*>* _pFoundGameObjects)
 	{
+		// templateキーワードを付けないと<T>の<が小なりと区別がつかない?
 		mtgb::Game::System<SceneSystem>().GetActiveScene()->template GetGameObjects<T>(_pFoundGameObjects);
 	}
 }

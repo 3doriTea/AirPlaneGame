@@ -11,7 +11,7 @@
 #include "Terrain.h"
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
-
+#include "../ControlTower.h"
 using namespace mtgb;
 
 TestScene::TestScene()
@@ -37,8 +37,8 @@ void TestScene::Initialize()
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
 
-	CameraHandleInScene hCamera1 = RegisterCameraGameObject(
-		Instantiate<PlayerPilot>(eIdPlayer));
+	PlayerPilot* pPilot{Instantiate<PlayerPilot>(eIdPlayer)};
+	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
 
 	PlayerGunner* pGunner{ Instantiate<PlayerGunner>(eIdPlayer) };
 	CameraHandleInScene hCamera2 = RegisterCameraGameObject(pGunner);
@@ -48,7 +48,7 @@ void TestScene::Initialize()
 
 	Instantiate<EnemyPlane>(Vector3{ 0, 3, 40 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 0, 0, -10 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 
 	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
@@ -57,6 +57,10 @@ void TestScene::Initialize()
 	pGunner->SetRadarUI(pGunnerRader);
 
 	Instantiate<HighlightEnemy>();
+
+	ControlTower* pControlTower{ Instantiate<ControlTower>() };
+	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
+	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
 }
 
 void TestScene::Update()

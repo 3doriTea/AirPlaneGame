@@ -110,10 +110,9 @@ void PlayerPilot::LockOn()
 	}
 	else
 	{
-		pTargetInfo_ = nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Ínullptr
+		pTargetInfo_ = nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Í nullptr
 	}
 
-	
 }
 
 void PlayerPilot::Shoot()
