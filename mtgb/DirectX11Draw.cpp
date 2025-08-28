@@ -71,7 +71,6 @@ void mtgb::DirectX11Draw::Begin()
 
 	// 深度バッファクリア
 	pContext_->ClearDepthStencilView(pDepthStencilView_.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0U);
-
 }
 
 void mtgb::DirectX11Draw::End()
