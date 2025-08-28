@@ -182,6 +182,7 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
+    <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\HighlightEnemy.h" />
@@ -393,6 +394,7 @@
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
+    <ClInclude Include="Source\VVPlayer.h" />
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
