@@ -59,19 +59,19 @@ void PlayerPlane::Update()
 		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
 #else
-	if (InputUtil::GetKey(KeyCode::Up))
+	if (InputUtil::GetKey(KeyCode::W))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Down))
+	if (InputUtil::GetKey(KeyCode::S))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Left))
+	if (InputUtil::GetKey(KeyCode::A))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Right))
+	if (InputUtil::GetKey(KeyCode::D))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
@@ -90,8 +90,8 @@ void PlayerPlane::Update()
 
 	//curr = RemoveZRotation(curr);
 
-	/*pTransform_->rotate = curr;
-	pRB_->velocity_ = pTransform_->Forward() * 3.0f;*/
+	pTransform_->rotate = curr;
+	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
 
 	MTImGui::Instance().DirectShow([this]() {
 		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
