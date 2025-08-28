@@ -6,7 +6,7 @@
 
 #include "Vector3.h"
 #include "Vector2Int.h"
-
+#include "Vector2F.h"
 #include "InputKeyCode.h"
 #include "InputMouseCode.h"
 #include "InputPadCode.h"
@@ -31,13 +31,16 @@ namespace mtgb
 		static const bool GetMouse(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
 		static const bool GetMouseDown(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
 		static const bool GetMouseUp(const MouseCode _mouseCode, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePad(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePadDown(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
-		static const bool GetGamePadUp(const PadCode _padButtonCode, const size_t _padID, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePad(const PadCode _padButtonCode,WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadDown(const PadCode _padButtonCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadUp(const PadCode _padButtonCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePad(const FlightStickCode _flightStickCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadDown(const FlightStickCode _flightStickCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const bool GetGamePadUp(const FlightStickCode _flightStickCode, WindowContext _context = mtgb::WindowContext::Both);
 		//static inline const size_t* GetActiveGamePadID() { return activeGamepadID.data(); }
 
 		static const float GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both);
-
+		static const Vector2F GetAxis(WindowContext _context = mtgb::WindowContext::Both);
 
 		static const Vector2Int GetMousePosition(WindowContext _context = mtgb::WindowContext::Both);
 		static const Vector3 GetMouseMove(WindowContext _context = mtgb::WindowContext::Both);
@@ -73,6 +76,16 @@ namespace mtgb
 		{
 			return static_cast<size_t>(_moudeCode);
 		}
+
+		static inline const size_t Index(const PadCode _padCode)
+		{
+			return static_cast<size_t>(_padCode);
+		}
+		static inline const size_t Index(const FlightStickCode _flightStickCode)
+		{
+			return static_cast<size_t>(_flightStickCode);
+		}
+
 		/// <summary>
 		/// 入力状態を取得
 		/// どのウィンドウでも構わない場合はWindowContext::Firstのウィンドウが取得される
@@ -81,13 +94,21 @@ namespace mtgb
 		/// <returns></returns>
 		static const InputData& GetInput(WindowContext _context);
 	
-		static inline const int padXOR(const PadCode _padCode, const _XINPUT_STATE& _padStateCurrent, const _XINPUT_STATE& _padStatePrevious)
+		static inline const int PadXOR(const PadCode _padCode, const DIJOYSTATE& _padStateCurrent, const DIJOYSTATE& _padStatePrevious)
 		{
-			WORD buttonPrev = _padStatePrevious.Gamepad.wButtons; // 0000
-			WORD buttonCurr = _padStateCurrent.Gamepad.wButtons;  // 1000
-			WORD padCode    = static_cast<WORD>(_padCode);        // 0x08
-			return (buttonCurr & padCode) ^ (buttonPrev & padCode); // 1 ^ 0 = 1
+			return _padStateCurrent.rgbButtons[Index(_padCode)] ^ _padStatePrevious.rgbButtons[Index(_padCode)];
 		}
+		//static inline const int padXOR(const PadCode _padCode, const _XINPUT_STATE& _padStateCurrent, const _XINPUT_STATE& _padStatePrevious)
+		//{
+		//	WORD buttonPrev = _padStatePrevious.Gamepad.wButtons; // 0000
+		//	WORD buttonCurr = _padStateCurrent.Gamepad.wButtons;  // 1000
+		//	WORD padCode    = static_cast<WORD>(_padCode);        // 0x08
+		//	return (buttonCurr & padCode) ^ (buttonPrev & padCode); // 1 ^ 0 = 1
+		//}
+
+		static inline bool GetGamePadImpl(size_t _index, WindowContext _context);
+		static inline bool GetGamePadUpImpl(size_t _index, WindowContext _context);
+		static inline bool GetGamePadDownImpl(size_t _index, WindowContext _context);
 	};
 
 	class InputData final

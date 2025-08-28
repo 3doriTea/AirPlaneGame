@@ -585,7 +585,10 @@ mtgb::JoystickContext::JoystickContext()
 
 mtgb::JoystickContext::~JoystickContext()
 {
-	Timer::Remove(timerHandle);
+	if (timerHandle)
+	{
+		Timer::Remove(timerHandle);
+	}
 	device.Reset();
 }
 

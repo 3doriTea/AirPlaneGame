@@ -51,6 +51,7 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 	pInputData_ = new InputData();
 	pProxy_ = new JoystickProxy(pInputData_->joyStateCurrent_);
+
 	pInputData_->config_.SetRange(1000);
 	pInputData_->config_.SetDeadZone(0.1);
 	//pProxy_->SetDisplayName("proxy:"+ id++);
