@@ -766,6 +766,15 @@
     <ClCompile Include="Source\Ranking.cpp">
       <Filter>01Game\04ResultScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\MTNet\HttpClient.cpp">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VVPlayer.cpp">
+      <Filter>01Game\01Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1322,6 +1331,18 @@
     </ClInclude>
     <ClInclude Include="Source\Ranking.h">
       <Filter>01Game\04ResultScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Ranking.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\HttpClient.h">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h">
+      <Filter>03mtgb\Library\MTNet</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VVPlayer.h">
+      <Filter>01Game\01Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

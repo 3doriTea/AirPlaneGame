@@ -23,7 +23,10 @@ HWND WinCtxRes::GetHWND(WindowContext ctx)
 	return WinCtxRes::Get<WindowResource>(ctx).GetHWND();
 }
 
-
+void mtgb::WinCtxRes::SetFullscreen(bool _fullscreen, WindowContext _ctx)
+{
+	Game::System<WinCtxResManager>().Get<DXGIResource>(_ctx).SetFullscreen(_fullscreen);
+}
 
 void WinCtxRes::ChangeResource(WindowContext ctx)
 {

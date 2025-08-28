@@ -69,26 +69,26 @@ void PlayerGunner::Update()
 	const float ROT_ANGLE{ Time::DeltaTimeF() };
 	Quaternion curr{ pTransform_->rotate };
 
-	if (InputUtil::GetKey(KeyCode::W))
-	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
-		//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
-	}
-	if (InputUtil::GetKey(KeyCode::S))
-	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
-		//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
-	}
-	if (InputUtil::GetKey(KeyCode::A))
-	{
-		curr *= XMQuaternionRotationAxis(Vector3::Up(), -ROT_ANGLE);
-		pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
-	}
-	if (InputUtil::GetKey(KeyCode::D))
-	{
-		curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE);
-		pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
-	}
+	//if (InputUtil::GetKey(KeyCode::W))
+	//{
+	//	curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
+	//	//pTransform_->Rotation(Vector3::Right(), -ROT_ANGLE);
+	//}
+	//if (InputUtil::GetKey(KeyCode::S))
+	//{
+	//	curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
+	//	//pTransform_->Rotation(Vector3::Right(), ROT_ANGLE);
+	//}
+	//if (InputUtil::GetKey(KeyCode::A))
+	//{
+	//	curr *= XMQuaternionRotationAxis(Vector3::Up(), -ROT_ANGLE);
+	//	pTransform_->Rotation(Vector3::Up(), -ROT_ANGLE);
+	//}
+	//if (InputUtil::GetKey(KeyCode::D))
+	//{
+	//	curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE);
+	//	pTransform_->Rotation(Vector3::Up(), ROT_ANGLE);
+	//}
 
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ Vector3::Forward() };
@@ -137,9 +137,3 @@ void PlayerGunner::Draw() const
 {
 	
 }
-
-//void PlayerGunner::ShowImGui()
-//{
-//	ImGui::Text("%d,Gunner", entityId_);
-//	Inspector::Instance().ShowInspector(pTransform_, "Gunner");
-//}

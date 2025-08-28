@@ -37,7 +37,7 @@ namespace yz
     static inline float len(F3 a) { return std::sqrt(dot(a, a)); }
     static inline F3  norm(F3 a) { float L = len(a); return (L > 1e-6f) ? mul(a, 1.0f / L) : f3(0, 0, 0); }
     static inline F3  lerp(F3 a, F3 b, float t) { return add(a, mul(sub(b, a), t)); }
-    static inline float clampf(float v, float lo, float hi) { return max(lo, min(hi, v)); }
+    static inline float clampf(float v, float lo, float hi) { return (std::max)(lo, (std::min)(hi, v)); }
 
     // --------------------------------------------------
     // TrailEmitter: stores world-space points; builds billboard ribbon

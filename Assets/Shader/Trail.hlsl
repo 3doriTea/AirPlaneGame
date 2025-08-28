@@ -1,13 +1,7 @@
-cbuffer ConstantBuffer : register(b0)
+cbuffer ConstantBuffer
 {
     float4x4 gVP;
 }
-
-struct VSIn
-{
-    float3 position : POSITION;
-    float4 color : COLOR;
-};
 
 struct VSOut
 {
@@ -15,11 +9,11 @@ struct VSOut
     float4 color : COLOR;
 };
 
-VSOut VS(VSIn input)
+VSOut VS(float4 position : POSITION, float4 color : COLOR)
 {
     VSOut output;
-    output.sv = mul(float4(input.position, 1), gVP);
-    output.color = input.color;
+    output.sv = mul(position, gVP);
+    output.color = color;
 
     return output;
 }
@@ -27,4 +21,5 @@ VSOut VS(VSIn input)
 float4 PS(VSOut input) : SV_TARGET
 {
     return input.color;
+    //return float4(0, 1, 0, 1);
 }

@@ -39,7 +39,6 @@ void mtgb::MTImGui::Update()
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
-    
     using RegisterShowFuncHolder::Set;
 
     // テンプレートパラメータに型を指定
@@ -97,6 +96,7 @@ void mtgb::MTImGui::ShowAll(ShowType show)
 {
     if (show == ShowType::Inspector)
     {
+
         static std::string selectedName;
         static std::function<void()> selectedFunc = nullptr;
 
@@ -110,6 +110,10 @@ void mtgb::MTImGui::ShowAll(ShowType show)
             if (!isSelected)
             {
                 isSelected = selectedName == name;
+
+                // 表示関数がコピーキャプチャのラムダ式の場合値が更新されないので、
+                // 選択済みの名前と表示リストの名前が一致していたら関数を更新
+                selectedFunc = func;
             }
 
             if (ImGui::Selectable(name.c_str(),selectedName == name))
@@ -150,7 +154,8 @@ void mtgb::MTImGui::Register(ImGuiShowable* obj)
 void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 {
     auto it = std::find(showableObjs_.begin(), showableObjs_.end(), obj);
-    if (it != showableObjs_.end()) {
+    if (it != showableObjs_.end()) 
+    {
         showableObjs_.erase(it);
     }
 }

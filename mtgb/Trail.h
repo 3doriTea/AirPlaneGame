@@ -15,7 +15,7 @@ namespace mtgb
 
 		struct ConstantBuffer
 		{
-
+			Matrix4x4 wvp_;
 		};
 
 	public:

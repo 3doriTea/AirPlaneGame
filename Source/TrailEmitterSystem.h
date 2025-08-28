@@ -20,7 +20,7 @@ public:
 private:
 	std::vector<yz::TrailEmitter> trails_;
 	float width_;  // トレイルの横幅
-	float pointsMax_;  // トレイルの最大頂点数
+	int pointsMax_;  // トレイルの最大頂点数
 
 	Trail trail_;
 };

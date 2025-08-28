@@ -1,6 +1,7 @@
 #include "PlayerPilot.h"
 #include "PlayerBullet.h"
 #include <algorithm>
+#include "../TrailEmitterSystem.h"
 
 using namespace mtgb;
 
@@ -83,6 +84,8 @@ void PlayerPilot::Draw() const
 	{
 		Draw::Image(lockOnReticle_, enemyFrameRect_, uiParams_);
 	}
+
+	Game::System<TrailEmitterSystem>().Render();
 }
 
 void PlayerPilot::LockOn()
@@ -110,10 +113,9 @@ void PlayerPilot::LockOn()
 	}
 	else
 	{
-		pTargetInfo_ = nullptr; // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçáÇÕnullptr
+		pTargetInfo_ = nullptr; // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçáÇÕ nullptr
 	}
 
-	
 }
 
 void PlayerPilot::Shoot()

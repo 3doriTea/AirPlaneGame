@@ -25,8 +25,6 @@ namespace mtgb
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 		
-
-		
 		WindowResource(const WindowResource& other);
 		// WindowContextResource ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
 		WindowResource* Clone() const override;

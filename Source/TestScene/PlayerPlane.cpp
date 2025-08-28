@@ -59,19 +59,19 @@ void PlayerPlane::Update()
 		//curr *= XMQuaternionRotationAxis(Vector3::Up(), ROT_ANGLE * InputUtil::GetAxis(Axis::X, WindowContext::Second));
 	}
 #else
-	if (InputUtil::GetKey(KeyCode::Up))
+	if (InputUtil::GetKey(KeyCode::W))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Down))
+	if (InputUtil::GetKey(KeyCode::S))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Left))
+	if (InputUtil::GetKey(KeyCode::A))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
 	}
-	if (InputUtil::GetKey(KeyCode::Right))
+	if (InputUtil::GetKey(KeyCode::D))
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
@@ -82,12 +82,9 @@ void PlayerPlane::Update()
 	//pTransform_->Right()
 	Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
 
-	LOGF("PLANEDIFF(%f, %f, %f)\n", forward - angleForward);
+	//LOGF("PLANEDIFF(%f, %f, %f)\n", forward - angleForward);
 
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
-
-
-
 
 	//curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
@@ -96,18 +93,13 @@ void PlayerPlane::Update()
 	pTransform_->rotate = curr;
 	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
 
-	Vector3 worldPos{ pTransform_->GetWorldPosition() };
-
 	MTImGui::Instance().DirectShow([this]() {
-		TypeRegistry::Instance().CallFunc(&pTransform_->position, "name");
-		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "name");
+		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
+		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "Rotation");
 		},"PlayerPlane", ShowType::Inspector);
 	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
 	//LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
-
-	/*Vector3 worldPos{ pTransform_->GetWorldPosition() };
-	LOGF("Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);*/
 }
 
 void PlayerPlane::Draw() const

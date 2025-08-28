@@ -9,7 +9,7 @@ using Microsoft::WRL::ComPtr;
 struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGIDevice1;
-struct IDXGIAdapter;
+struct IDXGIAdapter1;
 struct IDXGIFactory2;
 
 struct IDXGISwapChain;
@@ -134,7 +134,7 @@ namespace mtgb
 		static ComPtr<ID3D11Device> pDevice_;                                                             // 描画を行うための環境、リソースの作成に使う
 		static ComPtr<ID3D11DeviceContext> pContext_;                                                     // GPUに命令出すやつ
 		static ComPtr<IDXGIDevice1> pDXGIDevice_;
-		static ComPtr<IDXGIAdapter> pDXGIAdapter_;
+		static std::vector<ComPtr<IDXGIAdapter1>> pDXGIAdapters_;
 		static ComPtr<IDXGIFactory2> pDXGIFactory_;
 
 		static IDXGISwapChain* pSwapChain_;                                                        // ダブルバッファリングするやつ

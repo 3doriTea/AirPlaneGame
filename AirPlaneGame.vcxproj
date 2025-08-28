@@ -36,6 +36,8 @@
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
     <ClCompile Include="mtgb\MTImGui.cpp" />
+    <ClCompile Include="mtgb\MTNet\HttpClient.cpp" />
+    <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
@@ -181,6 +183,7 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
+    <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\HighlightEnemy.h" />
@@ -208,6 +211,8 @@
     <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Mathf.h" />
+    <ClInclude Include="mtgb\MTNet\HttpClient.h" />
+    <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
@@ -390,6 +395,7 @@
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
+    <ClInclude Include="Source\VVPlayer.h" />
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
