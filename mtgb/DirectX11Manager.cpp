@@ -806,7 +806,7 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
 			{
 				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
-				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.CullMode = D3D11_CULL_NONE,    // カリング: 隠面消去
 				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
 				.DepthBias = {},
 				.DepthBiasClamp = {},
