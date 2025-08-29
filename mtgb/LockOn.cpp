@@ -1,6 +1,7 @@
 #include "LockOn.h"
 #include <algorithm>
 #include "Draw.h"
+//#include ""
 void mtgb::LockOn::Search()
 {
 	rectDetector.UpdateDetection();
@@ -27,6 +28,16 @@ void mtgb::LockOn::Search()
 	else
 	{
 		pTargetInfo = nullptr; // Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡‚Í nullptr
+	}
+}
+
+void mtgb::LockOn::Shoot()
+{
+	if (rectDetector.HasDetectedTargets())
+	{
+		Vector3 toTarget = Vector3::Normalize(pTargetInfo->worldPos - pTransform->GetWorldPosition());
+		Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
+		Instantiate<PlayerBullet>(pTransform->GetWorldPosition(), shootDir);
 	}
 }
 

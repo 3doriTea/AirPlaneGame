@@ -263,8 +263,6 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 	ImVec2 mousePos = ImGui::GetMousePos();
 	ImVec2 windowPos = ImGui::GetWindowPos();
 	ImVec2 localPos = ImVec2(mousePos.x - windowPos.x, mousePos.y - windowPos.y);
-	int mousePosInt[2] = { localPos.x ,localPos.y };
-	ImGui::InputInt2("mouse", mousePosInt);
 
 	MTImGui::Instance().TypedShow(&pCameraTransform_->position, "cameraPos");
 	MTImGui::Instance().TypedShow(&pCameraTransform_->rotate, "cameraRot");

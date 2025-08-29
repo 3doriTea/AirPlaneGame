@@ -46,6 +46,7 @@ namespace mtgb
 			point{ std::move(_other.point) },
 			size{ std::move(_other.size) }
 		{}
+		
 		RectT& operator=(const RectT& _other)
 		{
 			x = _other.x;
@@ -180,4 +181,5 @@ namespace mtgb
 				);
 		}
 	};
+	
 }

@@ -35,7 +35,6 @@
     <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
-    <ClCompile Include="mtgb\LockOn.cpp" />
     <ClCompile Include="mtgb\MTImGui.cpp" />
     <ClCompile Include="mtgb\MTNet\HttpClient.cpp" />
     <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
@@ -156,6 +155,7 @@
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
     <ClCompile Include="Source\ResultScene.cpp" />
@@ -211,7 +211,6 @@
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
-    <ClInclude Include="mtgb\LockOn.h" />
     <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
@@ -366,6 +365,7 @@
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />
     <ClInclude Include="Source\ResultScene.h" />

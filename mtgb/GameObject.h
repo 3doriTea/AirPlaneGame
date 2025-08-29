@@ -46,7 +46,7 @@ namespace mtgb
 		/// <param name="..._args">コンストラクタ可変長引数</param>
 		/// <returns>インスタンスされたゲームオブジェクトのポインタ</returns>
 		template<class GameObjectT, typename ...Args>
-		GameObjectT* Instantiate(Args... _args);
+		static GameObjectT* Instantiate(Args... _args);
 
 		template<typename GameSceneT>
 		GameSceneT& GetScene();
