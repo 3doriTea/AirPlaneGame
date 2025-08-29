@@ -2,6 +2,7 @@
 #include "PlayerBullet.h"
 #include <algorithm>
 #include "../TrailEmitterSystem.h"
+#include "LockOn.h"
 
 using namespace mtgb;
 
@@ -14,8 +15,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 
 	.Build()),
 	pTransform{ Component<Transform>() },
-	lockOnSide_{400.0f},
-	enemyFrameSideExtents_{30.0f},
+	lockOn_(),
 	lockOnAny_{ false },
 	lockOnDistance_{100.0f},
 	pTargetInfo_{nullptr}
@@ -24,37 +24,34 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
 	
-	lockOnRect_ = 
-	{
-		rectCenter.x - lockOnSide_ / 2.0f,
-		rectCenter.y - lockOnSide_ / 2.0f,
-		lockOnSide_,
-		lockOnSide_ 
-	};
 
 
-	rectDetector.config = 
+	lockOn_->lockOnSide = 400.0f ;
+	lockOn_->reticleSideExtents= 30.0f ;
+	
+	lockOn_->rectDetector.config =
 	{
 		.targetName = "Enemy",
 		.windowContext = WindowContext::First,
 		.detectionRect
 			{
-				rectCenter.x - lockOnSide_ / 2.0f,
-				rectCenter.y - lockOnSide_ / 2.0f,
-				lockOnSide_,
-				lockOnSide_
+				rectCenter.x - lockOn_->lockOnSide / 2.0f,
+				rectCenter.y - lockOn_->lockOnSide / 2.0f,
+				lockOn_->lockOnSide,
+				lockOn_->lockOnSide
 			},
 		.maxDistance = 300.0f,
 	};
 
 	pTransform->SetParent(_plane);
 
-	lockOnFrame_ = Image::Load("Image/lockOnFrame.png");
-	lockOnReticle_ = Image::Load("Image/lockOnReticle.png");
+	lockOn_->frameImage = Image::Load("Image/lockOnFrame.png");
+	lockOn_->reticleImage = Image::Load("Image/lockOnReticle.png");
 
-	enemyFrameRect_.size = { enemyFrameSideExtents_ * 2.0f,enemyFrameSideExtents_ * 2.0f};
 	
-	uiParams_.layerFlag = GameObjectLayer::A;
+	lockOn_->reticleRect.size = { lockOn_->reticleSideExtents * 2.0f,lockOn_->reticleSideExtents * 2.0f};
+	
+	lockOn_->uiParams.layerFlag = GameObjectLayer::A;
 }
 
 PlayerPilot::~PlayerPilot()
@@ -82,47 +79,47 @@ void PlayerPilot::Update()
 void PlayerPilot::Draw() const
 {
 	//é©ìÆÇ≈ë_Ç¢ÇíËÇﬂÇÈîÕàÕÇï`âÊ
-	const Vector2Int DRAW_SIZE{ lockOnSide_ ,lockOnSide_ };
-	Draw::Image(lockOnFrame_, lockOnRect_,uiParams_);
+	/*const Vector2Int DRAW_SIZE{ lockOnSide_ ,lockOnSide_ };
+	Draw::Image(lockOnFrame_, lockOnRect_,lockOn_->uiParams);*/
 
 	//ë_Ç¢Ç™íËÇ‹Ç¡ÇƒÇ¢ÇÈìGÇã≠í≤ï\é¶
 	if (rectDetector.HasDetectedTargets())
 	{
-		Draw::Image(lockOnReticle_, enemyFrameRect_, uiParams_);
+		Draw::Image(lockOnReticle_, lockOn_->reticleRect, lockOn_->uiParams);
 	}
 
 	Game::System<TrailEmitterSystem>().Render();
 }
 
-void PlayerPilot::LockOn()
-{
-	rectDetector.UpdateDetection();
-
-	// ÉèÅ[ÉãÉhç¿ïWånÇ≈àÍî‘ãﬂÇ¢ìGÇë_Ç§
-
-	auto it = std::min_element(
-		rectDetector.detectedTargets.begin(),
-		rectDetector.detectedTargets.end(),
-		[this](const RectContainsInfo& a, const RectContainsInfo& b)
-		{
-			float da = (pTransform->position - a.worldPos).Size();
-			float db = (pTransform->position - b.worldPos).Size();
-			return da < db;
-		}
-	);
-	
-	if (it != rectDetector.detectedTargets.end())
-	{
-		pTargetInfo_ = &(*it); // ÉAÉhÉåÉXÇë„ì¸
-		enemyFrameRect_.x = pTargetInfo_->screenPos.x - enemyFrameSideExtents_ ;
-		enemyFrameRect_.y = pTargetInfo_->screenPos.y - enemyFrameSideExtents_ ;
-	}
-	else
-	{
-		pTargetInfo_ = nullptr; // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçáÇÕ nullptr
-	}
-
-}
+//void PlayerPilot::LockOn()
+//{
+//	rectDetector.UpdateDetection();
+//
+//	// ÉèÅ[ÉãÉhç¿ïWånÇ≈àÍî‘ãﬂÇ¢ìGÇë_Ç§
+//
+//	auto it = std::min_element(
+//		rectDetector.detectedTargets.begin(),
+//		rectDetector.detectedTargets.end(),
+//		[this](const RectContainsInfo& a, const RectContainsInfo& b)
+//		{
+//			float da = (pTransform->position - a.worldPos).Size();
+//			float db = (pTransform->position - b.worldPos).Size();
+//			return da < db;
+//		}
+//	);
+//	
+//	if (it != rectDetector.detectedTargets.end())
+//	{
+//		pTargetInfo_ = &(*it); // ÉAÉhÉåÉXÇë„ì¸
+//		lockOn_->reticleRect.x = pTargetInfo_->screenPos.x - enemyFrameSideExtents_ ;
+//		lockOn_->reticleRect.y = pTargetInfo_->screenPos.y - enemyFrameSideExtents_ ;
+//	}
+//	else
+//	{
+//		pTargetInfo_ = nullptr; // å©Ç¬Ç©ÇÁÇ»Ç©Ç¡ÇΩèÍçáÇÕ nullptr
+//	}
+//
+//}
 
 void PlayerPilot::Shoot()
 {
