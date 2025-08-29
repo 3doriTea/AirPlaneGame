@@ -25,6 +25,9 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
+	Game::System<WinCtxResManager>().SwapResource<InputResource>();
+
+
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
 	MTImGui::Instance().Initialize();
@@ -85,6 +88,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::M))
 	{
 		WinCtxRes::SetFullscreen(false, WindowContext::Second);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::O))
+	{
+		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
 }
 

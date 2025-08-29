@@ -28,6 +28,8 @@ void mtgb::WinCtxRes::SetFullscreen(bool _fullscreen, WindowContext _ctx)
 	Game::System<WinCtxResManager>().Get<DXGIResource>(_ctx).SetFullscreen(_fullscreen);
 }
 
+
+
 void WinCtxRes::ChangeResource(WindowContext ctx)
 {
 	Game::System<WinCtxResManager>().ChangeResource(ctx);

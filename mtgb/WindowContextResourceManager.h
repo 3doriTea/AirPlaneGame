@@ -46,6 +46,10 @@ namespace mtgb
         /// <param name="windowContext">切り替えるウィンドウの識別子</param>
         void ChangeResource(WindowContext windowContext);
 
+        template<typename ResourceT>
+        void SwapResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);
+      /*  void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);*/
+
         /// <summary>
         /// リソースを取得する
         /// </summary>
@@ -93,4 +97,24 @@ namespace mtgb
             };
         }
     };
+
+    template<typename ResourceT>
+    inline void WindowContextResourceManager::SwapResource(WindowContext context1, WindowContext context2)
+    {
+        // context1,2のResourceCollectionが登録されている確認
+        auto itr1 = collectionMap_.find(context1);
+        auto itr2 = collectionMap_.find(context2);
+
+        assert(itr1 != collectionMap_.end() && "指定されたWindowContextが見つかりません");
+        assert(itr2 != collectionMap_.end() && "指定されたWindowContextが見つかりません");
+
+        std::type_index typeIdx = typeid(ResourceT);
+
+        // リソースを取得
+        /*WindowContextResource* resource1 = itr1->second[typeIdx];
+        WindowContextResource* resource2 = itr2->second[typeIdx];*/
+
+        // 入れ替える
+        std::swap(itr1->second[typeIdx], itr2->second[typeIdx]);
+    }
 }

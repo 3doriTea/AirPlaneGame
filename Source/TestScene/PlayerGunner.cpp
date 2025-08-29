@@ -31,7 +31,7 @@ void PlayerGunner::Update()
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
 
 #if 1
-	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
+	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
 	// ã
 	if (axis.y > 0)
 	{
@@ -118,7 +118,7 @@ void PlayerGunner::Update()
 
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::First))
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
 	{
 		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		LOGIMGUI("Gunner:shoot");

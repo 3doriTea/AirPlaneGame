@@ -39,7 +39,8 @@ namespace mtgb
         void Release();
 
         /// <summary>
-        /// 指定されたリソースを返す
+        /// <para> 指定されたリソースの参照を返す </para>
+        /// <para> 見つからない場合はassertでプログラム中止 </para>
         /// </summary>
         /// <typeparam name="Type">リソースの型</typeparam>
         /// <returns>指定されたリソースの参照</returns>
