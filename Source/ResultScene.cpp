@@ -5,6 +5,7 @@
 #include "ResultLogo.h"
 #include <iostream>
 #include <sys/stat.h>
+#include "TimeLimit.h"
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
@@ -39,6 +40,12 @@ void ResultScene::Initialize()
 //	Instantiate<ResultText>();
 	Instantiate<TextBox>("tekita", 0.1f);
 	Instantiate<ResultLogo>();
+
+    timeLimit_ = Instantiate<TimeLimit>(10.0f);
+	timeLimit_->RegisterOnEndTimerCallback([]()
+		{
+			Game::System<SceneSystem>().Move<TestScene>();
+		});
 
 	mtbin::MemoryStream ms{ buffer, BUFFER_SIZE };
 
@@ -80,7 +87,8 @@ void ResultScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<TestScene>();
+	//	Game::System<SceneSystem>().Move<TestScene>();
+        timeLimit_->StartTimer();
 	}
 }
 

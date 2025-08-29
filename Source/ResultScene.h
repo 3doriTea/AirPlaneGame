@@ -3,6 +3,8 @@
 #include "TextBox.h"
 #include "Ranking.h"
 
+class TimeLimit;
+
 class ResultScene : public mtgb::GameScene
 {
 public:
@@ -16,6 +18,7 @@ public:
 
 private:
 
+	TimeLimit* timeLimit_;
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;
 	Ranking* ranking_;
