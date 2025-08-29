@@ -42,7 +42,6 @@ mtgb::InputResource::InputResource(const InputResource& other)
 
 void mtgb::InputResource::Initialize(WindowContext _windowContext)
 {
-	context_ = _windowContext;
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
 	Game::System<Input>().CreateKeyDevice(hWnd, pKeyDevice_.ReleaseAndGetAddressOf());

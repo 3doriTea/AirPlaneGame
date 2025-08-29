@@ -36,7 +36,7 @@ void PlayerPlane::Update()
 
 #if 1
 	// WindowContext‚ğ’¼Úw’è‚µ‚È‚¢•û‚¢‚¢
-	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
+	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 	//if (axis.x != 0.0f || axis.y != 0.0f)
 	{
 

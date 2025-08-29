@@ -58,3 +58,5 @@ void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowCont
 	currentContext_ = windowContext;
 }
 
+
+

@@ -515,6 +515,11 @@ bool mtgb::Input::IsJoystickAssigned(GUID guid) const
 	return (joystickContext_.find(guid) != joystickContext_.end());
 }
 
+void mtgb::Input::SwapJoystickContext(GUID guid1, GUID guid2)
+{
+
+}
+
 void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig)
 {
 	HRESULT hResult{};
