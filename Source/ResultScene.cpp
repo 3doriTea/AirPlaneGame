@@ -42,6 +42,8 @@ void ResultScene::Initialize()
 
 	mtbin::MemoryStream ms{ buffer, BUFFER_SIZE };
 
+    ranking_ = new Ranking();
+
     struct _stat s;
     int rc = _stat("ranking.dat", &s);
     if (rc == -1)
