@@ -36,26 +36,34 @@ void PlayerPlane::Update()
 
 #if 1
 	// WindowContextを直接指定しない方いい
-	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
-	// 上
-	if (axis.y > 0)
+	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
+	//if (axis.x != 0.0f || axis.y != 0.0f)
 	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
-	}
-	else if (axis.y < 0)
-	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
-	}
-	// 右
-	if (axis.x > 0)
-	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
-	}
-	else if (axis.x < 0)
-	{
-		curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
-	}
 
+		// 上
+		if (axis.y > 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE);
+		}
+		else if (axis.y < 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE);
+		}
+		// 右
+		if (axis.x > 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
+		}
+		else if (axis.x < 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
+		}
+
+		// 前方向、頭は上方向に
+		Vector3 forward{ pTransform_->Forward() };
+		curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+		pTransform_->rotate = curr;
+	}
 #else
 	if (InputUtil::GetKey(KeyCode::W))
 	{
@@ -73,6 +81,10 @@ void PlayerPlane::Update()
 	{
 		curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE);
 	}
+	// 前方向、頭は上方向に
+	Vector3 forward{ pTransform_->Forward() };
+	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+	pTransform_->rotate = curr;
 #endif
 
 	if (InputUtil::GetKeyDown(KeyCode::F))
@@ -80,15 +92,12 @@ void PlayerPlane::Update()
 		vVPlayer_.Play(u8"正面に敵が102体います");
 	}
 
-	// 前方向、頭は上方向に
-	Vector3 forward{ pTransform_->Forward() };
+
 	//Vector3 forward = XMVector3Cross(pTransform_->Right(), Vector3::Down());
 	//pTransform_->Right()
-	Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
+	//Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
 
-	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
-	pTransform_->rotate = curr;
 	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
 
 	MTImGui::Instance().DirectShow([this]() {

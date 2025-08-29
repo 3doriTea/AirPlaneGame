@@ -64,7 +64,7 @@ PlayerPilot::~PlayerPilot()
 void PlayerPilot::Update()
 {
 	LockOn();
-	if (InputUtil::GetKeyDown(KeyCode::Space),InputUtil::GetGamePadDown(PadCode::A))
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(FlightStickCode::Thumb))
 	{
 		LOGIMGUI("Pilot:shoot");
 		Shoot();

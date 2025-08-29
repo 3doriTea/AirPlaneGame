@@ -71,6 +71,11 @@ void mtgb::MTImGui::SetupShowFunc()
                 TypeRegistry::Instance().CallFunc(&target, "RectContains:" + target.entityId);
             }
         });
+
+    Set<DXGI_ADAPTER_DESC1>([](DXGI_ADAPTER_DESC1* _target, const char* _name)
+        {   
+            ImGui::Text(WideToMulti(_target->Description).c_str());
+        });
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
 {

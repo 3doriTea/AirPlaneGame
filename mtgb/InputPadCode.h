@@ -46,8 +46,8 @@ enum struct PadCode : uint8_t
 /// </summary>
 enum struct FlightStickCode : uint8_t
 {
-	Trigger = 0,
-	Thumb = 1, // 親指
+	Thumb = 0, // 親指
+	Trigger = 1,
 	Button3 = 2,
 	Button4 = 3,
 };

@@ -589,7 +589,11 @@ void mtgb::FbxParts::InitializeTexture(FbxSurfaceMaterial* _pMaterial, const DWO
 		// ƒtƒ@ƒCƒ‹–¼ + Šg’£ ‚¾‚¯‚É‚·‚é
 		char name[_MAX_FNAME]{};
 		char ext[_MAX_EXT]{};
-		_splitpath_s(pTexture->GetRelativeFileName(), nullptr, 0, nullptr, 0, name, _MAX_FNAME, ext, _MAX_EXT);
+		_splitpath_s(pTexture->GetRelativeFileName(), 
+			nullptr, 0,
+			nullptr, 0, 
+			name, _MAX_FNAME,
+			ext, _MAX_EXT);
 		wsprintf(name, "%s%s", name, ext);
 
 		pMaterial_[_i].pTexture = new Texture2D{};

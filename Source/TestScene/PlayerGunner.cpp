@@ -30,7 +30,45 @@ void PlayerGunner::Update()
 {
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
 
-	/*if (InputUtil::GetKey(KeyCode::W))
+#if 1
+	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
+	// ã
+	if (axis.y > 0)
+	{
+		angleX_ += ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleX_ > ANGLE_X_MAX)
+		{
+			angleX_ = ANGLE_X_MAX;
+		}
+	}
+	else if (axis.y < 0)
+		angleX_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleX_ < ANGLE_X_MIN)
+		{
+			angleX_ = ANGLE_X_MIN;
+		}
+	{
+	}
+	// ‰E
+	if (axis.x > 0)
+	{
+		angleY_ += ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleY_ < 0.0f)
+		{
+			angleY_ += DirectX::XM_2PI;
+		}
+	}
+	else if (axis.x < 0)
+	{
+		angleY_ -= ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleY_ >= DirectX::XM_2PI)
+		{
+			angleY_ -= DirectX::XM_2PI;
+		}
+	}
+#else
+
+	if (InputUtil::GetKey(KeyCode::W))
 	{
 		angleX_ -= ANGLE_SPEED * Time::DeltaTimeF();
 		if (angleX_ < ANGLE_X_MIN)
@@ -62,7 +100,8 @@ void PlayerGunner::Update()
 		{
 			angleY_ += DirectX::XM_2PI;
 		}
-	}*/
+	}
+#endif
 
 	using DirectX::XMQuaternionRotationAxis;
 
@@ -78,8 +117,8 @@ void PlayerGunner::Update()
 	pTransform_->rotate = curr;
 
 
-	//pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RStick))
+	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
 	{
 		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		LOGIMGUI("Gunner:shoot");

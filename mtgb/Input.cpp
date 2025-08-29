@@ -126,7 +126,7 @@ void mtgb::Input::Update()
 	}
 
 #pragma region ゲームパッド
-	UpdateGamePadDevice();
+	//UpdateGamePadDevice();
 #pragma endregion
 }
 
@@ -425,8 +425,8 @@ void mtgb::Input::AssignJoystick(IDirectInputDevice8* _pJoystickDevice)
 {
 	auto& front = requestedJoystickDevices_.front();
 	HWND hWnd = front.hWnd;
-	//_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
-	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+	_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_BACKGROUND);
+	//_pJoystickDevice->SetCooperativeLevel(hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
 	_pJoystickDevice->SetDataFormat(&c_dfDIJoystick);
 	SetProperty(_pJoystickDevice, front.config);

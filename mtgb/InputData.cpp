@@ -174,7 +174,8 @@ const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context)
 const mtgb::Vector2F mtgb::InputUtil::GetAxis(WindowContext _context)
 {
 	const InputData& input = GetInput(_context);
-	return Vector2F{ input.joyStateCurrent_.lX,input.joyStateCurrent_.lY };
+	return Vector2F{ 
+		GetAxis(Axis::X,_context),GetAxis(Axis::Y,_context)};
 }
 
 const mtgb::Vector2Int mtgb::InputUtil::GetMousePosition(WindowContext _context)
