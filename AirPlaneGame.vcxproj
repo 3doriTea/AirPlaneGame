@@ -35,6 +35,7 @@
     <ClCompile Include="mtgb\ImGuizmoManipulator.cpp" />
     <ClCompile Include="mtgb\InputConfig.cpp" />
     <ClCompile Include="mtgb\JoystickProxy.cpp" />
+    <ClCompile Include="mtgb\LockOn.cpp" />
     <ClCompile Include="mtgb\MTImGui.cpp" />
     <ClCompile Include="mtgb\MTNet\HttpClient.cpp" />
     <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="mtgb\InputConfig.h" />
     <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
+    <ClInclude Include="mtgb\LockOn.h" />
     <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />

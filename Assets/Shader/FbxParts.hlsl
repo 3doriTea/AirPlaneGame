@@ -19,12 +19,16 @@ VS_OUT VS(float4 position : POSITION, float4 normal : NORMAL, float2 uv : TEXCOO
 
 float4 PS(VS_OUT inData) : SV_Target
 {
+    // 光源方向
     float4 lightDir = normalize(g_lightDir);
-
+    
+    // 法線
     inData.normal = normalize(inData.normal);
     
+    // 光源方向
     float4 shade = saturate(dot(inData.normal, -lightDir));
     shade.a = 1;  // 透明度は操作したくないため、強制的にアルファ値1
+    
     
     float4 diffuse;
     if (g_hasTexture == true)
@@ -44,7 +48,9 @@ float4 PS(VS_OUT inData) : SV_Target
     //g_speculerColor //float4(255, 0, 0, 0);
     if (g_speculerColor.a != 0)
     {
+        // reflect
         float4 r = reflect(lightDir, inData.normal);
+        // 
         specuer = pow(saturate(dot(r, inData.eye)), g_shuniness) * g_speculerColor;
     }
     
