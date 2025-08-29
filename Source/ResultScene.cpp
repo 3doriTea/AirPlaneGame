@@ -100,6 +100,9 @@ void ResultScene::Draw() const
 		Draw::ImmediateText(std::to_string(i + 1) + "位: " + std::to_string(rankingList_[i]),
 			{ 0, 160 + i * 40 }, 32, TextAlignment::center);
 	}
+
+    Draw::ImmediateText("Tキーを押したら10秒後にタイトルへ戻ります"
+		, { 0, 50 }, 16, TextAlignment::center);
 }
 
 void ResultScene::End()
