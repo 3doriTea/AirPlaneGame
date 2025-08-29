@@ -111,8 +111,6 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
-	Draw::ImmediateText("aiueo‚ ‚¢‚¤‚¦‚¨",{0,0});
-	Draw::Text(testText_, { 0, 0 });
 }
 
 Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const

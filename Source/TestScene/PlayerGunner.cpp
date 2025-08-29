@@ -118,7 +118,7 @@ void PlayerGunner::Update()
 
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::First))
 	{
 		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		LOGIMGUI("Gunner:shoot");

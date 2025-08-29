@@ -86,10 +86,10 @@ void EnemyPlane::Update()
 	}
 	if (lockOnTarget_)
 	{
-		Vector3 diffDir{ pTarget_->position - pTransform_->position };
+		/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
 		Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
 		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
-		pRB_->velocity_ = pTransform_->Forward() * CHASE_SPEED;
+		pRB_->velocity_ = pTransform_->Forward() * CHASE_SPEED;*/
 	}
 	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
 	//DirectX::XMQuaternionBaryCentric
