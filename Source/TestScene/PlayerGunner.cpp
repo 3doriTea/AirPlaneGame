@@ -31,7 +31,7 @@ void PlayerGunner::Update()
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
 
 #if 1
-	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
+	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
 	// ã
 	if (axis.y > 0)
 	{

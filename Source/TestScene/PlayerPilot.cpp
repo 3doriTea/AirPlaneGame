@@ -17,7 +17,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	lockOnSide_{400.0f},
 	enemyFrameSideExtents_{30.0f},
 	lockOnAny_{ false },
-	lockOnDistance_{30.0f},
+	lockOnDistance_{100.0f},
 	pTargetInfo_{nullptr}
 {
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
@@ -64,7 +64,7 @@ PlayerPilot::~PlayerPilot()
 void PlayerPilot::Update()
 {
 	LockOn();
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(FlightStickCode::Thumb))
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(FlightStickCode::Thumb,WindowContext::First))
 	{
 		LOGIMGUI("Pilot:shoot");
 		Shoot();
@@ -128,8 +128,8 @@ void PlayerPilot::Shoot()
 {
 	if (rectDetector.HasDetectedTargets())
 	{
-		Vector3 toTarget = Vector3::Normalize(pTargetInfo_->worldPos - pTransform->position);
+		Vector3 toTarget = Vector3::Normalize(pTargetInfo_->worldPos - pTransform->GetWorldPosition());
 		Quaternion shootDir = Quaternion::LookRotation(toTarget, Vector3::Up());
-		Instantiate<PlayerBullet>(pTransform->position + Vector3::Forward() * 1.0f, shootDir);
+		Instantiate<PlayerBullet>(pTransform->GetWorldPosition() , shootDir);
 	}
 }

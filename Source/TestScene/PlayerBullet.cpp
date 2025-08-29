@@ -20,7 +20,7 @@ PlayerBullet::PlayerBullet(const Vector3& _position, const Quaternion& _quaterni
 	pCollider_->sphere_.radius_ = 0.5f;
 
 	// 3ïbåoÇ¡ÇΩÇÁè¡Ç∑
-	Timer::AddAram(1.0f, [this] { DestroyMe(); });
+	Timer::AddAram(3.0f, [this] { DestroyMe(); });
 }
 
 PlayerBullet::~PlayerBullet()

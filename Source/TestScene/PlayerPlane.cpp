@@ -36,7 +36,7 @@ void PlayerPlane::Update()
 
 #if 1
 	// WindowContextÇíºê⁄éwíËÇµÇ»Ç¢ï˚Ç¢Ç¢
-	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
+	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 	//if (axis.x != 0.0f || axis.y != 0.0f)
 	{
 
@@ -111,8 +111,6 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
-	Draw::ImmediateText("aiueoÇ†Ç¢Ç§Ç¶Ç®",{0,0});
-	Draw::Text(testText_, { 0, 0 });
 }
 
 Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const

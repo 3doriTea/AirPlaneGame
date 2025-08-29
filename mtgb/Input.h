@@ -145,6 +145,7 @@ namespace mtgb
 		bool IsJoystickConnected(GUID guid) const;
 		bool IsJoystickAssigned(GUID guid) const;
 
+		void SwapJoystickContext(GUID guid1, GUID guid2);
 	private:
 
 		/// <summary>
