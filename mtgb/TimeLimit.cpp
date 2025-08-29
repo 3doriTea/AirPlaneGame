@@ -13,6 +13,11 @@ TimeLimit::TimeLimit() : GameObject(GameObjectBuilder()
 {
 }
 
+TimeLimit::TimeLimit(float _time) : TimeLimit()
+{
+	remainingTime_ = _time;
+}
+
 TimeLimit::~TimeLimit()
 {
 }
@@ -57,7 +62,6 @@ void TimeLimit::StartTimer()
 {
 	isStartTimer_ = true;
 	isResumeTimer_ = false;
-	remainingTime_ = PLAY_SCENE_TIMER;
 }
 
 

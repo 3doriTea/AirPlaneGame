@@ -28,8 +28,8 @@ void TrailEmitterSystem::Initialize()
 	using DirectX::XMFLOAT4;
 	using namespace yz;
 
-	TrailEmitter a(f3(0, 0, 3), XMFLOAT4(0.30f, 0.80f, 1.00f, 0.90f), 0.32f);
-	a.SetPhase(0.5f); a.SetRadius(2.2f); a.SetMotionSpeed(1.00f); a.SetBaseHeight(0.4f); a.SetEmitInterval(0.0001f);
+	TrailEmitter a(f3(0, 0, 100), XMFLOAT4(0.30f, 0.80f, 1.00f, 0.90f), 0.32f);
+	a.SetPhase(10.f); a.SetRadius(2.2f); a.SetMotionSpeed(1.00f); a.SetBaseHeight(0.4f); a.SetEmitInterval(0.0001f);
 	/*TrailEmitter b(f3(0, 0, 3), XMFLOAT4(1.00f, 0.55f, 0.25f, 0.85f), 0.26f);
 	b.SetPhase(1.8f); b.SetRadius(2.6f); b.SetMotionSpeed(0.92f); b.SetBaseHeight(0.6f); b.SetEmitInterval(0.020f);
 	TrailEmitter c(f3(0, 0, 3), XMFLOAT4(0.70f, 0.60f, 1.00f, 0.80f), 0.22f);
