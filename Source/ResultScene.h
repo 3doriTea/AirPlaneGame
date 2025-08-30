@@ -1,6 +1,5 @@
 #pragma once
 #include <mtgb.h>
-#include "TextBox.h"
 #include "Ranking.h"
 
 class TimeLimit;
