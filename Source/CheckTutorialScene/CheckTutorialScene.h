@@ -29,9 +29,11 @@ public:
 
 	const Vector2Int GenPositionPlane() const;
 	const Vector2Int GenPositionMountain() const;
+	const RectF GenTextBox() const;
 
 private:
 	float peekRate_;  // 覗き具合 0.0 ~ 1.0
+	float toMoveTimeLeft_;  // 遷移までの残り時間
 
 	TimerHandle hToNextSceneTimer_;  // プレイシーン遷移までのタイマー
 	bool isSkipTutorial_;  // チュートリアルをスキップするか

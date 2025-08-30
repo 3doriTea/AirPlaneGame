@@ -9,11 +9,14 @@ namespace
 {
 	// ÉvÉåÉCÉVÅ[ÉìÇ…ëJà⁄Ç∑ÇÈÇ‹Ç≈ÇÃéûä‘(ïb)
 	const float TO_NEXT_SCENE_WAIT_SEC{ 50000.0f };
+	const float TO_MOVE_SCENE_WAIT_SEC{ 5.0f };
 	const Vector2Int BACKGROUND_IMAGE_SIZE{ 1920, 1080 };
+	const Vector2 CANVAS_SIZE{ 1920.0f, 1080.0f };
 }
 
 CheckTutorialScene::CheckTutorialScene() :
-	peekRate_{ 0.0f }
+	peekRate_{ 0.0f },
+	toMoveTimeLeft_{ TO_MOVE_SCENE_WAIT_SEC }
 {
 }
 
@@ -42,6 +45,8 @@ void CheckTutorialScene::Initialize()
 
 void CheckTutorialScene::Update()
 {
+	toMoveTimeLeft_ -= Time::DeltaTimeF();
+
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
@@ -61,6 +66,12 @@ void CheckTutorialScene::Draw() const
 	drawImageLayer(IL_BACKGROUND, Vector2Int::Zero());
 	drawImageLayer(IL_PLANE, GenPositionPlane());
 	drawImageLayer(IL_MOUNTAIN, GenPositionMountain());
+
+	std::string text{ std::string{ std::to_string(toMoveTimeLeft_).substr(0, 3) } + "ïb" };
+
+	Draw::ImmediateText(text, GenTextBox(), 32, TextAlignment::center);
+
+	//Draw::Text()
 }
 
 void CheckTutorialScene::End()
@@ -70,8 +81,7 @@ void CheckTutorialScene::End()
 const Vector2Int CheckTutorialScene::GenPositionPlane() const
 {
 	static const int TO_Y{ -300 };
-	static const float CANVAS_SIZE_Y{ 1080.0f };
-	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE_Y };
+	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE.y };
 
 	return Vector2Int(0, Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_);
 }
@@ -79,8 +89,24 @@ const Vector2Int CheckTutorialScene::GenPositionPlane() const
 const Vector2Int CheckTutorialScene::GenPositionMountain() const
 {
 	static const int TO_Y{ 500 };
-	static const float CANVAS_SIZE_Y{ 1080.0f };
-	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE_Y };
+	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE.y };
 
 	return Vector2Int(0, Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_);
+}
+
+const RectF CheckTutorialScene::GenTextBox() const
+{
+	static const RectF TO{ 900, 375, 200, 90 };
+	static const RectF RATE
+	{
+		TO.point.x / CANVAS_SIZE.x, TO.point.y / CANVAS_SIZE.y,
+		TO.size.x / CANVAS_SIZE.x, TO.size.y / CANVAS_SIZE.y,
+	};
+	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+
+	return
+	{
+		RATE.point.x * SCREEN_SIZE.x, RATE.point.y * SCREEN_SIZE.y,
+		RATE.size.x * SCREEN_SIZE.x, RATE.size.y * SCREEN_SIZE.y,
+	};
 }
