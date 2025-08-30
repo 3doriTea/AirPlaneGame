@@ -74,8 +74,33 @@ void mtgb::MTImGui::SetupShowFunc()
 
     Set<DXGI_ADAPTER_DESC1>([](DXGI_ADAPTER_DESC1* _target, const char* _name)
         {   
-            ImGui::Text(WideToMulti(_target->Description).c_str());
+            // WCHARの配列を文字列に変換して表示
+            char description[256];
+            WideCharToMultiByte(CP_UTF8, 0, _target->Description, -1, description, sizeof(description), nullptr, nullptr);
+            ImGui::Text("Description: %s", description);
+
+            ImGui::Text("Adapter LUID: %08X-%08X", _target->AdapterLuid.HighPart, _target->AdapterLuid.LowPart);
+            ImGui::Text("Flags: 0x%X", _target->Flags);
         });
+
+    Set<DXGI_OUTPUT_DESC>([](DXGI_OUTPUT_DESC* _target, const char* _name)
+		{
+			// WCHARの配列を文字列に変換して表示
+			char deviceName[64];
+			WideCharToMultiByte(CP_UTF8, 0, _target->DeviceName, -1, deviceName, sizeof(deviceName), nullptr, nullptr);
+			ImGui::Text("Device Name: %s", deviceName);
+
+			ImGui::Text("Desktop Coordinates: (%d, %d) - (%d, %d)",
+				_target->DesktopCoordinates.left, _target->DesktopCoordinates.top,
+				_target->DesktopCoordinates.right, _target->DesktopCoordinates.bottom);
+
+			ImGui::Text("Attached to Desktop: %s", _target->AttachedToDesktop ? "Yes" : "No");
+
+            // PVOID
+			ImGui::Text("Monitor Handle: %p", _target->Monitor);
+
+
+		});
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
 {

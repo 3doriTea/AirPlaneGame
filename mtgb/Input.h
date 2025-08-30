@@ -24,23 +24,32 @@ namespace mtgb
 	class InputResource;
 	class InputData;
 
+	enum class DeviceType
+	{
+		Unknown,
+		GamePad,
+		FlightStick
+	};
+
 	struct JoystickContext
 	{
 		TimerHandle timerHandle;
 		HRESULT lastResult;
 		ComPtr<IDirectInputDevice8> device;
+		DeviceType deviceType;
 		JoystickContext();
 		~JoystickContext();
-		JoystickContext(IDirectInputDevice8* _device);
+		JoystickContext(ComPtr<IDirectInputDevice8> _device);
 	};
 
 	/// <summary>
-	/// ジョイスティックの割り当て要求
+	/// ジョイスティックの割り当て予約
 	/// </summary>
 	struct JoystickReservation
 	{
 		HWND hWnd;
 		InputConfig config;
+		DeviceType deviceType; // 割り当てて欲しいデバイスの種類
 		std::function<void(ComPtr<IDirectInputDevice8>, GUID)> onAssign;
 		~JoystickReservation();
 	};
@@ -83,7 +92,7 @@ namespace mtgb
 		/// <param name="_pJoystickDevice">切り替え対象のマウスデバイス</param>
 		void ChangeMouseDevice(ComPtr<IDirectInputDevice8> _pMouseDevice);
 		/// <summary>
-		/// 入力状態を格納する対象を切り返す
+		/// 入力状態を格納する対象を切り返る
 		/// </summary>
 		/// <param name="_pJoystickDevice">切り替え対象の入力状態を格納する物</param>
 		void ChangeInputData(InputData* _pInputData);
@@ -111,7 +120,7 @@ namespace mtgb
 		/// 接続されているジョイスティックを割り当て予約してるデバイスに割り当てる
 		/// </summary>
 		/// <param name="_pJoystickDevice"></param>
-		void AssignJoystick(IDirectInputDevice8* _pJoystickDevice);
+		void AssignJoystickToReservation(ComPtr<IDirectInputDevice8> _pJoystickDevice, size_t _reservationIndex, GUID _guid);
 
 		/// <summary>
 		/// 登録されたジョイスティックを解除する
@@ -137,16 +146,53 @@ namespace mtgb
 		/// <returns>/returns>
 		bool IsNotSubscribed();
 
+		/// <summary>
+		/// デバイスの名前を取得
+		/// </summary>
+		/// <param name="_pInputDevice">デバイス</param>
+		/// <returns>デバイス名</returns>
+		std::string GetDeviceName(ComPtr<IDirectInputDevice8> _pInputDevice);
+		std::string GetDeviceName(GUID _guid);
+
+		/// <summary>
+		/// デバイスの製品名を取得
+		/// </summary>
+		/// <param name="_pInputDevice">デバイス</param>
+		/// <returns>デバイス名</returns>
+		std::string GetDeviceProductName(ComPtr<IDirectInputDevice8> _pInputDevice);
+		std::string GetDeviceProductName(GUID _guid);
 		std::string ConvertHResultToMessage(HRESULT hr) const;
 
+		/// <summary>
+		/// デバイスのタイプを判別
+		/// </summary>
+		/// <param name="_pInputDevice">デバイス</param>
+		/// <returns>デバイスタイプ</returns>
+		/// 
+		static DeviceType GetDeviceType(ComPtr<IDirectInputDevice8> _pInputDevice);
+		static DeviceType GetDeviceType(const DIDEVICEINSTANCE& _inst);
 		HRESULT UpdateJoystickState(GUID guid);
 
+		
+		/// <summary>
+		/// <para> 予約の中から指定された種類のデバイスを要求しているものを探し、先着順で割り当てを行う </para>
+		/// <para> 見つからない場合はどの種類でも構わないという予約に割り当てる　</para>
+		/// </summary>
+		/// <param name="_devType">要求するデバイスの種類</param>
+		/// <returns></returns>
+		int FindReservationIndexForDevice(DeviceType _devType) const;
 		const std::string GetJoystickStatusMessage(GUID guid) const;
 		bool IsJoystickConnected(GUID guid) const;
 		bool IsJoystickAssigned(GUID guid) const;
 
-		void SwapJoystickContext(GUID guid1, GUID guid2);
 	private:
+
+		void StartEnumTimer();
+		void StopEnumTimer();
+		void AutoEnum();
+		// 定期的にデバイス列挙をタイマー
+		TimerHandle enumTimerHandle_{ nullptr };
+		float enumInterval_{ 1.0f };
 
 		/// <summary>
 		/// アクティブなコントローラのIDを調べる
