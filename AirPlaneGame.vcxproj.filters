@@ -1356,6 +1356,12 @@
     <ClInclude Include="Source\TextBox.h">
       <Filter>03mtgb\System\Text</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\FlightStickCode.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MTStat\MTStat.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -1398,7 +1404,12 @@
     <FxCompile Include="Assets\Shader\WingEffect.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\Shader\Trail.hlsl" />
+    <FxCompile Include="Assets\Shader\FbxPartsSkin.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Trail.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Object Include="Assets\Model\Test.obj" />

@@ -1,7 +1,7 @@
 Texture2D g_texture : register(t0);  // テクスチャ
 SamplerState g_sampler : register(s0);  // テクスチャのサンプラ
 
-cbuffer global
+cbuffer global : register(b0)
 {
     matrix g_matrixWVP;  // ワールド・ビュー・プロジェクションの合成行列
     matrix g_matrixNormalTrans;  // 法線の変換行列 (回転行列)

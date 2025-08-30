@@ -59,7 +59,8 @@ void mtgb::FbxParts::Initialize()
 	//InitializeVertexBuffer(DirectX11Draw::pDevice_);
 	//InitializeIndexBuffer(DirectX11Draw::pDevice_);
 	//InitializeConstantBuffer(DirectX11Draw::pDevice_);
-	InitializeSkelton();
+
+	
 }
 
 void mtgb::FbxParts::Release()
@@ -109,6 +110,14 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 	// 使用するコンスタントバッファをシェーダに伝える
 	DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
 	DirectX11Draw::pContext_->PSSetConstantBuffers(0, 1, pConstantBuffer_.GetAddressOf());
+
+	if (hasSkinnedMesh_)
+	{
+		DirectX11Draw::SetShader(ShaderType::FbxPartsSkin);
+		SetBoneMatrix(); // ボーン行列
+		DirectX11Draw::pContext_->VSSetConstantBuffers(1, 1, pBoneConstantBuffer_.GetAddressOf());
+		DirectX11Draw::SetShader(ShaderType::FbxParts);
+	}
 
 	// カメラシステムへのアクセス用
 	const CameraSystem& CAMERA{ Game::System<CameraSystem>() };
@@ -187,6 +196,7 @@ void mtgb::FbxParts::Draw(const Transform& _transform)
 
 void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _time)
 {
+#if 0
 	using namespace DirectX;
 
 	for (int i = 0; i < boneCount_; i++)
@@ -246,71 +256,15 @@ void mtgb::FbxParts::DrawSkinAnimation(const Transform& _transform, FbxTime _tim
 		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
 	}
 	Draw(_transform);
-}
+#endif
+	// アニメーション時間を設定
+	SetAnimationTime(_time);
 
-void mtgb::FbxParts::DrawSkinAnimation(const std::string& _takeName, const Transform& _transform, FbxTime _time)
-{
-	using namespace DirectX;
-
-	for (int i = 0; i < boneCount_; i++)
-	{
-		FbxAnimEvaluator* evaluator{ ppCluster_[i]->GetLink()->GetScene()->GetAnimationEvaluator() };
-		FbxMatrix mCurrent{ evaluator->GetNodeGlobalTransform(ppCluster_[i]->GetLink(), _time) };
-
-		// Fbx to DirectX matrix
-		XMFLOAT4X4 pose{};
-		for (DWORD x = 0; x < 4; x++)
-		{
-			for (DWORD y = 0; y < 4; y++)
-			{
-				pose(x, y) = static_cast<float>(mCurrent.Get(x, y));
-			}
-		}
-
-		XMFLOAT4X4 mat{};
-		XMMATRIX mMirror{ XMMatrixIdentity() };
-		XMStoreFloat4x4(&mat, mMirror);
-		mat.m[2][2] = -1.0f;
-
-		mMirror = XMLoadFloat4x4(&mat);
-
-		pBones_[i].newPose = XMLoadFloat4x4(&pose) * mMirror;
-		pBones_[i].diffPose = XMMatrixInverse(nullptr, pBones_[i].bindPose * mMirror);
-		pBones_[i].diffPose = pBones_[i].diffPose * pBones_[i].newPose;
-	}
-
-	for (DWORD i = 0; i < vertexCount_; i++)
-	{
-		Matrix4x4 matrix{};
-		for (int m = 0; m < boneCount_; m++)
-		{
-			if (pWeights_[i].pBoneIndex[m] < 0)
-			{
-				break;
-			}
-			matrix += pBones_[pWeights_[i].pBoneIndex[m]].diffPose * pWeights_[i].pBoneWeight[m];
-		}
-
-		XMVECTOR position{ XMLoadFloat3(&pWeights_[i].posOrigin) };
-		XMVECTOR normal{ XMLoadFloat3(&pWeights_[i].normalOrigin) };
-
-		XMStoreFloat3(&pVertexes_[i].position, XMVector3TransformCoord(position, matrix));
-		XMFLOAT3X3 mat{};
-		XMStoreFloat3x3(&mat, matrix);
-		matrix = XMLoadFloat3x3(&mat);
-		XMStoreFloat3(&pVertexes_[i].normal, XMVector3TransformCoord(normal, matrix));
-	}
-
-	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
-	DirectX11Draw::pContext_->Map(pVertexBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
-	if (mappedSubResource.pData)
-	{
-		memcpy_s(mappedSubResource.pData, mappedSubResource.RowPitch, pVertexes_, sizeof(Vertex) * vertexCount_);
-		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
-	}
+	// 通常の描画処理を呼び出し
 	Draw(_transform);
-	//DirectX11Draw::
 }
+
+
 
 void mtgb::FbxParts::DrawMeshAnimation(const Transform& _transform, FbxTime _time)
 {
@@ -390,6 +344,27 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 				static_cast<float>(normal[1]),
 				-static_cast<float>(normal[2]),
 			};
+
+			// スキニング関連の初期化
+			if (hasSkinnedMesh_) 
+			{
+				for (int i = 0; i < 4; ++i) 
+				{
+					pVertexes_[index].boneIndex[i] = 0;
+					pVertexes_[index].boneWeight[i] = 0.0f;
+				}
+			}
+			else 
+			{
+				// スキニング無しの場合はデフォルト値
+				pVertexes_[index].boneIndex[0] = 0;
+				pVertexes_[index].boneWeight[0] = 1.0f;
+				for (int i = 1; i < 4; ++i) 
+				{
+					pVertexes_[index].boneIndex[i] = 0;
+					pVertexes_[index].boneWeight[i] = 0.0f;
+				}
+			}
 		}
 	}
 
@@ -412,6 +387,12 @@ void mtgb::FbxParts::InitializeVertexBuffer(ID3D11Device* _pDevice)
 		}
 	}
 	
+	FbxDeformer* pDeformer = pMesh_->GetDeformer(0);
+	hasSkinnedMesh_ = (pDeformer != nullptr);
+	if (hasSkinnedMesh_)
+	{
+		InitializeSkelton();
+	}
 
 	const D3D11_BUFFER_DESC BUFFER_DESC
 	{
@@ -511,6 +492,30 @@ void mtgb::FbxParts::InitializeConstantBuffer(ID3D11Device* _pDevice)
 
 	massert(SUCCEEDED(hResult)
 		&& "コンスタントバッファの作成に失敗 @FbxParts::InitializeConstantBuffer");
+
+	// ボーン行列用コンスタントバッファ
+	if (hasSkinnedMesh_)
+	{
+		const D3D11_BUFFER_DESC BUFFER_DESC
+		{
+			.ByteWidth = sizeof(BoneMatrices),
+			.Usage = D3D11_USAGE_DYNAMIC,
+			.BindFlags = D3D11_BIND_CONSTANT_BUFFER,
+			.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
+			.MiscFlags = 0,
+			.StructureByteStride = 0,
+		};
+
+		hResult = _pDevice->CreateBuffer(
+			&BUFFER_DESC,
+			nullptr,  // 初期データなし
+			pBoneConstantBuffer_.ReleaseAndGetAddressOf());
+
+		massert(SUCCEEDED(hResult)
+			&& "ボーン行列用コンスタントバッファの作成に失敗 @FbxParts::InitializeConstantBuffer");
+
+		boneMatrices_.hasSkinnedMesh = true;
+	}
 }
 
 void mtgb::FbxParts::InitializeMaterial()
@@ -628,8 +633,52 @@ void mtgb::FbxParts::InitializeSkelton()
 	}
 
 	// ボーンの数に合わせてウェイト情報を準備
-	pWeights_ = new Weight[vertexCount_];
-	for (DWORD i = 0; i < vertexCount_; i++)
+	//pWeights_ = new Weight[vertexCount_];
+
+	for (int i = 0; i < boneCount_; i++)
+	{
+		// i番目のボーンが影響を与える頂点数
+		int influencedVertexCount{ ppCluster_[i]->GetControlPointIndicesCount() };
+		// 頂点のインデックスの配列
+		int* boneInfluencedVertexIndices{ ppCluster_[i]->GetControlPointIndices() };
+		// 頂点のウェイトの配列
+		double* boneInfluencedWeights{ ppCluster_[i]->GetControlPointWeights() };
+
+		// 影響を受けている頂点の数だけループ
+		for (int k = 0; k < influencedVertexCount; k++)
+		{
+			// k番目の頂点のインデックス
+			int vertexIndex = boneInfluencedVertexIndices[k];
+			// k番目の頂点のウェイト
+			double weight = boneInfluencedWeights[k];
+
+			// 1頂点最大4つまでのボーンから影響を受けるよう制限
+			for (int m = 0; m < 4; m++)
+			{
+				if (m >= boneCount_)
+				{
+					break;
+				}
+
+				// m番目のウェイトより大きいなら上書き
+				// 本来はウェイトの大きい順にソートすべき
+				if (weight > pVertexes_[vertexIndex].boneWeight[m])
+				{
+					/*for (int n = boneCount_ - 1; n > m; n--)
+					{
+						pVertexes_[vertexIndex].boneIndex[n] = pVertexes_[vertexIndex].boneIndex[n - 1];
+						pVertexes_[vertexIndex].boneWeight[n] = pVertexes_[vertexIndex].boneWeight[n - 1];
+					}*/
+					
+					pVertexes_[vertexIndex].boneIndex[m] = i;
+					pVertexes_[vertexIndex].boneWeight[m] = (float)weight;
+					break;
+				}
+			}
+		}
+	}
+
+	/*for (DWORD i = 0; i < vertexCount_; i++)
 	{
 		pWeights_[i].posOrigin = pVertexes_[i].position;
 		pWeights_[i].normalOrigin = pVertexes_[i].normal;
@@ -640,41 +689,7 @@ void mtgb::FbxParts::InitializeSkelton()
 			pWeights_[i].pBoneIndex[j] = -1;
 			pWeights_[i].pBoneWeight[j] = 0.0f;
 		}
-	}
-
-	for (int i = 0; i < boneCount_; i++)
-	{
-		// ボーンに影響を与える頂点数
-		int indicesCount{ ppCluster_[i]->GetControlPointIndicesCount() };
-		// ボーン・ウェイトの情報番号
-		int* pIndex{ ppCluster_[i]->GetControlPointIndices() };
-		// 頂点ごとのウェイト情報
-		double* pWeight{ ppCluster_[i]->GetControlPointWeights() };
-
-		for (int k = 0; k < indicesCount; k++)
-		{
-			for (int m = 0; m < 4; m++)
-			{
-				if (m >= boneCount_)
-				{
-					break;
-				}
-
-				if (pWeight[k] > pWeights_[pIndex[k]].pBoneWeight[m])
-				{
-					for (int n = boneCount_ - 1; n > m; n--)
-					{
-						pWeights_[pIndex[k]].pBoneIndex[n] = pWeights_[pIndex[k]].pBoneIndex[n - 1];
-						pWeights_[pIndex[k]].pBoneWeight[n] = pWeights_[pIndex[k]].pBoneWeight[n - 1];
-					}
-					
-					pWeights_[pIndex[k]].pBoneIndex[m] = i;
-					pWeights_[pIndex[k]].pBoneWeight[m] = (float)pWeight[k];
-					break;
-				}
-			}
-		}
-	}
+	}*/
 
 	// ボーン作る
 	pBones_ = new Bone[boneCount_];
@@ -694,6 +709,57 @@ void mtgb::FbxParts::InitializeSkelton()
 		pBones_[i].bindPose = DirectX::XMLoadFloat4x4(&pose);
 		boneNamePair_[ppCluster_[i]->GetLink()->GetName()] = pBones_ + i;
 	}
+}
+
+
+
+void mtgb::FbxParts::SetBoneMatrix()
+{
+	using namespace DirectX;
+
+	for (int i = 0; i < boneCount_; i++)
+	{
+		FbxAnimEvaluator* evaluator{ ppCluster_[i]->GetLink()->GetScene()->GetAnimationEvaluator() };
+		FbxMatrix mCurrent{ evaluator->GetNodeGlobalTransform(ppCluster_[i]->GetLink(), currentTime_) };
+
+		// FbxMatrix を DirectX::XMMATRIX に変換
+		XMFLOAT4X4 pose{};
+		for (DWORD x = 0; x < 4; x++)
+		{
+			for (DWORD y = 0; y < 4; y++)
+			{
+				pose(x, y) = static_cast<float>(mCurrent.Get(x, y));
+			}
+		}
+
+		// 座標系変換
+		XMFLOAT4X4 mat{};
+		Matrix4x4 mMirror{ XMMatrixIdentity() };
+		XMStoreFloat4x4(&mat, mMirror);
+		mat.m[2][2] = -1.0f;
+
+		mMirror = XMLoadFloat4x4(&mat);
+
+		Matrix4x4 currentPose = XMLoadFloat4x4(&pose) * mMirror;
+		Matrix4x4 bindPoseInv = XMMatrixInverse(nullptr, pBones_[i].bindPose * mMirror);
+		Matrix4x4 finalBoneMatrix = currentPose * bindPoseInv;
+
+		boneMatrices_.boneMatrices[i] = XMMatrixTranspose(finalBoneMatrix);
+	}
+
+	// コンスタントバッファに書き込み
+	D3D11_MAPPED_SUBRESOURCE mappedSubResource{};
+	DirectX11Draw::pContext_->Map(pBoneConstantBuffer_.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedSubResource);
+
+	memcpy_s(mappedSubResource.pData, mappedSubResource.RowPitch, &boneMatrices_, sizeof(BoneMatrices));
+	DirectX11Draw::pContext_->Unmap(pBoneConstantBuffer_.Get(), 0);
+
+	
+}
+
+void mtgb::FbxParts::SetAnimationTime(const FbxTime& _time)
+{
+	currentTime_ = _time;
 }
 
 mtgb::FbxParts::Material::~Material()

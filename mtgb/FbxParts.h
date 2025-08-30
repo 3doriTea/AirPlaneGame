@@ -24,6 +24,8 @@ namespace mtgb
 	class Transform;
 	class DirectX11Draw;
 
+	static const UINT MAX_BONE_COUNT = 128;
+
 	class FbxParts : public IShader
 	{
 		friend DirectX11Draw;
@@ -33,7 +35,11 @@ namespace mtgb
 			Vector3 position;  // 座標
 			Vector3 normal;  // 法線
 			Vector3 uv;  // uv座標
+			uint32_t boneIndex[4];
+			float boneWeight[4];
 		};
+
+	
 
 		struct ConstantBuffer
 		{
@@ -63,6 +69,14 @@ namespace mtgb
 			Texture2D* pTexture;
 		};
 
+
+		struct BoneMatrices
+		{
+			Matrix4x4 boneMatrices[MAX_BONE_COUNT];  // 最大ボーン数
+			bool hasSkinnedMesh; //4バイト
+			// パディングを追加（16バイト境界に合わせる）
+			float padding[3];//12バイト
+		};
 		/// <summary>
 		/// ボーン (関節そのもの)
 		/// </summary>
@@ -71,7 +85,7 @@ namespace mtgb
 			// REF: https://help.autodesk.com/view/MAYACRE/JPN/?guid=GUID-36808BCC-ACF9-4A9E-B0D8-B8F509FEC0D5
 			Matrix4x4 bindPose;  // 初期ポーズ時のボーン変換行列
 			Matrix4x4 newPose;  // アニメーションで変化時のボーン変換行列
-			Matrix4x4 diffPose;  // bindPoseに対する newPoseの変化量
+			//Matrix4x4 diffPose;  // bindPoseに対する newPoseの変化量
 		};
 
 		/// <summary>
@@ -105,13 +119,7 @@ namespace mtgb
 		/// <param name="_transform">座標系</param>
 		/// <param name="_time">アニメーションフレーム</param>
 		void DrawSkinAnimation(const Transform& _transform, FbxTime _time);
-		/// <summary>
-		/// ボーンありでモデルを描画する
-		/// </summary>
-		/// <param name="_takeName"></param>
-		/// <param name="_transform">座標系</param>
-		/// <param name="_time">フレーム</param>
-		void DrawSkinAnimation(const std::string& _takeName, const Transform& _transform, FbxTime _time);
+		
 		/// <summary>
 		/// ボーン無しでモデルを描画する
 		/// </summary>
@@ -167,7 +175,13 @@ namespace mtgb
 		/// </summary>
 		void InitializeSkelton();
 
+		void SetBoneMatrix();
+		bool HasSkinnedMesh() const { return hasSkinnedMesh_; }
+
 	private:
+		void SetAnimationTime(const FbxTime& _time);
+
+		bool hasSkinnedMesh_; // ボーンのあるメッシュか否か
 		uint32_t vertexCount_;  // 頂点数
 		uint32_t polygonCount_;  // ポリゴン数
 		uint32_t indexCount_;  // インデックス数
@@ -178,15 +192,21 @@ namespace mtgb
 		Material* pMaterial_;  // マテリアル
 		FbxMesh* pMesh_;  // メッシュ
 		FbxSkin* pSkin_;  // スキンメッシュ情報 (スキンメッシュアニメーションのデータ)
-		FbxCluster** ppCluster_;  // クラスタ情報 (関節事に関連つけられた頂点情報)
+		FbxCluster** ppCluster_;  // クラスタ情報 (関節ごとに関連つけられた頂点情報)
+		FbxTime currentTime_; // 現在設定されているアニメーションの時間
+
 		int boneCount_;  // FBX に含まれている関節の数
 		Bone* pBones_;  // 各関節の情報配列
 		std::unordered_map<std::string, Bone*> boneNamePair_;  // 関節名とのペア
 		Weight* pWeights_;  // ウェイト情報 (頂点に対する関節の影響度合い)
 		Vertex* pVertexes_;  // 頂点情報
+		
 		DWORD** ppIndexData_;  // インデックス情報
 
 		std::vector<ComPtr<ID3D11Buffer>> ppIndexBuffer_;
+		ComPtr<ID3D11Buffer> pBoneConstantBuffer_;
+
+		BoneMatrices boneMatrices_; //ボーン変換用行列
 	};
 
 }

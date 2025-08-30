@@ -645,6 +645,55 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		},
 	};
 
+	const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_SKINNED[]
+	{
+		{
+			.SemanticName = "POSITION",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 0,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "NORMAL",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 1,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "TEXCOORD",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 2,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "BONE_INDEX",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32A32_UINT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 3,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+		{
+			.SemanticName = "BONE_WEIGHT",
+			.SemanticIndex = 0,
+			.Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+			.InputSlot = 0,
+			.AlignedByteOffset = vectorSize * 4,
+			.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA,
+			.InstanceDataStepRate = 0,
+		},
+	};
+
 	// 2D図形用シェーダの読み込み
 	{
 		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
@@ -832,6 +881,28 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			INPUT_ELEMENT_DESC_TRAIL,
 			sizeof(INPUT_ELEMENT_DESC_TRAIL) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
+
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/FbxPartsSkin.hlsl",
+			ShaderType::FbxPartsSkin,
+			INPUT_ELEMENT_DESC_SKINNED,
+			sizeof(INPUT_ELEMENT_DESC_SKINNED) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+		
 	}
 }
 
