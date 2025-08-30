@@ -187,6 +187,7 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />

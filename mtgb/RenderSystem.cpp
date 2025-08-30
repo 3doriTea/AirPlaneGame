@@ -84,17 +84,60 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	using mtgb::Debug;
 	const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
 
+	// フィルター用のカテゴリ一覧を作成
+	static std::set<std::string> availableCategories;
+	static std::string selectedCategory = "All";
+	
+	// カテゴリを収集
+	availableCategories.clear();
+	availableCategories.insert("All");
+	for (const auto& log : logs)
+	{
+		if (!log.category.empty())
+		{
+			availableCategories.insert(log.category);
+		}
+	}
+
+	// カテゴリフィルター用のコンボボックス
+	if (ImGui::BeginCombo("Category Filter", selectedCategory.c_str()))
+	{
+		for (const auto& category : availableCategories)
+		{
+			bool isSelected = (selectedCategory == category);
+			if (ImGui::Selectable(category.c_str(), isSelected))
+			{
+				selectedCategory = category;
+			}
+			if (isSelected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
+
 	static int selectedLog = -1;
 	int idx = 0;
-	for (const mtgb::LogEntry log : logs)
+	int displayIdx = 0;
+	
+	for (const mtgb::LogEntry& log : logs)
 	{
-		std::string text = log.msg + " (" + std::to_string(log.count) + ")";
+		// フィルター適用
+		if (selectedCategory != "All" && log.category != selectedCategory)
+		{
+			++idx;
+			continue;
+		}
+
+		std::string text = "[" + log.category + "] " + log.msg + " (" + std::to_string(log.count) + ")";
 
 		if (ImGui::Selectable(text.c_str(), selectedLog == idx))
 		{
 			selectedLog = idx;
 		}
 		++idx;
+		++displayIdx;
 	}
 
 	// ログの詳細表示
@@ -104,6 +147,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 		std::advance(it, selectedLog);
 
 		ImGui::Begin("Log Details");
+		ImGui::Text("Category: %s", it->category.c_str());
 		ImGui::Text("File: %s", it->file.c_str());
 		ImGui::Text("Line: %d", it->line);
 		ImGui::Text("Function: %s", it->func.c_str());
@@ -114,7 +158,6 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 	imGui.EndFrame();
 
-	//DirectX11Draw::End();
 }
 
 void mtgb::RenderSystem::RenderGameView(GameScene& _scene)
