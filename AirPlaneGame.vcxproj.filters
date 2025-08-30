@@ -628,9 +628,6 @@
     <ClCompile Include="mtgb\World.cpp">
       <Filter>03mtgb\X-Ignore</Filter>
     </ClCompile>
-    <ClCompile Include="Source\TextBox.cpp">
-      <Filter>01Game\03PlayScene</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\MTNet\Socket.cpp">
       <Filter>03mtgb\Library\MTNet</Filter>
     </ClCompile>
@@ -775,8 +772,14 @@
     <ClCompile Include="Source\VVPlayer.cpp">
       <Filter>01Game\01Common</Filter>
     </ClCompile>
-    <ClCompile Include="mtgb\LockOn.cpp">
-      <Filter>03mtgb</Filter>
+    <ClCompile Include="Source\TargetingSystem.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\UI\OrderText.cpp">
+      <Filter>01Game\05TestScene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TextBox.cpp">
+      <Filter>03mtgb\System\Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1122,9 +1125,6 @@
     <ClInclude Include="mtgb\World.h">
       <Filter>03mtgb\X-Ignore</Filter>
     </ClInclude>
-    <ClInclude Include="Source\TextBox.h">
-      <Filter>01Game\03PlayScene</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SkySphere.h">
       <Filter>01Game\01Common</Filter>
     </ClInclude>
@@ -1347,8 +1347,14 @@
     <ClInclude Include="Source\VVPlayer.h">
       <Filter>01Game\01Common</Filter>
     </ClInclude>
-    <ClInclude Include="mtgb\LockOn.h">
-      <Filter>03mtgb</Filter>
+    <ClInclude Include="Source\TargetingSystem.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\UI\OrderText.h">
+      <Filter>01Game\05TestScene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TextBox.h">
+      <Filter>03mtgb\System\Text</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
