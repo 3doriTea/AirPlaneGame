@@ -110,7 +110,7 @@ namespace mtgb
 	template<typename GameSceneT>
 	inline GameSceneT& GameObject::GetScene()
 	{
-		GameSceneT* pActiveScene{ Game::System<SceneSystem>().GetActiveScene() };
+		GameSceneT* pActiveScene{ static_cast<GameSceneT*>(Game::System<SceneSystem>().GetActiveScene()) };
 		massert(pActiveScene != nullptr
 			&& "アクティブシーンの取得に失敗 @GameObject::GetScene");
 

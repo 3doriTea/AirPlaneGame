@@ -153,6 +153,7 @@
     <ClCompile Include="Source\Bullet.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp" />
+    <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
@@ -366,6 +367,7 @@
     <ClInclude Include="Source\Bullet.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h" />
+    <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\TargetingSystem.h" />

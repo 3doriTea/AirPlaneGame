@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "TestScene/TestScene.h"
 #include "TrailEmitterSystem.h"
+#include "CheckTutorialScene/CheckTutorialScene.h"
 
 #pragma endregion
 
@@ -82,7 +83,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	// 開始時のシーン
 	//Game::System<SceneSystem>().Move<PlayScene>();
-	Game::System<SceneSystem>().Move<TestScene>();
+	Game::System<SceneSystem>().Move<CheckTutorialScene>();
 
 	//_register<MainWindow>(SystemUpdateType::Cycle);
 }
