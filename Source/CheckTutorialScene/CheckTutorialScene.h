@@ -15,4 +15,5 @@ public:
 private:
 	TimerHandle hToNextSceneTimer_;  // プレイシーン遷移までのタイマー
 	bool isSkipTutorial_;  // チュートリアルをスキップするか
+	ImageHandle hBackground_;  // 背景画像
 };
