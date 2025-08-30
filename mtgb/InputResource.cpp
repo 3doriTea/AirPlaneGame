@@ -11,7 +11,11 @@ namespace
 	static int id = 0;
 }
 mtgb::InputResource::InputResource()
-	:pInputData_{nullptr},pKeyDevice_{nullptr},pMouseDevice_{nullptr},pProxy_{nullptr}
+	: pInputData_{nullptr}
+	, pKeyDevice_{nullptr}
+	, pMouseDevice_{nullptr}
+	, pProxy_{nullptr}
+	, assignedJoystickGuid_{GUID_NULL}
 {
 	
 }
@@ -114,6 +118,10 @@ void InputResource::SetResource()
 	if (isInitialized)
 	{
 		input.SetJoystickGuid(assignedJoystickGuid_);
+	}
+	else
+	{
+		input.SetJoystickGuid(GUID_NULL);
 	}
 	input.ChangeInputData(pInputData_);
 }

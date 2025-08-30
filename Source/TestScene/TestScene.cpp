@@ -25,8 +25,6 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	Game::System<WinCtxResManager>().SwapResource<InputResource>();
-
 
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
