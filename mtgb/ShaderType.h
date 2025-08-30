@@ -11,6 +11,7 @@ namespace mtgb
 		Figure,
 		Sprite2D,
 		FbxParts,
+		FbxPartsSkin,
 		Unlit3D,
 		Debug3D,
 		Ground,

@@ -104,16 +104,9 @@ void EnemyPlane::Update()
 
 void EnemyPlane::Draw() const
 {
-	//Draw::SetShaderOnce(ShaderType::Unlit3D);
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
-	
-	/*Draw::ChangeTextAlignment(TextAlignment::center);
-	Draw::Text(hText, 0, 0);
-	Draw::ImmediateText("Banana", 0, 0, 72, TextAlignment::topLeft);*/
-	//Draw::ImmediateText("hello world",0,0);
-	//Game::System<ColliderCP>().TestDraw();
 	
 }
 
