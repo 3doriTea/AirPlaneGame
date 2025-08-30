@@ -215,6 +215,7 @@
     <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
+    <ClInclude Include="mtgb\MTStat\MTStat.h" />
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />

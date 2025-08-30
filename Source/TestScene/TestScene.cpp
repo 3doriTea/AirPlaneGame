@@ -12,6 +12,7 @@
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
+#include "../CheckTutorialScene/CheckTutorialScene.h"
 
 using namespace mtgb;
 
@@ -70,6 +71,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::Y))
+	{
+		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::J))
 	{
