@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sys/stat.h>
 #include "TimeLimit.h"
+#include "TextBox.h"
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
@@ -16,6 +17,7 @@ namespace
 	static const size_t BUFFER_SIZE{ 1024 };
 	mtbin::Byte* buffer = new mtbin::Byte[BUFFER_SIZE];
 	int maxRankingCount{ 5 };
+    Vector2F textPos_{ 400.0f, 400.0f };
 }
 
 ResultScene::ResultScene()
@@ -38,7 +40,7 @@ void ResultScene::Initialize()
 
 	Instantiate<SkySphere>();
 //	Instantiate<ResultText>();
-	Instantiate<TextBox>("tekita", 0.1f);
+//	Instantiate<TextBox>("tekita", 0.1f);
 	Instantiate<ResultLogo>();
 
     timeLimit_ = Instantiate<TimeLimit>(10.0f);

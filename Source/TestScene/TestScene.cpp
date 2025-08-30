@@ -12,6 +12,7 @@
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
+#include "../TestScene/UI/OrderText.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 
 using namespace mtgb;
@@ -53,6 +54,8 @@ void TestScene::Initialize()
 	Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
+
+	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
 
 	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
 
@@ -96,6 +99,8 @@ void TestScene::Update()
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
+
+
 }
 
 void TestScene::Draw() const
