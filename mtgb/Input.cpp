@@ -454,7 +454,7 @@ void mtgb::Input::AssignJoystickToReservation(ComPtr<IDirectInputDevice8> _pJoys
 	if (reservation.onAssign)
 		reservation.onAssign(itr->second.device, guid);
 
-	SetAcquireInterval(guid, itr->second.device);
+	//SetAcquireInterval(guid, itr->second.device);
 
 }
 
