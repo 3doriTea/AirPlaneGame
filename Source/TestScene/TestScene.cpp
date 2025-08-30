@@ -13,6 +13,7 @@
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
 #include "../TestScene/UI/OrderText.h"
+#include "../CheckTutorialScene/CheckTutorialScene.h"
 
 using namespace mtgb;
 
@@ -26,8 +27,6 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	Game::System<WinCtxResManager>().SwapResource<InputResource>();
-
 
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
@@ -75,6 +74,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::Y))
+	{
+		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::J))
 	{

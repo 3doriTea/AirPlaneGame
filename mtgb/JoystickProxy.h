@@ -23,6 +23,8 @@ namespace mtgb
 		std::string connectionStatus;
 		std::string assignmentStatus;
 		std::string lastErrorMessage;
+		std::string deviceName;
+		std::string deviceProductName;
 		bool isConnected;
 		bool isAssigned;
 

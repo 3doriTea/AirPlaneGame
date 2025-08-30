@@ -11,6 +11,7 @@ namespace
 	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // 墜落中のz軸回転(1秒間あたりの回転角度)
 	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
+	const float ENEMY_SCALE{ 1.0f }; // スケール
 }
 
 EnemyPlane::EnemyPlane(
@@ -18,6 +19,7 @@ EnemyPlane::EnemyPlane(
 	const EntityId _playerPlane) : GameObject(GameObjectBuilder()
 	.SetName("Enemy")
 	.SetPosition(_worldPosition)
+	.SetScale({ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE})
 	.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
@@ -34,7 +36,7 @@ EnemyPlane::EnemyPlane(
 	
 	
 	//hText = Text::Load("apple", 72);
-	hModel_ = Fbx::Load("Model/AirPlene.fbx");
+	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
