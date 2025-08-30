@@ -21,7 +21,9 @@ CheckTutorialScene::~CheckTutorialScene()
 
 void CheckTutorialScene::Initialize()
 {
-	hBackground_ = Image::Load("Image/CheckTutorialBackground.png");
+	hImage_[IL_BACKGROUND] = Image::Load("Image/CheckTutorialBackground.png");
+	hImage_[IL_MOUNTAIN] = Image::Load("Image/CheckTutorialBackgroundMt.png");
+	hImage_[IL_PLANE] = Image::Load("Image/CheckTutorialBackgroundPl.png");
 
 	// 一定時間経ったら必ずプレイシーンに遷移
 	hToNextSceneTimer_ = Timer::AddAram(TO_NEXT_SCENE_WAIT_SEC, []()
@@ -37,7 +39,18 @@ void CheckTutorialScene::Update()
 
 void CheckTutorialScene::Draw() const
 {
-	Draw::Image(hBackground_, { { 0, 0 }, BACKGROUND_IMAGE_SIZE });
+	static auto drawImageLayer
+	{
+		[this](const IMAGE_LAYER _layer, const Vector2Int _position)
+		{
+			Draw::Image(hImage_[_layer], {_position, BACKGROUND_IMAGE_SIZE}, { _layer });
+
+		}
+	};
+
+	drawImageLayer(IL_BACKGROUND, Vector2Int::Zero());
+	drawImageLayer(IL_PLANE, Vector2Int::Zero());
+	drawImageLayer(IL_MOUNTAIN, Vector2Int::Zero());
 }
 
 void CheckTutorialScene::End()
