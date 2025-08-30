@@ -28,7 +28,8 @@ void OrderText::Update()
         // ˆÈ‘O‚ÌTextBox‚ª‚ ‚ê‚Î”jŠüiƒƒ‚ƒŠƒŠ[ƒN–hŽ~j
         if (pTextBox_)
         {
-            delete pTextBox_;
+            //delete pTextBox_;
+            pTextBox_->DestroyMe();
             pTextBox_ = nullptr;
         }
 
@@ -46,7 +47,7 @@ void OrderText::Update()
 
 
     std::vector<EnemyPlane*> enemies;
-   // FindGameObjects<EnemyPlane>(&enemies);
+    FindGameObjects<EnemyPlane>(&enemies);
 
     for (const auto& enemy : enemies)
     {
