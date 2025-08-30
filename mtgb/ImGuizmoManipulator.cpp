@@ -207,6 +207,7 @@ mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
 
 mtgb::ImGuizmoManipulator::~ImGuizmoManipulator()
 {
+	pCamera_->DestroyMe();
 	SAFE_DELETE(pCamera_);
 }
 
