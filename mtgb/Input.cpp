@@ -95,12 +95,10 @@ void mtgb::Input::Initialize()
 	massert(SUCCEEDED(hResult)  // DirectInput8のデバイス作成に成功
 		&& "DirectInput8のデバイス作成に失敗 @Input::Initialize");
 
-	//CheckValidPadID();
 }
 
 void mtgb::Input::Update()
 {
-	
 	static HRESULT hResult{};
 
 #pragma region キーボード
@@ -192,33 +190,33 @@ void mtgb::Input::UpdateJoystickDevice()
 	static HRESULT hResult{};
 	
 	if (joystickContext_.empty()) return;
+	if (currJoystickGuid_ == GUID_NULL) return;
 
 	memcpy(
 		&pInputData_->joyStatePrevious_,
 		&pInputData_->joyStateCurrent_,
 		sizeof(DIJOYSTATE));
 
-
 	hResult = joystickContext_[currJoystickGuid_].device->GetDeviceState(sizeof(DIJOYSTATE), &pInputData_->joyStateCurrent_);
 	joystickContext_[currJoystickGuid_].lastResult = hResult;
 	switch (hResult)
 	{
 	case DI_OK:
-		//LOGF("OK\n");
+		// LOGF("OK\n");
 		break;
-	case DIERR_INPUTLOST://入力ロスト、一時的なアクセス不可
+	case DIERR_INPUTLOST:// 入力ロスト、一時的なアクセス不可
 		AcquireJoystick(joystickContext_[currJoystickGuid_].device);
 		return;
-	case DIERR_NOTACQUIRED://未取得
+	case DIERR_NOTACQUIRED:// 未取得
 		AcquireJoystick(joystickContext_[currJoystickGuid_].device);
 		return;
-	default://何らかの失敗
+	default: // 何らかの失敗
 	{
-		//デバイスを割り当て済みリストから除外
+		// デバイスを割り当て済みリストから除外
 		UnregisterJoystickGuid(GetDeviceGuid(joystickContext_[currJoystickGuid_].device));
 		return;
 	}
-	/*massert(false
+	/* massert(false
 		&& "デバイスの状態の取得の際にエラーが起こりました @Input::Update");*/
 	}
 }
@@ -267,8 +265,11 @@ void mtgb::Input::UpdateMousePositionData(
 	const int32_t _x,
 	const int32_t _y)
 {
-	pInputData_->mousePosition_.x = _x;
-	pInputData_->mousePosition_.y = _y;
+	if (pInputData_)
+	{
+		pInputData_->mousePosition_.x = _x;
+		pInputData_->mousePosition_.y = _y;
+	}
 }
 
 void mtgb::Input::CreateKeyDevice(HWND _hWnd, LPDIRECTINPUTDEVICE8* _ppKeyDevice)
@@ -325,8 +326,8 @@ void mtgb::Input::ChangeKeyDevice(ComPtr<IDirectInputDevice8> _pKeyDevice)
 
 void mtgb::Input::SetJoystickGuid(GUID _guid)
 {
-	massert(assignedJoystickGuids_.contains(_guid)
-		&& "無効なGUIDが渡されました @Input::SetJoystickGuid");
+	/*massert(assignedJoystickGuids_.contains(_guid)
+		&& "無効なGUIDが渡されました @Input::SetJoystickGuid");*/
 	currJoystickGuid_ = _guid;
 }
 
@@ -403,7 +404,8 @@ BOOL CALLBACK EnumJoysticksCallback(const LPCDIDEVICEINSTANCE lpddi, LPVOID pvRe
 	}
 
 	input.AssignJoystickToReservation(pDevice, static_cast<size_t>(reservationIndex), lpddi->guidInstance);
-	
+	LOGIMGUI_CAT("Input", "Assigned reservationIndex=%d", reservationIndex);
+
 	// 予約がまだ残っているなら続行
 	return input.IsNotSubscribed() ? DIENUM_STOP : DIENUM_CONTINUE;
 }
@@ -454,8 +456,6 @@ void mtgb::Input::AssignJoystickToReservation(ComPtr<IDirectInputDevice8> _pJoys
 
 	SetAcquireInterval(guid, itr->second.device);
 
-	std::string deviceName = GetDeviceName(_pJoystickDevice);
-	std::string deviceProductName = GetDeviceProductName(_pJoystickDevice);
 }
 
 void mtgb::Input::UnregisterJoystickGuid(GUID _guid)
@@ -630,7 +630,7 @@ bool mtgb::Input::IsJoystickAssigned(GUID guid) const
 
 void mtgb::Input::StartEnumTimer()
 {
-	if (enumTimerHandle_ || IsNotSubscribed())
+	if (!enumTimerHandle_ || IsNotSubscribed())
 		return;
 
 	enumTimerHandle_ = Timer::AddInterval(enumInterval_, [this]() {AutoEnum(); });
@@ -652,8 +652,6 @@ void mtgb::Input::AutoEnum()
 	}
 	EnumJoystick();
 }
-
-
 
 void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, InputConfig _inputConfig)
 {
@@ -720,8 +718,7 @@ void mtgb::Input::SetProperty(ComPtr<IDirectInputDevice8> _pJoystickDevice, Inpu
 
 mtgb::JoystickContext::JoystickContext()
 	:timerHandle{nullptr}
-{
-}
+{}
 
 mtgb::JoystickContext::~JoystickContext()
 {

@@ -44,7 +44,6 @@ TargetingSystem::TargetingSystem()
 
 TargetingSystem::~TargetingSystem()
 {
-	delete currentTarget;
 }
 
 void TargetingSystem::SearchTargets()
