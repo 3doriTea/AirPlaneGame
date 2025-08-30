@@ -1,6 +1,7 @@
 #include "GameObject.h"
 #include "SceneSystem.h"
 #include "Transform.h"
+#include "MTAssert.h"
 
 
 mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
@@ -29,6 +30,8 @@ mtgb::GameObject::GameObject(const GameObject& _other)
 
 mtgb::GameObject::~GameObject()
 {
+	massert(status_.toDestroy_ &&
+		"ゲームオブジェクトを削除するときは直接deleteを呼び出さないでください！");
 }
 
 mtgb::GameObject* mtgb::GameObject::FindGameObject(const std::string& _name)
