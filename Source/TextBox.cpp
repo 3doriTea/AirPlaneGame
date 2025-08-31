@@ -7,8 +7,8 @@ using namespace mtgb;
 
 
 TextBox::TextBox() : GameObject(GameObjectBuilder()
-    .Build()),
-    TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
+	.Build()),
+	TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
 {
 }
 
@@ -22,66 +22,66 @@ TextBox::TextBox(std::string _testText, float _textsec, Vector2F _textpos) : Tex
 
 TextBox::~TextBox()
 {
-    mtgb::Timer::Remove(hTimer_);
-    
-    mtgb::Timer::Remove(cTimer_);
-    testtext_ = "";
+	mtgb::Timer::Remove(hTimer_);
+	
+	mtgb::Timer::Remove(cTimer_);
+	testtext_ = "";
 }
 
 // 1文字あたりの表示秒数
 void TextBox::SetTextSpeedSec(const float _sec)
 {
-    TextSec_ = _sec;
+	TextSec_ = _sec;
 }
 
 // 文字列をいざ表示する
 void TextBox::Show(const std::string& _text)
 {
-    currentIndex_ = 0;
-    finished_ = false;
+	currentIndex_ = 0;
+	finished_ = false;
 
-    if (hTimer_)
-    {
-        mtgb::Timer::Remove(hTimer_);
-        hTimer_ = nullptr;
-    }
+	if (hTimer_)
+	{
+		mtgb::Timer::Remove(hTimer_);
+		hTimer_ = nullptr;
+	}
 
-    hTimer_ = mtgb::Timer::AddInterval(TextSec_, [&,this]()
-        {
+	hTimer_ = mtgb::Timer::AddInterval(TextSec_, [&,this]()
+		{
 
-            if (currentIndex_ < testtext_.size())
-            {
-                ++currentIndex_;
-            }
-            else
-            {
-                finished_ = true;
-                if (hTimer_ != nullptr)
-                {
-                    mtgb::Timer::Remove(hTimer_);
-                    hTimer_ = nullptr;
-                }
+			if (currentIndex_ < testtext_.size())
+			{
+				++currentIndex_;
+			}
+			else
+			{
+				finished_ = true;
+				if (hTimer_ != nullptr)
+				{
+					mtgb::Timer::Remove(hTimer_);
+					hTimer_ = nullptr;
+				}
 
-                // 1秒後にテキストをクリアする単発タイマーをセット
-                cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
-                    {
-                        testtext_.clear();
-                        currentIndex_ = 0;
-                        finished_ = false;
-                        //cTimer_ = nullptr;
-                    });
-            }
-        });
+				// 1秒後にテキストをクリアする単発タイマーをセット
+				cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
+					{
+						testtext_.clear();
+						currentIndex_ = 0;
+						finished_ = false;
+						//cTimer_ = nullptr;
+					});
+			}
+		});
 
-    if (finished_ == true)
-    {
-        testtext_.clear();
-    }
+	if (finished_ == true)
+	{
+		testtext_.clear();
+	}
 }
 
 bool TextBox::IsFinished()
 {
-    return finished_;
+	return finished_;
 }
 
 
