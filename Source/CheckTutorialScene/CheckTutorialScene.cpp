@@ -115,7 +115,7 @@ const Vector2Int CheckTutorialScene::GenPositionMountain() const
 	static const int TO_Y{ 500 };
 	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE.y };
 
-	return Vector2Int(0, Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_);
+	return Vector2Int(0, static_cast<int>(Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_));
 }
 
 const RectF CheckTutorialScene::GenTextBoxTimer() const

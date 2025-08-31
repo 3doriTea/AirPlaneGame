@@ -4,7 +4,7 @@
 #include <vector>
 
 // 読み上げ字幕テキスト
-using SpeechText = std::string_view;
+using SpeechText = std::u8string_view;
 // 読み上げ音声ファイル
 using SpeechAudioFile = std::string_view;
 // 読み上げ時間 (秒)
