@@ -796,6 +796,9 @@
     <ClCompile Include="Source\DemoScene\DemoScene.cpp">
       <Filter>01Game\09DemoScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp">
+      <Filter>01Game\07TutorialScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1379,6 +1382,9 @@
     </ClInclude>
     <ClInclude Include="Source\DemoScene\DemoScene.h">
       <Filter>01Game\09DemoScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialScene\SpeechQueue.h">
+      <Filter>01Game\07TutorialScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

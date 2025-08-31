@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 #include "MTStat/MTStat.h"
+#include "../TextBox.h"
 
 class TutorialScene : public mtgb::GameScene
 {
@@ -35,4 +36,5 @@ public:
 private:
 	TimerHandle hToPlaySceneTimer_;  // プレイシーン遷移までのタイマー
 	mtstat::MTStat<STATE> state_;  // ステート管理
+	TextBox* pTextBox_;  // 字幕
 };

@@ -6,90 +6,90 @@
 using namespace mtgb;
 
 TextBox::TextBox() : GameObject(GameObjectBuilder()
-    .Build()),
-    TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
+	.Build()),
+	TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
 {
 }
 
 TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
 {
-    testtext_ = _testText;
-    SetTextSpeedSec(_textsec);
-    Show(testtext_);
+	testtext_ = _testText;
+	SetTextSpeedSec(_textsec);
+	Show(testtext_);
 }
 
 TextBox::~TextBox()
 {
-    mtgb::Timer::Remove(hTimer_);
-    
-    mtgb::Timer::Remove(cTimer_);
-    testtext_ = "";
+	mtgb::Timer::Remove(hTimer_);
+	
+	mtgb::Timer::Remove(cTimer_);
+	testtext_ = "";
 }
 
 // 1文字あたりの表示秒数
 void TextBox::SetTextSpeedSec(const float _sec)
 {
-    TextSec_ = _sec;
+	TextSec_ = _sec;
 }
 
 // 文字列をいざ表示する
 void TextBox::Show(const std::string& _text)
 {
-    currentIndex_ = 0;
-    finished_ = false;
+	currentIndex_ = 0;
+	finished_ = false;
 
-    if (hTimer_)
-    {
-        mtgb::Timer::Remove(hTimer_);
-        hTimer_ = nullptr;
-    }
+	if (hTimer_)
+	{
+		mtgb::Timer::Remove(hTimer_);
+		hTimer_ = nullptr;
+	}
 
-    hTimer_ = mtgb::Timer::AddInterval(TextSec_, [&,this]()
-        {
+	hTimer_ = mtgb::Timer::AddInterval(TextSec_, [&,this]()
+		{
 
-            if (currentIndex_ < testtext_.size())
-            {
-                ++currentIndex_;
-            }
-            else
-            {
-                finished_ = true;
-                if (hTimer_ != nullptr)
-                {
-                    mtgb::Timer::Remove(hTimer_);
-                    hTimer_ = nullptr;
-                }
+			if (currentIndex_ < testtext_.size())
+			{
+				++currentIndex_;
+			}
+			else
+			{
+				finished_ = true;
+				if (hTimer_ != nullptr)
+				{
+					mtgb::Timer::Remove(hTimer_);
+					hTimer_ = nullptr;
+				}
 
-                // 1秒後にテキストをクリアする単発タイマーをセット
-                cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
-                    {
-                        testtext_.clear();
-                        currentIndex_ = 0;
-                        finished_ = false;
-                        //cTimer_ = nullptr;
-                    });
-            }
-        });
+				// 1秒後にテキストをクリアする単発タイマーをセット
+				cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
+					{
+						testtext_.clear();
+						currentIndex_ = 0;
+						finished_ = false;
+						//cTimer_ = nullptr;
+					});
+			}
+		});
 
-    if (finished_ == true)
-    {
-        testtext_.clear();
-    }
+	if (finished_ == true)
+	{
+		testtext_.clear();
+	}
 }
 
 bool TextBox::IsFinished()
 {
-    return finished_;
+	return finished_;
 }
 
 
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
 {
-    if (currentIndex_ > 0 && !testtext_.empty())
-    {
-        Draw::ChangeTextAlignment(TextAlignment::topLeft);
-        Draw::ImmediateText(testtext_.substr(0, currentIndex_), {400.0f,400.0f}, 48);
-    }
-    //Draw::ImmediateText(testtext_, 0, 30, 100);
+	if (currentIndex_ > 0 && !testtext_.empty())
+	{
+		Draw::ChangeTextAlignment(TextAlignment::topLeft);
+		Draw::ImmediateText(testtext_.substr(0, currentIndex_), {400.0f,400.0f}, 48);
+	}
+	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }
