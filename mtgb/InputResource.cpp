@@ -49,13 +49,18 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 {
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
+	// キーボードの取得
 	Game::System<Input>().CreateKeyDevice(hWnd, pKeyDevice_.ReleaseAndGetAddressOf());
 
+	// マウスの取得
 	Game::System<Input>().CreateMouseDevice(hWnd, pMouseDevice_.ReleaseAndGetAddressOf());
 
+	// 入力状態を保持するデータ
 	pInputData_ = new InputData();
+	// ImGui表示用のプロキシ
 	pProxy_ = new JoystickProxy(pInputData_->joyStateCurrent_);
 
+	// 入力の取り方を設定
 	pInputData_->config_.SetRange(1000);
 	pInputData_->config_.SetDeadZone(0.1);
 	//pProxy_->SetDisplayName("proxy:"+ id++);
@@ -89,14 +94,6 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 	Game::System<Input>().EnumJoystick();
 
-	if (_windowContext == WindowContext::First)
-	{
-		name_ = "FirstWindowController";
-	}
-	else if (_windowContext == WindowContext::Second)
-	{
-		name_ = "SecondWindowController";
-	}
 }
 
 void mtgb::InputResource::Update()

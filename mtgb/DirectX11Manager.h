@@ -35,21 +35,31 @@ namespace mtgb
 		void InitializeCommonResources();
 		void CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDXGISurface** ppDXGISurface);
 		
-		void CreateOutput(int index, IDXGIOutput** ppOutput);
+		//void CreateOutput(int index, IDXGIOutput** ppOutput);
 		void CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1);
 		void CreateRenderTargetView(IDXGISwapChain1* pSwapChain1, ID3D11RenderTargetView** ppRenderTargetView);
 		void CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport);
 		void CreateDepthStencilAndDepthStencilView(const Vector2Int bufSize, ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
-		//void InitializeWindowContext(WindowContext& context, bool isMultiMonitor);
 
-		//void ChangeRenderContext(WindowContext& context);
 		void ChangeViewport(const D3D11_VIEWPORT& viewport);
 		void ChangeRenderTargets(ComPtr<ID3D11RenderTargetView> pRenderTargetView, ComPtr<ID3D11DepthStencilView> pDepthStencilView);
 		void ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1);
-		//void ChangeRenderContext(WindowRenderContext& context);
+				
+		/// <summary>
+		/// 利用可能なモニターを自動で割り当てる
+		/// </summary>
+		/// <param name="ppOutput">これにモニターを割り当てる</param>
+		/// <returns>割り当てられたモニターのインデックス、失敗時は -1</returns>
+		int AssignAvailableMonitor(IDXGIOutput** ppOutput);
+
+		int GetAvailableMonitorCount() const;
 
 		void Release() override;
 	private:
+		/// <summary>
+		/// 利用可能なモニターを列挙する
+		/// </summary>
+		void EnumAvailableMonitors();
 		/// <summary>
 		/// シェーダバンドルを初期化する
 		/// </summary>

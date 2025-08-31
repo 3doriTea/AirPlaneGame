@@ -79,22 +79,7 @@ void TestScene::Update()
 	{
 		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::J))
-	{
-		WinCtxRes::SetFullscreen(true,WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::K))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::N))
-	{
-		WinCtxRes::SetFullscreen(true, WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::M))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::Second);
-	}
+	
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
