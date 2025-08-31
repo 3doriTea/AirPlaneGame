@@ -1,5 +1,14 @@
 #include "TutorialScene.h"
+
 #include "../PlayScene.h"
+#include "../SkySphere.h"
+#include "../Reticle.h"
+
+#include "../TestScene/Terrain.h"
+#include "../TestScene/PlayerPlane.h"
+#include "../TestScene/PlayerGunner.h"
+#include "../TestScene/PlayerPilot.h"
+#include "../TestScene/UI/Radar.h"
 
 namespace
 {
@@ -28,6 +37,32 @@ void TutorialScene::Initialize()
 		.OnUpdate(S_HANDSHAKE, []
 		{
 		});
+
+	TypeRegistry::Instance();
+	TypeRegistry::Instance().Initialize();
+	MTImGui::Instance().Initialize();
+
+	Audio::Clear();
+
+	Instantiate<SkySphere>();
+	Instantiate<Terrain>();
+	Instantiate<Reticle>();
+
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
+
+	PlayerPilot* pPilot{ Instantiate<PlayerPilot>(eIdPlayer) };
+	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
+
+	PlayerGunner* pGunner{ Instantiate<PlayerGunner>(eIdPlayer) };
+	CameraHandleInScene hCamera2 = RegisterCameraGameObject(pGunner);
+
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
+
+	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
+	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
+	pGunner->SetRadarUI(pGunnerRader);
 }
 
 void TutorialScene::Update()

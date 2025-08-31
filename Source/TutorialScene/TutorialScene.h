@@ -26,9 +26,13 @@ public:
 	void Draw() const override;
 	void End() override;
 
+	/// <summary>
+	/// 現在のステートを取得する
+	/// </summary>
+	/// <returns>現在のステート</returns>
 	const STATE GetState() const { return state_.Current(); }
 
 private:
 	TimerHandle hToPlaySceneTimer_;  // プレイシーン遷移までのタイマー
-	mtstat::MTStat<STATE> state_;
+	mtstat::MTStat<STATE> state_;  // ステート管理
 };
