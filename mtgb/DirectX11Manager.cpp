@@ -26,218 +26,7 @@ mtgb::DirectX11Manager::~DirectX11Manager()
 
 void mtgb::DirectX11Manager::Initialize()
 {
-#if 0
-	HRESULT hResult{};
 
-	STARTUPINFO startupInfo{};
-	GetStartupInfo(&startupInfo);
-	int nCmdShow = startupInfo.wShowWindow;
-
-	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	HWND hMainWindow{ Game::System<MainWindow>().GetHWND() };
-
-	// ダブルバッファリングの切り替え役の設定
-	DXGI_SWAP_CHAIN_DESC swapChainDesc
-	{
-		.BufferDesc
-		{
-			.Width = static_cast<UINT>(SCREEN_SIZE.x),
-			.Height = static_cast<UINT>(SCREEN_SIZE.y),
-			.RefreshRate
-			{
-				.Numerator = 60,  // リフレッシュレートの分母
-				.Denominator = 1,  // リフレッシュレートの分子
-			},
-			.Format = DXGI_FORMAT_R8G8B8A8_UNORM,  // 使える色数
-		},
-		.SampleDesc
-		{
-			.Count = 1,
-			.Quality = 0,
-		},
-		.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-		.BufferCount = 1,  // 裏画面の枚数
-		.OutputWindow = hMainWindow,
-		.Windowed = TRUE,  // ウィンドウモードか
-	};
-
-	D3D_FEATURE_LEVEL level{};
-	hResult = D3D11CreateDeviceAndSwapChain(
-		nullptr,                      // ビデオアダプターの指定
-		D3D_DRIVER_TYPE_HARDWARE,     // ドライバのタイプ (ハードウェアかソフトウェアか)
-		nullptr,                      // ドライバのタイプがソフトウェアの場合に指定するモジュール
-		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,    // フラグ (デバッグ用にする),Direct2D使えるようにする
-		nullptr,                      // デバイス、コンテキストのレベル設定 (nullptrで最高レベル)
-		0,                            // レベル設定の数
-		D3D11_SDK_VERSION,            // DirectX11のSDKバージョン
-		&swapChainDesc,               // スワップチェーンの設定
-		&DirectX11Draw::pSwapChain_,  // 作成するスワップチェーンのポインタ渡し
-		&DirectX11Draw::pDevice_,     // 作成するデバイスのポインタ渡し
-		&level,                       // 作成されたデバイス&&コンテキストのレベル情報のポインタ渡し
-		&DirectX11Draw::pContext_);   // 策するコンテキストのポインタ渡し
-
-	massert(SUCCEEDED(hResult)  // D3D11CreateDeviceAndSwapChainに成功している
-		&& "D3D11CreateDeviceAndSwapChainに失敗 @DirectX11Manager::Initialize");
-
-	ID3D11Texture2D* pBackBuffer{ nullptr };
-	hResult = DirectX11Draw::pSwapChain_->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
-
-	massert(SUCCEEDED(hResult)  // スワップチェーンからの0番目バッファ取得に成功している
-		&& "スワップチェーンからの0番目バッファ取得に失敗 @DirectX11Manager::Initialize");
-
-	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, &DirectX11Draw::pRenderTargetView_);
-
-	massert(SUCCEEDED(hResult)  // 描画先の作成に成功している
-		&& "描画先の作成に失敗 @DirectX11Manager::Initialize");
-
-	pBackBuffer->Release();  // バックバッファは使わないため解放する
-
-	D3D11_VIEWPORT viewport  // 描画画面の設定
-	{
-		.TopLeftX = 0,
-		.TopLeftY = 0,
-		.Width = static_cast<float>(SCREEN_SIZE.x),
-		.Height = static_cast<float>(SCREEN_SIZE.y),
-		.MinDepth = 0,
-		.MaxDepth = 1,
-	};
-
-	DirectX11Draw::pContext_->RSSetViewports(
-		1,           // セットするビューポートの数 1つだけ
-		&viewport);  // セットするビューポート (配列可能)
-
-	InitializeShaderBundle();  // シェーダバンドルの初期化
-
-	DirectX11Draw::SetShader(ShaderType::FbxParts);
-
-#pragma region 深度バッファ作成
-	// 深度バッファの設定
-	const D3D11_TEXTURE2D_DESC DEPTH_TEXTURE2D_DESC
-	{
-		.Width = static_cast<UINT>(SCREEN_SIZE.x),
-		.Height = static_cast<UINT>(SCREEN_SIZE.y),
-		.MipLevels = 1,
-		.ArraySize = 1,
-		.Format = DXGI_FORMAT_D32_FLOAT,
-		.SampleDesc
-		{
-			.Count = 1,
-			.Quality = 0
-		},
-		.Usage = D3D11_USAGE_DEFAULT,
-		.BindFlags = D3D11_BIND_DEPTH_STENCIL,
-		.CPUAccessFlags = 0,
-		.MiscFlags = 0,
-	};
-
-	hResult = DirectX11Draw::pDevice_->CreateTexture2D(
-		&DEPTH_TEXTURE2D_DESC,
-		nullptr,
-		&DirectX11Draw::pDepthStencil_);
-
-	massert(SUCCEEDED(hResult)  // 深度ステンシルバッファの作成に失敗
-		&& "深度ステンシルバッファの作成に失敗");
-
-	hResult = DirectX11Draw::pDevice_->CreateDepthStencilView(
-		DirectX11Draw::pDepthStencil_,
-		nullptr,
-		&DirectX11Draw::pDepthStencilView_);
-
-	massert(SUCCEEDED(hResult)  // 深度ステンシルビュの作成に成功
-		&& "深度ステンシルビュの作成に失敗");
-
-	// 深度ステンシルの
-	const D3D11_DEPTH_STENCIL_DESC DEPTH_STENCIL_DESC
-	{
-		.DepthEnable = TRUE,
-		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO,
-		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
-		.StencilEnable = TRUE,
-		.StencilReadMask = {},
-		.StencilWriteMask = {},
-		.FrontFace
-		{
-			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
-			.StencilFunc = D3D11_COMPARISON_ALWAYS,
-		},
-		.BackFace
-		{
-			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
-			.StencilFunc = D3D11_COMPARISON_ALWAYS,
-		}
-	};
-
-	hResult = DirectX11Draw::pDevice_->CreateDepthStencilState(
-		&DEPTH_STENCIL_DESC,
-		&DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)]);
-
-	massert(SUCCEEDED(hResult)  // 深度ステンシルステートの作成に成功
-		&& "深度ステンシルステートの作成に失敗");
-
-	DirectX11Draw::pContext_->OMSetDepthStencilState(
-		DirectX11Draw::pDepthStencilState_[static_cast<size_t>(BlendMode::Default)],
-		0);
-#pragma endregion
-
-#pragma region ブレンドステート作成
-	const D3D11_BLEND_DESC BLEND_DESC
-	{
-		.AlphaToCoverageEnable = FALSE,
-		.IndependentBlendEnable = FALSE,
-		.RenderTarget
-		{
-			D3D11_RENDER_TARGET_BLEND_DESC
-			{
-				.BlendEnable = TRUE,
-				.SrcBlend = D3D11_BLEND_SRC_ALPHA,
-				.DestBlend = D3D11_BLEND_INV_SRC_ALPHA,
-				.BlendOp = D3D11_BLEND_OP_ADD,
-				.SrcBlendAlpha = D3D11_BLEND_ONE,
-				.DestBlendAlpha = D3D11_BLEND_ZERO,
-				.BlendOpAlpha = D3D11_BLEND_OP_ADD,
-				.RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL,
-			},
-		},
-	};
-
-	hResult = DirectX11Draw::pDevice_->CreateBlendState(
-		&BLEND_DESC,
-		&DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)]);
-
-	massert(SUCCEEDED(hResult)  // ブレンドステート作成に成功
-		&& "ブレンドステート作成に失敗");
-
-	float blendFactor[4]{ D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
-	DirectX11Draw::pContext_->OMSetBlendState(
-		DirectX11Draw::pBlendState_[static_cast<size_t>(BlendMode::Default)],
-		blendFactor,
-		0xffffffffU);
-#pragma endregion
-
-	//デフォルトのサンプラー
-	D3D11_SAMPLER_DESC desc = {};
-	desc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-	desc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-	desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-	desc.MinLOD = 0;
-	desc.MaxLOD = D3D11_FLOAT32_MAX;
-	DirectX11Draw::pDevice_->CreateSamplerState(&desc, &DirectX11Draw::pDefaultSamplerState_);
-
-	// テクスチャがない場合でも
-	DirectX11Draw::pContext_->PSSetSamplers(0, 1, &DirectX11Draw::pDefaultSamplerState_);
-
-	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	DirectX11Draw::pContext_->OMSetRenderTargets(
-		1,
-		&DirectX11Draw::pRenderTargetView_,
-		DirectX11Draw::pDepthStencilView_);
-#endif
 	InitializeCommonResources();
 }
 
@@ -298,6 +87,8 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	}
 	/*massert(SUCCEEDED(hResult)
 		&& "EnumAdaptersに失敗 @DirectX11Manager::InitializeCommonResources");*/
+
+	EnumAvailableMonitors(); // モニターの列挙
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
@@ -441,14 +232,14 @@ void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDX
 		&& "QueryInterfaceに失敗 @DirectX11Manager::CreateDXGISurface");
 }
 
-void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
-{
-	HRESULT hResult{};
-	
-	hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(index, ppOutput);
-	massert(SUCCEEDED(hResult)
-		&& "EnumOutputsに失敗 @DirectX11Manager::CreateOutput");
-}
+//void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
+//{
+//	HRESULT hResult{};
+//	
+//	hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(index, ppOutput);
+//	massert(SUCCEEDED(hResult)
+//		&& "EnumOutputsに失敗 @DirectX11Manager::CreateOutput");
+//}
 
 void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1)
 {
@@ -479,7 +270,7 @@ void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, ID
 		DirectX11Draw::pDevice_.Get(),
 		hWnd,
 		&desc,
-		nullptr,//フルスクリーンの設定
+		nullptr,//フルスクリーンの設定。初期状態をフルスクリーンにしたい場合のみDESCを渡して、そうでないならnullptrにしておいて必要に応じてSetFullscreenStateで切り替える
 		pOutput,//出力
 		ppSwapChain1
 	);
@@ -579,9 +370,72 @@ void mtgb::DirectX11Manager::ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1
 	DirectX11Draw::pSwapChain1_ = pSwapChain1;
 }
 
+int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
+{
+	// 初回の列挙
+	if (DirectX11Draw::monitorInfos_.empty())
+	{
+		EnumAvailableMonitors();
+	}
+
+	// 未使用のモニターを探す
+	for (auto& info : DirectX11Draw::monitorInfos_)
+	{
+		if (!info.isRequested)
+		{
+			HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(info.assignedIndex, ppOutput);
+			if (SUCCEEDED(hResult))
+			{
+				info.isRequested = true;
+				return info.assignedIndex;
+			}
+		}
+	}
+
+	// 全て使用済みの場合は、0番目のモニターを返す
+	if (!DirectX11Draw::monitorInfos_.empty())
+	{
+		HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(0, ppOutput);
+		if (SUCCEEDED(hResult))
+		{
+			return 0;
+		}
+	}
+
+	// モニターの割り当て失敗
+	return -1;
+}
+
+int mtgb::DirectX11Manager::GetAvailableMonitorCount() const
+{
+	return static_cast<int>(DirectX11Draw::monitorInfos_.size());
+}
+
 void mtgb::DirectX11Manager::Release()
 {
 	DirectX11Draw::Release();
+}
+
+void mtgb::DirectX11Manager::EnumAvailableMonitors()
+{
+	DirectX11Draw::monitorInfos_.clear();
+
+	UINT i = 0;
+	ComPtr<IDXGIOutput> pOutput;
+	while (DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(i, pOutput.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
+	{
+		MonitorInfo info{};
+		info.assignedIndex = static_cast<int>(i);
+		info.isRequested = false;
+
+		HRESULT hResult = pOutput->GetDesc(&info.desc);
+		if(SUCCEEDED(hResult))
+		{
+			DirectX11Draw::monitorInfos_.push_back(info);
+		}
+		i++;
+		pOutput.Reset();
+	}
 }
 
 void mtgb::DirectX11Manager::InitializeShaderBundle()

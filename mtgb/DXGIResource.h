@@ -9,7 +9,7 @@
 #include "WindowContext.h"
 #include <map>
 #include <typeindex>
-
+#include <string>
 typedef struct HWND__* HWND;
 
 namespace mtgb
@@ -23,6 +23,7 @@ namespace mtgb
 		DXGIResource(const DXGIResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
+		void Update() override;
 		/// <summary>
 		/// フルスクリーンの切り替え
 		/// </summary>
@@ -39,6 +40,7 @@ namespace mtgb
 		// WindowContextResource を介して継承されました
 		WindowContextResource* Clone() const override;
 	private:
-		static unsigned int outputMonitorCounter_;
+		std::string name_;
+		DXGI_OUTPUT_DESC outputDesc_;
 	};
 }

@@ -9,6 +9,7 @@ private:
 		IL_BACKGROUND,  // 背景
 		IL_PLANE,       // 飛行機
 		IL_MOUNTAIN,    // 手前の山
+		IL_MESSAGE,     // メッセージテキスト
 		IL_MAX,  // 最大値
 	};
 
@@ -29,7 +30,9 @@ public:
 
 	const Vector2Int GenPositionPlane() const;
 	const Vector2Int GenPositionMountain() const;
-	const RectF GenTextBox() const;
+	const RectF GenTextBoxTimer() const;
+	const RectF GenTextBoxMsg() const;
+	const RectF GenSlideBar(const float _rate = 1.0f) const;
 
 private:
 	float peekRate_;  // 覗き具合 0.0 ~ 1.0
@@ -37,8 +40,5 @@ private:
 
 	TimerHandle hToNextSceneTimer_;  // プレイシーン遷移までのタイマー
 	bool isSkipTutorial_;  // チュートリアルをスキップするか
-	ImageHandle hImage_[IL_MAX];
-	ImageHandle hBackground_;  // 背景画像
-	ImageHandle hPlane_;  // 背景飛行機画像
-	ImageHandle hMountain_;  // 背景山画像
+	ImageHandle hImage_[IL_MAX];  // 画像ハンドルの配列
 };
