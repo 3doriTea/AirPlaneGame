@@ -7,7 +7,7 @@ OrderText::OrderText(const EntityId _playerId, const GameObjectLayer _layer) : G
 	pPlayerTransform_{ &Transform::Get(_playerId) }
 {
     orderTexts_ = {
-        "‹ß‚­“G‚ª‚¢‚È‚¢‚Ì‚¾I’T‚·‚Ì‚¾",
+        "‹ß‚­‚É“G‚ª‚¢‚È‚¢‚Ì‚¾I’T‚·‚Ì‚¾",
         "‹ß‚­‚É“G‚ª‚¢‚é‚Ì‚¾I",
     };
 
@@ -52,7 +52,7 @@ void OrderText::Update()
     for (const auto& enemy : enemies)
     {
         Transform& enemyTransform = Transform::Get(enemy->GetEntityId());
-		Vector3 toEnemy = Vector3::Normalize(enemyTransform.position - pPlayerTransform_->position);
+		Vector3 toEnemy = enemyTransform.position - pPlayerTransform_->position;
         if (toEnemy.Size() < 50.0f)
         {
             enemyStatus_ = EnemyStatus::NearEnemy;
