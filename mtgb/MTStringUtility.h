@@ -65,6 +65,7 @@ namespace mtgb
 	std::string MultiToUTF8(const char* _string);
 
 	std::wstring UTF8ToWide(const std::string& _string);
+	std::wstring UTF8ToWide(const std::u8string& _string);
 	std::wstring UTF8ToWide(const char* _string);
 
 	std::string WideToUTF8(const std::wstring& _wstring);
