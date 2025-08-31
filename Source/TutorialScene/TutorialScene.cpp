@@ -23,6 +23,11 @@ void TutorialScene::Initialize()
 		{
 			Game::System<SceneSystem>().Move<PlayScene>();
 		});
+
+	state_
+		.OnUpdate(S_HANDSHAKE, []
+		{
+		});
 }
 
 void TutorialScene::Update()
@@ -31,6 +36,8 @@ void TutorialScene::Update()
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
+
+	state_.Update();
 }
 
 void TutorialScene::Draw() const
