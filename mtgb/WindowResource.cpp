@@ -71,31 +71,32 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	case WM_MOUSEMOVE:  // マウスが動いた
 		Game::System<Input>().UpdateMousePositionData(LOWORD(lParam), HIWORD(lParam));
 		return S_OK;
-	case WM_SIZE:  // ウィンドウサイズが変わった
+	//case WM_SIZE:  // ウィンドウサイズが変わった
 
-		return S_OK;
-	case WM_NCCALCSIZE:
-		// wParamについて：TRUEならNCCALCSIZE_PARAMS / FALSEならRect*
-		if (wParam) return 0;
-		break;
-	case WM_NCHITTEST:
-	{
-		LRESULT hitResult{ DefWindowProc(hWnd, msg, wParam, lParam) };
-		switch (hitResult)
-		{
-		case HTLEFT:
-		case HTRIGHT:
-		case HTTOP:
-		case HTBOTTOM:
-		case HTTOPLEFT:
-		case HTTOPRIGHT:
-		case HTBOTTOMLEFT:
-		case HTBOTTOMRIGHT:
-			return HTCLIENT; // サイズは変えさせない
-		default:
-			return hitResult;
-		}
-	}
+	//	return S_OK;
+
+	//case WM_NCCALCSIZE:
+	//	// wParamについて：TRUEならNCCALCSIZE_PARAMS / FALSEならRect*
+	//	if (wParam) return 0;
+	//	break;
+	//case WM_NCHITTEST:
+	//{
+	//	LRESULT hitResult{ DefWindowProc(hWnd, msg, wParam, lParam) };
+	//	switch (hitResult)
+	//	{
+	//	case HTLEFT:
+	//	case HTRIGHT:
+	//	case HTTOP:
+	//	case HTBOTTOM:
+	//	case HTTOPLEFT:
+	//	case HTTOPRIGHT:
+	//	case HTBOTTOMLEFT:
+	//	case HTBOTTOMRIGHT:
+	//		return HTCLIENT; // サイズは変えさせない
+	//	default:
+	//		return hitResult;
+	//	}
+	//}
 	default:  // それ以外のメッセージは譲渡
 		break;
 	}
