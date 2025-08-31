@@ -8,7 +8,7 @@ using namespace mtgb;
 namespace
 {
 	// プレイシーンに遷移するまでの時間(秒)
-	const float TO_NEXT_SCENE_WAIT_SEC{ 50000.0f };
+	const float TO_NEXT_SCENE_WAIT_SEC{ 5.0f };
 	const float TO_MOVE_SCENE_WAIT_SEC{ 10.0f };
 	const Vector2Int BACKGROUND_IMAGE_SIZE{ 1920, 1080 };
 	const Vector2 CANVAS_SIZE{ 1920.0f, 1080.0f };

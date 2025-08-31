@@ -14,6 +14,7 @@ namespace
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
 	const float ENEMY_SCALE{ 1.0f }; // スケール
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
+	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
 }
 
 EnemyPlane::EnemyPlane(
@@ -103,8 +104,17 @@ void EnemyPlane::Update()
 	// もしターゲットしているなら、弾を打つ
 	timeSinceLastshot_ += Time::DeltaTimeF();
 
+	std::vector<EnemyBullet*> bullets;
+	FindGameObjects<EnemyBullet>(&bullets);
+
 	if (lockOnTarget_ && timeSinceLastshot_ >= SHOOT_COOLDOWN)
 	{
+		// 弾の数を制限して、弾の数が5以上の場合は撃たないようにする
+		if (bullets.size() >= MAX_BULLETS)
+		{
+			return;
+		}
+		
 		GameObject::Instantiate<EnemyBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 		timeSinceLastshot_ = 0.0f;
 	}

@@ -29,7 +29,7 @@ EnemyBullet::~EnemyBullet()
 
 void EnemyBullet::Update()
 {
-	pRigidBody_->velocity_ = pTransform_->Forward() * 100.0f;
+	pRigidBody_->velocity_ = pTransform_->Forward() * 60.0f;
 }
 
 void EnemyBullet::Draw() const
