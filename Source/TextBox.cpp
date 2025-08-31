@@ -98,7 +98,7 @@ void TextBox::Draw() const
 	{
 		Draw::ChangeTextAlignment(TextAlignment::topLeft);
 		std::u8string_view cut{ showText_.substr(0, currentIndex_) };
-		Draw::ImmediateText(UTF8ToMulti({ cut.begin(), cut.end() }), drawPosition_, 48);
+		Draw::ImmediateText({ cut.begin(), cut.end() }, drawPosition_, 48);
 	}
 	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }
