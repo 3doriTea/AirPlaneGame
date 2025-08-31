@@ -26,11 +26,35 @@
     <Filter Include="01Game\01Common\Network">
       <UniqueIdentifier>{BD99EDDC-E900-421F-B7A4-0C6009B5CE76}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01Game\01Common\Shader">
+      <UniqueIdentifier>{5e6abeed-62f1-4946-a766-a626106da289}</UniqueIdentifier>
+    </Filter>
     <Filter Include="01Game\02TitleScene">
       <UniqueIdentifier>{8B54B4AD-0409-4961-9B3F-FBEE728A955F}</UniqueIdentifier>
     </Filter>
     <Filter Include="01Game\03PlayScene">
       <UniqueIdentifier>{787764BF-5D53-4B8B-850D-E0CA5E4F2CD8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\04ResultScene">
+      <UniqueIdentifier>{CC9F97F6-335F-4F3E-8243-54EDA3875C18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\05TestScene">
+      <UniqueIdentifier>{f3ea2cb6-7ef2-4eb1-b9a6-6d9a44791181}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\05TestScene\UI">
+      <UniqueIdentifier>{3004756e-d5c0-458e-b75e-843c3b227730}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\06OverScene">
+      <UniqueIdentifier>{e4f96919-f9b0-4a21-a1de-3d2628ba1b16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\07TutorialScene">
+      <UniqueIdentifier>{82DE18CA-25D3-4DC4-A466-059DEF7F3594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\08CheckTutorialScene">
+      <UniqueIdentifier>{DA5A8FB1-6495-4762-9BD6-6AD0E8A8FFAE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01Game\09DemoScene">
+      <UniqueIdentifier>{1EF05A64-E301-4156-AFFB-E1E1EF950954}</UniqueIdentifier>
     </Filter>
     <Filter Include="02Assets">
       <UniqueIdentifier>{135DEEFF-4BB8-46CC-A5A5-E492A0B0220B}</UniqueIdentifier>
@@ -146,6 +170,9 @@
     <Filter Include="03mtgb\Library\MTBit">
       <UniqueIdentifier>{5E0E2846-6D8F-450A-B3FF-F768E6F41879}</UniqueIdentifier>
     </Filter>
+    <Filter Include="03mtgb\Library\MTStat">
+      <UniqueIdentifier>{E7372645-9D4E-4FA6-A57D-647CD5B56EA6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="03mtgb\Library\ImGui">
       <UniqueIdentifier>{90291104-2F3A-46D0-A8F3-49C8CFF88BA3}</UniqueIdentifier>
     </Filter>
@@ -170,17 +197,11 @@
     <Filter Include="04Library\ImGui">
       <UniqueIdentifier>{B083F975-732A-45C3-89FD-9F553D8FE71C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="01Game\05TestScene">
-      <UniqueIdentifier>{f3ea2cb6-7ef2-4eb1-b9a6-6d9a44791181}</UniqueIdentifier>
-    </Filter>
     <Filter Include="03mtgb\System\Audio">
       <UniqueIdentifier>{F90B930B-0998-4579-8DAF-FAB97AFAEFD7}</UniqueIdentifier>
     </Filter>
     <Filter Include="03mtgb\System\Ground">
       <UniqueIdentifier>{de5c7e48-ac63-4fe9-9610-1e5cdb555812}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Game\05TestScene\UI">
-      <UniqueIdentifier>{3004756e-d5c0-458e-b75e-843c3b227730}</UniqueIdentifier>
     </Filter>
     <Filter Include="03mtgb\System\Debug\MTImGui">
       <UniqueIdentifier>{c9172372-b361-434b-90f2-207230460f77}</UniqueIdentifier>
@@ -190,15 +211,6 @@
     </Filter>
     <Filter Include="03mtgb\System\Collider\ColliderInfo">
       <UniqueIdentifier>{94a10e42-91ba-48c8-8387-b63ce42fc08f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Game\01Common\Shader">
-      <UniqueIdentifier>{5e6abeed-62f1-4946-a766-a626106da289}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Game\06OverScene">
-      <UniqueIdentifier>{e4f96919-f9b0-4a21-a1de-3d2628ba1b16}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="01Game\04ResultScene">
-      <UniqueIdentifier>{CC9F97F6-335F-4F3E-8243-54EDA3875C18}</UniqueIdentifier>
     </Filter>
     <!--<Filter Include="mtgb">
       <UniqueIdentifier>{9d90928f-f713-44c3-a09a-4c269d6f0647}</UniqueIdentifier>
@@ -727,16 +739,7 @@
     <ClCompile Include="mtgb\TimeLimit.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\DemoScene\DemoScene.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Health.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\TutorialScene\TutorialScene.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\OverScene.cpp">
@@ -780,6 +783,18 @@
     </ClCompile>
     <ClCompile Include="Source\TextBox.cpp">
       <Filter>03mtgb\System\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutorialScene\TutorialScene.cpp">
+      <Filter>01Game\07TutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CheckTutorialScene\CheckTutorialScene.cpp">
+      <Filter>01Game\08CheckTutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp">
+      <Filter>01Game\08CheckTutorialScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DemoScene\DemoScene.cpp">
+      <Filter>01Game\09DemoScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1299,19 +1314,10 @@
     <ClInclude Include="mtgb\TimeLimit.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\DemoScene\DemoScene.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Health.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\Library\YzTrailEmitter.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\TutorialScene\TutorialScene.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
     <ClInclude Include="Source\OverScene.h">
@@ -1359,8 +1365,20 @@
     <ClInclude Include="mtgb\FlightStickCode.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\TutorialScene\TutorialScene.h">
+      <Filter>01Game\07TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CheckTutorialScene\CheckTutorialScene.h">
+      <Filter>01Game\08CheckTutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h">
+      <Filter>01Game\08CheckTutorialScene</Filter>
+    </ClInclude>
     <ClInclude Include="mtgb\MTStat\MTStat.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+      <Filter>03mtgb\Library\MTStat</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DemoScene\DemoScene.h">
+      <Filter>01Game\09DemoScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
