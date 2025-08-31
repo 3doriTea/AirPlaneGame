@@ -84,7 +84,15 @@ void CheckTutorialScene::Draw() const
 	drawImageLayer(IL_MOUNTAIN, GenPositionMountain());
 	drawImageLayerRect(IL_MESSAGE, GenTextBoxMsg());
 
-	std::string text{ std::string{ std::to_string(toMoveTimeLeft_).substr(0, 3) } + "•b" };
+	std::string text{};
+	if (toMoveTimeLeft_ > 0)
+	{
+		text = std::to_string(toMoveTimeLeft_).substr(0, 3) + "•b";
+	}
+	else
+	{
+		text = "0•b";
+	}
 
 	Draw::ImmediateText(text, GenTextBoxTimer(), 82, TextAlignment::middleLeft, { 0 });
 	
