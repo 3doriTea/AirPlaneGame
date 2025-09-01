@@ -3,6 +3,9 @@
 #include <string>
 #include <wrl/client.h>
 #include "Vector2Int.h"
+#include <dxgi1_2.h> 
+#include <vector>
+
 #pragma comment(lib, "d3d11.lib")  // DirectX11のライブラリ
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")  // シェーダコンパイラ用ライブラリ
@@ -63,6 +66,7 @@ namespace mtgb
 
 		void Release() override;
 	private:
+		std::vector<DXGI_ADAPTER_DESC1> adaptersDesc_;
 		/// <summary>
 		/// 利用可能なモニターを列挙する
 		/// </summary>

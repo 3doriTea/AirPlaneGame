@@ -197,10 +197,8 @@ void mtgb::WindowResource::SetFullScreen(bool _fullscreen)
 	{
 		// フルスクリーンになる
 
-		// 現在のウィンドウのスタイルと位置を保存
-		windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
-		windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
-		GetWindowRect(hWnd_, &windowedRect_);
+
+		//windowedRect_.
 
 		// ウィンドウスタイルを枠なしポップアップに変更
 		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_ & ~(WS_CAPTION | WS_THICKFRAME));
@@ -235,6 +233,14 @@ void mtgb::WindowResource::SetFullScreen(bool _fullscreen)
 			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
 			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 	}
+}
+
+void mtgb::WindowResource::GetWindowInfo()
+{
+	// 現在のウィンドウのスタイルと位置を保存
+	windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
+	windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
+	GetWindowRect(hWnd_, &windowedRect_);
 }
 
 void mtgb::WindowResource::Release()

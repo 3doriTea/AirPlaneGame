@@ -21,6 +21,8 @@ void mtgb::Screen::Initialize()
 	width_    = ProfileInt::Load().Section("SCREEN").Param("Width") .InitValue(800).Get();
 	height_   = ProfileInt::Load().Section("SCREEN").Param("Height").InitValue(600).Get();
 	fpsLimit_ = ProfileInt::Load().Section("GAME")  .Param("Fps")   .InitValue(60) .Get();
+
+	//initialHeight_
 }
 
 void mtgb::Screen::Update()

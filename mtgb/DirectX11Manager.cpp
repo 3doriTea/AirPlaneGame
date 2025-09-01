@@ -3,7 +3,7 @@
 #include "MTAssert.h"
 #include "IncludingWindows.h"
 #include <d3d11.h>
-#include <dxgi1_2.h> 
+
 #include <dxgi.h>
 #include <DirectXMath.h>
 #include "DirectX11Draw.h"
@@ -16,6 +16,7 @@
 #include "WindowContext.h"
 #include "ReleaseUtility.h"
 #include "Direct2D/Direct2D.h"
+#include "MTImGui.h"
 mtgb::DirectX11Manager::DirectX11Manager()
 {
 }
@@ -32,12 +33,16 @@ void mtgb::DirectX11Manager::Initialize()
 
 void mtgb::DirectX11Manager::Update()
 {
-	/*Game::System<MTImGui>().EndFrame();
-	DirectX11Draw::End();
-	
+	MTImGui::Instance().DirectShow([this]() {
+			for (auto& desc : adaptersDesc_)
+			{
+				ImGui::PushID(&desc);
 
-	Game::System<MTImGui>().BeginFrame();
-	DirectX11Draw::Begin();*/
+				TypeRegistry::Instance().CallFunc(&desc, "Desc");
+
+				ImGui::PopID();
+			}
+		}, "AdaptersDesc", ShowType::Inspector);
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()
@@ -83,11 +88,9 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 		DXGI_ADAPTER_DESC1 desc;
 		pAdapter->GetDesc1(&desc);
-		WCHAR* s = desc.Description;
+		adaptersDesc_.push_back(desc);
 	}
-	/*massert(SUCCEEDED(hResult)
-		&& "EnumAdaptersに失敗 @DirectX11Manager::InitializeCommonResources");*/
-
+	
 	EnumAvailableMonitors(); // モニターの列挙
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
@@ -277,7 +280,7 @@ void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, ID
 			},
 		.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
 		.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
-		.Windowed = TRUE, // フルスクリーン
+		.Windowed = FALSE, // フルスクリーン
 	};
 
 	if (fullscreen)
@@ -400,10 +403,10 @@ void mtgb::DirectX11Manager::ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1
 int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 {
 	// 初回の列挙
-	if (DirectX11Draw::monitorInfos_.empty())
+	/*if (DirectX11Draw::monitorInfos_.empty())
 	{
 		EnumAvailableMonitors();
-	}
+	}*/
 
 	// 未使用のモニターを探す
 	for (auto& info : DirectX11Draw::monitorInfos_)
@@ -478,22 +481,26 @@ void mtgb::DirectX11Manager::EnumAvailableMonitors()
 {
 	DirectX11Draw::monitorInfos_.clear();
 
-	UINT i = 0;
-	ComPtr<IDXGIOutput> pOutput;
-	while (DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(i, pOutput.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
+	/*ComPtr<IDXGIAdapter1> pAdapter;
+	for (UINT adapterIndex = 0; DirectX11Draw::pDXGIAdapters_.size();adapterIndex++)
 	{
-		MonitorInfo info{};
-		info.assignedIndex = static_cast<int>(i);
-		info.isRequested = false;
-
-		HRESULT hResult = pOutput->GetDesc(&info.desc);
-		if(SUCCEEDED(hResult))
+		ComPtr<IDXGIOutput> pOutput;
+		UINT outputIndex = 0;
+		while(DirectX11Draw::pDXGIAdapters_[adapterIndex]->EnumOutputs(outputIndex, pOutput.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
 		{
-			DirectX11Draw::monitorInfos_.push_back(info);
+		
+			MonitorInfo info{};
+			info.assignedIndex = static_cast<int>(adapterIndex);
+			info.isRequested = false;
+			HRESULT hResult = pOutput->GetDesc(&info.desc);
+			if (SUCCEEDED(hResult))
+			{
+				DirectX11Draw::monitorInfos_.push_back(info);
+			}
+				pOutput.Reset();
+				
 		}
-		i++;
-		pOutput.Reset();
-	}
+	}*/
 }
 
 void mtgb::DirectX11Manager::InitializeShaderBundle()

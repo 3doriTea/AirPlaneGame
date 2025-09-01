@@ -43,8 +43,8 @@ void mtgb::Sprite::Draw(
 			_pCB->g_matrixWorldRotation = XMMatrixRotationZ(_rotationZ);
 
 #pragma region TODO: 計算見直し必要
-			// スクリーンサイズを一度だけ取得
-			static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+			// スクリーンサイズを取得
+			const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 			// 数学座標と描画座標のy軸差異解消
 			RectF cartesianBox{ _draw };

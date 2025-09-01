@@ -38,6 +38,10 @@ namespace mtgb
 		void OnResize(WindowContext _windowContext, UINT _width, UINT _height) override;
 
 		void SetFullScreen(bool _fullscreen);
+		/// <summary>
+		/// フルスクリーンにする前に情報を保持しておく
+		/// </summary>
+		void GetWindowInfo();
 	private:
 		WindowContext context_;
 		HWND hWnd_;

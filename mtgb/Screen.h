@@ -16,6 +16,8 @@ namespace mtgb
 		inline const Vector2Int GetSize() const { return Vector2Int{ width_,height_ }; }
 		void SetSize(int _width, int _height);
 	private:
+		int initialWidth_;
+		int initialHeight_;
 		int width_;     // スクリーンの横幅
 		int height_;    // スクリーンの縦幅
 		int fpsLimit_;  // FPS制限 (1フレームあたりの更新フレーム数)
