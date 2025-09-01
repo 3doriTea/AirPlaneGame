@@ -68,10 +68,22 @@ namespace mtgb
 		void UpdateGameViewRect();
 		void End();
 		void Release();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void ResetComPtrs();
+		/// <summary>
+		/// ウィンドウリサイズ時の処理
+		/// </summary>
+		/// <param name="width">新しい幅</param>
+		/// <param name="height">新しい高さ</param>
+		void OnResize(UINT width, UINT height);
 		
 		const D3D11_VIEWPORT& GetViewport() { return viewport_; }
 		ImGuizmoManipulator&  Manipulator() { return *manipulator_; };
 	private:
+		void CreateD3DResources();
 		UINT winWidth_, winHeight_;
 		bool isManipulatingGuizmo_;
 		ImGuizmoManipulator* manipulator_;
@@ -84,6 +96,7 @@ namespace mtgb
 		//ImGuiIO io;
 		ComPtr<ID3D11RenderTargetView> pRenderTargetView_;
 		ComPtr<ID3D11ShaderResourceView> pSRV_;
+		ComPtr<ID3D11Texture2D> pSRVTexture_;
 		ComPtr<ID3D11Texture2D> pTexture_;
 		ComPtr<ID3D11Texture2D> pDepthStencil_;
 		ComPtr<ID3D11DepthStencilView> pDepthStencilView_;

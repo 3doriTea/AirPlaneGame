@@ -30,10 +30,10 @@ namespace mtgb
 		void Update() override;
 		void Draw();
 		void Release();
+		void Reset();
 		D2D1_SIZE_F GetRenderTargetSize();
 	private:
-		static ID2D1Factory* pD2DFactory_;
-		static IDXGISurface* pDefDXGISurface_;
+		static ComPtr<ID2D1Factory> pD2DFactory_;
 
 		static ComPtr<ID2D1SolidColorBrush> pDefD2DBrush_;
 		static ComPtr<ID2D1RenderTarget> pDefRenderTarget_;

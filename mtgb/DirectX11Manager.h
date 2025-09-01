@@ -41,10 +41,17 @@ namespace mtgb
 		void CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport);
 		void CreateDepthStencilAndDepthStencilView(const Vector2Int bufSize, ID3D11Texture2D** ppDepthStencil, ID3D11DepthStencilView** ppDepthStencilView);
 
+
 		void ChangeViewport(const D3D11_VIEWPORT& viewport);
 		void ChangeRenderTargets(ComPtr<ID3D11RenderTargetView> pRenderTargetView, ComPtr<ID3D11DepthStencilView> pDepthStencilView);
 		void ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1);
 				
+		void ClearState();
+		/// <summary>
+		/// ClearState後に必要なデフォルト状態を再設定
+		/// </summary>
+		void SetDefaultStates();
+		
 		/// <summary>
 		/// 利用可能なモニターを自動で割り当てる
 		/// </summary>

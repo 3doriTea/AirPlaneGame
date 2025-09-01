@@ -36,7 +36,7 @@ EnemyPlane::EnemyPlane(
 	
 	
 	//hText = Text::Load("apple", 72);
-	hModel_ = Fbx::Load("Model/Enemy01.fbx");
+	//hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "“G”òs‹@ƒ‚ƒfƒ‹“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
@@ -104,7 +104,7 @@ void EnemyPlane::Update()
 
 void EnemyPlane::Draw() const
 {
-	Draw::FBXModel(hModel_, *pTransform_, 0);
+	//Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
 	

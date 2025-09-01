@@ -15,7 +15,7 @@
 #include "HLSLInclude.h"
 #include "WindowContext.h"
 #include "ReleaseUtility.h"
-
+#include "Direct2D/Direct2D.h"
 mtgb::DirectX11Manager::DirectX11Manager()
 {
 }
@@ -218,15 +218,15 @@ void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDX
 	HRESULT hResult{};
 	
 	//バックバッファ受け取る
-	ID3D11Texture2D* pBackBuffer = nullptr;
-	hResult = pSwapChain1->GetBuffer(0, _uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
+	hResult = pSwapChain1->GetBuffer(0, _uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 	massert(SUCCEEDED(hResult)
 		&& "GetBufferに失敗 @DirectX11Manager::CreateDXGISurface");
 
 	//バックバッファからIDXGISurfaceインターフェースを取り出す
 	hResult = pBackBuffer->QueryInterface(IID_PPV_ARGS(ppDXGISurface));
 
-	SAFE_RELEASE(pBackBuffer);
+	pBackBuffer.Reset();
 
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterfaceに失敗 @DirectX11Manager::CreateDXGISurface");
@@ -263,17 +263,45 @@ void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, ID
 		.Scaling = DXGI_SCALING_STRETCH,
 		.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
 		.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
-		.Flags = 0
+		.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
 	};
 
-	hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
-		DirectX11Draw::pDevice_.Get(),
-		hWnd,
-		&desc,
-		nullptr,//フルスクリーンの設定。初期状態をフルスクリーンにしたい場合のみDESCを渡して、そうでないならnullptrにしておいて必要に応じてSetFullscreenStateで切り替える
-		pOutput,//出力
-		ppSwapChain1
-	);
+	// 仮のフラグ、
+	bool fullscreen = false;
+	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc = 
+	{
+		.RefreshRate
+			{
+				.Numerator = 60,
+				.Denominator = 1
+			},
+		.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
+		.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
+		.Windowed = TRUE, // フルスクリーン
+	};
+
+	if (fullscreen)
+	{
+		hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
+			DirectX11Draw::pDevice_.Get(),
+			hWnd,
+			&desc,
+			&fullscreenDesc,//フルスクリーンの設定
+			pOutput,//出力
+			ppSwapChain1
+		);
+	}
+	else
+	{
+		hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
+			DirectX11Draw::pDevice_.Get(),
+			hWnd,
+			&desc,
+			nullptr,//初期状態をフルスクリーンにしたい場合のみDESCを渡して、そうでないならnullptrにしておいて必要に応じてSetFullscreenStateで切り替える
+			pOutput,//出力
+			ppSwapChain1
+		);
+	}
 	massert(SUCCEEDED(hResult)
 		&& "CreateSwapChainForHwndに失敗 @DirectX11Manager::CreateSwapChain");
 }
@@ -282,21 +310,20 @@ void mtgb::DirectX11Manager::CreateRenderTargetView(IDXGISwapChain1* pSwapChain1
 {
 	HRESULT hResult{};
 	
-	ID3D11Texture2D* pBackBuffer{ nullptr };
-	hResult = pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	ComPtr<ID3D11Texture2D> pBackBuffer{ nullptr };
+	hResult = pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 	massert(SUCCEEDED(hResult) 
 		&& "GetBufferに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, ppRenderTargetView);
+	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer.Get(), nullptr, ppRenderTargetView);
 	massert(SUCCEEDED(hResult)
 		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	SAFE_RELEASE(pBackBuffer);
+	pBackBuffer.Reset();
 }
 
 void mtgb::DirectX11Manager::CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport)
 {
-	
 	viewport =
 	{
 		.TopLeftX = 0,
@@ -414,6 +441,37 @@ int mtgb::DirectX11Manager::GetAvailableMonitorCount() const
 void mtgb::DirectX11Manager::Release()
 {
 	DirectX11Draw::Release();
+}
+
+void mtgb::DirectX11Manager::ClearState()
+{
+	// パイプラインにバインドされた全てをリセット
+	DirectX11Draw::pContext_->ClearState();
+	// 描画コマンドを強制的にGPUに送り出す
+	DirectX11Draw::pContext_->Flush();
+
+	//ID3D11CommandList* pCmdList = nullptr;
+	//// 描画コマンドが残っているなら破棄
+	//DirectX11Draw::pContext_->FinishCommandList(FALSE, &pCmdList);
+	//if (pCmdList)
+	//{
+	//	pCmdList->Release();
+	//}
+	Game::System<Direct2D>().Reset();
+	DirectX11Draw::pDepthStencil_.Reset();
+	DirectX11Draw::pDepthStencilView_.Reset();
+	DirectX11Draw::pRenderTargetView_.Reset();
+	//DirectX11Draw::pSwapChain1_.Reset();
+}
+
+void mtgb::DirectX11Manager::SetDefaultStates()
+{
+	// PrimitiveTopology を再設定
+	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+	// 必要に応じて他のデフォルト状態も再設定
+	// 例：デフォルトサンプラーステート、ブレンドステートなど
+	/*DirectX11Draw::pContext_->PSGetSamplers*/
 }
 
 void mtgb::DirectX11Manager::EnumAvailableMonitors()
@@ -774,7 +832,7 @@ void mtgb::DirectX11Manager::CompileShader(
 	// 項点シェーダのインタフェース
 	ID3DBlob* pCompileVS{ nullptr };
 
-	// 項点シェーダのコンパイル
+	// 頂点シェーダのコンパイル
 	hResult = D3DCompileFromFile(
 		_fileName.c_str(),  // ファイルパス
 		nullptr,            // シェーダマクロの配列

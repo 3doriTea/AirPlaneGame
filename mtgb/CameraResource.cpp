@@ -42,6 +42,11 @@ void mtgb::CameraResource::SetResource()
     Game::System<CameraSystem>().SetDrawCamera(hCamera_);
 }
 
+void mtgb::CameraResource::Release()
+{
+
+}
+
 mtgb::WindowContextResource* mtgb::CameraResource::Clone() const
 {
     return new CameraResource(*this);

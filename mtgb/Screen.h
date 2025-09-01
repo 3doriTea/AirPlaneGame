@@ -13,8 +13,8 @@ namespace mtgb
 		void Initialize() override;
 		void Update() override;
 
-		inline const Vector2Int GetSize() const { return{ width_, height_ }; }
-
+		inline const Vector2Int GetSize() const { return Vector2Int{ width_,height_ }; }
+		void SetSize(int _width, int _height);
 	private:
 		int width_;     // スクリーンの横幅
 		int height_;    // スクリーンの縦幅

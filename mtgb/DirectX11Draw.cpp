@@ -7,7 +7,7 @@
 #include "IShader.h"
 #include "DirectWrite.h"
 #include "OBJ.h"
-
+#include "Debug.h"
 
 using namespace mtgb;
 
@@ -78,7 +78,11 @@ void mtgb::DirectX11Draw::End()
 {
 	// スワップして画面更新
 	//pSwapChain_->Present(0U, 0U);
-	pSwapChain1_->Present(0U, 0U);
+	HRESULT hr = pSwapChain1_->Present(0U, 0U);
+	if (FAILED(hr))
+	{
+		LOGIMGUI_CAT("Device", "failed SwapChain::Present:Error-%ld");
+	}
 	//pSwapChain_->Present(0U, 0U);
 }
 
