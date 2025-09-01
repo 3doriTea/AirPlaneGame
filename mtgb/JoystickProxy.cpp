@@ -20,6 +20,8 @@ void mtgb::JoystickProxy::UpdateFromInput(GUID guid)
     connectionStatus = input.IsJoystickConnected(guid) ? "Ú‘±’†" : "Ø’f";
     assignmentStatus = input.IsJoystickAssigned(guid) ? "Š„‚è“–‚ÄÏ‚İ" : "–¢Š„“–";
     lastErrorMessage = input.GetJoystickStatusMessage(guid);
+    deviceName = input.GetDeviceName(guid);
+    deviceProductName = input.GetDeviceProductName(guid);
 }
 
 void mtgb::JoystickProxy::UpdateInputData(const DIJOYSTATE& js)

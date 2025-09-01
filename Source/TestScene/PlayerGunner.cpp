@@ -1,7 +1,7 @@
 #include "PlayerGunner.h"
 #include "PlayerBullet.h"
 #include "UI/Radar.h"
-
+#include "../TargetingSystem.h"
 using namespace mtgb;
 
 namespace
@@ -17,13 +17,25 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	angleX_{ 0.0f },
 	angleY_{ 0.0f },
 	pRadarUI_{ nullptr },
-	pPlaneTransform_{ &Transform::Get(_plane) }
+	pPlaneTransform_{ &Transform::Get(_plane) },
+	pTargetingSystem_{}
 {
 	pTransform_->SetParent(_plane);
+
+	Vector2Int screenSize = Game::System<Screen>().GetSize();
+	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
+	float lockOnSide = 400.0f;
+
+	// TargetingSystem‚ð‰Šú‰»
+	pTargetingSystem_ = new TargetingSystem();
+	pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
+	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
+	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 }
 
 PlayerGunner::~PlayerGunner()
 {
+	delete pTargetingSystem_;
 }
 
 void PlayerGunner::Update()
@@ -43,11 +55,9 @@ void PlayerGunner::Update()
 	}
 	else if (axis.y < 0)
 		angleX_ -= ANGLE_SPEED * Time::DeltaTimeF();
-		if (angleX_ < ANGLE_X_MIN)
-		{
-			angleX_ = ANGLE_X_MIN;
-		}
+	if (angleX_ < ANGLE_X_MIN)
 	{
+		angleX_ = ANGLE_X_MIN;
 	}
 	// ‰E
 	if (axis.x > 0)
@@ -112,23 +122,21 @@ void PlayerGunner::Update()
 	Vector3 forward{ Vector3::Forward() };
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.001f);
 
-
-
 	pTransform_->rotate = curr;
 
-
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
-	{
-		Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
-		LOGIMGUI("Gunner:shoot");
-	}
 	Vector3 worldPos{ pTransform_->GetWorldPosition() };
 	Vector3 parentWorldPos{ pTransform_->GetParent()->GetWorldPosition() };
 	//LOGF("G:Pos(%f, %f, %f)\n", pTransform_->position.x, pTransform_->position.y, pTransform_->position.z);
 	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
 	//LOGF("G:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
-	Vector3 worldDiff{ worldPos - parentWorldPos };
+
+	pTargetingSystem_->SearchTargets();
+	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
+	{
+		//Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
+		pTargetingSystem_->FireAtTarget();
+	}
 
 	if (pRadarUI_)
 	{
@@ -136,7 +144,6 @@ void PlayerGunner::Update()
 		using namespace DirectX;
 
 		Vector3 forward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
-		//Vector3 
 
 		angle = DirectX::XMVector3Dot(forward, pPlaneTransform_->Forward()).m128_f32[0];
 
@@ -144,10 +151,9 @@ void PlayerGunner::Update()
 		pRadarUI_->SetViewAngle(angle);
 	}
 	
-	//MTImGui::Instance().TypedShow(pTransform_, "PlayerGunner");
 }
 
 void PlayerGunner::Draw() const
 {
-	
+	pTargetingSystem_->DrawUI();
 }

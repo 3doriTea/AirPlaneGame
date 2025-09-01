@@ -34,7 +34,7 @@ namespace mtgb
 		InputData* pInputData_;
 	private:
 		std::string name_;
-		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pKeyDevice_;
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;
 		JoystickProxy* pProxy_;

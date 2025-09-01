@@ -107,7 +107,6 @@ void mtgb::Timer::Update()
 			continue;  // Œã‘±‚àI—¹‚µ‚Ä‚¢‚é‰Â”\«‚ª‚ ‚é‚½‚ßŒp‘±
 		}
 	}
-
 	// íœ—\’è‚Ì‚â‚Â‚ğÁ‚·
 	for (auto itr = pReenqueueElements_.begin(); itr != pReenqueueElements_.end();)
 	{

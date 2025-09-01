@@ -12,6 +12,8 @@
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
+#include "../TestScene/UI/OrderText.h"
+#include "../CheckTutorialScene/CheckTutorialScene.h"
 
 using namespace mtgb;
 
@@ -25,9 +27,6 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	Game::System<WinCtxResManager>().SwapResource<InputResource>();
-
-
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
 	MTImGui::Instance().Initialize();
@@ -55,6 +54,8 @@ void TestScene::Initialize()
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 
+	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
+
 	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
 
 	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
@@ -73,26 +74,17 @@ void TestScene::Update()
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::J))
+	if (InputUtil::GetKeyDown(KeyCode::Y))
 	{
-		WinCtxRes::SetFullscreen(true,WindowContext::First);
+		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::K))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::N))
-	{
-		WinCtxRes::SetFullscreen(true, WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::M))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::Second);
-	}
+	
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
+
+
 }
 
 void TestScene::Draw() const

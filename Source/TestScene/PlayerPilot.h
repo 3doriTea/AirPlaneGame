@@ -1,6 +1,9 @@
 #pragma once
 #include <mtgb.h>
 
+
+struct TargetingSystem;
+
 class PlayerPilot : public mtgb::GameObject
 {
 public:
@@ -11,20 +14,6 @@ public:
 	void Draw() const override;
 
 private:
-	//ロックオンの正方形の一辺の長さ
-	float lockOnSide_;
-	float enemyFrameSideExtents_;
-	RectF lockOnRect_;
-	RectF enemyFrameRect_;
-	bool lockOnAny_;
-	float lockOnDistance_;//前方幾つまでロックオン有効か
-	void LockOn();
-	void Shoot();
+	TargetingSystem* pTargetingSystem_;
 	Transform* pTransform;
-	ImageHandle lockOnFrame_;
-	ImageHandle lockOnReticle_;
-	
-	UIParams uiParams_;
-	RectDetector rectDetector;
-	RectContainsInfo* pTargetInfo_;
 };

@@ -15,6 +15,7 @@ ComPtr<ID3D11Device> DirectX11Draw::pDevice_{ nullptr };  // •`‰æ‚ğs‚¤‚½‚ß‚ÌŠÂ‹
 ComPtr<ID3D11DeviceContext> DirectX11Draw::pContext_{ nullptr };
 ComPtr<IDXGIDevice1> DirectX11Draw::pDXGIDevice_{ nullptr };
 std::vector<ComPtr<IDXGIAdapter1>> DirectX11Draw::pDXGIAdapters_{};
+std::vector<MonitorInfo> DirectX11Draw::monitorInfos_{};
 ComPtr<IDXGIFactory2> DirectX11Draw::pDXGIFactory_{ nullptr };
 
 IDXGISwapChain* DirectX11Draw::pSwapChain_{ nullptr };  // ƒ_ƒuƒ‹ƒoƒbƒtƒ@ƒŠƒ“ƒO‚·‚é‚â‚Â

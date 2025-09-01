@@ -10,6 +10,10 @@ mtgb::GameScene::GameScene()
 
 mtgb::GameScene::~GameScene()
 {
+	for (auto& pGameObject : pGameObjects_)
+	{
+		pGameObject->DestroyMe();  // íœƒtƒ‰ƒO‚ð—§‚Ä‚Ä‚¨‚­
+	}
 	SAFE_CLEAR_CONTAINER_DELETE(pGameObjects_);
 }
 

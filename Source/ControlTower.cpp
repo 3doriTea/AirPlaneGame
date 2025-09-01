@@ -7,10 +7,10 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	.SetName("ControlTower")
 	.Build())
 	,detectionRadius_{30.0f}
-	, pGunner_{nullptr,INVALD_ENTITY}
-	, pPilot_{nullptr,INVALD_ENTITY}
+	
 {
-
+	pGunner_ = { nullptr,INVALD_ENTITY };
+	pPilot_ = { nullptr,INVALD_ENTITY };
 }
 
 ControlTower::~ControlTower()
