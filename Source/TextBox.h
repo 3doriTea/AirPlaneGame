@@ -20,7 +20,11 @@ public:
 	/// テキストを非表示にする
 	/// </summary>
 	void Hide();
-	bool IsFinished();  // 表示し終わっている true / false
+	/// <summary>
+	/// 字幕再生が終了しているか
+	/// </summary>
+	/// <returns>終了している true / false</returns>
+	bool IsFinished();
 	void Draw() const override;  // 所属するゲームオブジェクトから呼ぶ
 
 private:
