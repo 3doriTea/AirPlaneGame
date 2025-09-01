@@ -11,6 +11,8 @@ namespace mtgb
 		AudioOneShot();
 		~AudioOneShot();
 
+		void Release();
+
 		float timeLeft;
 		IXAudio2SourceVoice* pSourceVoice;
 		AudioClip* pAudioClip;
