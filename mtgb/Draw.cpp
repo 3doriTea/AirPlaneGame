@@ -52,7 +52,10 @@ void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& 
 		[=]()
 		{
 			CheckSetShader(ShaderType::Figure);
-			Game::System<Draw>().pFigure_->Draw(_rect, _color);
+
+			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+
+			Game::System<Draw>().pFigure_->Draw(RectF{ _rect.point * ratio ,_rect.size * ratio }, _color);
 		}
 		});	
 }
@@ -70,7 +73,10 @@ void mtgb::Draw::Image(
 		{
 			CheckSetShader(ShaderType::Sprite2D);
 			Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
-			pSprite->Draw(_draw, _rotationZ, _cut, Color::WHITE);
+
+			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+
+			pSprite->Draw(RectF{ _draw.point * ratio, _draw.size * ratio }, _rotationZ, RectF{ _cut.point * ratio, _cut.size * ratio }, Color::WHITE);
 		}
 		});
 }
@@ -90,10 +96,10 @@ void mtgb::Draw::Image(
 		[=]() {
 			CheckSetShader(ShaderType::Sprite2D);
 
-	Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
+			Sprite* pSprite{ Game::System<mtgb::Image>().GetSprite(_hImage) };
 
-	const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
-	pSprite->Draw(&_transform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
+			const Transform* pCameraTransform = &(Game::System<CameraSystem>().GetTransform());
+			pSprite->Draw(&_transform, pCameraTransform, pSprite->GetSize(), Color::WHITE);
 		} });
 	
 }
@@ -132,7 +138,10 @@ void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlign
 		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(layoutData->fontSize);
 
 		Game::System<mtgb::DirectWrite>().SetTextAlignment(_alignment, layoutData->layout);
-		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x, _origin.y + formatData->pixelFontMetrics.textTopOffset);
+
+		const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+
+		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x * ratio.x, (_origin.y + formatData->pixelFontMetrics.textTopOffset) * ratio.y );
 		} });
 }
 
@@ -152,11 +161,13 @@ void mtgb::Draw::ImmediateTextW(const std::wstring& _text, RectF _rect, int _siz
 
 			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+
 			Game::System<DirectWrite>().ImmediateDraw(_text, formatData->format, formatData->pixelFontMetrics,
-				_rect.x,
-				_rect.y,
-				_rect.width,
-				_rect.height);
+				_rect.x * ratio.x,
+				_rect.y * ratio.y,
+				_rect.width * ratio.x,
+				_rect.height * ratio.y);
 		}
 		});
 }
@@ -183,11 +194,13 @@ void mtgb::Draw::ImmediateText(const std::string& _text, RectF _rect, int _size,
 
 			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+
+			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 			Game::System<DirectWrite>().ImmediateDraw(MultiToWide(_text), formatData->format, formatData->pixelFontMetrics,
-				_rect.x,
-				_rect.y,
-				_rect.width,
-				_rect.height);
+				_rect.x * ratio.x,
+				_rect.y * ratio.y,
+				_rect.width * ratio.y,
+				_rect.height * ratio.y);
 		}
 		});
 }
@@ -203,11 +216,13 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 
 		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
 		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+
+		const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		Game::System<DirectWrite>().ImmediateDraw(MultiToWide(text), formatData->format, formatData->pixelFontMetrics,
-			_rect.x,
-			_rect.y,
-			_rect.width,
-			_rect.height);
+			_rect.x * ratio.x,
+			_rect.y * ratio.y,
+			_rect.width * ratio.y,
+			_rect.height * ratio.y);
 	}
 		});
 }

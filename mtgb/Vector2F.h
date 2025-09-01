@@ -13,4 +13,6 @@ namespace mtgb
 	{
 		return Vector2T<float>(1.0f, 1.0f);
 	}
+
+
 }

@@ -96,6 +96,18 @@ namespace mtgb
 		}
 
 		template<typename T, typename U>
+		inline auto operator*(const Vector2T<T>& _v, Vector2T<U>)
+			-> Vector2T<std::common_type_t<T, U>>
+		{
+			using R = std::common_type_t<T, U>;
+			return Vector2T<R>
+				(
+					static_cast<R>(lhs.x) * static_cast<R>(rhs.x),
+					static_cast<R>(lhs.y) * static_cast<R>(rhs.y)
+				);
+		}
+
+		template<typename T, typename U>
 		inline auto operator*(U _scalar, const Vector2T<T>& _v)
 			-> Vector2T<std::common_type_t<T, U>>
 		{

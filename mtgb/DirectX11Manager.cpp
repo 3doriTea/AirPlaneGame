@@ -40,6 +40,7 @@ void mtgb::DirectX11Manager::Update()
 				TypeRegistry::Instance().CallFunc(&desc, "AdapterDesc");
 				ImGui::PopID();
 			}
+			ImGui::Separator();
 			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
 			{
 				ImGui::PushID(&monitorInfo);
@@ -239,14 +240,7 @@ void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDX
 		&& "QueryInterface‚ÉŽ¸”s @DirectX11Manager::CreateDXGISurface");
 }
 
-//void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
-//{
-//	HRESULT hResult{};
-//	
-//	hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(index, ppOutput);
-//	massert(SUCCEEDED(hResult)
-//		&& "EnumOutputs‚ÉŽ¸”s @DirectX11Manager::CreateOutput");
-//}
+
 
 void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1)
 {

@@ -3,6 +3,8 @@
 #include <d3d11.h>
 #include "DirectX11Draw.h"
 #include "RectInt.h"
+#include "RectF.h"
+#include "Vector2F.h"
 #include "Game.h"
 #include "Screen.h"
 
@@ -18,6 +20,11 @@ mtgb::Figure::~Figure()
 void mtgb::Figure::Draw(
 	const RectInt& _rect,
 	const Color& _color)
+{
+	Draw(_rect, _color);
+}
+
+void mtgb::Figure::Draw(const RectF& _rect, const Color& _color)
 {
 	using DirectX::XMMatrixScaling;      // 拡縮
 	using DirectX::XMMatrixTranspose;    // 行と列を入れ替える
@@ -37,12 +44,12 @@ void mtgb::Figure::Draw(
 			static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 			// 数学座標と描画座標のy軸差異解消
-			RectInt cartesianBox{ _rect };
+			RectF cartesianBox{ _rect };
 			cartesianBox.y = SCREEN_SIZE.y - cartesianBox.y;
 			cartesianBox.height *= -1;
 
-			const Vector2Int VIEW_BEGIN{ cartesianBox.GetBegin() };
-			const Vector2Int VIEW_END{ cartesianBox.GetEnd() };
+			const Vector2F VIEW_BEGIN{ cartesianBox.GetBegin() };
+			const Vector2F VIEW_END{ cartesianBox.GetEnd() };
 
 			// 表示するサイズに合わせる
 			Matrix4x4 scalingBox = XMMatrixScaling(
