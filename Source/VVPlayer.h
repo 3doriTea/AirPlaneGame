@@ -3,6 +3,7 @@
 #include <string>
 #include <queue>
 #include "MTNet/HttpClient.h"
+#include <mutex>
 
 /// <summary>
 /// VOICEVOXを再生するためのクラス
@@ -20,7 +21,11 @@ public:
 	void Play(const std::u8string& _text);
 
 private:
-	std::queue<std::string> playList_;  // 台詞の待機キュー
+	std::queue<std::u8string> playList_;  // 台詞の待機キュー
 
-	mtnet::HttpClient httpClient_;  // VOICEVOXのAPI利用用 http通信クライアント
+	mtnet::HttpClient httpClient_;  // VOICEVOXのAPI利用 http通信クライアント
+
+	bool isPlaying_;  // 再生中か否か
+	std::mutex playingMutex_;  // 再生中の排他制御用
+	std::thread playingThread_;  // 再生の非同期スレッド
 };
