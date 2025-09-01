@@ -6,7 +6,7 @@
 
 using namespace mtgb;
 
-TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition) : GameObject(GameObjectBuilder()
+TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize) : GameObject(GameObjectBuilder()
 	.Build()),
 	popTimeSec_{ _popTimeSec },
 	drawPosition_{ _drawPosition },
@@ -14,12 +14,12 @@ TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition) : GameOb
 	currentIndex_{ 0 },
 	finished_{ false },
 	hTimer_{ nullptr },
-	cTimer_{ nullptr }
+	fontSize_{ _fontSize }
 {
 }
 
-TextBox::TextBox(const std::string _initShowText, const float _popTimeSec, const Vector2F _drawPosition) :
-	TextBox{ _popTimeSec, _drawPosition }
+TextBox::TextBox(const std::string _initShowText, const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize) :
+	TextBox{ _popTimeSec, _drawPosition, _fontSize }
 {
 	showText_ = { _initShowText.begin(), _initShowText.end() };
 }
@@ -27,7 +27,6 @@ TextBox::TextBox(const std::string _initShowText, const float _popTimeSec, const
 TextBox::~TextBox()
 {
 	Timer::Remove(hTimer_);
-	Timer::Remove(cTimer_);
 }
 
 // 1文字あたりの表示秒数
@@ -63,15 +62,6 @@ void TextBox::Show(const std::u8string& _text)
 					mtgb::Timer::Remove(hTimer_);
 					hTimer_ = nullptr;
 				}
-
-				// 1秒後にテキストをクリアする単発タイマーをセット
-				//cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
-				//	{
-				//		testtext_.clear();
-				//		currentIndex_ = 0;
-				//		finished_ = false;
-				//		//cTimer_ = nullptr;
-				//	});
 			}
 		});
 }
@@ -81,10 +71,10 @@ void TextBox::Hide()
 	showText_.clear();
 	currentIndex_ = 0;
 	finished_ = false;
-	cTimer_ = nullptr;
+	hTimer_ = nullptr;
 }
 
-bool TextBox::IsFinished()
+bool TextBox::IsFinished() const
 {
 	return finished_;
 }
@@ -97,7 +87,7 @@ void TextBox::Draw() const
 	{
 		Draw::ChangeTextAlignment(TextAlignment::topLeft);
 		//std::u8string_view cut{ showText_.substr(0, currentIndex_) };
-		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, 48);
+		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, fontSize_);
 	}
 	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }

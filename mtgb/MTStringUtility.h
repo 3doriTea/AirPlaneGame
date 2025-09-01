@@ -30,6 +30,7 @@ namespace mtgb
 		};
 		
 		// REF: https://ja.wikipedia.org/wiki/UTF-8
+		size_t charasCount{};
 		for (int byteIndex = 0; byteIndex < _string.size();)
 		{
 			BYTE_SIZE charaByteSize{};
@@ -53,7 +54,10 @@ namespace mtgb
 			massert(charaByteSize != BYTE_SIZE_IDK && "バイトカウントが不一致 @SubStrBegin");
 
 			byteIndex += charaByteSize;
+			charasCount++;
 		}
+
+		return charasCount;
 	}
 
 	/// <summary>

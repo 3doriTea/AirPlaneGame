@@ -10,9 +10,15 @@ SpeechQueue::~SpeechQueue()
 {
 }
 
-const SPEECH_ELEMENT& SpeechQueue::GetNext()
+const bool SpeechQueue::TryGetNext(SPEECH_ELEMENT& _speechElement)
 {
-	current_++;
+	if (current_ >= static_cast<int>(lines_.size()) - 1)
+	{
+		return false;
+	}
 
-	return lines_[current_];
+	current_++;
+	_speechElement = lines_[current_];
+	
+	return true;
 }

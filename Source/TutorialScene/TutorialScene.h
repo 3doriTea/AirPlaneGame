@@ -37,4 +37,5 @@ private:
 	TimerHandle hToPlaySceneTimer_;  // プレイシーン遷移までのタイマー
 	mtstat::MTStat<STATE> state_;  // ステート管理
 	TextBox* pTextBox_;  // 字幕
+	float textBoxToChangeTimeLeft_;  // 字幕切り替えまでの残り時間
 };
