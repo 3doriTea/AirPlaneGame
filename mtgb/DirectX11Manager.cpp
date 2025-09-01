@@ -37,12 +37,16 @@ void mtgb::DirectX11Manager::Update()
 			for (auto& desc : adaptersDesc_)
 			{
 				ImGui::PushID(&desc);
-
-				TypeRegistry::Instance().CallFunc(&desc, "Desc");
-
+				TypeRegistry::Instance().CallFunc(&desc, "AdapterDesc");
 				ImGui::PopID();
 			}
-		}, "AdaptersDesc", ShowType::Inspector);
+			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
+			{
+				ImGui::PushID(&monitorInfo);
+				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
+				ImGui::PopID();
+			}
+		}, "Adapter,OutputDesc", ShowType::Inspector);
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()
@@ -481,8 +485,8 @@ void mtgb::DirectX11Manager::EnumAvailableMonitors()
 {
 	DirectX11Draw::monitorInfos_.clear();
 
-	/*ComPtr<IDXGIAdapter1> pAdapter;
-	for (UINT adapterIndex = 0; DirectX11Draw::pDXGIAdapters_.size();adapterIndex++)
+	ComPtr<IDXGIAdapter1> pAdapter;
+	for (UINT adapterIndex = 0; adapterIndex < DirectX11Draw::pDXGIAdapters_.size();adapterIndex++)
 	{
 		ComPtr<IDXGIOutput> pOutput;
 		UINT outputIndex = 0;
@@ -497,10 +501,10 @@ void mtgb::DirectX11Manager::EnumAvailableMonitors()
 			{
 				DirectX11Draw::monitorInfos_.push_back(info);
 			}
-				pOutput.Reset();
-				
+			pOutput.Reset();
+			outputIndex++;
 		}
-	}*/
+	}
 }
 
 void mtgb::DirectX11Manager::InitializeShaderBundle()
