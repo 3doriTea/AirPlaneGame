@@ -1,9 +1,107 @@
 #pragma once
 #include <string>
 #include <string_view>
+#include "MTAssert.h"
 
 namespace mtgb
 {
+	static inline size_t GetSizeUTF8Characters(const std::u8string& _string)
+	{
+		enum BYTE_SIZE : int
+		{
+			BYTE_SIZE_IDK,
+			BYTE_SIZE1,
+			BYTE_SIZE2,
+			BYTE_SIZE3,
+			BYTE_SIZE4,
+		};
+
+		static auto isMatchByteSize
+		{
+			[](const uint8_t _byte, const uint8_t _idByte, const uint8_t _byteMask) -> bool
+			{
+				return (_byte & _byteMask) == _idByte;
+			}
+		};
+
+		for (int byteIndex = 0; byteIndex < _string.size();)
+		{
+			BYTE_SIZE charaByteSize{};
+			if (isMatchByteSize(_string[byteIndex], 0b0000'0000, 0b1000'0000))
+			{
+				charaByteSize = BYTE_SIZE1;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1100'0000, 0b1110'0000))
+			{
+				charaByteSize = BYTE_SIZE2;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1110'0000, 0b1111'0000))
+			{
+				charaByteSize = BYTE_SIZE3;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1111'0000, 0b1111'1000))
+			{
+				charaByteSize = BYTE_SIZE4;
+			}
+
+			massert(charaByteSize != BYTE_SIZE_IDK && "バイトカウントが不一致 @SubStrBegin");
+
+			byteIndex += charaByteSize;
+		}
+	}
+
+	static inline std::u8string SubStrBegin(const std::u8string& _string, const int _count)
+	{
+		enum BYTE_SIZE : int
+		{
+			BYTE_SIZE_IDK,
+			BYTE_SIZE1,
+			BYTE_SIZE2,
+			BYTE_SIZE3,
+			BYTE_SIZE4,
+		};
+
+		int charaCount{};  // utf8の文字数カウント
+		int byteCount{};  // 1文字を構成するバイト数カウント
+		int byteIndex{};
+
+		static auto isMatchByteSize
+		{
+			[](const uint8_t _byte, const uint8_t _idByte, const uint8_t _byteMask) -> bool
+			{
+				return (_byte & _byteMask) == _idByte;
+			}
+		};
+
+		for (byteIndex = 0; charaCount < _count && byteIndex < _string.size();)
+		{
+			BYTE_SIZE charaByteSize{};
+			if (isMatchByteSize(_string[byteIndex], 0b0000'0000, 0b1000'0000))
+			{
+				charaByteSize = BYTE_SIZE1;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1100'0000, 0b1110'0000))
+			{
+				charaByteSize = BYTE_SIZE2;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1110'0000, 0b1111'0000))
+			{
+				charaByteSize = BYTE_SIZE3;
+			}
+			else if (isMatchByteSize(_string[byteIndex], 0b1111'0000, 0b1111'1000))
+			{
+				charaByteSize = BYTE_SIZE4;
+			}
+
+			massert(charaByteSize != BYTE_SIZE_IDK && "バイトカウントが不一致 @SubStrBegin");
+
+			byteIndex += charaByteSize;
+			charaCount++;
+		}
+
+		return _string.substr(0, byteIndex);
+	}
+
 	/// <summary>
 	/// ワイド文字列に変換する
 	/// </summary>

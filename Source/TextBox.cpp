@@ -49,12 +49,11 @@ void TextBox::Show(const std::u8string& _text)
 		hTimer_ = nullptr;
 	}
 
-	hTimer_ = mtgb::Timer::AddInterval(popTimeSec_, [&,this]()
+	hTimer_ = mtgb::Timer::AddInterval(popTimeSec_, [&, this]()
 		{
-
-			if (currentIndex_ < showText_.size())
+			if (currentIndex_ < GetSizeUTF8Characters(showText_))
 			{
-				++currentIndex_;
+				currentIndex_++;
 			}
 			else
 			{
@@ -98,7 +97,7 @@ void TextBox::Draw() const
 	{
 		Draw::ChangeTextAlignment(TextAlignment::topLeft);
 		//std::u8string_view cut{ showText_.substr(0, currentIndex_) };
-		Draw::ImmediateTextW(UTF8ToWide(showText_), drawPosition_, 48);
+		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, 48);
 	}
 	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }
