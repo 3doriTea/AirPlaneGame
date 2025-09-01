@@ -182,6 +182,14 @@ void mtgb::DirectWrite::SetTextAlignment(TextAlignment alignment, ComPtr<IDWrite
 		format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
 		format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
 		break;
+	case TextAlignment::bottomLeft:
+		format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+		break;
+	case TextAlignment::middleLeft:
+		format->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+		format->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+		break;
 	}
 }
 

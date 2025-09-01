@@ -136,6 +136,31 @@ void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlign
 		} });
 }
 
+void mtgb::Draw::ImmediateTextW(const std::wstring& _text, Vector2F _topLeft, int _size, TextAlignment _alignment, const UIParams& _uiParams)
+{
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	ImmediateTextW(_text, { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment, _uiParams);
+}
+
+void mtgb::Draw::ImmediateTextW(const std::wstring& _text, RectF _rect, int _size, TextAlignment _alignment, const UIParams& _uiParams)
+{
+	uiDrawCommands_.insert({
+		_uiParams,
+		[=]() {
+			DirectX11Draw::SetIsWriteToDepthBuffer(false);
+			CheckSetShader(ShaderType::Sprite2D);
+
+			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
+			Game::System<DirectWrite>().ImmediateDraw(_text, formatData->format, formatData->pixelFontMetrics,
+				_rect.x,
+				_rect.y,
+				_rect.width,
+				_rect.height);
+		}
+		});
+}
+
 void mtgb::Draw::ImmediateText(const std::string& _text, Vector2F _topLeft, int _size, TextAlignment _alignment,  const UIParams& _uiParams)
 {
 	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();

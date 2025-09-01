@@ -1,6 +1,11 @@
 #include "OrderText.h"
 #include "../Source/TestScene/EnemyPlane.h"
 
+namespace
+{
+    static const Vector2F TEXT_POSITION{ 150.0f, 600.0f };
+}
+
 OrderText::OrderText(const EntityId _playerId, const GameObjectLayer _layer) : GameObject(GameObjectBuilder()
     .SetLayerFlag(_layer)
 	.Build()),
@@ -36,10 +41,10 @@ void OrderText::Update()
         switch (enemyStatus_)
         {
         case EnemyStatus::NoEnemy:
-            pTextBox_ = Instantiate<TextBox>(orderTexts_[0], 0.08f);
+            pTextBox_ = Instantiate<TextBox>(orderTexts_[0], 0.1f, TEXT_POSITION);
             break;
         case EnemyStatus::NearEnemy:
-            pTextBox_ = Instantiate<TextBox>(orderTexts_[1], 0.08f);
+            pTextBox_ = Instantiate<TextBox>(orderTexts_[1], 0.1f, TEXT_POSITION);
             break;
         }
         previousStatus = enemyStatus_;
@@ -53,7 +58,7 @@ void OrderText::Update()
     {
         Transform& enemyTransform = Transform::Get(enemy->GetEntityId());
 		Vector3 toEnemy = enemyTransform.position - pPlayerTransform_->position;
-        if (toEnemy.Size() < 50.0f)
+        if (toEnemy.Size() < 30.0f)
         {
             enemyStatus_ = EnemyStatus::NearEnemy;
         }

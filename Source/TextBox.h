@@ -6,21 +6,29 @@
 class TextBox : public GameObject
 {
 public:
-	TextBox();
-	TextBox(std::string testText_, float textsec_);
+	TextBox(const float _popTimeSec, const Vector2F _drawPosition);
+	TextBox(const std::string _initShowText, const float _popTimeSec, const Vector2F _drawPosition);
 	~TextBox();
 	// 1文字あたりの表示秒数
-	void SetTextSpeedSec(const float _sec);
-	void Show(const std::string& _text);  // 文字列をいざ表示する
+	void SetPopTimeSec(const float _timeSec);
+	/// <summary>
+	/// テキストをいざ表示する
+	/// </summary>
+	/// <param name="_text">表示するテキスト</param>
+	void Show(const std::u8string& _text);
+	/// <summary>
+	/// テキストを非表示にする
+	/// </summary>
+	void Hide();
 	bool IsFinished();  // 表示し終わっている true / false
 	void Draw() const override;  // 所属するゲームオブジェクトから呼ぶ
 
 private:
-	// 変数名は仮
-	float TextSec_;
-	std::string testtext_;
+	float popTimeSec_;
+	std::u8string showText_;
 	size_t currentIndex_;
 	bool finished_;
 	TimerHandle hTimer_;
 	TimerHandle cTimer_;
+	Vector2F drawPosition_;
 };

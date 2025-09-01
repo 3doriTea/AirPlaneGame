@@ -1,5 +1,6 @@
 #include "EnemyPlane.h"
 #include "../TrailEmitterSystem.h"
+#include "EnemyBullet.h"
 
 using namespace mtgb;
 
@@ -12,6 +13,8 @@ namespace
 	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
 	const float ENEMY_SCALE{ 1.0f }; // スケール
+	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
+	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
 }
 
 EnemyPlane::EnemyPlane(
@@ -33,7 +36,7 @@ EnemyPlane::EnemyPlane(
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->sphere_.offset_ = Vector3::Zero();
 	pCollider_->sphere_.radius_ = 1.0f;
-	
+	timeSinceLastshot_ = 0.0f;
 	
 	//hText = Text::Load("apple", 72);
 	//hModel_ = Fbx::Load("Model/Enemy01.fbx");
@@ -98,6 +101,24 @@ void EnemyPlane::Update()
 
 	Search();
 
+	// もしターゲットしているなら、弾を打つ
+	timeSinceLastshot_ += Time::DeltaTimeF();
+
+	std::vector<EnemyBullet*> bullets;
+	FindGameObjects<EnemyBullet>(&bullets);
+
+	if (lockOnTarget_ && timeSinceLastshot_ >= SHOOT_COOLDOWN)
+	{
+		// 弾の数を制限して、弾の数が5以上の場合は撃たないようにする
+		if (bullets.size() >= MAX_BULLETS)
+		{
+			return;
+		}
+		
+		GameObject::Instantiate<EnemyBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
+		timeSinceLastshot_ = 0.0f;
+	}
+
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawVec(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
 }
@@ -127,6 +148,10 @@ void EnemyPlane::Search()
 	{
 		//LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
 		lockOnTarget_ = true;
+	}
+	else
+	{
+		lockOnTarget_ = false;
 	}
 }
 

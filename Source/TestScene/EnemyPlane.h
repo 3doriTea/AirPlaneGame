@@ -25,4 +25,5 @@ private:
 	float lockOnAngle_;// ロックオン、プレイヤーを発見する角度(degree)
 	float lockOnDistance_;// ロックオン、プレイヤーを発見する距離
 	bool lockOnTarget_; //ターゲットをロックオンしているかどうか
+	float timeSinceLastshot_;
 };

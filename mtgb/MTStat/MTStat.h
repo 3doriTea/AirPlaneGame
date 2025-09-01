@@ -26,6 +26,8 @@ namespace mtstat
 		void Update();
 		void Change(const StatEnumT _nextStat);
 
+		const StatEnumT Current() const { return stat_; }
+
 	private:
 		StatEnumT stat_;  // 現在のステート
 		std::map<StatEnumT, std::function<void()>> updateFuncs_;  // 登録されている更新関数
