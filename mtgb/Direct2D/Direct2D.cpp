@@ -15,8 +15,7 @@
 //#pragma comment(lib,"dwrite.lib")
 #pragma comment(lib,"d2d1.lib")
 
-ID2D1Factory* mtgb::Direct2D::pD2DFactory_{ nullptr };
-IDXGISurface* mtgb::Direct2D::pDefDXGISurface_{ nullptr };
+ComPtr<ID2D1Factory> mtgb::Direct2D::pD2DFactory_{ nullptr };
 ComPtr<ID2D1SolidColorBrush> mtgb::Direct2D::pDefD2DBrush_{nullptr};
 ComPtr<ID2D1RenderTarget> mtgb::Direct2D::pDefRenderTarget_{ nullptr };
 
@@ -33,7 +32,7 @@ void mtgb::Direct2D::Initialize()
 void mtgb::Direct2D::InitializeCommonResource()
 {
 	//ファクトリー作成
-	HRESULT hResult = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &pD2DFactory_);
+	HRESULT hResult = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, pD2DFactory_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "D2D1CreateFactoryに失敗 @Direct2D::Initialize");
@@ -94,11 +93,17 @@ void mtgb::Direct2D::Draw()
 
 void mtgb::Direct2D::Release()
 {
-	SAFE_RELEASE(pD2DFactory_);
-	SAFE_RELEASE(pDefDXGISurface_);
+	pD2DFactory_.Reset();
+	
 	pDefD2DBrush_.Reset();
 	pDefRenderTarget_.Reset();
 
+}
+
+void mtgb::Direct2D::Reset()
+{
+	pDefD2DBrush_.Reset();
+	pDefRenderTarget_.Reset();
 }
 
 D2D1_SIZE_F mtgb::Direct2D::GetRenderTargetSize()

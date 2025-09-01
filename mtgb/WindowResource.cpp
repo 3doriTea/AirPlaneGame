@@ -5,9 +5,13 @@
 #include "../ImGui/imgui.h"
 #include "../ImGui/imgui_impl_win32.h"
 #include "../ImGui/imgui_impl_dx11.h"
-
+#include "WindowContextUtil.h"
+#include "Direct3DResource.h"
+#include "MTAssert.h"
+#include "Screen.h"
 using namespace mtgb;
-int mtgb::WindowResource::outputCount = 0;
+
+
 
 /// <summary>
 /// ウィンドウからのメッセージを受信してImGuiの入力やイベントを有効にするためのコールバック関数
@@ -61,6 +65,8 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	{
 		return true;
 	}
+
+	// TODO: メッセージにべた書きせず購読方式などにすべき
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -71,9 +77,23 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 	case WM_MOUSEMOVE:  // マウスが動いた
 		Game::System<Input>().UpdateMousePositionData(LOWORD(lParam), HIWORD(lParam));
 		return S_OK;
-	//case WM_SIZE:  // ウィンドウサイズが変わった
+	case WM_SIZE:  // ウィンドウサイズが変わった
+	{
+		if (this && wParam != SIZE_MINIMIZED)
+		{
+			if (!isInitialized_)
+			{
+				// 初期化が完了していないならばスキップする
+				return S_OK;
+			}
 
-	//	return S_OK;
+			UINT width = LOWORD(lParam);
+			UINT height = HIWORD(lParam);
+
+			Game::System<WindowManager>().ResizeWindow(context_, width, height);
+		}
+		return S_OK;
+	}
 
 	//case WM_NCCALCSIZE:
 	//	// wParamについて：TRUEならNCCALCSIZE_PARAMS / FALSEならRect*
@@ -116,7 +136,12 @@ void WindowResource::Initialize(WindowContext _windowContext)
 	hWnd_ = Game::System<WindowManager>().CreateWindowContext(_windowContext);
 
 	isActive_ = true;
-	outputIndex_ = outputCount++;
+	context_ = _windowContext;
+	isInitialized_ = false;
+
+	windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
+	windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
+	GetWindowRect(hWnd_, &windowedRect_);
 }
 
 void WindowResource::SetResource()
@@ -128,7 +153,6 @@ mtgb::WindowResource::WindowResource(const WindowResource& other)
 	:WindowContextResource(other)
 	,hWnd_(other.hWnd_)
 	,isActive_(other.isActive_)
-	,outputIndex_(other.outputIndex_)
 {
 
 }
@@ -139,10 +163,81 @@ WindowResource* mtgb::WindowResource::Clone() const
 }
 
 mtgb::WindowResource::WindowResource()
+	: isInitialized_{false}
 {
 }
 
 mtgb::WindowResource::~WindowResource()
+{
+	Release();
+}
+
+void mtgb::WindowResource::MarkInitialized()
+{
+	isInitialized_ = true;
+}
+
+void mtgb::WindowResource::OnResize(WindowContext _windowContext, UINT _width, UINT _height)
+{
+	if (_width == 0 || _height == 0) return;
+
+	Game::System<Screen>().SetSize(static_cast<int>(_width), static_cast<int>(_height));
+
+	//WindowConfigのサイズを更新
+	WindowConfig config = Game::System<WindowManager>().GetWindowConfig(_windowContext);
+	config.width = _width;
+	config.height = _height;
+	Game::System<WindowManager>().SetWindowConfig(_windowContext, config);
+
+}
+
+void mtgb::WindowResource::SetFullScreen(bool _fullscreen)
+{
+	if (_fullscreen)
+	{
+		// フルスクリーンになる
+
+		// 現在のウィンドウのスタイルと位置を保存
+		windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
+		windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
+		GetWindowRect(hWnd_, &windowedRect_);
+
+		// ウィンドウスタイルを枠なしポップアップに変更
+		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_ & ~(WS_CAPTION | WS_THICKFRAME));
+		SetWindowLong(hWnd_, GWL_EXSTYLE, windowedExStyle_ & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+
+		// ウィンドウの位置、サイズの変更、スタイルの適用
+		MONITORINFO monitorInfo;
+		//	ウィンドウ最も近いディスプレイ モニターへのハンドルを受け取る
+		GetMonitorInfo(MonitorFromWindow(hWnd_, MONITOR_DEFAULTTONEAREST), &monitorInfo);
+		SetWindowPos(hWnd_, HWND_TOP,
+			monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, // ウィンドウの位置
+			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, // ウィンドウのサイズ(幅)
+			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, // ウィンドウのサイズ(高さ)
+			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED); // フラグ
+
+	}
+	else
+	{
+		// ウィンドウモードに戻る
+
+		// ウィンドウスタイルを元に戻す
+		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_);
+		SetWindowLong(hWnd_, GWL_EXSTYLE, windowedExStyle_);
+
+		// 保存しておいたウィンドウの位置、サイズを戻す
+		SetWindowPos(hWnd_, HWND_NOTOPMOST,
+			windowedRect_.left,
+			windowedRect_.top,
+			windowedRect_.right - windowedRect_.left,
+			windowedRect_.bottom - windowedRect_.top,
+			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
+	}
+}
+
+void mtgb::WindowResource::Release()
 {
 	DestroyWindow(hWnd_);
 }

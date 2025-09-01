@@ -15,6 +15,7 @@ namespace mtgb
 		CameraResource(const CameraResource& other);
 		// WindowContextResource ‚ğ‰î‚µ‚ÄŒp³‚³‚ê‚Ü‚µ‚½
 		void Initialize(WindowContext _windowContext) override;
+		void Release() override;
 		/// <summary>
 		/// ƒJƒƒ‰‚ğØ‚è‘Ö‚¦‚é
 		/// </summary>

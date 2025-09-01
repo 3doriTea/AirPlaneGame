@@ -31,12 +31,13 @@ namespace
 mtgb::ImGuiRenderer::ImGuiRenderer()
 	:pRenderTargetView_{nullptr}
 	,pSRV_{nullptr}
+	,pSRVTexture_{nullptr}
 	,pTexture_{nullptr}
 	,pDepthStencil_{nullptr}
 	,pDepthStencilView_{nullptr}
 	,gameViewRectValid_{false}
-	,winWidth_{0}
-	,winHeight_{0}
+	,winWidth_{900}
+	,winHeight_{700}
 {
 	
 }
@@ -86,49 +87,7 @@ void mtgb::ImGuiRenderer::Initialize()
 
 	manipulator_ = new ImGuizmoManipulator();
 
-	const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
-	winWidth_ = SCREEN_SIZE.x;
-	winHeight_ = 270;
-	Game::System<DirectX11Manager>().CreateViewport(SCREEN_SIZE, viewport_);
-
-	//テクスチャ作成
-
-	D3D11_TEXTURE2D_DESC desc
-	{
-		.Width = winWidth_,
-		.Height = winHeight_,
-		.MipLevels = 1,
-		.ArraySize = 1,
-		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
-		.SampleDesc
-		{
-			.Count = 1,
-		},
-		.Usage = D3D11_USAGE_DEFAULT,
-		.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
-	};
-	ID3D11Texture2D* pRawTexture = nullptr;
-	device->CreateTexture2D(&desc, nullptr, &pRawTexture);
-	pTexture_.Attach(pRawTexture);
-
-	//SRV作成
-	ID3D11ShaderResourceView* pRawSRV = nullptr;
-	device->CreateShaderResourceView(pTexture_.Get(), nullptr, &pRawSRV);
-	pSRV_.Attach(pRawSRV);
-
-	//RenderTargetView作成
-	ID3D11RenderTargetView* pRawRenderTargetView = nullptr;
-	device->CreateRenderTargetView(pTexture_.Get(), nullptr, &pRawRenderTargetView);
-	pRenderTargetView_.Attach(pRawRenderTargetView);
-
-
-	// 深度ステンシルと深度ステンシルビューを作成
-	ID3D11Texture2D* pRawDepthStencil = nullptr;
-	ID3D11DepthStencilView* pRawDepthStencilView = nullptr;
-	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(Vector2Int(static_cast<int>(winWidth_),static_cast<int>( winHeight_)), &pRawDepthStencil, &pRawDepthStencilView);
-	pDepthStencil_.Attach(pRawDepthStencil);
-	pDepthStencilView_.Attach(pRawDepthStencilView);
-
+	CreateD3DResources();
 
 	
 
@@ -182,6 +141,9 @@ void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
 
 void mtgb::ImGuiRenderer::SetImGuizmoRenderTargetView()
 {
+	ID3D11ShaderResourceView* nullSRV[16]{};
+	// 全スロットのSRVをクリア
+	DirectX11Draw::pContext_->PSSetShaderResources(0, 16, nullSRV);
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
 }
 void mtgb::ImGuiRenderer::SetGameViewCamera()
@@ -212,6 +174,7 @@ void mtgb::ImGuiRenderer::SetDrawList()
 
 void mtgb::ImGuiRenderer::RenderSceneView()
 {
+	
 	ImGui::Image((void*)pSRV_.Get(), ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)));
 }
 
@@ -324,5 +287,76 @@ void mtgb::ImGuiRenderer::Release()
 	ImGui_ImplWin32_Shutdown();
 	ImGui::DestroyContext();
 }
+
+void mtgb::ImGuiRenderer::ResetComPtrs()
+{
+	// ImGuiが保持しているリソース解放
+	ImGui_ImplDX11_InvalidateDeviceObjects();
+
+	pSRV_.Reset();
+	pRenderTargetView_.Reset();
+	pDepthStencilView_.Reset();
+	pDepthStencil_.Reset();
+	pTexture_.Reset();
+
+}
+
+void mtgb::ImGuiRenderer::OnResize(UINT width, UINT height)
+{
+	CreateD3DResources();
+    // ウィンドウサイズを更新
+    /*winWidth_ = width;
+    winHeight_ = height;*/
+    
+    // GameView の矩形情報をリセット
+    gameViewRectValid_ = false;
+    
+    // ImGuiのディスプレイサイズを更新
+    /*ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2(static_cast<float>(width), static_cast<float>(height));*/
+    
+    // ImGuiのリソースを再作成する必要がある場合
+    // ImGui_ImplDX11_InvalidateDeviceObjects();
+    // ImGui_ImplDX11_CreateDeviceObjects();
+}
+
+void mtgb::ImGuiRenderer::CreateD3DResources()
+{
+	ComPtr<ID3D11Device> device = mtgb::DirectX11Draw::pDevice_;
+	ComPtr<ID3D11DeviceContext> context = mtgb::DirectX11Draw::pContext_;
+
+	Game::System<DirectX11Manager>().CreateViewport({ static_cast<int>(winWidth_) ,static_cast<int>(winHeight_) }, viewport_);
+
+	// RTV用テクスチャ作成
+	D3D11_TEXTURE2D_DESC desc
+	{
+		.Width = winWidth_,
+		.Height = winHeight_,
+		.MipLevels = 1,
+		.ArraySize = 1,
+		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
+		.SampleDesc = { .Count = 1 },
+		.Usage = D3D11_USAGE_DEFAULT,
+		.BindFlags = D3D11_BIND_RENDER_TARGET
+	};
+	
+	device->CreateTexture2D(&desc, nullptr, pTexture_.ReleaseAndGetAddressOf());
+	device->CreateRenderTargetView(pTexture_.Get(), nullptr, pRenderTargetView_.ReleaseAndGetAddressOf());
+
+	// SRV用テクスチャ作成
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	device->CreateTexture2D(&desc, nullptr, pSRVTexture_.GetAddressOf());
+	device->CreateShaderResourceView(pSRVTexture_.Get(), nullptr, pSRV_.ReleaseAndGetAddressOf());
+
+	// 深度ステンシルと深度ステンシルビューを作成
+	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(
+		Vector2Int(static_cast<int>(winWidth_), static_cast<int>(winHeight_)),
+		pDepthStencil_.ReleaseAndGetAddressOf(), pDepthStencilView_.ReleaseAndGetAddressOf());
+
+	ImGui_ImplDX11_CreateDeviceObjects();
+}
+
+
+
 
 

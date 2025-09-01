@@ -1,7 +1,9 @@
 #include "Screen.h"
 #include <string>
 #include "ProfileUtlity.h"
-
+#include "WindowManager.h"
+#include "Game.h"
+#include "WindowContext.h"
 mtgb::Screen::Screen() :
 	width_{ 0 },
 	height_{ 0 },
@@ -23,4 +25,11 @@ void mtgb::Screen::Initialize()
 
 void mtgb::Screen::Update()
 {
+}
+
+
+void mtgb::Screen::SetSize(int _width, int _height)
+{
+	width_ = _width;
+	height_ = _height;
 }

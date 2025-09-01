@@ -9,7 +9,7 @@
 #include "Game.h"
 #include "ISystem.h"
 #include "MTStringUtility.h"
-
+#include "ImGuiRenderer.h"
 
 MSG* mtgb::WindowManager::pPeekedMessage_{ nullptr };
 std::map<mtgb::WindowContext, mtgb::WindowConfig> mtgb::WindowManager::windowConfigMap_;
@@ -76,9 +76,17 @@ HWND mtgb::WindowManager::CreateWindowContext(WindowContext context)
 	massert(SetWindowText(hWnd, config.title.c_str())
 		&& "SetWindowTextに失敗");
 
-	ShowWindow(hWnd, SW_SHOW);
 	
 	return hWnd;
+}
+
+mtgb::Vector2Int mtgb::WindowManager::GetWindowSize(WindowContext context)
+{
+	if (context == WindowContext::Both)
+	{
+		return mtgb::Vector2Int{ windowConfigMap_[WindowContext::First].width,windowConfigMap_[WindowContext::First].height };
+	}
+	return mtgb::Vector2Int{ windowConfigMap_[context].width,windowConfigMap_[context].height };
 }
 
 void mtgb::WindowManager::Initialize()
@@ -104,13 +112,10 @@ void mtgb::WindowManager::Release()
 {
 }
 
-void mtgb::WindowManager::RegisterWindowConfig(WindowContext windowContext, const WindowConfig& config)
+void mtgb::WindowManager::SetWindowConfig(WindowContext windowContext, const WindowConfig& config)
 {
 	windowConfigMap_[windowContext] = config;
 }
-
-
-
 
 mtgb::WindowConfig mtgb::WindowManager::GetWindowConfig(WindowContext windowContext)
 {
@@ -122,4 +127,25 @@ mtgb::WindowConfig mtgb::WindowManager::GetWindowConfig(WindowContext windowCont
 mtgb::WindowResource& mtgb::WindowManager::GetWindowResource(WindowContext windowContext)
 {
 	return Game::System<WindowContextResourceManager>().Get<WindowResource>(windowContext);
+}
+
+void mtgb::WindowManager::ResizeWindow(WindowContext _windowContext, UINT _width, UINT _height)
+{
+	// パイプラインにバインドした設定、スワップチェーンのバックバッファを参照するリソースのリセット
+	Game::System<DirectX11Manager>().ClearState();
+	if (_windowContext == WindowContext::First)
+	{
+		Game::System<ImGuiRenderer>().ResetComPtrs();
+	}
+	// リソースを更新
+	Game::System<WindowContextResourceManager>().OnResizeAll(_windowContext, _width, _height);
+
+	// デフォルトの設定をセット
+	Game::System<DirectX11Manager>().SetDefaultStates();
+
+	// ImGuiも更新
+	if (_windowContext == WindowContext::First)
+	{
+		Game::System<ImGuiRenderer>().OnResize(_width,_height);
+	}
 }

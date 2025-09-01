@@ -4,7 +4,7 @@
 #include <string>
 #include "ISystem.h"
 #include "WindowContext.h"
-
+#include "Vector2Int.h"
 typedef struct HWND__* HWND;
 typedef struct tagMSG MSG;
 
@@ -28,16 +28,20 @@ namespace mtgb
 		~WindowManager();
 
 		static HWND CreateWindowContext(WindowContext context);
+		static Vector2Int GetWindowSize(WindowContext context);
+		
+
 		void Initialize() override;
 		void Update() override;
 		void Release();
 		
 		/// <summary>
-		/// WindowContextに対応するWindowConfigを登録
+		/// WindowContextに対応するWindowConfigをセット
 		/// </summary>
 		/// <param name="windowContext">ウィンドウの識別子</param>
 		/// <param name="config">ウィンドウ設定</param>
-		void RegisterWindowConfig(WindowContext windowContext, const WindowConfig& config);
+		void SetWindowConfig(WindowContext windowContext, const WindowConfig& config);
+		
 		
 		/// <summary>
 		/// WindowContextからWindowConfigを取得
@@ -49,6 +53,8 @@ namespace mtgb
 
 		static WindowResource& GetWindowResource(WindowContext windowContext);
 
+
+		static void ResizeWindow(WindowContext _windowContext, UINT _width, UINT _height);
 	private:
 		static MSG* pPeekedMessage_;
 		static std::map<WindowContext, WindowConfig> windowConfigMap_;

@@ -8,6 +8,7 @@
 #include "DirectX11Draw.h"
 #include "WindowContextResourceManager.h"
 #include "WindowContextUtil.h"
+#include "WindowResource.h"
 mtgb::DoubleWindow::DoubleWindow()
 {
 	context1_ = WindowContext::First;
@@ -46,18 +47,27 @@ void mtgb::DoubleWindow::Initialize()
 	//mtgb::WindowManager::CreateWindowContext(config2, &context2_);
 
 	//リソースの初期化もここで行う
-	Game::System<WindowManager>().RegisterWindowConfig(WindowContext::First,config1);
-	Game::System<WindowManager>().RegisterWindowConfig(WindowContext::Second,config2);
+	Game::System<WindowManager>().SetWindowConfig(WindowContext::First,config1);
+	Game::System<WindowManager>().SetWindowConfig(WindowContext::Second,config2);
 	
 
 	Game::System<WindowContextResourceManager>().CreateResource(WindowContext::First);
 	Game::System<WindowContextResourceManager>().CreateResource(WindowContext::Second);
 
+	HWND hWnd1 = WinCtxRes::GetHWND(WindowContext::First);
+	HWND hWnd2 = WinCtxRes::GetHWND(WindowContext::Second);
+
+	ShowWindow(hWnd1, SW_SHOW);
+	ShowWindow(hWnd2, SW_SHOW);
+
+	// ウィンドウの表示、初期化完了をマーク
+	Game::System<WindowContextResourceManager>().Get<WindowResource>(WindowContext::First).MarkInitialized();
+	Game::System<WindowContextResourceManager>().Get<WindowResource>(WindowContext::Second).MarkInitialized();
+
 	Game::System<WindowContextResourceManager>().ChangeResource(WindowContext::First);
 
 	SetDoubleWindowPos();
 
-	HWND hWnd1 = WinCtxRes::GetHWND(WindowContext::First);
 	SetForegroundWindow(hWnd1);
 }
 
