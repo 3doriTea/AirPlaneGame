@@ -5,6 +5,11 @@
 
 namespace mtgb
 {
+	/// <summary>
+	/// UTF8 文字数(バイト数ではない)を取得する
+	/// </summary>
+	/// <param name="_string">utf8の文字列</param>
+	/// <returns>文字数</returns>
 	static inline size_t GetSizeUTF8Characters(const std::u8string& _string)
 	{
 		enum BYTE_SIZE : int
@@ -23,7 +28,8 @@ namespace mtgb
 				return (_byte & _byteMask) == _idByte;
 			}
 		};
-
+		
+		// REF: https://ja.wikipedia.org/wiki/UTF-8
 		for (int byteIndex = 0; byteIndex < _string.size();)
 		{
 			BYTE_SIZE charaByteSize{};
@@ -50,6 +56,12 @@ namespace mtgb
 		}
 	}
 
+	/// <summary>
+	/// utf8文字列を切り取る
+	/// </summary>
+	/// <param name="_string">utf8文字列</param>
+	/// <param name="_count">文字数(バイト数ではない)</param>
+	/// <returns>切り取られたutf8文字列</returns>
 	static inline std::u8string SubStrBegin(const std::u8string& _string, const int _count)
 	{
 		enum BYTE_SIZE : int
@@ -73,6 +85,7 @@ namespace mtgb
 			}
 		};
 
+		// REF: https://ja.wikipedia.org/wiki/UTF-8
 		for (byteIndex = 0; charaCount < _count && byteIndex < _string.size();)
 		{
 			BYTE_SIZE charaByteSize{};
