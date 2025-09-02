@@ -21,7 +21,7 @@ void mtgb::Figure::Draw(
 	const RectInt& _rect,
 	const Color& _color)
 {
-	Draw(_rect, _color);
+	Draw(RectF(_rect.point,_rect.size), _color);
 }
 
 void mtgb::Figure::Draw(const RectF& _rect, const Color& _color)

@@ -48,9 +48,7 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	// マルチモニター対応するかどうか
 	bool isMultiMonitor = true;
 
-	if (isMultiMonitor) {
-		// 将来的にマルチモニター対応する場合のoutputIndexを管理
-		
+	if (isMultiMonitor) {	
 		outputMonitorIndex_ = dx11Manager.AssignAvailableMonitor(pOutput_.ReleaseAndGetAddressOf());
 
 		HRESULT hResult = pOutput_->GetDesc(&outputDesc_);
