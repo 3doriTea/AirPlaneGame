@@ -49,7 +49,12 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	bool isMultiMonitor = true;
 
 	if (isMultiMonitor) {	
-		outputMonitorIndex_ = dx11Manager.AssignAvailableMonitor(pOutput_.ReleaseAndGetAddressOf());
+		 
+		std::optional<MonitorInfo> optMonitorInfo = dx11Manager.AssignAvailableMonitor(pOutput_.ReleaseAndGetAddressOf());
+		if (optMonitorInfo)
+		{
+			monitorInfo_ = *optMonitorInfo;
+		}
 
 		HRESULT hResult = pOutput_->GetDesc(&outputDesc_);
 		massert(SUCCEEDED(hResult)
@@ -75,7 +80,6 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	else 
 	{
 		pOutput_ = nullptr;
-		outputMonitorIndex_ = -1;
 	}
 
 	// スワップチェーンを作成
@@ -94,7 +98,7 @@ void mtgb::DXGIResource::Update()
 {
 	MTImGui::Instance().DirectShow([this]
 		{
-			//MTImGui::Instance().TypedShow(&outputDesc_, name_.c_str(), ShowType::Inspector);
+			//ImGui::Text("OutputIndex:%ud", outputMonitorIndex_);
 			TypeRegistry::Instance().CallFunc(&outputDesc_,name_.c_str());
 			/*for (int i = 0; i < modeList_.size(); i++)
 			{
@@ -154,29 +158,26 @@ void mtgb::DXGIResource::SetFullscreen(bool _fullscreen)
 				.Denominator = 1
 			},
 			.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
-			// スキャンライン法の設定
+			// スキャンライン順序の設定
 			.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED, // 指定なし
 			// 画像の拡大方法の設定
 			// REF:https://learn.microsoft.com/ja-jp/previous-versions/windows/desktop/legacy/bb173066(v=vs.85)
-			// UNSPECIFIED以外だとフルスクリーンに切り替えた時にモード変更(?)が発生する可能性があるらしい
+			// UNSPECIFIED以外だとフルスクリーンに切り替える際にモード変更(?)が発生する可能性があるらしい
 			.Scaling = DXGI_MODE_SCALING_UNSPECIFIED // 指定なし
 		};
 		
-		// 仮:一番目のモードを使う
+		// 旧:最初のモードを使用
 		//hResult = pSwapChain1_->ResizeTarget(&modeList_[0]);
-		hResult = pSwapChain1_->ResizeTarget(&modeDesc);
-		
-	}
-	else
-	{
+		//hResult = pSwapChain1_->ResizeTarget(&modeDesc);
 		
 	}
 	
-	hResult = pSwapChain1_->SetFullscreenState(_fullscreen, _fullscreen ? pOutput_.Get() : nullptr);
-	if (FAILED(hResult))
+	//hResult = pSwapChain1_->SetFullscreenState(_fullscreen, _fullscreen ? pOutput_.Get() : nullptr);
+	/*if (FAILED(hResult))
 	{
 		LOGIMGUI("WARN:%ld", hResult);
-	}
+	}*/
+	
 }
 
 WindowContextResource* mtgb::DXGIResource::Clone() const

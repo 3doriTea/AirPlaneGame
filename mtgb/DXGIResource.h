@@ -10,6 +10,7 @@
 #include <map>
 #include <typeindex>
 #include <string>
+#include "MonitorInfo.h"
 typedef struct HWND__* HWND;
 
 namespace mtgb
@@ -34,14 +35,17 @@ namespace mtgb
 		/// <param name="_fullscreen">trueならフルスクリーンになり、falseならウィンドウモード</param>
 		void SetFullscreen(bool _fullscreen);
 
+		/// <summary>
+		/// 割り当てられたモニターの矩形を返す
+		/// </summary>
+		RECT GetAssignedMonitorRect() const { return outputDesc_.DesktopCoordinates; }
+
 		ComPtr<IDXGISwapChain1> pSwapChain1_;
 		ComPtr<IDXGIOutput> pOutput_;
 		ComPtr<IDXGISurface> pDXGISurface_;
 
-		// WindowContextResource を介して継承されました
-		
-		unsigned int outputMonitorIndex_;
-		// WindowContextResource を介して継承されました
+		MonitorInfo monitorInfo_;
+
 		WindowContextResource* Clone() const override;
 	private:
 		std::vector<DXGI_MODE_DESC> modeList_;

@@ -5,6 +5,8 @@
 #include "Vector2Int.h"
 #include <dxgi1_2.h> 
 #include <vector>
+#include <optional>
+#include "MonitorInfo.h"
 
 #pragma comment(lib, "d3d11.lib")  // DirectX11のライブラリ
 #pragma comment(lib, "dxgi.lib")
@@ -60,7 +62,7 @@ namespace mtgb
 		/// </summary>
 		/// <param name="ppOutput">これにモニターを割り当てる</param>
 		/// <returns>割り当てられたモニターのインデックス、失敗時は -1</returns>
-		int AssignAvailableMonitor(IDXGIOutput** ppOutput);
+		std::optional<MonitorInfo> AssignAvailableMonitor(IDXGIOutput** ppOutput);
 
 		int GetAvailableMonitorCount() const;
 

@@ -66,7 +66,7 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 		return true;
 	}
 
-	// TODO: メッセージにべた書きせず購読方式などにすべき
+
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -83,14 +83,15 @@ LRESULT WindowResource::HandleWindowMessage(HWND hWnd, UINT msg, WPARAM wParam, 
 		{
 			if (!isInitialized_)
 			{
-				// 初期化が完了していないならばスキップする
+				// まだ初期化されていないならスキップする
 				return S_OK;
 			}
 
 			UINT width = LOWORD(lParam);
 			UINT height = HIWORD(lParam);
 
-			Game::System<WindowManager>().ResizeWindow(context_, width, height);
+			// フルスクリーン切り替え時のリサイズ処理を有効化
+			//Game::System<WindowManager>().ResizeWindow(context_, width, height);
 		}
 		return S_OK;
 	}
@@ -193,31 +194,34 @@ void mtgb::WindowResource::OnResize(WindowContext _windowContext, UINT _width, U
 
 void mtgb::WindowResource::SetFullScreen(bool _fullscreen)
 {
+	
+	MONITORINFO monitorInfo;
+	//	ウィンドウに最も近いディスプレイ モニターへのハンドルを受け取る
+	GetMonitorInfo(MonitorFromWindow(hWnd_, MONITOR_DEFAULTTONEAREST), &monitorInfo);
+	
+	SetFullScreen(_fullscreen, monitorInfo.rcMonitor);
+}
+
+void mtgb::WindowResource::SetFullScreen(bool _fullscreen, const RECT& _monitorRect)
+{
 	if (_fullscreen)
 	{
 		// フルスクリーンになる
-
-
-		//windowedRect_.
-
 		// ウィンドウスタイルを枠なしポップアップに変更
 		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_ & ~(WS_CAPTION | WS_THICKFRAME));
 		SetWindowLong(hWnd_, GWL_EXSTYLE, windowedExStyle_ & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
 
-		// ウィンドウの位置、サイズの変更、スタイルの適用
-		MONITORINFO monitorInfo;
-		//	ウィンドウ最も近いディスプレイ モニターへのハンドルを受け取る
-		GetMonitorInfo(MonitorFromWindow(hWnd_, MONITOR_DEFAULTTONEAREST), &monitorInfo);
+		// 指定されたモニター座標を直接使用
 		SetWindowPos(hWnd_, HWND_TOP,
-			monitorInfo.rcMonitor.left, monitorInfo.rcMonitor.top, // ウィンドウの位置
-			monitorInfo.rcMonitor.right - monitorInfo.rcMonitor.left, // ウィンドウのサイズ(幅)
-			monitorInfo.rcMonitor.bottom - monitorInfo.rcMonitor.top, // ウィンドウのサイズ(高さ)
+			_monitorRect.left, _monitorRect.top,// ウィンドウの位置
+			_monitorRect.right - _monitorRect.left,// ウィンドウのサイズ(幅)
+			_monitorRect.bottom - _monitorRect.top,// ウィンドウのサイズ(高さ)
 			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
-			SWP_NOOWNERZORDER | SWP_FRAMECHANGED); // フラグ
-
+			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 	}
 	else
 	{
+
 		// ウィンドウモードに戻る
 
 		// ウィンドウスタイルを元に戻す

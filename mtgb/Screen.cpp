@@ -7,6 +7,7 @@
 mtgb::Screen::Screen() :
 	width_{ 0 },
 	height_{ 0 },
+	sizeRatio_{1.0f,1.0f},
 	fpsLimit_{ 0 }
 {
 }
@@ -31,8 +32,17 @@ void mtgb::Screen::Update()
 }
 
 
+const mtgb::Vector2F mtgb::Screen::GetSizeRatio() const
+{
+	return sizeRatio_;
+}
+
 void mtgb::Screen::SetSize(int _width, int _height)
 {
 	width_ = _width;
 	height_ = _height;
+
+	
+	sizeRatio_.x = static_cast<float>(width_) / initialWidth_;
+	sizeRatio_.y = static_cast<float>(height_) / initialHeight_;
 }

@@ -5,6 +5,7 @@
 #include <array>
 #include "ShaderType.h"
 #include <dxgi.h>
+#include "MonitorInfo.h"
 
 using Microsoft::WRL::ComPtr;
 
@@ -36,12 +37,7 @@ namespace mtgb
 	class IShader;
 	class ImGuiRenderer;
 
-	struct MonitorInfo
-	{
-		int assignedIndex;
-		bool isRequested; // 使用済み
-		DXGI_OUTPUT_DESC desc;
-	};
+	
 
 	/// <summary>
 	/// ブレンドモード

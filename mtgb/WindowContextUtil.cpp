@@ -30,7 +30,12 @@ void mtgb::WinCtxRes::SetFullscreen(bool _fullscreen, WindowContext _ctx)
 		Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).GetWindowInfo();
 	}
 	Game::System<WinCtxResManager>().Get<DXGIResource>(_ctx).SetFullscreen(_fullscreen);
-	Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).SetFullScreen(_fullscreen);
+
+	RECT monitorRect = WinCtxRes::Get<DXGIResource>(_ctx).GetAssignedMonitorRect();
+
+	Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).SetFullScreen(_fullscreen,monitorRect);
+
+	Game::System<WindowManager>().ResizeWindow(_ctx, monitorRect.right - monitorRect.left, monitorRect.bottom - monitorRect.top);
 }
 
 void WinCtxRes::ChangeResource(WindowContext ctx)

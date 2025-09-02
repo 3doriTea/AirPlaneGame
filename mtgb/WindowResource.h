@@ -38,6 +38,7 @@ namespace mtgb
 		void OnResize(WindowContext _windowContext, UINT _width, UINT _height) override;
 
 		void SetFullScreen(bool _fullscreen);
+		void SetFullScreen(bool _fullscreen, const RECT& _monitorRect);
 		/// <summary>
 		/// フルスクリーンにする前に情報を保持しておく
 		/// </summary>

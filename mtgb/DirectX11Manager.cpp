@@ -6,7 +6,6 @@
 
 #include <dxgi.h>
 #include <DirectXMath.h>
-#include "DirectX11Draw.h"
 #include "ImGuiRenderer.h"
 #include "MainWindow.h"
 #include "Screen.h"
@@ -17,6 +16,8 @@
 #include "ReleaseUtility.h"
 #include "Direct2D/Direct2D.h"
 #include "MTImGui.h"
+#include "DirectX11Draw.h"
+
 mtgb::DirectX11Manager::DirectX11Manager()
 {
 }
@@ -44,7 +45,8 @@ void mtgb::DirectX11Manager::Update()
 			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
 			{
 				ImGui::PushID(&monitorInfo);
-				ImGui::Text("assignedIndex:%d",monitorInfo.assignedIndex);
+				ImGui::Text("assignedIndex:%d",monitorInfo.adapterIndex);
+				ImGui::Text("outputIndex:%d",monitorInfo.outputIndex);
 				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
 				ImGui::PopID();
 			}
@@ -399,7 +401,7 @@ void mtgb::DirectX11Manager::ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1
 	DirectX11Draw::pSwapChain1_ = pSwapChain1;
 }
 
-int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
+std::optional<mtgb::MonitorInfo> mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 {
 	// èââÒÇÃóÒãì
 	/*if (DirectX11Draw::monitorInfos_.empty())
@@ -412,11 +414,11 @@ int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 	{
 		if (!info.isRequested)
 		{
-			HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(info.assignedIndex, ppOutput);
+			HRESULT hResult = DirectX11Draw::pDXGIAdapters_[info.adapterIndex]->EnumOutputs(info.outputIndex, ppOutput);
 			if (SUCCEEDED(hResult))
 			{
 				info.isRequested = true;
-				return info.assignedIndex;
+				return info;
 			}
 		}
 	}
@@ -427,12 +429,12 @@ int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 		HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(0, ppOutput);
 		if (SUCCEEDED(hResult))
 		{
-			return 0;
+			return DirectX11Draw::monitorInfos_[0];
 		}
 	}
 
 	// ÉÇÉjÉ^Å[ÇÃäÑÇËìñÇƒé∏îs
-	return -1;
+	return std::nullopt;
 }
 
 int mtgb::DirectX11Manager::GetAvailableMonitorCount() const
@@ -489,7 +491,8 @@ void mtgb::DirectX11Manager::EnumAvailableMonitors()
 		{
 		
 			MonitorInfo info{};
-			info.assignedIndex = static_cast<int>(adapterIndex);
+			info.adapterIndex = static_cast<int>(adapterIndex);
+			info.outputIndex = outputIndex;
 			info.isRequested = false;
 			HRESULT hResult = pOutput->GetDesc(&info.desc);
 			if (SUCCEEDED(hResult))

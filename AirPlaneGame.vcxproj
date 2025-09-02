@@ -220,6 +220,7 @@
     <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Mathf.h" />
+    <ClInclude Include="mtgb\MonitorInfo.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
     <ClInclude Include="mtgb\MTStat\MTStat.h" />
