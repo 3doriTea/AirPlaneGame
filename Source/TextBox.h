@@ -12,6 +12,8 @@ public:
 	TextBox(const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize);
 	TextBox(const std::string _initShowText, const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize);
 	~TextBox();
+
+	void SetUIParams(const UIParams& _uIParams) { uIParams_ = _uIParams; }
 	// 1文字あたりの表示秒数
 	void SetPopTimeSec(const float _timeSec);
 	/// <summary>
@@ -38,5 +40,5 @@ private:
 	TimerHandle hTimer_;  // 1文字表示のタイマーハンドル
 	Vector2F drawPosition_;  // 描画座標
 	int fontSize_;  // 文字のフォントサイズ
-
+	UIParams uIParams_;  // UIパラメータ
 };

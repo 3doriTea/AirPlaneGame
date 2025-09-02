@@ -14,7 +14,8 @@ TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition, const in
 	currentIndex_{ 0 },
 	finished_{ false },
 	hTimer_{ nullptr },
-	fontSize_{ _fontSize }
+	fontSize_{ _fontSize },
+	uIParams_{}
 {
 }
 
@@ -87,7 +88,7 @@ void TextBox::Draw() const
 	{
 		Draw::ChangeTextAlignment(TextAlignment::topLeft);
 		//std::u8string_view cut{ showText_.substr(0, currentIndex_) };
-		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, fontSize_);
+		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, fontSize_, TextAlignment::topLeft, uIParams_ );
 	}
 	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }

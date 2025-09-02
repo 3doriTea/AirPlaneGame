@@ -10,6 +10,7 @@
 #include "../TestScene/PlayerPilot.h"
 #include "../TestScene/UI/Radar.h"
 
+#include "TextBoxBackground.h"
 #include "SpeechQueue.h"
 
 namespace
@@ -88,6 +89,9 @@ void TutorialScene::Initialize()
 
 	pTextBox_ = Instantiate<TextBox>(0.01f, Vector2F{160, 480}, 48);
 	pTextBox_->SetPopTimeSec(0.1f);
+	pTextBox_->SetUIParams({ 6 });
+
+	Instantiate<TextBoxBackground>();
 }
 
 void TutorialScene::Update()
