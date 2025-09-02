@@ -95,15 +95,16 @@ namespace mtgb
 				static_cast<R>(_v.y) * static_cast<R>(_scalar));
 		}
 
+		// TODO: _scalar‚ª•ÏŠ·‚Å‚«‚¸‚ÉƒGƒ‰[
 		template<typename T, typename U>
-		inline auto operator*(const Vector2T<T>& _v, Vector2T<U>)
+		inline auto operator*(const Vector2T<T>& _v1, Vector2T<U> _v2)
 			-> Vector2T<std::common_type_t<T, U>>
 		{
 			using R = std::common_type_t<T, U>;
 			return Vector2T<R>
 				(
-					static_cast<R>(lhs.x) * static_cast<R>(rhs.x),
-					static_cast<R>(lhs.y) * static_cast<R>(rhs.y)
+					static_cast<R>(_v1.x) * static_cast<R>(_v2.x),
+					static_cast<R>(_v1.y) * static_cast<R>(_v2.y)
 				);
 		}
 

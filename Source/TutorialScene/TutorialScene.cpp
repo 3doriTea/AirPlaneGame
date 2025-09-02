@@ -11,6 +11,7 @@
 #include "../TestScene/UI/Radar.h"
 
 #include "TextBoxBackground.h"
+#include "TextBoxTimeBar.h"
 #include "SpeechQueue.h"
 
 namespace
@@ -92,6 +93,7 @@ void TutorialScene::Initialize()
 	pTextBox_->SetUIParams({ 6 });
 
 	Instantiate<TextBoxBackground>();
+	pTextBoxTimeBar_ = Instantiate<TextBoxTimeBar>();
 }
 
 void TutorialScene::Update()
@@ -113,6 +115,7 @@ void TutorialScene::Update()
 		if (speechQueue.TryGetNext(element))
 		{
 			textBoxToChangeTimeLeft_ += element.time_;
+			pTextBoxTimeBar_->SetTimeLeftMax(element.time_);
 			pTextBox_->Show(element.text_.data());
 			Game::System<Audio>().PlayOneShotFile(element.audioFile_.data());
 		}
@@ -123,6 +126,7 @@ void TutorialScene::Update()
 
 void TutorialScene::Draw() const
 {
+	
 }
 
 void TutorialScene::End()

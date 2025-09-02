@@ -1,6 +1,7 @@
 #pragma once
 #include "ISystem.h"
 #include "Vector2Int.h"
+#include "Vector2F.h"
 
 namespace mtgb
 {
