@@ -44,6 +44,7 @@ void mtgb::DirectX11Manager::Update()
 			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
 			{
 				ImGui::PushID(&monitorInfo);
+				ImGui::Text("assignedIndex:%d",monitorInfo.assignedIndex);
 				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
 				ImGui::PopID();
 			}
@@ -59,23 +60,6 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	int nCmdShow = startupInfo.wShowWindow;
 	
 	D3D_FEATURE_LEVEL level{};
-
-	hResult = D3D11CreateDevice(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		DirectX11Draw::pDevice_.ReleaseAndGetAddressOf(),
-		&level,
-		DirectX11Draw::pContext_.ReleaseAndGetAddressOf()
-	);
-	massert(SUCCEEDED(hResult)
-	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
-
-	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)DirectX11Draw::pDXGIDevice_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterfaceに失敗 @DirectX11Manager::InitializeCommonResources");
@@ -97,6 +81,23 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	}
 	
 	EnumAvailableMonitors(); // モニターの列挙
+
+	hResult = D3D11CreateDevice(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		nullptr,
+		0,
+		D3D11_SDK_VERSION,
+		DirectX11Draw::pDevice_.ReleaseAndGetAddressOf(),
+		&level,
+		DirectX11Draw::pContext_.ReleaseAndGetAddressOf()
+	);
+	massert(SUCCEEDED(hResult)
+	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)DirectX11Draw::pDXGIDevice_.ReleaseAndGetAddressOf());
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
