@@ -62,6 +62,8 @@ namespace mtgb
 		template<typename T>
 		inline Vector2T<T> operator/(T _scalar, const Vector2T<T>& _v) { return Vector2T<T>{ _v } /= _scalar; }
 		template<typename T>
+		inline Vector2T<T> operator/(const Vector2T<T>& _v1, const Vector2T<T>& _v2) { return Vector2T<T>{_v1.x / _v2.x, _v1.y / _v2.y}; }
+		template<typename T>
 		inline Vector2T<T> operator+(const Vector2T<T>& _v1, Vector2T<T> _v2) { return Vector2T<T>{ _v1 } += _v2; }
 		template<typename T>
 		inline Vector2T<T> operator-(const Vector2T<T>& _v1, const Vector2T<T>& _v2) { return Vector2T<T>{ _v1 } -= _v2; }

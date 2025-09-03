@@ -65,8 +65,16 @@ void TargetingSystem::SearchTargets()
 	if (it != targetDetector.detectedTargets.end())
 	{
 		currentTarget = &(*it); // Å‚à‹ß‚¢“G‚ðƒ^[ƒQƒbƒg‚ÉÝ’è
-		reticleRect.x = currentTarget->screenPos.x - reticleRadius;
+
+		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+		
+		reticleRect.x =  currentTarget->screenPos.x - reticleRadius;
+		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius);
+		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
 		reticleRect.y = currentTarget->screenPos.y - reticleRadius;
+		//reticleRect.width = reticleRadius * 2.0f * ratio.x;
+		//reticleRect.height = reticleRadius * 2.0f * ratio.y;
+
 	}
 	else
 	{

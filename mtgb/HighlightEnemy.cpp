@@ -74,12 +74,16 @@ void HighlightEnemy::Draw() const
 	// 一つ目のウィンドウ
 	const RectDetectorConfig& firstConfig = firstWndRectDetector_.config;
 
-	firstWndRectDetector_.ForEach([this](const RectContainsInfo& _info)
+	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+
+	firstWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
 		{
 			RectF targetRect
 			{
-				_info.screenPos.x - highlightFrameSize.x / 2.0f,
-				_info.screenPos.y - highlightFrameSize.y / 2.0f,
+				/*(_info.screenPos.x - highlightFrameSize.x / 2.0f ),
+				(_info.screenPos.y - highlightFrameSize.y / 2.0f ),*/
+				(_info.screenPos.x - highlightFrameSize.x / 2.0f) / ratio.x,
+				(_info.screenPos.y - highlightFrameSize.y / 2.0f) / ratio.y,
 				highlightFrameSize.x,
 				highlightFrameSize.y
 			};
@@ -89,12 +93,14 @@ void HighlightEnemy::Draw() const
 	// 二つ目のウィンドウ
 	const RectDetectorConfig& secondConfig = secondWndRectDetector_.config;
 
-	secondWndRectDetector_.ForEach([this](const RectContainsInfo& _info)
+	secondWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
 		{
 			RectF targetRect
 			{
-				_info.screenPos.x - highlightFrameSize.x / 2.0f,
-				_info.screenPos.y - highlightFrameSize.y / 2.0f,
+				/*(_info.screenPos.x - highlightFrameSize.x / 2.0f),
+				(_info.screenPos.y - highlightFrameSize.y / 2.0f),*/
+				(_info.screenPos.x - highlightFrameSize.x / 2.0f) / ratio.x,
+				(_info.screenPos.y - highlightFrameSize.y / 2.0f) / ratio.y,
 				highlightFrameSize.x,
 				highlightFrameSize.y
 			};

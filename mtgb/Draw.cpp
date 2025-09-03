@@ -41,8 +41,9 @@ void mtgb::Draw::Box(
 	const UIParams& _uiParams)
 {
 	CheckSetShader(ShaderType::Figure);
+	const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-	Box(RectInt::FromLine(_begin, _end), _color,_uiParams);
+	Box(RectInt::FromLine(Vector2F(_begin) / ratio,Vector2F(_end) / ratio), _color,_uiParams);
 }
 
 void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& _uiParams)
@@ -55,7 +56,8 @@ void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& 
 
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-			Game::System<Draw>().pFigure_->Draw(RectF{ _rect.point * ratio ,_rect.size * ratio }, _color);
+			Game::System<Draw>().pFigure_->Draw(RectF{ Vector2F(_rect.point) / ratio, Vector2F(_rect.size) / ratio}, _color);
+			//Game::System<Draw>().pFigure_->Draw(RectF{ _rect.point * ratio ,_rect.size * ratio }, _color);
 		}
 		});	
 }
@@ -76,7 +78,8 @@ void mtgb::Draw::Image(
 
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-			pSprite->Draw(RectF{ _draw.point * ratio, _draw.size * ratio }, _rotationZ, RectF{ _cut.point * ratio, _cut.size * ratio }, Color::WHITE);
+			pSprite->Draw(RectF{ _draw.point / ratio, _draw.size / ratio}, _rotationZ, RectF{ _cut.point, _cut.size }, Color::WHITE);
+			//pSprite->Draw(RectF{ _draw.point * ratio, _draw.size * ratio }, _rotationZ, RectF{ _cut.point * ratio, _cut.size * ratio }, Color::WHITE);
 		}
 		});
 }
@@ -139,9 +142,9 @@ void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlign
 
 		Game::System<mtgb::DirectWrite>().SetTextAlignment(_alignment, layoutData->layout);
 
-		const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+		//const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x * ratio.x, (_origin.y + formatData->pixelFontMetrics.textTopOffset) * ratio.y );
+		Game::System<mtgb::DirectWrite>().Draw(layoutData->layout, _origin.x, (_origin.y + formatData->pixelFontMetrics.textTopOffset) );
 		} });
 }
 
@@ -221,7 +224,7 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 		Game::System<DirectWrite>().ImmediateDraw(MultiToWide(text), formatData->format, formatData->pixelFontMetrics,
 			_rect.x * ratio.x,
 			_rect.y * ratio.y,
-			_rect.width * ratio.y,
+			_rect.width * ratio.x,
 			_rect.height * ratio.y);
 	}
 		});
