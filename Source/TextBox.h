@@ -35,7 +35,7 @@ public:
 private:
 	float popTimeSec_;  // 1文字が表示される時間 (秒)
 	std::u8string showText_;  // 表示するテキスト
-	size_t currentIndex_;     // 現在表示する文字番号
+	int currentIndex_;     // 現在表示する文字番号
 	bool finished_;           // すべての文字が表示しきったか true / false
 	TimerHandle hTimer_;  // 1文字表示のタイマーハンドル
 	Vector2F drawPosition_;  // 描画座標

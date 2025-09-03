@@ -8,6 +8,7 @@ namespace
 }
 
 TextBoxBackground::TextBoxBackground() : GameObject(GameObjectBuilder()
+	.SetLayerFlag(GameObjectLayer::All)
 	.Build())
 {
 	hImage_ = Image::Load("Image/TutorialUITextBox.png");

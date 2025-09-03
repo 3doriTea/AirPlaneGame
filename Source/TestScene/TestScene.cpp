@@ -14,6 +14,7 @@
 #include "../ControlTower.h"
 #include "../TestScene/UI/OrderText.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
+#include "../TutorialScene/TutorialScene.h"
 
 using namespace mtgb;
 
@@ -77,6 +78,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::Y))
 	{
 		Game::System<SceneSystem>().Move<CheckTutorialScene>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::U))
+	{
+		Game::System<SceneSystem>().Move<TutorialScene>();
 	}
 	
 	if (InputUtil::GetKeyDown(KeyCode::O))

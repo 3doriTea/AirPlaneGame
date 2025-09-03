@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float MOVE_RATE_SEC{ 0.1f * 20.0 };
+	const float MOVE_RATE_SEC{ 0.1f * 20.0f };
 }
 
 SkipChecker::SkipChecker() : GameObject(GameObjectBuilder()

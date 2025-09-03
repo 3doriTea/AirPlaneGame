@@ -51,6 +51,10 @@ TutorialScene::~TutorialScene()
 
 void TutorialScene::Initialize()
 {
+	TypeRegistry::Instance();
+	TypeRegistry::Instance().Initialize();
+	MTImGui::Instance().Initialize();
+
 	// 一定時間経ったら必ずプレイシーンに遷移
 	hToPlaySceneTimer_ = Timer::AddAram(TO_PLAY_SCENE_WAIT_SEC, []()
 		{
@@ -61,10 +65,6 @@ void TutorialScene::Initialize()
 		.OnUpdate(S_HANDSHAKE, []
 		{
 		});
-
-	TypeRegistry::Instance();
-	TypeRegistry::Instance().Initialize();
-	MTImGui::Instance().Initialize();
 
 	Audio::Clear();
 
@@ -92,7 +92,7 @@ void TutorialScene::Initialize()
 	pTextBox_->SetPopTimeSec(0.1f);
 	pTextBox_->SetUIParams({ 6 });
 
-	Instantiate<TextBoxBackground>();
+	pTextBoxBackground_ = Instantiate<TextBoxBackground>();
 	pTextBoxTimeBar_ = Instantiate<TextBoxTimeBar>();
 }
 
@@ -126,7 +126,6 @@ void TutorialScene::Update()
 
 void TutorialScene::Draw() const
 {
-	
 }
 
 void TutorialScene::End()

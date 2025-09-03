@@ -3,6 +3,7 @@
 namespace
 {
 	const RectInt DRAW_RECT{ 280, 900, 1360, 20 };
+	const RectF DRAW_RECT_FRAME{ 278, 779, 1363, 144 };
 }
 
 TextBoxTimeBar::TextBoxTimeBar() : GameObject(GameObjectBuilder()

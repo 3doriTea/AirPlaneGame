@@ -4,6 +4,7 @@
 #include "../TextBox.h"
 
 class TextBoxTimeBar;
+class TextBoxBackground;
 
 class TutorialScene : public mtgb::GameScene
 {
@@ -42,4 +43,5 @@ private:
 	float textBoxToChangeTimeLeft_;  // š–‹Ø‚è‘Ö‚¦‚Ü‚Å‚Ìc‚èŠÔ
 
 	TextBoxTimeBar* pTextBoxTimeBar_;
+	TextBoxBackground* pTextBoxBackground_;
 };
