@@ -8,7 +8,7 @@ namespace
 }
 
 TextBoxBackground::TextBoxBackground() : GameObject(GameObjectBuilder()
-	.SetLayerFlag(mtbit::operator|(GameObjectLayer::A , GameObjectLayer::B))
+	//.SetLayerFlag(GameObjectLayer::A)
 	.Build())
 {
 	hImage_ = Image::Load("Image/TutorialUITextBox.png");
