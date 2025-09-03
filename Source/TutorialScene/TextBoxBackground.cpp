@@ -4,11 +4,11 @@ using namespace mtgb;
 
 namespace
 {
-	const RectF DRAW_RECT{ 278, 778, 1364, 144 };
+	const RectF DRAW_RECT{ 0, 0, 1000, 700 };
 }
 
 TextBoxBackground::TextBoxBackground() : GameObject(GameObjectBuilder()
-	.SetLayerFlag(GameObjectLayer::All)
+	.SetLayerFlag(mtbit::operator|(GameObjectLayer::A , GameObjectLayer::B))
 	.Build())
 {
 	hImage_ = Image::Load("Image/TutorialUITextBox.png");

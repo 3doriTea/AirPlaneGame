@@ -229,7 +229,7 @@ namespace mtgb
 		~Draw();
 		void Initialize() override;
 		void Update() override;
-		static void FlushUIDrawCommands(GameObjectLayer _layer);
+		static void FlushUIDrawCommands(GameObjectLayerFlag _layer);
 		static void ClearUICommands();
 	private:
 		FbxModel* pFbxModel_;

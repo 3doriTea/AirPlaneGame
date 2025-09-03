@@ -294,12 +294,12 @@ void mtgb::Draw::Update()
 {
 }
 
-void mtgb::Draw::FlushUIDrawCommands(GameObjectLayer _layer)
+void mtgb::Draw::FlushUIDrawCommands(GameObjectLayerFlag _layer)
 {
 	using mtbit::operator|;
 	for (auto& drawCommand : uiDrawCommands_)
 	{
-		if (drawCommand.params.layerFlag.Has(GameObjectLayer::All | _layer))
+		if (drawCommand.params.layerFlag.Has(_layer))
 		{
 			drawCommand.drawFunction();
 		}

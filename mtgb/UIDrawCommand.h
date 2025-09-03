@@ -9,7 +9,7 @@ namespace mtgb
 	struct UIParams
 	{
 		int depth = 0;// 小さいほど奥、大きいほど手前
-		GameObjectLayerFlag layerFlag = GameObjectLayer::All;// 描画するレイヤー
+		GameObjectLayerFlag layerFlag = mtbit::operator|(GameObjectLayer::A, GameObjectLayer::B);// 描画するレイヤー
 	};
 	struct UIDrawCommand
 	{

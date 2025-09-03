@@ -805,6 +805,15 @@
     <ClCompile Include="Source\ScoreManager.cpp">
       <Filter>01Game\01Common</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\UIDrawCommand.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1397,6 +1406,15 @@
     </ClInclude>
     <ClInclude Include="Source\ScoreManager.h">
       <Filter>01Game\01Common</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\MonitorInfo.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialScene\TextBoxBackground.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
