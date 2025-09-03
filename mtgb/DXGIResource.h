@@ -48,6 +48,8 @@ namespace mtgb
 
 		WindowContextResource* Clone() const override;
 	private:
+		bool isMultiMonitor_ = true;
+		bool isBorderlessWindow = true;
 		std::vector<DXGI_MODE_DESC> modeList_;
 		std::string name_;
 		DXGI_OUTPUT_DESC outputDesc_;

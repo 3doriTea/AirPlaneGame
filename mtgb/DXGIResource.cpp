@@ -46,10 +46,11 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 	HWND hWnd = WinCtxRes::GetHWND(_windowContext);
 
 	// マルチモニター対応するかどうか
-	bool isMultiMonitor = true;
+	
 
-	if (isMultiMonitor) {	
-		 
+	if (isMultiMonitor_)
+	{	
+		
 		std::optional<MonitorInfo> optMonitorInfo = dx11Manager.AssignAvailableMonitor(pOutput_.ReleaseAndGetAddressOf());
 		if (optMonitorInfo)
 		{
@@ -60,7 +61,13 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 		massert(SUCCEEDED(hResult)
 			&& "GetDescに失敗 @DXGIResource::Initialize");
 
-		UINT nomModes = 0;
+		// ボーダレスウィンドウにするならDescだけ取得して解放
+		if (isBorderlessWindow)
+		{
+			pOutput_.Reset();
+			
+		}
+		/*UINT nomModes = 0;
 		pOutput_->GetDisplayModeList(
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			0,
@@ -73,7 +80,7 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 			DXGI_FORMAT_R8G8B8A8_UNORM,
 			0,
 			&nomModes,
-			modeList_.data());
+			modeList_.data());*/
 
 		
 	}
