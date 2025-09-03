@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DrawScreenUtility.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp" />
     <ClCompile Include="ImGui\ImCurveEdit.cpp" />
     <ClCompile Include="ImGui\ImGradient.cpp" />
@@ -195,6 +196,7 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DrawScreenUtility.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
@@ -222,6 +224,7 @@
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Mathf.h" />
     <ClInclude Include="mtgb\MonitorInfo.h" />
+    <ClInclude Include="mtgb\MTBit\BitFlag.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
     <ClInclude Include="mtgb\MTStat\MTStat.h" />

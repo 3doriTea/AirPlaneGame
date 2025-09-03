@@ -1,9 +1,10 @@
 #include "TextBoxTimeBar.h"
+#include "DrawScreenUtility.h"
 
 namespace
 {
-	//const RectInt DRAW_RECT{ 280, 900, 1360, 20 };
-	const RectInt DRAW_RECT{ 0, 0, 1000, 700 };
+	const RectInt DRAW_RECT{ 280, 900, 1360, 20 };
+	//const RectInt DRAW_RECT{ 0, 0, 1000, 700 };
 
 	const RectF DRAW_RECT_FRAME{ 0, 0, 1000, 700 };
 }
@@ -29,7 +30,7 @@ void TextBoxTimeBar::Draw() const
 	}
 
 	// TODO: éûä‘åoâﬂÇ∆ã§Ç…óºí[Ç©ÇÁè¡Ç¶ÇƒÇ¢Ç≠ÇÊÇ§Ç…ï`âÊÇ∑ÇÈ
-	Draw::Box(DRAW_RECT, Color::GREEN, { 0 });
+	Draw::Box(GenDrawScreenFrom(DRAW_RECT), Color::GREEN, { 0 });
 }
 
 void TextBoxTimeBar::SetTimeLeftMax(const float _timeSec)
