@@ -9,6 +9,7 @@ public:
 
 	void Update() override;
 	void Draw() const override;
+
 private:
 	ImageHandle hImage_;
 };
