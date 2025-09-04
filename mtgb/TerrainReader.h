@@ -6,14 +6,11 @@
 #include <cstdint>
 #include "MTAssert.h"
 #include <limits>
+#include "MTImGui.h"
 namespace mtgb
 {
 
-	/*enum StageDataBit
-	{
-		Bit8,
-		Bit16
-	};*/
+	
 
 	template<typename StageDataBit>
 	class TerrainReader
@@ -21,12 +18,14 @@ namespace mtgb
 	public:
 		TerrainReader();
 		void ReadTerrain(const char* fileName);
-
+		void TestDraw();
 		int width, height;
 		float heightScale;
 		float widthScale;
 		std::vector<StageDataBit> stageBuffer;
 		std::vector<std::vector<float>> stageData;
+
+
 	};
 
 	using TerrainReader8 = TerrainReader<uint8_t>;
@@ -34,8 +33,8 @@ namespace mtgb
 
 	template<typename StageDataBit>
 	inline TerrainReader<StageDataBit>::TerrainReader()
-		: width{100}
-		, height{100}
+		: width{513}
+		, height{513}
 		, heightScale{50.0f}
 		, widthScale{5.0f}
 	{
@@ -60,6 +59,22 @@ namespace mtgb
 				StageDataBit value = stageBuffer[y * width + x];
 				float normalized = static_cast<float>(value) / (std::numeric_limits<StageDataBit>::max)();
 				stageData[y][x] = normalized * heightScale;
+			}
+		}
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::TestDraw()
+	{
+		for (int y = 0; y < height;y++)
+		{
+			for (int x = 0; x < width;x++)
+			{
+				Vector3 start = { widthScale * x ,stageData[y][x] ,widthScale * y };
+				Vector3 end = { widthScale * x, 0, widthScale * y };
+
+				MTImGui::Instance().DrawLine(start, end, 3.0f);
+				//stageData[y][x]
 			}
 		}
 	}

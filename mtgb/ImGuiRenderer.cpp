@@ -141,10 +141,15 @@ void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
 
 void mtgb::ImGuiRenderer::SetImGuizmoRenderTargetView()
 {
-	ID3D11ShaderResourceView* nullSRV[16]{};
-	// 全スロットのSRVをクリア
-	DirectX11Draw::pContext_->PSSetShaderResources(0, 16, nullSRV);
+	//ID3D11ShaderResourceView* nullSRV[16]{};
+	//// 全スロットのSRVをクリア
+	//DirectX11Draw::pContext_->PSSetShaderResources(0, 16, nullSRV);
+
+	DirectX11Draw::pContext_->PSSetShaderResources(0, 0, pSRV_.GetAddressOf());
+	Game::System<DirectX11Manager>().ChangeViewport(viewport_);
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
+
+
 }
 void mtgb::ImGuiRenderer::SetGameViewCamera()
 {
@@ -340,20 +345,20 @@ void mtgb::ImGuiRenderer::CreateD3DResources()
 		.BindFlags = D3D11_BIND_RENDER_TARGET
 	};
 	
-	device->CreateTexture2D(&desc, nullptr, pTexture_.ReleaseAndGetAddressOf());
-	device->CreateRenderTargetView(pTexture_.Get(), nullptr, pRenderTargetView_.ReleaseAndGetAddressOf());
+	HRESULT hResult = device->CreateTexture2D(&desc, nullptr, pTexture_.ReleaseAndGetAddressOf());
+	hResult = device->CreateRenderTargetView(pTexture_.Get(), nullptr, pRenderTargetView_.ReleaseAndGetAddressOf());
 
 	// SRV用テクスチャ作成
 	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	device->CreateTexture2D(&desc, nullptr, pSRVTexture_.GetAddressOf());
-	device->CreateShaderResourceView(pSRVTexture_.Get(), nullptr, pSRV_.ReleaseAndGetAddressOf());
+	hResult = device->CreateTexture2D(&desc, nullptr, pSRVTexture_.GetAddressOf());
+	hResult = device->CreateShaderResourceView(pSRVTexture_.Get(), nullptr, pSRV_.ReleaseAndGetAddressOf());
 
 	// 深度ステンシルと深度ステンシルビューを作成
 	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(
 		Vector2Int(static_cast<int>(winWidth_), static_cast<int>(winHeight_)),
 		pDepthStencil_.ReleaseAndGetAddressOf(), pDepthStencilView_.ReleaseAndGetAddressOf());
 
-	ImGui_ImplDX11_CreateDeviceObjects();
+	//ImGui_ImplDX11_CreateDeviceObjects();
 }
 
 
