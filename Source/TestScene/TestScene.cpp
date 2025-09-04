@@ -130,7 +130,7 @@ void TestScene::Update()
 
 void TestScene::Draw() const
 {
-	reader16->TestDraw();
+	//reader16->TestDraw();
 }
 
 void TestScene::End()

@@ -66,17 +66,17 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::TestDraw()
 	{
-		for (int y = 0; y < height;y++)
-		{
-			for (int x = 0; x < width;x++)
-			{
-				Vector3 start = { widthScale * x ,stageData[y][x] ,widthScale * y };
-				Vector3 end = { widthScale * x, 0, widthScale * y };
+		//for (int y = 0; y < height;y++)
+		//{
+		//	for (int x = 0; x < width;x++)
+		//	{
+		//		Vector3 start = { widthScale * x ,stageData[y][x] ,widthScale * y };
+		//		Vector3 end = { widthScale * x, 0, widthScale * y };
 
-				MTImGui::Instance().DrawLine(start, end, 3.0f);
-				//stageData[y][x]
-			}
-		}
+		//		MTImGui::Instance().DrawLine(start, end, 3.0f);
+		//		//stageData[y][x]
+		//	}
+		//}
 	}
 
 	
