@@ -33,12 +33,12 @@ public:
 	void Draw() const override;  // 所属するゲームオブジェクトから呼ぶ
 
 private:
-	float popTimeSec_;  // 1文字が表示される時間 (秒)
+	float popTimeSec_;        // 1文字が表示される時間 (秒)
 	std::u8string showText_;  // 表示するテキスト
-	int currentIndex_;     // 現在表示する文字番号
+	int currentIndex_;        // 現在表示する文字番号
 	bool finished_;           // すべての文字が表示しきったか true / false
-	TimerHandle hTimer_;  // 1文字表示のタイマーハンドル
-	Vector2F drawPosition_;  // 描画座標
-	int fontSize_;  // 文字のフォントサイズ
-	UIParams uIParams_;  // UIパラメータ
+	TimerHandle hTimer_;      // 1文字表示のタイマーハンドル
+	Vector2F drawPosition_;   // 描画座標
+	int fontSize_;            // 文字のフォントサイズ
+	UIParams uIParams_;       // UIパラメータ
 };
