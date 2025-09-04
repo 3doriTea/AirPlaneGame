@@ -53,12 +53,14 @@ void PlayerPilot::Update()
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}
 		}, "PilotContains", ShowType::Inspector);
+
+
 }
 
 void PlayerPilot::Draw() const
 {
 	pTargetingSystem_->DrawUI();
-
+	Draw::ImmediateText("apple", { 0,0 }, 30);
 	Game::System<TrailEmitterSystem>().Render();
 }
 

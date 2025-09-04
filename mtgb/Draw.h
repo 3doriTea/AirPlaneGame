@@ -231,6 +231,7 @@ namespace mtgb
 		void Update() override;
 		static void FlushUIDrawCommands(GameObjectLayerFlag _layer);
 		static void ClearUICommands();
+		static int CalcScaledFontSize(int _baseSize);
 	private:
 		FbxModel* pFbxModel_;
 		Figure* pFigure_;

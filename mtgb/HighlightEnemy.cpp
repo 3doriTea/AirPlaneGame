@@ -84,8 +84,8 @@ void HighlightEnemy::Draw() const
 				(_info.screenPos.y - highlightFrameSize.y / 2.0f ),*/
 				(_info.screenPos.x - highlightFrameSize.x / 2.0f) / ratio.x,
 				(_info.screenPos.y - highlightFrameSize.y / 2.0f) / ratio.y,
-				highlightFrameSize.x,
-				highlightFrameSize.y
+				highlightFrameSize.x / ratio.x,
+				highlightFrameSize.y / ratio.y
 			};
 			Draw::Image(highlightFrameImage_, targetRect, { .depth = 0,.layerFlag = GameObjectLayer::A });
 		});

@@ -68,12 +68,14 @@ void TargetingSystem::SearchTargets()
 
 		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		
+		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
 		reticleRect.x =  currentTarget->screenPos.x - reticleRadius;
-		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius);
 		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
 		reticleRect.y = currentTarget->screenPos.y - reticleRadius;
+		reticleRect.width = (reticleRadius * 2.0f);
+		//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
 		//reticleRect.width = reticleRadius * 2.0f * ratio.x;
-		//reticleRect.height = reticleRadius * 2.0f * ratio.y;
+		reticleRect.height = (reticleRadius * 2.0f);
 
 	}
 	else
@@ -109,6 +111,8 @@ bool TargetingSystem::HasTarget() const
 void TargetingSystem::DrawUI() const
 {
 	// ターゲット検出範囲を描画
+	Vector2F ratio =  Game::System<Screen>().GetSizeRatio();
+	//RectF detectionRect{ targetDetector.config.detectionRect.point / ratio,targetDetector.config.detectionRect.size / ratio };
 	Draw::Image(detectionFrameImage, targetDetector.config.detectionRect, uiParams);
 
 	// ターゲットがロックオンされている場合、レティクルを描画

@@ -16,6 +16,7 @@
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 #include "../TutorialScene/TutorialScene.h"
 
+#include "TerrainReader.h"
 using namespace mtgb;
 
 TestScene::TestScene()
@@ -67,6 +68,9 @@ void TestScene::Initialize()
 	ControlTower* pControlTower{ Instantiate<ControlTower>() };
 	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
 	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
+
+	/*TerrainReader16* reader16 = new TerrainReader16();
+	reader16->ReadTerrain("terrain16.raw");*/
 }
 
 void TestScene::Update()

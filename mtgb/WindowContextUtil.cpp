@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "WindowResource.h"
 #include "Direct3DResource.h"
+#include "ISystem.h"
+#include "Screen.h"
 using namespace mtgb;
 
 /// <summary>
@@ -35,7 +37,19 @@ void mtgb::WinCtxRes::SetFullscreen(bool _fullscreen, WindowContext _ctx)
 
 	Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).SetFullScreen(_fullscreen,monitorRect);
 
-	Game::System<WindowManager>().ResizeWindow(_ctx, monitorRect.right - monitorRect.left, monitorRect.bottom - monitorRect.top);
+	UINT width, height;
+	if (_fullscreen)
+	{
+		width = monitorRect.right - monitorRect.left; 
+		height = monitorRect.bottom - monitorRect.top;
+	}
+	else
+	{
+		Vector2Int initialSize = Game::System<Screen>().GetInitialSize();
+		width = static_cast<UINT>(initialSize.x);
+		height = static_cast<UINT>(initialSize.y);
+	}
+	Game::System<WindowManager>().ResizeWindow(_ctx, width,height);
 }
 
 void WinCtxRes::ChangeResource(WindowContext ctx)

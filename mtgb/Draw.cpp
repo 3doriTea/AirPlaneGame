@@ -17,7 +17,7 @@
 #include <dwrite.h>
 #include "Ground.h"
 #include "Figure.h"
-
+#include <cmath>
 
 void mtgb::Draw::CheckSetShader(const ShaderType _default)
 {
@@ -43,7 +43,7 @@ void mtgb::Draw::Box(
 	CheckSetShader(ShaderType::Figure);
 	const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-	Box(RectInt::FromLine(Vector2F(_begin) / ratio,Vector2F(_end) / ratio), _color,_uiParams);
+	Box(RectInt::FromLine(_begin,_end), _color,_uiParams);
 }
 
 void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& _uiParams)
@@ -56,8 +56,9 @@ void mtgb::Draw::Box(const RectInt& _rect, const Color& _color, const UIParams& 
 
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-			Game::System<Draw>().pFigure_->Draw(RectF{ Vector2F(_rect.point) / ratio, Vector2F(_rect.size) / ratio}, _color);
+			//Game::System<Draw>().pFigure_->Draw(RectF{ Vector2F(_rect.point) / ratio, Vector2F(_rect.size) / ratio}, _color);
 			//Game::System<Draw>().pFigure_->Draw(RectF{ _rect.point * ratio ,_rect.size * ratio }, _color);
+			Game::System<Draw>().pFigure_->Draw(RectF{ _rect.point,_rect.size}, _color);
 		}
 		});	
 }
@@ -78,8 +79,9 @@ void mtgb::Draw::Image(
 
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-			pSprite->Draw(RectF{ _draw.point / ratio, _draw.size / ratio}, _rotationZ, RectF{ _cut.point, _cut.size }, Color::WHITE);
+			//pSprite->Draw(RectF{ _draw.point / ratio, _draw.size / ratio}, _rotationZ, RectF{ _cut.point, _cut.size }, Color::WHITE);
 			//pSprite->Draw(RectF{ _draw.point * ratio, _draw.size * ratio }, _rotationZ, RectF{ _cut.point * ratio, _cut.size * ratio }, Color::WHITE);
+			pSprite->Draw(RectF{ _draw.point, _draw.size}, _rotationZ, RectF{ _cut.point, _cut.size}, Color::WHITE);
 		}
 		});
 }
@@ -150,7 +152,8 @@ void mtgb::Draw::Text(const TextHandle _hText, const Vector2F& _origin,TextAlign
 
 void mtgb::Draw::ImmediateTextW(const std::wstring& _text, Vector2F _topLeft, int _size, TextAlignment _alignment, const UIParams& _uiParams)
 {
-	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetInitialSize();
+
 	ImmediateTextW(_text, { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment, _uiParams);
 }
 
@@ -162,7 +165,7 @@ void mtgb::Draw::ImmediateTextW(const std::wstring& _text, RectF _rect, int _siz
 			DirectX11Draw::SetIsWriteToDepthBuffer(false);
 			CheckSetShader(ShaderType::Sprite2D);
 
-			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(CalcScaledFontSize(_size));
 			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
@@ -177,13 +180,13 @@ void mtgb::Draw::ImmediateTextW(const std::wstring& _text, RectF _rect, int _siz
 
 void mtgb::Draw::ImmediateText(const std::string& _text, Vector2F _topLeft, int _size, TextAlignment _alignment,  const UIParams& _uiParams)
 {
-	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetInitialSize();
 	ImmediateText(_text, { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment, _uiParams);
 }
 
 void mtgb::Draw::ImmediateText(std::string&& _text, Vector2F _topLeft, int _size, TextAlignment _alignment, const UIParams& _uiParams)
 {
-	Vector2Int layoutBoxSize = Game::System<Screen>().GetSize();
+	Vector2Int layoutBoxSize = Game::System<Screen>().GetInitialSize();
 	ImmediateText(std::move(_text), { _topLeft.x,_topLeft.y,static_cast<float>(layoutBoxSize.x), static_cast<float>(layoutBoxSize.y) }, _size, _alignment,_uiParams);
 }
 
@@ -195,7 +198,7 @@ void mtgb::Draw::ImmediateText(const std::string& _text, RectF _rect, int _size,
 			DirectX11Draw::SetIsWriteToDepthBuffer(false);
 			CheckSetShader(ShaderType::Sprite2D);
 
-			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+			FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(CalcScaledFontSize(_size));
 			Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
 
 			const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
@@ -217,7 +220,7 @@ void mtgb::Draw::ImmediateText(std::string&& _text, RectF _rect, int _size, Text
 		DirectX11Draw::SetIsWriteToDepthBuffer(false);
 		CheckSetShader(ShaderType::Sprite2D);
 
-		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(_size);
+		FontFormatData* formatData = Game::System<mtgb::Text>().GetOrCreateTextFormat(CalcScaledFontSize(_size));
 		Game::System<DirectWrite>().SetTextAlignment(_alignment, formatData->format);
 
 		const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
@@ -312,6 +315,13 @@ void mtgb::Draw::FlushUIDrawCommands(GameObjectLayerFlag _layer)
 void mtgb::Draw::ClearUICommands()
 {
 	uiDrawCommands_.clear();
+}
+
+int mtgb::Draw::CalcScaledFontSize(int _baseSize)
+{
+	const Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+	float avg = (ratio.x + ratio.y) * 0.5f;
+	return static_cast<int>(std::roundf(_baseSize * avg));
 }
 
 ShaderType mtgb::Draw::onceShaderType_{ ShaderType::Max };
