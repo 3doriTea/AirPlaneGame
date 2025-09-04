@@ -9,6 +9,8 @@
 #include "WindowContextUtil.h"
 #include "MTImGui.h"
 #include "RenderSystem.h"
+#include "InputData.h"
+
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr },
 	onMoveListener_{}
@@ -38,6 +40,23 @@ void mtgb::SceneSystem::Update()
 	if (GameScene::pInstance_ == nullptr)
 	{
 		return;  // ÉVÅ[ÉìÇ™Ç»Ç¢Ç»ÇÁâÒãA
+	}
+
+	if (InputUtil::GetKeyDown(KeyCode::J))
+	{
+		WinCtxRes::SetFullscreen(true, WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::K))
+	{
+		WinCtxRes::SetFullscreen(false, WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::N))
+	{
+		WinCtxRes::SetFullscreen(true, WindowContext::Second);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::M))
+	{
+		WinCtxRes::SetFullscreen(false, WindowContext::Second);
 	}
 
 	WinCtxRes::ChangeResource(WindowContext::First);

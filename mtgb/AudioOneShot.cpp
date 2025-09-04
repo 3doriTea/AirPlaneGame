@@ -12,6 +12,11 @@ mtgb::AudioOneShot::AudioOneShot() :
 
 mtgb::AudioOneShot::~AudioOneShot()
 {
+	
+}
+
+void mtgb::AudioOneShot::Release()
+{
 	if (pSourceVoice != nullptr)
 	{
 		pSourceVoice->DestroyVoice();

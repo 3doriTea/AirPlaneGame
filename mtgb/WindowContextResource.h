@@ -26,6 +26,18 @@ namespace mtgb
 		virtual void SetResource() = 0;
 
 		/// <summary>
+		/// ウィンドウのサイズが変更される前の解放処理
+		/// </summary>
+		virtual void Reset() {};
+		/// <summary>
+		/// ウィンドウのサイズが変更された後の処理
+		/// </summary>
+		/// <param name="_width">幅</param>
+		/// <param name="_height">高さ</param>
+		virtual void OnResize(WindowContext _windowContext,UINT _width, UINT _height){};
+		virtual void Release() = 0;
+
+		/// <summary>
 		/// 更新処理
 		/// </summary>
 		virtual void Update() {};

@@ -106,6 +106,7 @@ mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScre
 	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
 		return Vector2F(-1, -1);
 	return Vector2F(screenPos.x, screenPos.y);
+
 }
 
 mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _context)
@@ -131,7 +132,8 @@ mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _co
 	
 	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
 		return Vector2F(-1, -1);
-	return Vector2F(screenPos.x, screenPos.y);
+	return Vector2F(screenPos.x, screenPos.y) * Game::System<Screen>().GetSizeRatio();
+
 }
 
 const mtgb::Transform& mtgb::CameraSystem::GetTransform() const

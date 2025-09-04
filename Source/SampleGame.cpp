@@ -5,6 +5,7 @@
 #include "PlayScene.h"
 #include "TestScene/TestScene.h"
 #include "TrailEmitterSystem.h"
+#include "CheckTutorialScene/CheckTutorialScene.h"
 
 #pragma endregion
 
@@ -24,6 +25,9 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	//_register(new MainWindow{}, SystemUpdateType::Cycle);
 
 	//_register.function_
+	_register.Set<Time>(SystemUpdateType::Cycle);
+	_register.Set<Timer>(SystemUpdateType::Frame);
+
 	_register.Set<RenderSystem>(SystemUpdateType::DontCallMe);
 	_register.Set<AssetsManager>(SystemUpdateType::DontCallMe);
 
@@ -55,8 +59,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 
-	_register.Set<Time>(SystemUpdateType::Cycle);
-	_register.Set<Timer>(SystemUpdateType::Frame);
+	
 
 	_register.Set<Debug>(SystemUpdateType::Cycle);
 
@@ -80,6 +83,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	// 開始時のシーン
 	//Game::System<SceneSystem>().Move<PlayScene>();
+	//Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	Game::System<SceneSystem>().Move<TestScene>();
 
 	//_register<MainWindow>(SystemUpdateType::Cycle);

@@ -37,4 +37,6 @@ REGISTER_FIELD(rgbButtons)
 REGISTER_FIELD(connectionStatus)
 REGISTER_FIELD(assignmentStatus)
 REGISTER_FIELD(lastErrorMessage)
+REGISTER_FIELD(deviceName)
+REGISTER_FIELD(deviceProductName)
 REGISTER_END

@@ -1,6 +1,7 @@
 #include "VVPlayer.h"
 #include "MTNet/HttpHeaderBuilder.h"
 #include "JsonUtility.h"
+#include <thread>
 
 using mtnet::HttpClient;
 using mtnet::HttpHeaderBuilder;
@@ -29,52 +30,80 @@ VVPlayer::~VVPlayer()
 
 void VVPlayer::Play(const std::u8string& _text)
 {
-	// http postリクエストで読み上げるためのデータ生成
-	std::string response = httpClient_.Post(
-		HttpHeaderBuilder().ContentType("application/json; charset=UTF-8"),
-		"audio_query?text=" + HttpClient::ToPercentURI({ _text.begin(), _text.end() })
-		+ "&speaker=" + std::to_string(ZUNDAMON));
-
-	// 音声生成に必要な jsonだけ取り出す
-	json responseJson = json::parse(response.substr(response.find('{')));
-	std::string jsonStr = responseJson.dump(2);
-
-	// 取り出した jsonを送りwavファイルを生成
-	httpClient_.PostAndBinaryResponce(
-		HttpHeaderBuilder()
-		.ContentType("application/json")
-		.Accept("audio/wav")
-		.ResponseType("stream"),
-		"synthesis?speaker=" + std::to_string(ZUNDAMON) + "&enable_interrogative_upspeak=true",
-		[&](std::vector<uint8_t>& buffer) -> void
+	{  // 排他制御
+		std::lock_guard lock{ playingMutex_ };
+		if (isPlaying_)  // 既にプレイ中なら
 		{
-			std::string wavRow{ buffer.begin(), buffer.end() };
+			// キューに追加する
+			playList_.push(_text);
+			return;
+		}
+	}
+	
+	// 空いているなら非同期処理を走らせる
+	std::thread
+	{
+		[&, _text, this]()
+		{
+			{  // 排他制御
+				std::lock_guard lock{ playingMutex_ };
+				isPlaying_ = true;
+			}
 
-			std::istringstream iss{ wavRow };
+			// http postリクエストで読み上げるためのデータ生成
+			std::string response = httpClient_.Post(
+				HttpHeaderBuilder().ContentType("application/json; charset=UTF-8"),
+				"audio_query?text=" + HttpClient::ToPercentURI({ _text.begin(), _text.end() })
+				+ "&speaker=" + std::to_string(ZUNDAMON));
 
-			std::string wavRowHeader{};
-			size_t contentLength{};
+			// 音声生成に必要な jsonだけ取り出す
+			json responseJson = json::parse(response.substr(response.find('{')));
+			std::string jsonStr = responseJson.dump(2);
 
-			size_t bodyBeginIndex = wavRow.find("RIFF");
-			wavRowHeader = wavRow.substr(0, bodyBeginIndex);
+			// 取り出した jsonを送りwavファイルを生成
+			httpClient_.PostAndBinaryResponce(
+				HttpHeaderBuilder()
+				.ContentType("application/json")
+				.Accept("audio/wav")
+				.ResponseType("stream"),
+				"synthesis?speaker=" + std::to_string(ZUNDAMON) + "&enable_interrogative_upspeak=true",
+				[&](std::vector<uint8_t>& buffer) -> void
+				{
+					std::string wavRow{ buffer.begin(), buffer.end() };
 
-			static const char CONTENT_LENGTH_TEXT[]{ "content-length: " };
-			size_t begin = wavRowHeader.find(CONTENT_LENGTH_TEXT) + std::strlen(CONTENT_LENGTH_TEXT);
-			size_t end = wavRowHeader.find("\r\n", begin);
-			contentLength = std::stoull(wavRowHeader.substr(begin, end - begin));
+					std::istringstream iss{ wavRow };
 
-			byte* wavData{ new byte[contentLength]{} };
-			memcpy(wavData, wavRow.substr(bodyBeginIndex).data(), contentLength);
+					std::string wavRowHeader{};
+					size_t contentLength{};
 
-			/*std::ofstream ofs;
-			ofs.open("test.wav", std::ios::out | std::ios::binary | std::ios::trunc);
-			ofs.write(reinterpret_cast<char*>(wavData), contentLength);
-			ofs.close();*/
+					size_t bodyBeginIndex = wavRow.find("RIFF");
+					wavRowHeader = wavRow.substr(0, bodyBeginIndex);
 
-			//std::cout << "Playing..." << std::endl;
-			Game::System<Audio>().PlayOneShotBuffer(wavData, contentLength);
+					static const char CONTENT_LENGTH_TEXT[]{ "content-length: " };
+					size_t begin = wavRowHeader.find(CONTENT_LENGTH_TEXT) + std::strlen(CONTENT_LENGTH_TEXT);
+					size_t end = wavRowHeader.find("\r\n", begin);
+					contentLength = std::stoull(wavRowHeader.substr(begin, end - begin));
 
-			delete[] wavData;
-		},
-		jsonStr);
+					byte* wavData{ new byte[contentLength]{} };
+					memcpy(wavData, wavRow.substr(bodyBeginIndex).data(), contentLength);
+
+					Game::System<Audio>().PlayOneShotBuffer(wavData, contentLength);
+
+					delete[] wavData;
+				},
+				jsonStr);
+
+			{  // 排他制御
+				std::lock_guard lock{ playingMutex_ };
+				isPlaying_ = false;
+			}
+
+			// もし次の値があるなら続けて再生
+			if (!playList_.empty())
+			{
+				Play(playList_.back());
+				playList_.pop();
+			}
+		}
+	}.detach();
 }

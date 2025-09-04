@@ -38,7 +38,7 @@ EventPopup::EventPopup(const std::string& _message) : GameObject(GameObjectBuild
 		SWING_TIME + STOP_TIME + SWING_TIME,
 	};
 	int beginPosY{ static_cast<int>(MOVE_BEGIN_Y_PX_RATE * Game::System<Screen>().GetSize().y) };
-	moveSizeY_ = MOVE_SIZE_Y_PX_RATE * Game::System<Screen>().GetSize().y;
+	moveSizeY_ = static_cast<int>(MOVE_SIZE_Y_PX_RATE * Game::System<Screen>().GetSize().y);
 
 	for (int i = 0; i < ANIM_MAX; i++)
 	{

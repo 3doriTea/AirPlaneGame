@@ -46,6 +46,13 @@ namespace mtgb
         /// <param name="windowContext">切り替えるウィンドウの識別子</param>
         void ChangeResource(WindowContext windowContext);
 
+        /// <summary>
+        /// 全リソースのOnResizeを呼びだす
+        /// </summary>
+        /// <param name="windowContext"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        void OnResizeAll(WindowContext windowContext, UINT width, UINT height);
         template<typename ResourceT>
         void SwapResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);
       /*  void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);*/

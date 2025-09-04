@@ -2,94 +2,93 @@
 #include "Timer.h"
 #include "Text.h"
 #include "Draw.h"
+#include "MTStringUtility.h"
 
 using namespace mtgb;
 
-TextBox::TextBox() : GameObject(GameObjectBuilder()
-    .Build()),
-    TextSec_(0), finished_(false), currentIndex_(0), hTimer_(nullptr)
+TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize) : GameObject(GameObjectBuilder()
+	.Build()),
+	popTimeSec_{ _popTimeSec },
+	drawPosition_{ _drawPosition },
+	showText_{},
+	currentIndex_{ 0 },
+	finished_{ false },
+	hTimer_{ nullptr },
+	fontSize_{ _fontSize },
+	uIParams_{}
 {
 }
 
-TextBox::TextBox(std::string _testText, float _textsec) : TextBox()
+TextBox::TextBox(const std::string _initShowText, const float _popTimeSec, const Vector2F _drawPosition, const int _fontSize) :
+	TextBox{ _popTimeSec, _drawPosition, _fontSize }
 {
-    testtext_ = _testText;
-    SetTextSpeedSec(_textsec);
-    Show(testtext_);
+	showText_ = { _initShowText.begin(), _initShowText.end() };
 }
 
 TextBox::~TextBox()
 {
-    mtgb::Timer::Remove(hTimer_);
-    
-    mtgb::Timer::Remove(cTimer_);
-    testtext_ = "";
+	Timer::Remove(hTimer_);
 }
 
 // 1文字あたりの表示秒数
-void TextBox::SetTextSpeedSec(const float _sec)
+void TextBox::SetPopTimeSec(const float _timeSec)
 {
-    TextSec_ = _sec;
+	popTimeSec_ = _timeSec;
 }
 
 // 文字列をいざ表示する
-void TextBox::Show(const std::string& _text)
+void TextBox::Show(const std::u8string& _text)
 {
-    currentIndex_ = 0;
-    finished_ = false;
+	showText_ = _text;
+	currentIndex_ = 0;
+	finished_ = false;
 
-    if (hTimer_)
-    {
-        mtgb::Timer::Remove(hTimer_);
-        hTimer_ = nullptr;
-    }
+	if (hTimer_)
+	{
+		mtgb::Timer::Remove(hTimer_);
+		hTimer_ = nullptr;
+	}
 
-    hTimer_ = mtgb::Timer::AddInterval(TextSec_, [&,this]()
-        {
-
-            if (currentIndex_ < testtext_.size())
-            {
-                ++currentIndex_;
-            }
-            else
-            {
-                finished_ = true;
-                if (hTimer_ != nullptr)
-                {
-                    mtgb::Timer::Remove(hTimer_);
-                    hTimer_ = nullptr;
-                }
-
-                // 1秒後にテキストをクリアする単発タイマーをセット
-                cTimer_ = mtgb::Timer::AddAram(1.0f, [this]()
-                    {
-                        testtext_.clear();
-                        currentIndex_ = 0;
-                        finished_ = false;
-                        //cTimer_ = nullptr;
-                    });
-            }
-        });
-
-    if (finished_ == true)
-    {
-        testtext_.clear();
-    }
+	hTimer_ = mtgb::Timer::AddInterval(popTimeSec_, [&, this]()
+		{
+			if (currentIndex_ < GetSizeUTF8Characters(showText_))
+			{
+				currentIndex_++;
+			}
+			else
+			{
+				finished_ = true;
+				if (hTimer_ != nullptr)
+				{
+					mtgb::Timer::Remove(hTimer_);
+					hTimer_ = nullptr;
+				}
+			}
+		});
 }
 
-bool TextBox::IsFinished()
+void TextBox::Hide()
 {
-    return finished_;
+	showText_.clear();
+	currentIndex_ = 0;
+	finished_ = false;
+	hTimer_ = nullptr;
+}
+
+bool TextBox::IsFinished() const
+{
+	return finished_;
 }
 
 
 // 所属するゲームオブジェクトから呼ぶ
 void TextBox::Draw() const
 {
-    if (currentIndex_ > 0 && !testtext_.empty())
-    {
-        Draw::ChangeTextAlignment(TextAlignment::topLeft);
-        Draw::ImmediateText(testtext_.substr(0, currentIndex_), {400.0f,400.0f}, 48);
-    }
-    //Draw::ImmediateText(testtext_, 0, 30, 100);
+	if (currentIndex_ > 0 && !showText_.empty())
+	{
+		Draw::ChangeTextAlignment(TextAlignment::topLeft);
+		//std::u8string_view cut{ showText_.substr(0, currentIndex_) };
+		Draw::ImmediateTextW(UTF8ToWide(SubStrBegin(showText_, currentIndex_)), drawPosition_, fontSize_, TextAlignment::topLeft, uIParams_ );
+	}
+	//Draw::ImmediateText(testtext_, 0, 30, 100);
 }

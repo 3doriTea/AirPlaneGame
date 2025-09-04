@@ -10,8 +10,7 @@ mtgb::Direct2DResource::Direct2DResource()
 
 mtgb::Direct2DResource::~Direct2DResource()
 {
-	pD2DBrush_.Reset();
-	pRenderTarget_.Reset();
+	Release();
 }
 
 mtgb::Direct2DResource::Direct2DResource(const Direct2DResource& other)
@@ -29,15 +28,30 @@ void mtgb::Direct2DResource::Initialize(WindowContext _windowContext)
 
 	Direct2D& direct2D = Game::System<Direct2D>();
 
-	
 	direct2D.CreateD2DRenderTarget(dxgiResource.pDXGISurface_.Get(), pRenderTarget_.ReleaseAndGetAddressOf());
 
 	direct2D.CreateSolidColorBrush(D2D1::ColorF::White, pRenderTarget_.Get(), pD2DBrush_.ReleaseAndGetAddressOf());
 }
 
+void mtgb::Direct2DResource::Reset()
+{
+	Release();
+}
+
+void mtgb::Direct2DResource::OnResize(WindowContext _windowContext, UINT _width, UINT _height)
+{
+	Initialize(_windowContext);
+}
+
 void mtgb::Direct2DResource::SetResource()
 {
 	Game::System<Direct2D>().ChangeRenderTarget(pD2DBrush_, pRenderTarget_);
+}
+
+void mtgb::Direct2DResource::Release()
+{
+	pD2DBrush_.Reset();
+	pRenderTarget_.Reset();
 }
 
 WindowContextResource* mtgb::Direct2DResource::Clone() const

@@ -12,7 +12,11 @@
 #include "UI/Radar.h"
 #include "HighlightEnemy.h"
 #include "../ControlTower.h"
+#include "../TestScene/UI/OrderText.h"
+#include "../CheckTutorialScene/CheckTutorialScene.h"
+#include "../TutorialScene/TutorialScene.h"
 
+#include "TerrainReader.h"
 using namespace mtgb;
 
 TestScene::TestScene()
@@ -25,9 +29,6 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	Game::System<WinCtxResManager>().SwapResource<InputResource>();
-
-
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
 	MTImGui::Instance().Initialize();
@@ -55,6 +56,8 @@ void TestScene::Initialize()
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 
+	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
+
 	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
 
 	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
@@ -65,6 +68,9 @@ void TestScene::Initialize()
 	ControlTower* pControlTower{ Instantiate<ControlTower>() };
 	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
 	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
+
+	/*TerrainReader16* reader16 = new TerrainReader16();
+	reader16->ReadTerrain("terrain16.raw");*/
 }
 
 void TestScene::Update()
@@ -73,26 +79,47 @@ void TestScene::Update()
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::J))
+	if (InputUtil::GetKeyDown(KeyCode::Y))
 	{
-		WinCtxRes::SetFullscreen(true,WindowContext::First);
+		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::K))
+	if (InputUtil::GetKeyDown(KeyCode::U))
 	{
-		WinCtxRes::SetFullscreen(false, WindowContext::First);
+		Game::System<SceneSystem>().Move<TutorialScene>();
 	}
-	if (InputUtil::GetKeyDown(KeyCode::N))
-	{
-		WinCtxRes::SetFullscreen(true, WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::M))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::Second);
-	}
+	
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
+
+	if (InputUtil::GetKeyDown(KeyCode::F11))
+	{
+		static bool flag = false;
+		if (flag)
+		{
+			flag = false;
+		}
+		else
+		{
+			flag = true;
+		}
+		WinCtxRes::SetFullscreen(flag, WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::F10))
+	{
+		static bool flag = false;
+		if (flag)
+		{
+			flag = false;
+		}
+		else
+		{
+			flag = true;
+		}
+		WinCtxRes::SetFullscreen(flag, WindowContext::Second);
+	}
+
 }
 
 void TestScene::Draw() const

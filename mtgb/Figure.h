@@ -4,6 +4,7 @@
 #include "Vector4.h"
 #include "Matrix4x4.h"
 #include "RectInt.h"
+#include "RectF.h"
 #include "Color.h"
 
 namespace mtgb
@@ -34,7 +35,9 @@ namespace mtgb
 		void Draw(
 			const RectInt& _rect,
 			const Color& _color);
-
+		void Draw(
+			const RectF& _rect,
+			const Color& _color);
 	private:
 		/// <summary>
 		/// 頂点バッファの初期化

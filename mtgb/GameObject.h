@@ -46,7 +46,7 @@ namespace mtgb
 		/// <param name="..._args">コンストラクタ可変長引数</param>
 		/// <returns>インスタンスされたゲームオブジェクトのポインタ</returns>
 		template<class GameObjectT, typename ...Args>
-		GameObjectT* Instantiate(Args... _args);
+		static GameObjectT* Instantiate(Args... _args);
 
 		template<typename GameSceneT>
 		GameSceneT& GetScene();
@@ -110,7 +110,7 @@ namespace mtgb
 	template<typename GameSceneT>
 	inline GameSceneT& GameObject::GetScene()
 	{
-		GameSceneT* pActiveScene{ Game::System<SceneSystem>().GetActiveScene() };
+		GameSceneT* pActiveScene{ static_cast<GameSceneT*>(Game::System<SceneSystem>().GetActiveScene()) };
 		massert(pActiveScene != nullptr
 			&& "アクティブシーンの取得に失敗 @GameObject::GetScene");
 

@@ -66,7 +66,8 @@ void mtgb::Audio::Update()
 		}
 		else  // ·•ª‚ª0ˆÈ‰º = Ä¶I—¹
 		{
-			delete (*itr);  // ‰ð•ú‚·‚é
+			(*itr)->Release();
+			//delete (*itr);  // ‰ð•ú‚·‚é
 			itr = pOneShotQueue_.erase(pOneShotQueue_.begin());  // Á‚·
 			if (itr == pOneShotQueue_.end())
 			{
@@ -236,8 +237,10 @@ void mtgb::Audio::Clear()
 	{
 		oneShot->pSourceVoice->ExitLoop();
 		oneShot->pSourceVoice->Stop();
+		oneShot->Release();
 		delete oneShot;
 	}
+	pOneShotQueue_.clear();
 	pAudioClips_.clear();
 }
 

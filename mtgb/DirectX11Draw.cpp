@@ -7,7 +7,7 @@
 #include "IShader.h"
 #include "DirectWrite.h"
 #include "OBJ.h"
-
+#include "Debug.h"
 
 using namespace mtgb;
 
@@ -15,6 +15,7 @@ ComPtr<ID3D11Device> DirectX11Draw::pDevice_{ nullptr };  // ï`âÊÇçsÇ§ÇΩÇﬂÇÃä¬ã
 ComPtr<ID3D11DeviceContext> DirectX11Draw::pContext_{ nullptr };
 ComPtr<IDXGIDevice1> DirectX11Draw::pDXGIDevice_{ nullptr };
 std::vector<ComPtr<IDXGIAdapter1>> DirectX11Draw::pDXGIAdapters_{};
+std::vector<MonitorInfo> DirectX11Draw::monitorInfos_{};
 ComPtr<IDXGIFactory2> DirectX11Draw::pDXGIFactory_{ nullptr };
 
 IDXGISwapChain* DirectX11Draw::pSwapChain_{ nullptr };  // É_ÉuÉãÉoÉbÉtÉ@ÉäÉìÉOÇ∑ÇÈÇ‚Ç¬
@@ -77,7 +78,11 @@ void mtgb::DirectX11Draw::End()
 {
 	// ÉXÉèÉbÉvÇµÇƒâÊñ çXêV
 	//pSwapChain_->Present(0U, 0U);
-	pSwapChain1_->Present(0U, 0U);
+	HRESULT hr = pSwapChain1_->Present(0U, 0U);
+	if (FAILED(hr))
+	{
+		LOGIMGUI_CAT("Device", "failed SwapChain::Present:Error-%ld");
+	}
 	//pSwapChain_->Present(0U, 0U);
 }
 

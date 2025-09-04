@@ -30,11 +30,12 @@ namespace mtgb
 		void Initialize(WindowContext _windowContext) override;
 		void Update() override;
 		void SetResource() override;
+		void Release() override;
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
 	private:
 		std::string name_;
-		ComPtr<IDirectInputDevice8> pKeyDevice_;    // キーデバイス
+		ComPtr<IDirectInputDevice8> pKeyDevice_;
 		ComPtr<IDirectInputDevice8> pMouseDevice_;
 		ComPtr<IDirectInputDevice8> pJoystickDevice_;
 		JoystickProxy* pProxy_;

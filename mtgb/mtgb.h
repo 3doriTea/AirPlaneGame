@@ -20,6 +20,8 @@
 #include "Mathf.h"
 #include "RectDetector.h"
 
+#include "DrawScreenUtility.h"
+
 #pragma endregion
 
 #pragma region Systems

@@ -4,6 +4,9 @@
 #include <wrl/client.h>
 #include <array>
 #include "ShaderType.h"
+#include <dxgi.h>
+#include "MonitorInfo.h"
+
 using Microsoft::WRL::ComPtr;
 
 struct ID3D11Device;
@@ -11,6 +14,7 @@ struct ID3D11DeviceContext;
 struct IDXGIDevice1;
 struct IDXGIAdapter1;
 struct IDXGIFactory2;
+
 
 struct IDXGISwapChain;
 struct IDXGISwapChain1;
@@ -32,6 +36,8 @@ namespace mtgb
 	class Figure;
 	class IShader;
 	class ImGuiRenderer;
+
+	
 
 	/// <summary>
 	/// ブレンドモード
@@ -136,6 +142,7 @@ namespace mtgb
 		static ComPtr<IDXGIDevice1> pDXGIDevice_;
 		static std::vector<ComPtr<IDXGIAdapter1>> pDXGIAdapters_;
 		static ComPtr<IDXGIFactory2> pDXGIFactory_;
+		static std::vector<MonitorInfo> monitorInfos_;
 
 		static IDXGISwapChain* pSwapChain_;                                                        // ダブルバッファリングするやつ
 		static ComPtr<IDXGISwapChain1> pSwapChain1_;

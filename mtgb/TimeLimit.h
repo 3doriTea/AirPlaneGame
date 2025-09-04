@@ -12,6 +12,7 @@ class TimeLimit : public mtgb::GameObject
 {
 public:
 	TimeLimit();
+	TimeLimit(float _time);
 	~TimeLimit();
 
 	void Update() override;

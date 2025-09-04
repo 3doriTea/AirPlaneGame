@@ -30,11 +30,34 @@ namespace mtgb
 		WindowResource* Clone() const override;
 		WindowResource();
 		~WindowResource();
+
+		/// <summary>
+		/// <para> リソースの初期化が完了したというフラグを trueにする </para>
+		/// </summary>
+		void MarkInitialized();
+		void OnResize(WindowContext _windowContext, UINT _width, UINT _height) override;
+
+		void SetFullScreen(bool _fullscreen);
+		void SetFullScreen(bool _fullscreen, const RECT& _monitorRect);
+		/// <summary>
+		/// フルスクリーンにする前に情報を保持しておく
+		/// </summary>
+		void GetWindowInfo();
 	private:
+		WindowContext context_;
 		HWND hWnd_;
 		bool isActive_;
-		int outputIndex_;
-		static int outputCount;
+
+		// ウィンドウモード時の情報
+		RECT windowedRect_;		//位置とサイズ
+		LONG windowedStyle_;	// スタイル
+		LONG windowedExStyle_;	// 拡張スタイル
+
+		// 初期化が完了したか
+		bool isInitialized_;
+
+		// WindowContextResource を介して継承されました
+		void Release() override;
 
 	};
 }

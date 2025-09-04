@@ -11,15 +11,19 @@
 #define LOGF(format, ...) \
 	mtgb::Debug::LogF(format, __VA_ARGS__)
 
-//#define LOGIMGUI(objName,format,...) \
-//	Game::System<Debug>().LogImGui(objName,std::source_location::current(),format,__VA_ARGS__)
-
+// 後方互換性のため、元のマクロも残す
 #define LOGIMGUI(format,...) \
-	Game::System<Debug>().LogImGui("",std::source_location::current(),format,__VA_ARGS__)
+	Game::System<Debug>().LogImGui("General",std::source_location::current(),format,__VA_ARGS__)
+
+// カテゴリ指定版の新しいマクロ
+#define LOGIMGUI_CAT(category, format, ...) \
+	Game::System<Debug>().LogImGui(category, std::source_location::current(), format, __VA_ARGS__)
 
 #else
 
 #define LOGF(format, ...)
+#define LOGIMGUI(format, ...)
+#define LOGIMGUI_CAT(category, format, ...)
 
 #endif
 
@@ -33,6 +37,7 @@ namespace mtgb
 		int line;
 		std::string func;
 		std::string objectName;
+		std::string category;  // フィルター用カテゴリ
 		int count = 1;
 	};
 
@@ -56,7 +61,7 @@ namespace mtgb
 		static void LogF(const char* _format, const Args... _args);
 
 		template<typename ...Args>
-		void LogImGui(const std::string& object, const std::source_location& _location, const char* _format, const Args..._args);
+		void LogImGui(const std::string& category, const std::source_location& _location, const char* _format, const Args..._args);
 
 		std::list<LogEntry> GetLog();
 
@@ -70,9 +75,8 @@ namespace mtgb
 
 		LogItr RemoveLog(LogItr itr);
 		
-
 		std::list<LogEntry> logs_;
-		std::unordered_map<std::string, LogItr> logMap_;//ログがキー、logs_へのインデックスが値
+		std::unordered_map<std::string, LogItr> logMap_;//ログがキー、logs_へのイテレータが値
 		static std::string MakeKey(const std::string& object, const char* file, int line, const char* func, const std::string msg);
 	};
 
@@ -86,8 +90,9 @@ namespace mtgb
 
 		OutputDebugString(buffer);
 	}
+
 	template<typename ...Args>
-	void Debug::LogImGui(const std::string& object, const std::source_location& _location, const char* _format, const Args..._args)
+	void Debug::LogImGui(const std::string& category, const std::source_location& _location, const char* _format, const Args..._args)
 	{
 		char buffer[BUFFER_SIZE]{};
 		ZeroMemory(buffer, BUFFER_SIZE);  // ヌル文字埋め
@@ -95,7 +100,7 @@ namespace mtgb
 		::sprintf_s<BUFFER_SIZE>(buffer, _format, _args...);
 		
 		std::string msg = mtgb::MultiToUTF8(buffer);
-		std::string key = Debug::MakeKey(object, _location.file_name(), _location.line(), _location.function_name(), msg);
+		std::string key = Debug::MakeKey(category, _location.file_name(), _location.line(), _location.function_name(), msg);
 		key = mtgb::MultiToUTF8(key);
 		auto itr = logMap_.find(key);
 		if (itr != logMap_.end())
@@ -105,13 +110,15 @@ namespace mtgb
 		else
 		{
 			logs_.push_back(
-				LogEntry{
+				LogEntry
+				{
 					.msg = msg,
 					.msgDetail = key,
 					.file = _location.file_name(),
 					.line = static_cast<int>(_location.line()),
 					.func = _location.function_name(),
-					.objectName = object,
+					.objectName = "",  
+					.category = category,  // カテゴリを設定
 					.count = 1					
 				});
 			logMap_[key] = std::prev(logs_.end());

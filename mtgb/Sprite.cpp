@@ -43,8 +43,8 @@ void mtgb::Sprite::Draw(
 			_pCB->g_matrixWorldRotation = XMMatrixRotationZ(_rotationZ);
 
 #pragma region TODO: 計算見直し必要
-			// スクリーンサイズを一度だけ取得
-			static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+			// スクリーンサイズを取得
+			const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 			// 数学座標と描画座標のy軸差異解消
 			RectF cartesianBox{ _draw };
@@ -266,7 +266,7 @@ void mtgb::Sprite::Draw(const Transform* _pTransform, const Transform* _pCameraT
 
 			_pTransform->GenerateWorldRotationMatrix(&_pCB->g_matrixWorldRotation);
 			_pCB->g_matrixWorldRotation = XMMatrixTranspose(_pCB->g_matrixWorldRotation);
-#pragma endregion
+#pragma endregionu
 
 #pragma region UV計算
 			_pCB->g_matrixTexture = XMMatrixIdentity();
@@ -313,7 +313,7 @@ void mtgb::Sprite::InitializeVertexBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		&INITIALIZE_DATA,
-		&pVertexBuffer_);
+		pVertexBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // 頂点バッファの作成に成功
 		&& "頂点バッファの作成に失敗 @Sprite::InitializeVertexBuffer");
@@ -345,7 +345,7 @@ void mtgb::Sprite::InitializeIndexBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		&INITIALIZE_DATA,
-		&pIndexBuffer_);
+		pIndexBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)  // インデックスバッファの作成に成功
 		&& "インデックスバッファの作成に失敗 @Sprite::InitializeIndexBuffer");
@@ -367,7 +367,7 @@ void mtgb::Sprite::InitializeConstantBuffer(ID3D11Device* _pDevice)
 	hResult = _pDevice->CreateBuffer(
 		&BUFFER_DESC,
 		nullptr,  // 初期データなし
-		&pConstantBuffer_);
+		pConstantBuffer_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "コンスタントバッファの作成に失敗 @Sprite::InitializeConstantBuffer");

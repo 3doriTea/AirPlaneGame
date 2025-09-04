@@ -62,6 +62,8 @@ namespace mtgb
 		template<typename T>
 		inline Vector2T<T> operator/(T _scalar, const Vector2T<T>& _v) { return Vector2T<T>{ _v } /= _scalar; }
 		template<typename T>
+		inline Vector2T<T> operator/(const Vector2T<T>& _v1, const Vector2T<T>& _v2) { return Vector2T<T>{_v1.x / _v2.x, _v1.y / _v2.y}; }
+		template<typename T>
 		inline Vector2T<T> operator+(const Vector2T<T>& _v1, Vector2T<T> _v2) { return Vector2T<T>{ _v1 } += _v2; }
 		template<typename T>
 		inline Vector2T<T> operator-(const Vector2T<T>& _v1, const Vector2T<T>& _v2) { return Vector2T<T>{ _v1 } -= _v2; }
@@ -93,6 +95,19 @@ namespace mtgb
 			using R = std::common_type_t<T, U>;
 			return Vector2T<R>(static_cast<R>(_v.x) * static_cast<R>(_scalar),
 				static_cast<R>(_v.y) * static_cast<R>(_scalar));
+		}
+
+		// TODO: _scalarÇ™ïœä∑Ç≈Ç´Ç∏Ç…ÉGÉâÅ[
+		template<typename T, typename U>
+		inline auto operator*(const Vector2T<T>& _v1, Vector2T<U> _v2)
+			-> Vector2T<std::common_type_t<T, U>>
+		{
+			using R = std::common_type_t<T, U>;
+			return Vector2T<R>
+				(
+					static_cast<R>(_v1.x) * static_cast<R>(_v2.x),
+					static_cast<R>(_v1.y) * static_cast<R>(_v2.y)
+				);
 		}
 
 		template<typename T, typename U>
