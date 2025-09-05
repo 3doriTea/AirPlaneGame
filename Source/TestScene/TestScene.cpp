@@ -21,7 +21,7 @@ using namespace mtgb;
 
 namespace mtgb
 {
-	TerrainReader16* reader16;
+	//TerrainReader16* reader16;
 }
 
 TestScene::TestScene()
@@ -30,7 +30,7 @@ TestScene::TestScene()
 
 TestScene::~TestScene()
 {
-	delete reader16;
+	//delete reader16;
 }
 
 void TestScene::Initialize()
@@ -75,8 +75,8 @@ void TestScene::Initialize()
 	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
 	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
 
-	reader16 = new TerrainReader16();
-	reader16->ReadTerrain("terrain16.raw");
+	/*reader16 = new TerrainReader16();
+	reader16->ReadTerrain("terrain16.raw");*/
 }
 
 void TestScene::Update()
