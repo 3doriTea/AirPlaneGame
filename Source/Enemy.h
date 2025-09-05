@@ -16,6 +16,7 @@ private:
 	Transform* pTransform_;
 	//OBJModelHandle hModel_;
 
+
 	FBXModelHandle hModel_;
 	FBXModelHandle hModelCollider_;
 	float radius_;
