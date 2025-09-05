@@ -88,7 +88,7 @@ void TutorialScene::Initialize()
 	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
 	pGunner->SetRadarUI(pGunnerRader);
 
-	pTextBox_ = Instantiate<TextBox>(0.01f, Vector2F{160, 480}, 48);
+	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(Vector2Int{ 160, 480 }), 24);
 	pTextBox_->SetPopTimeSec(0.1f);
 	pTextBox_->SetUIParams({ 6 });
 

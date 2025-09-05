@@ -241,7 +241,10 @@
     <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\ShowType.h" />
-    <ClInclude Include="mtgb\TerrainReader.h" />
+    <ClInclude Include="mtgb\TerrainReader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="mtgb\TextAlignment.h" />
     <ClInclude Include="mtgb\TimeLimit.h" />
     <ClInclude Include="mtgb\Trail.h" />

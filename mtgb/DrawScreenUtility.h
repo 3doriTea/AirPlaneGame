@@ -35,4 +35,13 @@ namespace mtgb
 		};
 
 	}
+
+	template<typename T>
+	inline const mtgb::Vector2T<T> GenDrawScreenFrom(const mtgb::Vector2T<T>& _to)
+	{
+		static const Vector2T<T> RATE{ _to.x / CANVAS_SIZE.x, _to.y / CANVAS_SIZE.y };
+		const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+
+		return { SCREEN_SIZE.x * RATE.x, SCREEN_SIZE.y * RATE.y };
+	}
 }
