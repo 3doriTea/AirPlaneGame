@@ -11,7 +11,7 @@
 #include <DirectXCollision.h>
 #include "Draw.h"
 #include "Transform.h"
-
+#include "Fbx.h"
 namespace mtgb
 {
 
@@ -204,8 +204,9 @@ namespace mtgb
 			for (int x = 0; x < cellNum; x++)
 			{
 				DirectX::BoundingBox& box = aabbs[z * cellNum + x];
-				pTransform.
-				Draw::FBXModel()
+				pTransform->position = box.Center;
+				/*pTransform->scale = box.
+				Draw::FBXModel()*/
 			}
 		}
 		
@@ -245,7 +246,7 @@ namespace mtgb
 		int centerOffset = cellNum / 2;
 
 		// 中心基準の座標系にしてからワールド座標系に変換
-		return (x - centerOffset) * widthScale;
+		return (_cellIndex - centerOffset) * widthScale;
 	}
 
 }
