@@ -58,5 +58,35 @@ void mtgb::WindowContextResourceManager::ChangeResource(WindowContext windowCont
 	currentContext_ = windowContext;
 }
 
+void mtgb::WindowContextResourceManager::OnResizeAll(WindowContext windowContext, UINT width, UINT height)
+{
+	auto itr = collectionMap_.find(windowContext);
+	if (itr == collectionMap_.end()) return;
+
+	collectionMap_[windowContext].ForEachInReverseOrder(
+		[](const std::type_index&, WindowContextResource* resource)
+		{
+			if (resource)
+			{
+				resource->Reset();
+			}
+		}
+	);
+
+	collectionMap_[windowContext].ForEachInOrder(
+		[windowContext, width, height](const std::type_index&, WindowContextResource* resource)
+		{
+			if (resource)
+			{
+				resource->OnResize(windowContext, width, height);
+			}
+		}
+	);
+
+
+
+}
+
+
 
 

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DrawScreenUtility.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp" />
     <ClCompile Include="ImGui\ImCurveEdit.cpp" />
     <ClCompile Include="ImGui\ImGradient.cpp" />
@@ -42,10 +43,12 @@
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\TerrainReader.cpp" />
     <ClCompile Include="mtgb\TimeLimit.cpp" />
     <ClCompile Include="mtgb\Trail.cpp" />
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
+    <ClCompile Include="mtgb\UIDrawCommand.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -156,6 +159,7 @@
     <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\ScoreManager.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
@@ -187,10 +191,13 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
+    <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
+    <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DrawScreenUtility.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
@@ -217,6 +224,8 @@
     <ClInclude Include="mtgb\IOriginalShader.h" />
     <ClInclude Include="mtgb\JoystickProxy.h" />
     <ClInclude Include="mtgb\Mathf.h" />
+    <ClInclude Include="mtgb\MonitorInfo.h" />
+    <ClInclude Include="mtgb\MTBit\BitFlag.h" />
     <ClInclude Include="mtgb\MTNet\HttpClient.h" />
     <ClInclude Include="mtgb\MTNet\HttpHeaderBuilder.h" />
     <ClInclude Include="mtgb\MTStat\MTStat.h" />
@@ -232,6 +241,10 @@
     <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\ShowType.h" />
+    <ClInclude Include="mtgb\TerrainReader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="mtgb\TextAlignment.h" />
     <ClInclude Include="mtgb\TimeLimit.h" />
     <ClInclude Include="mtgb\Trail.h" />
@@ -372,6 +385,7 @@
     <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\ScoreManager.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />
@@ -406,6 +420,8 @@
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
+    <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
+    <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Source\VVPlayer.h" />
     <ClInclude Include="Source\WingEffect.h" />

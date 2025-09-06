@@ -70,5 +70,3 @@ void mtgb::Fbx::Release()
 	pFbxModels_.clear();
 	SAFE_DESTROY(pFbxManager_);
 }
-
-

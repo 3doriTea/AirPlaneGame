@@ -11,8 +11,7 @@ namespace
 	const float TO_NEXT_SCENE_WAIT_SEC{ 10.0f };
 	const float TO_MOVE_SCENE_WAIT_SEC{ 11.0f };
 	const Vector2Int BACKGROUND_IMAGE_SIZE{ 1920, 1080 };
-	const Vector2 CANVAS_SIZE{ 1920.0f, 1080.0f };
-	const float TO_SKIP_THRESHOLD{ 0.7 };  // チュートリアルをスキップするしきい値
+	const float TO_SKIP_THRESHOLD{ 0.7f };  // チュートリアルをスキップするしきい値
 }
 
 CheckTutorialScene::CheckTutorialScene() :
@@ -84,7 +83,15 @@ void CheckTutorialScene::Draw() const
 	drawImageLayer(IL_MOUNTAIN, GenPositionMountain());
 	drawImageLayerRect(IL_MESSAGE, GenTextBoxMsg());
 
-	std::string text{ std::string{ std::to_string(toMoveTimeLeft_).substr(0, 3) } + "秒" };
+	std::string text{};
+	if (toMoveTimeLeft_ > 0)
+	{
+		text = std::to_string(toMoveTimeLeft_).substr(0, 3) + "秒";
+	}
+	else
+	{
+		text = "0秒";
+	}
 
 	Draw::ImmediateText(text, GenTextBoxTimer(), 82, TextAlignment::middleLeft, { 0 });
 	
@@ -115,7 +122,7 @@ const Vector2Int CheckTutorialScene::GenPositionMountain() const
 	static const int TO_Y{ 500 };
 	static const float TO_Y_RATE{ TO_Y / CANVAS_SIZE.y };
 
-	return Vector2Int(0, Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_);
+	return Vector2Int(0, static_cast<int>(Game::System<Screen>().GetSize().y * TO_Y_RATE * peekRate_));
 }
 
 const RectF CheckTutorialScene::GenTextBoxTimer() const

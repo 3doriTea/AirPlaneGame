@@ -14,8 +14,16 @@
 #include "../ControlTower.h"
 #include "../TestScene/UI/OrderText.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
+#include "../TutorialScene/TutorialScene.h"
 
+#include "TerrainReader.h"
 using namespace mtgb;
+
+namespace mtgb
+{
+	//TerrainReader16* reader16;
+	TerrainReader8* reader8;
+}
 
 TestScene::TestScene()
 {
@@ -23,11 +31,12 @@ TestScene::TestScene()
 
 TestScene::~TestScene()
 {
+	//delete reader16;
+	delete reader8;
 }
 
 void TestScene::Initialize()
 {
-
 	TypeRegistry::Instance();
 	TypeRegistry::Instance().Initialize();
 	MTImGui::Instance().Initialize();
@@ -67,6 +76,14 @@ void TestScene::Initialize()
 	ControlTower* pControlTower{ Instantiate<ControlTower>() };
 	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
 	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
+
+	/*reader16 = new TerrainReader16();
+	reader16->ReadTerrain("terrain16.raw");*/
+
+	reader8 = new TerrainReader8();
+	reader8->ReadTerrain("terrain.raw");
+	//reader8->GenerateQuadtreeHeightMap();
+	reader8->GenerateTerrainAABBs(&reader8->aabbs);
 }
 
 void TestScene::Update()
@@ -79,17 +96,50 @@ void TestScene::Update()
 	{
 		Game::System<SceneSystem>().Move<CheckTutorialScene>();
 	}
+	if (InputUtil::GetKeyDown(KeyCode::U))
+	{
+		Game::System<SceneSystem>().Move<TutorialScene>();
+	}
 	
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
 
+	if (InputUtil::GetKeyDown(KeyCode::F11))
+	{
+		static bool flag = false;
+		if (flag)
+		{
+			flag = false;
+		}
+		else
+		{
+			flag = true;
+		}
+		WinCtxRes::SetFullscreen(flag, WindowContext::First);
+	}
+	if (InputUtil::GetKeyDown(KeyCode::F10))
+	{
+		static bool flag = false;
+		if (flag)
+		{
+			flag = false;
+		}
+		else
+		{
+			flag = true;
+		}
+		WinCtxRes::SetFullscreen(flag, WindowContext::Second);
+	}
 
 }
 
 void TestScene::Draw() const
 {
+	//reader16->TestDraw();
+	//5184
+	reader8->TestDraw();
 }
 
 void TestScene::End()

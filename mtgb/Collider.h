@@ -5,6 +5,7 @@
 #include <DirectXCollision.h>
 #include "Vector3.h"
 
+
 namespace mtgb
 {
 	class ColliderCP;

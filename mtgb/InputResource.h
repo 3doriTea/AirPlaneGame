@@ -30,6 +30,7 @@ namespace mtgb
 		void Initialize(WindowContext _windowContext) override;
 		void Update() override;
 		void SetResource() override;
+		void Release() override;
 		const InputData* GetInput(){ return pInputData_; }
 		InputData* pInputData_;
 	private:

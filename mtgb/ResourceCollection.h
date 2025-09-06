@@ -74,5 +74,15 @@ namespace mtgb
             }
 
         }
+
+        template<typename Func>
+        void ForEachInReverseOrder(Func&& _func)
+        {
+            for (auto itr = insertionOrder_.rbegin(); itr != insertionOrder_.rend(); itr++)
+            {
+                std::type_index key = *itr;
+                _func(key, resourceCollection_[key]);
+            }
+        }
     };
 }

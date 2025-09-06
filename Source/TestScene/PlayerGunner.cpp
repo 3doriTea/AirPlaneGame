@@ -150,6 +150,15 @@ void PlayerGunner::Update()
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}
+
+	MTImGui::Instance().DirectShow([this]()
+		{
+			auto& targets =pTargetingSystem_->targetDetector.detectedTargets;
+			for (RectContainsInfo& info : targets)
+			{
+				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
+			}
+		},"GunnerContains",ShowType::Inspector);
 	
 }
 

@@ -26,12 +26,14 @@ namespace mtgb
 		~Direct2DResource();
 		Direct2DResource(const Direct2DResource& other);
 		void Initialize(WindowContext _windowContext) override;
+		void Reset() override;
+		void OnResize(WindowContext _windowContext, UINT _width, UINT _height) override;
 		void SetResource() override;
+		void Release() override;
 	private:
 
 		ComPtr<ID2D1RenderTarget> pRenderTarget_;
 		ComPtr<ID2D1SolidColorBrush> pD2DBrush_;
-
 
 		// WindowContextResource ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 		WindowContextResource* Clone() const override;

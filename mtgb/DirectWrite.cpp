@@ -30,7 +30,7 @@ ComPtr<IDWriteFont> mtgb::DirectWrite::pDWriteFont_{ nullptr };
 DWRITE_FONT_METRICS mtgb::DirectWrite::fontMetrics_{};
 mtgb::PixelFontMetrics mtgb::DirectWrite::pixelFontMetrics_;
 //int mtgb::DirectWrite::currentDefaultFontSize_{ DEFAULT_FONT_SIZE };
-static std::wstring StrToWStr(const std::string& str);
+//static std::wstring StrToWStr(const std::string& str);
 
 
 
@@ -274,24 +274,24 @@ void mtgb::DirectWrite::Release()
 	
 }
 
-static std::wstring StrToWStr(const std::string& str)
-{
-	//nullptrを指定すると現在のロケール名が取得できる
-	std::string oldLocale = setlocale(LC_CTYPE, nullptr);
-
-	setlocale(LC_CTYPE, "Japanese_Japan.932");
-
-	size_t len;
-	//まずマルチバイト文字列(str)をワイド文字列に変換したときの長さを取得
-	mbstowcs_s(&len, nullptr, 0, str.c_str(), _TRUNCATE);
-	//ワイド文字列のバッファ用意
-	std::wstring wText;
-	wText.resize(len);
-
-	//実際にワイド文字列に変換
-	//_TRUNCATE定数で、バッファに収まらない文字は切り捨てるよう指定する
-	mbstowcs_s(&len, wText.data(), len, str.c_str(), _TRUNCATE);
-
-	setlocale(LC_CTYPE, oldLocale.c_str());
-	return wText;
-}
+//static std::wstring StrToWStr(const std::string& str)
+//{
+//	//nullptrを指定すると現在のロケール名が取得できる
+//	std::string oldLocale = setlocale(LC_CTYPE, nullptr);
+//
+//	setlocale(LC_CTYPE, "Japanese_Japan.932");
+//
+//	size_t len;
+//	//まずマルチバイト文字列(str)をワイド文字列に変換したときの長さを取得
+//	mbstowcs_s(&len, nullptr, 0, str.c_str(), _TRUNCATE);
+//	//ワイド文字列のバッファ用意
+//	std::wstring wText;
+//	wText.resize(len);
+//
+//	//実際にワイド文字列に変換
+//	//_TRUNCATE定数で、バッファに収まらない文字は切り捨てるよう指定する
+//	mbstowcs_s(&len, wText.data(), len, str.c_str(), _TRUNCATE);
+//
+//	setlocale(LC_CTYPE, oldLocale.c_str());
+//	return wText;
+//}

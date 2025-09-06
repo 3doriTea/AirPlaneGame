@@ -83,8 +83,8 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	// 開始時のシーン
 	//Game::System<SceneSystem>().Move<PlayScene>();
-	Game::System<SceneSystem>().Move<CheckTutorialScene>();
-	//Game::System<SceneSystem>().Move<TestScene>();
+	//Game::System<SceneSystem>().Move<CheckTutorialScene>();
+	Game::System<SceneSystem>().Move<TestScene>();
 
 	//_register<MainWindow>(SystemUpdateType::Cycle);
 }

@@ -181,8 +181,12 @@ void mtnet::HttpClient::PostAndBinaryResponce(
 	}
 
 	result = closesocket(socket_);
-	assert(result == 0  // •Â‚¶‚ç‚ê‚Ä‚¢‚é
-		&& "close error");
+	if (result != 0)  // •Â‚¶‚ç‚ê‚Ä‚¢‚é
+	{
+		return;
+	}
+	//assert(result == 0  // •Â‚¶‚ç‚ê‚Ä‚¢‚é
+	//	&& "close error");
 	socket_ = INVALID_SOCKET;
 
 	_onRecponce(buildBuffer);

@@ -3,10 +3,9 @@
 #include "MTAssert.h"
 #include "IncludingWindows.h"
 #include <d3d11.h>
-#include <dxgi1_2.h> 
+
 #include <dxgi.h>
 #include <DirectXMath.h>
-#include "DirectX11Draw.h"
 #include "ImGuiRenderer.h"
 #include "MainWindow.h"
 #include "Screen.h"
@@ -15,6 +14,9 @@
 #include "HLSLInclude.h"
 #include "WindowContext.h"
 #include "ReleaseUtility.h"
+#include "Direct2D/Direct2D.h"
+#include "MTImGui.h"
+#include "DirectX11Draw.h"
 
 mtgb::DirectX11Manager::DirectX11Manager()
 {
@@ -32,12 +34,23 @@ void mtgb::DirectX11Manager::Initialize()
 
 void mtgb::DirectX11Manager::Update()
 {
-	/*Game::System<MTImGui>().EndFrame();
-	DirectX11Draw::End();
-	
-
-	Game::System<MTImGui>().BeginFrame();
-	DirectX11Draw::Begin();*/
+	MTImGui::Instance().DirectShow([this]() {
+			for (auto& desc : adaptersDesc_)
+			{
+				ImGui::PushID(&desc);
+				TypeRegistry::Instance().CallFunc(&desc, "AdapterDesc");
+				ImGui::PopID();
+			}
+			ImGui::Separator();
+			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
+			{
+				ImGui::PushID(&monitorInfo);
+				ImGui::Text("assignedIndex:%d",monitorInfo.adapterIndex);
+				ImGui::Text("outputIndex:%d",monitorInfo.outputIndex);
+				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
+				ImGui::PopID();
+			}
+		}, "Adapter,OutputDesc", ShowType::Inspector);
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()
@@ -49,23 +62,6 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	int nCmdShow = startupInfo.wShowWindow;
 	
 	D3D_FEATURE_LEVEL level{};
-
-	hResult = D3D11CreateDevice(
-		nullptr,
-		D3D_DRIVER_TYPE_HARDWARE,
-		nullptr,
-		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,
-		nullptr,
-		0,
-		D3D11_SDK_VERSION,
-		DirectX11Draw::pDevice_.ReleaseAndGetAddressOf(),
-		&level,
-		DirectX11Draw::pContext_.ReleaseAndGetAddressOf()
-	);
-	massert(SUCCEEDED(hResult)
-	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
-
-	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)DirectX11Draw::pDXGIDevice_.ReleaseAndGetAddressOf());
 
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterfaceに失敗 @DirectX11Manager::InitializeCommonResources");
@@ -83,12 +79,27 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 
 		DXGI_ADAPTER_DESC1 desc;
 		pAdapter->GetDesc1(&desc);
-		WCHAR* s = desc.Description;
+		adaptersDesc_.push_back(desc);
 	}
-	/*massert(SUCCEEDED(hResult)
-		&& "EnumAdaptersに失敗 @DirectX11Manager::InitializeCommonResources");*/
-
+	
 	EnumAvailableMonitors(); // モニターの列挙
+
+	hResult = D3D11CreateDevice(
+		nullptr,
+		D3D_DRIVER_TYPE_HARDWARE,
+		nullptr,
+		D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		nullptr,
+		0,
+		D3D11_SDK_VERSION,
+		DirectX11Draw::pDevice_.ReleaseAndGetAddressOf(),
+		&level,
+		DirectX11Draw::pContext_.ReleaseAndGetAddressOf()
+	);
+	massert(SUCCEEDED(hResult)
+	 && "D3D11CreateDeviceに失敗 @DirectX11Manager::InitializeCommonResources");
+
+	hResult = DirectX11Draw::pDevice_->QueryInterface(_uuidof(IDXGIDevice1), (void**)DirectX11Draw::pDXGIDevice_.ReleaseAndGetAddressOf());
 
 	InitializeShaderBundle();  // シェーダバンドルの初期化
 
@@ -218,28 +229,21 @@ void mtgb::DirectX11Manager::CreateDXGISurface(IDXGISwapChain1* pSwapChain1, IDX
 	HRESULT hResult{};
 	
 	//バックバッファ受け取る
-	ID3D11Texture2D* pBackBuffer = nullptr;
-	hResult = pSwapChain1->GetBuffer(0, _uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+	ComPtr<ID3D11Texture2D> pBackBuffer = nullptr;
+	hResult = pSwapChain1->GetBuffer(0, _uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 	massert(SUCCEEDED(hResult)
 		&& "GetBufferに失敗 @DirectX11Manager::CreateDXGISurface");
 
 	//バックバッファからIDXGISurfaceインターフェースを取り出す
 	hResult = pBackBuffer->QueryInterface(IID_PPV_ARGS(ppDXGISurface));
 
-	SAFE_RELEASE(pBackBuffer);
+	pBackBuffer.Reset();
 
 	massert(SUCCEEDED(hResult)
 		&& "QueryInterfaceに失敗 @DirectX11Manager::CreateDXGISurface");
 }
 
-//void mtgb::DirectX11Manager::CreateOutput(int index, IDXGIOutput** ppOutput)
-//{
-//	HRESULT hResult{};
-//	
-//	hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(index, ppOutput);
-//	massert(SUCCEEDED(hResult)
-//		&& "EnumOutputsに失敗 @DirectX11Manager::CreateOutput");
-//}
+
 
 void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, IDXGISwapChain1** ppSwapChain1)
 {
@@ -263,17 +267,45 @@ void mtgb::DirectX11Manager::CreateSwapChain(HWND hWnd, IDXGIOutput* pOutput, ID
 		.Scaling = DXGI_SCALING_STRETCH,
 		.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD,
 		.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
-		.Flags = 0
+		.Flags = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH
 	};
 
-	hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
-		DirectX11Draw::pDevice_.Get(),
-		hWnd,
-		&desc,
-		nullptr,//フルスクリーンの設定。初期状態をフルスクリーンにしたい場合のみDESCを渡して、そうでないならnullptrにしておいて必要に応じてSetFullscreenStateで切り替える
-		pOutput,//出力
-		ppSwapChain1
-	);
+	// 仮のフラグ、
+	bool fullscreen = false;
+	DXGI_SWAP_CHAIN_FULLSCREEN_DESC fullscreenDesc = 
+	{
+		.RefreshRate
+			{
+				.Numerator = 60,
+				.Denominator = 1
+			},
+		.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
+		.Scaling = DXGI_MODE_SCALING_UNSPECIFIED,
+		.Windowed = FALSE, // フルスクリーン
+	};
+
+	if (fullscreen)
+	{
+		hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
+			DirectX11Draw::pDevice_.Get(),
+			hWnd,
+			&desc,
+			&fullscreenDesc,//フルスクリーンの設定
+			pOutput,//出力
+			ppSwapChain1
+		);
+	}
+	else
+	{
+		hResult = DirectX11Draw::pDXGIFactory_->CreateSwapChainForHwnd(
+			DirectX11Draw::pDevice_.Get(),
+			hWnd,
+			&desc,
+			nullptr,//初期状態をフルスクリーンにしたい場合のみDESCを渡して、そうでないならnullptrにしておいて必要に応じてSetFullscreenStateで切り替える
+			pOutput,//出力
+			ppSwapChain1
+		);
+	}
 	massert(SUCCEEDED(hResult)
 		&& "CreateSwapChainForHwndに失敗 @DirectX11Manager::CreateSwapChain");
 }
@@ -282,21 +314,20 @@ void mtgb::DirectX11Manager::CreateRenderTargetView(IDXGISwapChain1* pSwapChain1
 {
 	HRESULT hResult{};
 	
-	ID3D11Texture2D* pBackBuffer{ nullptr };
-	hResult = pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pBackBuffer));
+	ComPtr<ID3D11Texture2D> pBackBuffer{ nullptr };
+	hResult = pSwapChain1->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(pBackBuffer.GetAddressOf()));
 	massert(SUCCEEDED(hResult) 
 		&& "GetBufferに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer, nullptr, ppRenderTargetView);
+	hResult = DirectX11Draw::pDevice_->CreateRenderTargetView(pBackBuffer.Get(), nullptr, ppRenderTargetView);
 	massert(SUCCEEDED(hResult)
 		&& "CreateRenderTargetViewに失敗 @DirectX11Manager::CreateRenderTargetView");
 
-	SAFE_RELEASE(pBackBuffer);
+	pBackBuffer.Reset();
 }
 
 void mtgb::DirectX11Manager::CreateViewport(const Vector2Int& size, D3D11_VIEWPORT& viewport)
 {
-	
 	viewport =
 	{
 		.TopLeftX = 0,
@@ -370,24 +401,24 @@ void mtgb::DirectX11Manager::ChangeSwapChain(ComPtr<IDXGISwapChain1> pSwapChain1
 	DirectX11Draw::pSwapChain1_ = pSwapChain1;
 }
 
-int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
+std::optional<mtgb::MonitorInfo> mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 {
 	// 初回の列挙
-	if (DirectX11Draw::monitorInfos_.empty())
+	/*if (DirectX11Draw::monitorInfos_.empty())
 	{
 		EnumAvailableMonitors();
-	}
+	}*/
 
 	// 未使用のモニターを探す
 	for (auto& info : DirectX11Draw::monitorInfos_)
 	{
 		if (!info.isRequested)
 		{
-			HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(info.assignedIndex, ppOutput);
+			HRESULT hResult = DirectX11Draw::pDXGIAdapters_[info.adapterIndex]->EnumOutputs(info.outputIndex, ppOutput);
 			if (SUCCEEDED(hResult))
 			{
 				info.isRequested = true;
-				return info.assignedIndex;
+				return info;
 			}
 		}
 	}
@@ -398,12 +429,12 @@ int mtgb::DirectX11Manager::AssignAvailableMonitor(IDXGIOutput** ppOutput)
 		HRESULT hResult = DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(0, ppOutput);
 		if (SUCCEEDED(hResult))
 		{
-			return 0;
+			return DirectX11Draw::monitorInfos_[0];
 		}
 	}
 
 	// モニターの割り当て失敗
-	return -1;
+	return std::nullopt;
 }
 
 int mtgb::DirectX11Manager::GetAvailableMonitorCount() const
@@ -416,25 +447,61 @@ void mtgb::DirectX11Manager::Release()
 	DirectX11Draw::Release();
 }
 
+void mtgb::DirectX11Manager::ClearState()
+{
+	// パイプラインにバインドされた全てをリセット
+	DirectX11Draw::pContext_->ClearState();
+	// 描画コマンドを強制的にGPUに送り出す
+	DirectX11Draw::pContext_->Flush();
+
+	//ID3D11CommandList* pCmdList = nullptr;
+	//// 描画コマンドが残っているなら破棄
+	//DirectX11Draw::pContext_->FinishCommandList(FALSE, &pCmdList);
+	//if (pCmdList)
+	//{
+	//	pCmdList->Release();
+	//}
+	Game::System<Direct2D>().Reset();
+	DirectX11Draw::pDepthStencil_.Reset();
+	DirectX11Draw::pDepthStencilView_.Reset();
+	DirectX11Draw::pRenderTargetView_.Reset();
+	//DirectX11Draw::pSwapChain1_.Reset();
+}
+
+void mtgb::DirectX11Manager::SetDefaultStates()
+{
+	// PrimitiveTopology を再設定
+	DirectX11Draw::pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	
+	// 必要に応じて他のデフォルト状態も再設定
+	// 例：デフォルトサンプラーステート、ブレンドステートなど
+	/*DirectX11Draw::pContext_->PSGetSamplers*/
+}
+
 void mtgb::DirectX11Manager::EnumAvailableMonitors()
 {
 	DirectX11Draw::monitorInfos_.clear();
 
-	UINT i = 0;
-	ComPtr<IDXGIOutput> pOutput;
-	while (DirectX11Draw::pDXGIAdapters_[0]->EnumOutputs(i, pOutput.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
+	ComPtr<IDXGIAdapter1> pAdapter;
+	for (UINT adapterIndex = 0; adapterIndex < DirectX11Draw::pDXGIAdapters_.size();adapterIndex++)
 	{
-		MonitorInfo info{};
-		info.assignedIndex = static_cast<int>(i);
-		info.isRequested = false;
-
-		HRESULT hResult = pOutput->GetDesc(&info.desc);
-		if(SUCCEEDED(hResult))
+		ComPtr<IDXGIOutput> pOutput;
+		UINT outputIndex = 0;
+		while(DirectX11Draw::pDXGIAdapters_[adapterIndex]->EnumOutputs(outputIndex, pOutput.GetAddressOf()) != DXGI_ERROR_NOT_FOUND)
 		{
-			DirectX11Draw::monitorInfos_.push_back(info);
+		
+			MonitorInfo info{};
+			info.adapterIndex = static_cast<int>(adapterIndex);
+			info.outputIndex = outputIndex;
+			info.isRequested = false;
+			HRESULT hResult = pOutput->GetDesc(&info.desc);
+			if (SUCCEEDED(hResult))
+			{
+				DirectX11Draw::monitorInfos_.push_back(info);
+			}
+			pOutput.Reset();
+			outputIndex++;
 		}
-		i++;
-		pOutput.Reset();
 	}
 }
 
@@ -774,7 +841,7 @@ void mtgb::DirectX11Manager::CompileShader(
 	// 項点シェーダのインタフェース
 	ID3DBlob* pCompileVS{ nullptr };
 
-	// 項点シェーダのコンパイル
+	// 頂点シェーダのコンパイル
 	hResult = D3DCompileFromFile(
 		_fileName.c_str(),  // ファイルパス
 		nullptr,            // シェーダマクロの配列

@@ -98,7 +98,8 @@ namespace mtgb
 		static void FBXModel(
 			const FBXModelHandle _hFBXModel,
 			const Transform& _pTransform,
-			const int _frame);
+			const int _frame,
+			ShaderType _shaderType = ShaderType::FbxParts);
 
 		/// <summary>
 		/// <para> 事前にLoadをしたテキストを描画 </para>
@@ -115,6 +116,37 @@ namespace mtgb
 			TextAlignment _alignment = currentDefaultTextAlignment_,
 			const UIParams& _uiParams = defaultUIParams_);
 
+		/// <summary>
+		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
+		/// <para> 矩形領域に描画される 幅と高さはウィンドウのサイズ </para> 
+		/// </summary>
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_topLeft">矩形の左上</param>
+		/// <param name="_size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateTextW(
+			const std::wstring& _text,
+			Vector2F _topLeft,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
+
+		/// <summary>
+		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
+		/// <para> 矩形領域に描画される </para>
+		/// </summary>
+		/// <param name="_text">描画する文字列</param>
+		/// <param name="_rect">矩形</param>
+		/// <param name="_size">テキストのフォントサイズ（省略時は設定中のサイズ）</param>
+		/// <param name="_alignment">テキストの配置（省略時は設定中の配置）</param>
+		/// <param name="_uiParams">UIとして描画する際の設定</param>
+		static void ImmediateTextW(
+			const std::wstring& _text,
+			RectF _rect,
+			int _size = currentDefaultFontSize_,
+			TextAlignment _alignment = currentDefaultTextAlignment_,
+			const UIParams& _uiParams = defaultUIParams_);
 	
 		/// <summary>
 		/// <para> 文字列内容が頻繁に変化するテキスト(タイマーやスコアなど)を即時に描画</para>
@@ -198,8 +230,9 @@ namespace mtgb
 		~Draw();
 		void Initialize() override;
 		void Update() override;
-		static void FlushUIDrawCommands(GameObjectLayer _layer);
+		static void FlushUIDrawCommands(GameObjectLayerFlag _layer);
 		static void ClearUICommands();
+		static int CalcScaledFontSize(int _baseSize);
 	private:
 		FbxModel* pFbxModel_;
 		Figure* pFigure_;

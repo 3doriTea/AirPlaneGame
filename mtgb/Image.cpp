@@ -46,5 +46,8 @@ const mtgb::Vector2Int mtgb::Image::GetSize(const ImageHandle _imageHandle)
 const mtgb::Vector2F mtgb::Image::GetSizeF(const ImageHandle _imageHandle)
 {
 	mtgb::Vector2Int size = Game::System<Image>().GetSprite(_imageHandle)->GetSize();
-	return mtgb::Vector2F(size.x,size.y);
+	Vector2F ret = mtgb::Vector2F(size.x, size.y);
+	return ret;
+	//return mtgb::Vector2F(static_cast<float>(size.x), static_cast<float>(size.y));
+
 }

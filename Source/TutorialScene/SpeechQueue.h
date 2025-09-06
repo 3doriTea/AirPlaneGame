@@ -4,7 +4,7 @@
 #include <vector>
 
 // 読み上げ字幕テキスト
-using SpeechText = std::string_view;
+using SpeechText = std::u8string_view;
 // 読み上げ音声ファイル
 using SpeechAudioFile = std::string_view;
 // 読み上げ時間 (秒)
@@ -35,10 +35,17 @@ public:
 	~SpeechQueue();
 
 	/// <summary>
-	/// 次の読み上げ要素の参照を取得
+	/// 試しに次読み上げる要素を取得
 	/// </summary>
-	/// <returns>読み上げ要素の参照</returns>
-	const SPEECH_ELEMENT& GetNext();
+	/// <param name="_speechElement">読み上げ要素の参照</param>
+	/// <returns>次読み上げる要素がある true / false</returns>
+	const bool TryGetNext(SPEECH_ELEMENT& _speechElement);
+
+	/// <summary>
+	/// 読み上げが終わったか
+	/// </summary>
+	/// <returns>終わっている true / false</returns>
+	const bool IsFinished() const { return current_ >= static_cast<int>(lines_.size()); }
 
 private:
 	int current_;  // 現在の読み上げたライン

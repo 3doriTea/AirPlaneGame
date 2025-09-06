@@ -22,11 +22,7 @@ mtgb::InputResource::InputResource()
 
 mtgb::InputResource::~InputResource()
 {
-	SAFE_DELETE(pInputData_);
-	SAFE_DELETE(pProxy_);
-	pKeyDevice_.Reset();
-	pMouseDevice_.Reset();
-	pJoystickDevice_.Reset();
+	Release();
 }
 
 mtgb::InputResource::InputResource(const InputResource& other)
@@ -121,6 +117,15 @@ void InputResource::SetResource()
 		input.SetJoystickGuid(GUID_NULL);
 	}
 	input.ChangeInputData(pInputData_);
+}
+
+void mtgb::InputResource::Release()
+{
+	SAFE_DELETE(pInputData_);
+	SAFE_DELETE(pProxy_);
+	pKeyDevice_.Reset();
+	pMouseDevice_.Reset();
+	pJoystickDevice_.Reset();
 }
 
 WindowContextResource* mtgb::InputResource::Clone() const

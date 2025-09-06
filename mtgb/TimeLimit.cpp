@@ -52,7 +52,7 @@ void TimeLimit::Draw() const
 		chrono::seconds sec{ static_cast<int>(remainingTime_) };
 		chrono::hh_mm_ss<chrono::seconds> time(sec);
 		// 2åÖÇÉ[ÉçñÑÇﬂ		
-		Draw::ImmediateText(std::format("{:02}:{:02}", time.minutes().count(),time.seconds().count()), Vector2F{0.0f,0.0f}, 72, TextAlignment::topLeft, UIParams{.depth = 0,.layerFlag = GameObjectLayer::All});
+		Draw::ImmediateText(std::format("{:02}:{:02}", time.minutes().count(),time.seconds().count()), Vector2F{0.0f,0.0f}, 72, TextAlignment::topLeft, UIParams{.depth = 0,.layerFlag = mtbit::operator|(GameObjectLayer::A ,GameObjectLayer::B)});
 	}
 	
 	
