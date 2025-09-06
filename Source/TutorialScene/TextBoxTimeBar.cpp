@@ -3,8 +3,10 @@
 
 namespace
 {
-	const RectInt DRAW_RECT{ 280, 900, 1360, 20 };
-	//const RectInt DRAW_RECT{ 0, 0, 1000, 700 };
+	const RectF BEGIN_RECT{ 280, 900, 1360, 20 };
+	const float END_WIDTH{ 0.0f };
+	const float END_X{ 960.0f };
+	const float RATE_MAX{ 1.0f };
 
 	const RectF DRAW_RECT_FRAME{ 0, 0, 1000, 700 };
 }
@@ -20,6 +22,10 @@ TextBoxTimeBar::~TextBoxTimeBar()
 
 void TextBoxTimeBar::Update()
 {
+	if (timeLeft_ >= 0.0f)
+	{
+		timeLeft_ -= Time::DeltaTimeF();
+	}
 }
 
 void TextBoxTimeBar::Draw() const
@@ -29,8 +35,13 @@ void TextBoxTimeBar::Draw() const
 		return;  // 残り時間がマイナスなら回帰
 	}
 
-	// TODO: 時間経過と共に両端から消えていくように描画する
-	Draw::Box(GenDrawScreenFrom(DRAW_RECT), Color::GREEN, { 0 });
+	float rate{ RATE_MAX - timeLeft_ / timeLeftMax_ };
+	RectF draw{ BEGIN_RECT };
+
+	draw.x = Mathf::Lerp(BEGIN_RECT.x, END_X, rate);
+	draw.width = Mathf::Lerp(END_WIDTH, BEGIN_RECT.width, rate);
+
+	Draw::Box(GenDrawScreenFrom(RectInt{ draw.x, draw.y, draw.width, draw.height }), Color::GREEN, { 0 });
 }
 
 void TextBoxTimeBar::SetTimeLeftMax(const float _timeSec)
