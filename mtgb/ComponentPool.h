@@ -34,13 +34,15 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_entityId">エンティティId</param>
 		/// <returns>コンポーネントの参照ポインタ (確実に存在する)</returns>
-		ComponentT& Get(EntityId _entityId);
+		template<typename... Args>
+		ComponentT& Get(EntityId _entityId, Args&&... _args);
 
 		bool TryGet(ComponentT*& _pComponent, const EntityId _entityId) requires(IsSingleton);
 
 		bool TryGet(std::vector<ComponentT*>* _pComponents, const EntityId _entityId) requires(!IsSingleton);
-
-		ComponentT& Add(EntityId _entityId) requires(!IsSingleton);
+		
+		template<typename... Args>
+		ComponentT& Add(EntityId _entityId, Args&&... _args) requires(!IsSingleton);
 
 		/// <summary>
 		/// エンティティが持っているコンポーネントを削除する
@@ -91,24 +93,23 @@ namespace mtgb
 	}
 
 	template<class ComponentT, bool IsSingleton>
-	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Get(EntityId _entityId)
+	template<typename... Args>
+	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Get(EntityId _entityId, Args&&... _args)
 	{
 		for (int i = 0; i < poolId_.size(); i++)
 		{
 			if (poolId_[i] == _entityId)
 			{
-				return pool_[i];  // Idが一致した添字のコンポーネントを返す
+				return pool_[i];
 			}
 		}
-
 		// プールに存在しないなら新たに追加
 		poolId_.push_back(_entityId);
 		// NOTE: emplace_backで実体をそのまま追加
-		pool_.emplace_back(_entityId);
+		pool_.emplace_back(_entityId, std::forward<Args>(_args)...); // 可変長引数でコンストラクタ呼び出し
 		// 追加したら初期化処理
-		pool_[pool_.size() - 1].Initialize();
-
-		return pool_[pool_.size() - 1];  // 追加&&初期化したコンポーネントを返す
+		pool_.back().Initialize();
+		return pool_.back(); // 追加&&初期化したコンポーネントを返す
 	}
 
 	template<class ComponentT, bool IsSingleton>
@@ -145,12 +146,13 @@ namespace mtgb
 	}
 
 	template<class ComponentT, bool IsSingleton>
-	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Add(EntityId _entityId) requires(!IsSingleton)
+	template<typename... Args>
+	inline ComponentT& ComponentPool<ComponentT, IsSingleton>::Add(EntityId _entityId, Args&&... _args) requires(!IsSingleton)
 	{
 		// プールに存在しないなら新たに追加
 		poolId_.push_back(_entityId);
 		// NOTE: emplace_backで実体をそのまま追加
-		pool_.emplace_back(_entityId);
+		pool_.emplace_back(_entityId, std::forward<Args>(_args)...); // 可変長引数でコンストラクタ呼び出し
 		// 追加したら初期化処理
 		pool_[pool_.size() - 1].Initialize();
 

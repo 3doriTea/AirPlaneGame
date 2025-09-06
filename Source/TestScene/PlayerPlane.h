@@ -16,6 +16,7 @@ public:
 private:
 	int number;
 	RigidBody* pRB_;
+	Collider* pCollider_;
 	Transform* pTransform_;
 
 	VVPlayer vVPlayer_;

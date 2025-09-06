@@ -12,6 +12,8 @@
 #include "Draw.h"
 #include "Transform.h"
 #include "Fbx.h"
+#include "ColliderCP.h"
+#include "Collider.h"
 namespace mtgb
 {
 
@@ -30,7 +32,7 @@ namespace mtgb
 		void ReadTerrain(const char* fileName);
 		float GetHeightAt(float x, float z) const;
 		void GenerateQuadtreeHeightMap();
-		void GenerateTerrainAABBs(std::vector<DirectX::BoundingBox>* _aabbs);
+		void GenerateTerrainAABBs(std::vector<Collider*>* _aabbs);
 		void TestDraw();
 		int WorldToCellIndex(float _point) const;
 		float CellIndexToWorld(int _cellIndex) const;
@@ -41,7 +43,7 @@ namespace mtgb
 		float widthScale;
 		std::vector<StageDataBit> stageBuffer;
 		
-		std::vector<DirectX::BoundingBox> aabbs;
+		std::vector<Collider*> aabbs;
 		std::vector<std::vector<float>> quadtreeHeightMap;
 		int divisions; //分割回数
 		int cellNum;
@@ -58,7 +60,7 @@ namespace mtgb
 		: width{513}
 		, height{513}
 		, heightScale{200.0f}
-		, widthScale{15.0f}
+		, widthScale{5.0f}
 		, divisions{3}
 	{
 		stageBuffer.resize(width * height);
@@ -134,7 +136,7 @@ namespace mtgb
 	inline void TerrainReader<StageDataBit>::GenerateQuadtreeHeightMap()
 	{
 		// 一辺のセル数
-		cellNum = std::pow(2, divisions);
+		cellNum = static_cast<int>(std::pow(2, divisions));
 		//aabbs.resize(cellNum * cellNum);
 		// 元のデータから値を取得する間隔
 		// unityの terrain Dataにはセル数+1の頂点数が入っているので-1する
@@ -162,7 +164,7 @@ namespace mtgb
 	}
 
 	template<typename StageDataBit>
-	inline void TerrainReader<StageDataBit>::GenerateTerrainAABBs(std::vector<DirectX::BoundingBox>* _aabbs)
+	inline void TerrainReader<StageDataBit>::GenerateTerrainAABBs(std::vector<Collider*>* _aabbs)
 	{
 		for (int z = 0; z < cellNum; z++)
 		{
@@ -190,7 +192,16 @@ namespace mtgb
 
 				Vector3 extents = { widthScale / 2.0f, height / 2.0f,widthScale / 2.0f };
 				Vector3 center = cellWorldPos - extents;
-				_aabbs->emplace_back(center, extents);
+				//_aabbs->emplace_back(center, extents);
+				
+				EntityId terrainCellId = Game::CreateEntity();
+				// 静的なコライダー
+				Collider* pCollider = &(Game::System<ColliderCP>().Get(terrainCellId,Collider::ColliderTag::STAGE));
+
+				pCollider->type_ = Collider::TYPE_AABB;
+				pCollider->SetCenter(center);
+				pCollider->SetExtents(extents);
+				_aabbs->push_back(pCollider);
 			}
 		}
 	}
@@ -202,12 +213,13 @@ namespace mtgb
 		{
 			for (int x = 0; x < cellNum; x++)
 			{
-				DirectX::BoundingBox& box = aabbs[z * cellNum + x];
+				/*DirectX::BoundingBox& box = aabbs[z * cellNum + x];
 				pTransform->position = DirectX::XMLoadFloat3(&box.Center);
 				pTransform->scale = DirectX::XMLoadFloat3(&box.Extents) * 2;
 
 				pTransform->Compute();
-				Draw::FBXModel(hModelCollider_, *pTransform,0,ShaderType::Debug3D);
+				Draw::FBXModel(hModelCollider_, *pTransform,0,ShaderType::Debug3D);*/
+				aabbs[z * cellNum + x]->Draw();
 			}
 		}
 	}

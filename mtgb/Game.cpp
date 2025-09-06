@@ -2,7 +2,7 @@
 #include "ComponentPool.h"
 //#include "Windows.h"
 #include "IComponentPool.h"
-
+#include "Entity.h"
 
 namespace
 {
@@ -53,6 +53,11 @@ void mtgb::Game::RemoveEntityComponent(const EntityId _entityId)
 	{
 		cpSystem->Remove(_entityId);
 	}
+}
+
+mtgb::EntityId mtgb::Game::CreateEntity()
+{
+	return Entity().GetEntityId();
 }
 
 void mtgb::Game::InitializeSystems(const std::list<ISystem*>& _uninitialized)

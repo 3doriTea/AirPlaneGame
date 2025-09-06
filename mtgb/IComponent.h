@@ -23,6 +23,8 @@ namespace mtgb
 		virtual ~IComponent();
 
 		static ComponentT& Get(const EntityId _entityId);
+		template<typename... Args>
+		static ComponentT& Get(const EntityId _entityId, Args&&... _args);
 
 		virtual void Initialize() {}
 
@@ -43,6 +45,13 @@ namespace mtgb
 	inline IComponent<ComponentPoolT, ComponentT>::~IComponent()
 	{
 		//Game::System<ComponentPoolT>().UnRegister(entityId_);
+	}
+
+	template<class ComponentPoolT, typename ComponentT>
+	template<typename... Args>
+	inline ComponentT& IComponent<ComponentPoolT, ComponentT>::Get(const EntityId _entityId, Args&&... _args)
+	{
+		return Game::System<ComponentPoolT>().Get(_entityId, std::forward<Args>(_args)...);
 	}
 
 	template<class ComponentPoolT, typename ComponentT>

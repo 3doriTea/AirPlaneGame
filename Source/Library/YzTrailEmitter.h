@@ -117,7 +117,9 @@ namespace yz
 
         void SetCenter(F3 c) { center = c; }
         void SetPhase(float ph) { phase = ph; }
+        
         void SetRadius(float r) { radius = r; }
+        
         void SetEmitInterval(float dt) { emitInterval = dt; }
         void SetMaxPoints(size_t m) { maxPoints = m; }
         void SetBaseHeight(float h) { baseHeight = h; }
@@ -178,6 +180,7 @@ namespace yz
 #include <cmath>
 #include <algorithm>
 #include <cstring>
+#include "Collider.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")

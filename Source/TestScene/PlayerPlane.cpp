@@ -17,9 +17,24 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() },
+	pCollider_{Component<Collider>(Collider::ColliderTag::GAME_OBJECT)},
 	vVPlayer_{}
 {
-	testText_ = Text::Load("‚ ‚¢‚¤‚¦‚¨", 72);
+	pCollider_->type_ = Collider::TYPE_SPHERE;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(1.0f);
+
+	pRB_->OnCollisionEnter([this](EntityId _targetId)
+		{
+			GameObject* pTarget{ FindGameObject(_targetId) };
+			if (pTarget == nullptr)
+			{
+				LOGF("Id:%d(•Ç)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, entityId_, GetName().c_str());
+				return;
+			}
+			LOGF("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			LOGIMGUI("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+		});
 }
 
 PlayerPlane::~PlayerPlane()
