@@ -22,6 +22,7 @@ using namespace mtgb;
 namespace mtgb
 {
 	//TerrainReader16* reader16;
+	TerrainReader8* reader8;
 }
 
 TestScene::TestScene()
@@ -31,6 +32,7 @@ TestScene::TestScene()
 TestScene::~TestScene()
 {
 	//delete reader16;
+	delete reader8;
 }
 
 void TestScene::Initialize()
@@ -77,6 +79,11 @@ void TestScene::Initialize()
 
 	/*reader16 = new TerrainReader16();
 	reader16->ReadTerrain("terrain16.raw");*/
+
+	reader8 = new TerrainReader8();
+	reader8->ReadTerrain("terrain.raw");
+	//reader8->GenerateQuadtreeHeightMap();
+	reader8->GenerateTerrainAABBs(&reader8->aabbs);
 }
 
 void TestScene::Update()
@@ -131,6 +138,8 @@ void TestScene::Update()
 void TestScene::Draw() const
 {
 	//reader16->TestDraw();
+	//5184
+	reader8->TestDraw();
 }
 
 void TestScene::End()

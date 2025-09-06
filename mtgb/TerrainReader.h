@@ -32,8 +32,8 @@ namespace mtgb
 		void GenerateQuadtreeHeightMap();
 		void GenerateTerrainAABBs(std::vector<DirectX::BoundingBox>* _aabbs);
 		void TestDraw();
-		int WorldToCellIndex(float _point);
-		float CellIndexToWorld(int _cellIndex);
+		int WorldToCellIndex(float _point) const;
+		float CellIndexToWorld(int _cellIndex) const;
 		
 
 		int width, height;
@@ -57,12 +57,14 @@ namespace mtgb
 	inline TerrainReader<StageDataBit>::TerrainReader()
 		: width{513}
 		, height{513}
-		, heightScale{50.0f}
-		, widthScale{5.0f}
+		, heightScale{200.0f}
+		, widthScale{15.0f}
+		, divisions{3}
 	{
 		stageBuffer.resize(width * height);
-		hModelCollider_ = Fbx::Load("Model/SphereCollider.fbx");
+		hModelCollider_ = Fbx::Load("Model/BoxCollider.fbx");
 		pTransform = new Transform();
+
 	}
 
 	template<typename StageDataBit>
@@ -133,12 +135,12 @@ namespace mtgb
 	{
 		// 一辺のセル数
 		cellNum = std::pow(2, divisions);
-
+		//aabbs.resize(cellNum * cellNum);
 		// 元のデータから値を取得する間隔
 		// unityの terrain Dataにはセル数+1の頂点数が入っているので-1する
 		float samplingStep = static_cast<float>(width - 1) / (cellNum);
 
-		quadtreeHeightMap.resize(cellNum + 1* std::vector<float>(cellNum + 1));
+		quadtreeHeightMap.resize(cellNum + 1, std::vector<float>(cellNum + 1));
 
 		for (int y = 0; y < cellNum + 1; y++)
 		{
@@ -175,22 +177,19 @@ namespace mtgb
 				// 右下
 				float bottomRight = quadtreeHeightMap[z + 1][x + 1];
 
-				// セルの最小、最高高度
-				// セルの中から補間はせずに
-				float minHeight = (std::min)({ topLeft,topRight,bottomLeft,bottomRight });
+				//// セルの最小、最高高度
+				//// セルの中から補間はせずに
+				//float minHeight = (std::min)({ topLeft,topRight,bottomLeft,bottomRight });
 				float maxHeight = (std::max)({ topLeft,topRight,bottomLeft,bottomRight });
 
+				float height = maxHeight;
+				//float height = GetHeightAt(x, z);
 				// ワールド座標系に変換
-				//AABB aabb;
-				//aabb.min = Vector3(CellIndexToWorld(x), minHeight, CellIndexToWorld(z));
-				//aabb.max = Vector3(CellIndexToWorld(x), maxHeight, CellIndexToWorld(z));
+				
+				Vector3 cellWorldPos = { CellIndexToWorld(x), height, CellIndexToWorld(z) };
 
-				DirectX::XMFLOAT3 min = { CellIndexToWorld(x), minHeight, CellIndexToWorld(z) };
-				DirectX::XMFLOAT3 center,extents;
-
-				extents = { widthScale / 2.0f,(minHeight + maxHeight) / 2.0f,widthScale / 2.0f };
-				center = min + extents;
-
+				Vector3 extents = { widthScale / 2.0f, height / 2.0f,widthScale / 2.0f };
+				Vector3 center = cellWorldPos - extents;
 				_aabbs->emplace_back(center, extents);
 			}
 		}
@@ -204,16 +203,17 @@ namespace mtgb
 			for (int x = 0; x < cellNum; x++)
 			{
 				DirectX::BoundingBox& box = aabbs[z * cellNum + x];
-				pTransform->position = box.Center;
-				/*pTransform->scale = box.
-				Draw::FBXModel()*/
+				pTransform->position = DirectX::XMLoadFloat3(&box.Center);
+				pTransform->scale = DirectX::XMLoadFloat3(&box.Extents) * 2;
+
+				pTransform->Compute();
+				Draw::FBXModel(hModelCollider_, *pTransform,0,ShaderType::Debug3D);
 			}
 		}
-		
 	}
 
 	template<typename StageDataBit>
-	inline int TerrainReader<StageDataBit>::WorldToCellIndex(float _point)
+	inline int TerrainReader<StageDataBit>::WorldToCellIndex(float _point) const
 	{
 		// セル単位に変換
 		// 常に小さい方,左側へ丸めたいのでfloorf
@@ -232,10 +232,14 @@ namespace mtgb
 		{
 			return -1;
 		}
+		else
+		{
+			return cellIndex;
+		}
 	}
 
 	template<typename StageDataBit>
-	inline float TerrainReader<StageDataBit>::CellIndexToWorld(int _cellIndex)
+	inline float TerrainReader<StageDataBit>::CellIndexToWorld(int _cellIndex) const
 	{
 		// 境界チェック
 		if (_cellIndex < 0 || _cellIndex >= cellNum)
