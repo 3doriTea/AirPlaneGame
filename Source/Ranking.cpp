@@ -36,9 +36,9 @@ void Ranking::LoadFileToMemoryStream(const char* _fileName, mtbin::MemoryStream&
     fclose(file);
 
     // ©‚±‚±‚Åms‚©‚ç’¼ÚrankingList_‚ğ•œŒ³
-    ms.Seek(mtbin::MemoryStream::SeekDir::Head);
+    _ms.Seek(mtbin::MemoryStream::SeekDir::Head);
     rankingList_.resize(maxRankingCount);
-    ms.Read(rankingList_.data(), (int)rankingList_.size(), (int)rankingList_.size());
+    _ms.Read(rankingList_.data(), (int)rankingList_.size(), (int)rankingList_.size());
 }
 
 void Ranking::SaveMemoryStreamToFile(const char* _fileName, mtbin::MemoryStream& _ms, size_t _dataSize)
