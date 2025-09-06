@@ -7,7 +7,7 @@ class TextBox : public GameObject
 {
 public:
 	TextBox();
-	TextBox(std::string testText_, float textsec_, Vector2F textpos_);
+	TextBox(std::string _testText, float _textsec, Vector2F _textpos);
 	~TextBox();
 	// 1ï∂éöÇ†ÇΩÇËÇÃï\é¶ïbêî
 	void SetTextSpeedSec(const float _sec);

@@ -6,7 +6,7 @@ class SkySphere : public GameObject
 {
 public:
 	SkySphere();
-	SkySphere(mtgb::WindowContext context);
+	SkySphere(mtgb::WindowContext _context);
 	~SkySphere();
 
 	void Update() override;
