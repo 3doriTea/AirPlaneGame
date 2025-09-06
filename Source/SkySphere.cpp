@@ -26,10 +26,10 @@ SkySphere::SkySphere() : GameObject(GameObjectBuilder()
 	hModel_ = Fbx::Load("Model/sky_sphere.fbx");
 }
 
-SkySphere::SkySphere(mtgb::WindowContext context)
+SkySphere::SkySphere(mtgb::WindowContext _context)
 	:SkySphere()
 {
-	context_ = context;
+	context_ = _context;
 }
 
 SkySphere::~SkySphere()

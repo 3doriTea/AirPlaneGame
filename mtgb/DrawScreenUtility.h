@@ -21,7 +21,7 @@ namespace mtgb
 	template<typename T>
 	inline const mtgb::RectT<T> GenDrawScreenFrom(const mtgb::RectT<T>& _to)
 	{
-		static const RectT<T> RATE
+		static const RectF RATE
 		{
 			_to.point.x / CANVAS_SIZE.x, _to.point.y / CANVAS_SIZE.y,
 			_to.size.x / CANVAS_SIZE.x, _to.size.y / CANVAS_SIZE.y,
@@ -39,7 +39,7 @@ namespace mtgb
 	template<typename T>
 	inline const mtgb::Vector2T<T> GenDrawScreenFrom(const mtgb::Vector2T<T>& _to)
 	{
-		static const Vector2T<T> RATE{ _to.x / CANVAS_SIZE.x, _to.y / CANVAS_SIZE.y };
+		static const Vector2 RATE{ _to.x / CANVAS_SIZE.x, _to.y / CANVAS_SIZE.y };
 		const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 		return { SCREEN_SIZE.x * RATE.x, SCREEN_SIZE.y * RATE.y };
