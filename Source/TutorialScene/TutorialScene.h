@@ -1,15 +1,17 @@
 #pragma once
 #include <mtgb.h>
+#include <array>
 #include "MTStat/MTStat.h"
 #include "../TextBox.h"
 
 class TextBoxTimeBar;
 class TextBoxBackground;
+class ImageAnimator;
 
 class TutorialScene : public mtgb::GameScene
 {
 public:
-	enum STATE
+	enum STATE : int
 	{
 		S_HANDSHAKE = 0,  // 挨拶
 		S_SHOW_TIMER_NOLMA = 4,  // 時間内にノルマを
@@ -19,6 +21,18 @@ public:
 		S_TRIGGER = 8,  // トリガーを押すと
 		S_SLIDER = 9,  // 左の運転手スライダ
 		S_GL = 10,  // 幸運を祈る
+	};
+
+	/// <summary>
+	/// コントローラーアニメーションヒントの画像種類
+	/// </summary>
+	enum CONTROLLER_IMAGE
+	{
+		CI_PITCH_DOWN,
+		CI_PITCH_UP,
+		CI_YAW_RIGHT,
+		CI_YAW_LEFT,
+		CI_MAX,
 	};
 
 public:
@@ -44,4 +58,12 @@ private:
 
 	TextBoxTimeBar* pTextBoxTimeBar_;
 	TextBoxBackground* pTextBoxBackground_;
+	ImageAnimator* pImageAnimatorA_;  // コントローラ画像アニメーターA
+	ImageAnimator* pImageAnimatorB_;  // コントローラ画像アニメーターB
+
+	// コントローラーアニメーションヒントの画像ハンドルA
+	std::vector<ImageHandle> hControllerImagesA_;
+
+	// コントローラーアニメーションヒントの画像ハンドルB
+	std::vector<ImageHandle> hControllerImagesB_;
 };

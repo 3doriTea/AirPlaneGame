@@ -35,11 +35,13 @@ void TextBoxTimeBar::Draw() const
 		return;  // 残り時間がマイナスなら回帰
 	}
 
-	float rate{ RATE_MAX - timeLeft_ / timeLeftMax_ };
+	float rate{ timeLeft_ / timeLeftMax_ };
 	RectF draw{ BEGIN_RECT };
 
-	draw.x = Mathf::Lerp(BEGIN_RECT.x, END_X, rate);
+	draw.x = Mathf::Lerp(BEGIN_RECT.x, END_X, RATE_MAX - rate);
 	draw.width = Mathf::Lerp(END_WIDTH, BEGIN_RECT.width, rate);
+	//
+	//LOGF("x=%f, w=%f\n", draw.x, draw.width);
 
 	Draw::Box(GenDrawScreenFrom(RectInt{ draw.x, draw.y, draw.width, draw.height }), Color::GREEN, { 0 });
 }

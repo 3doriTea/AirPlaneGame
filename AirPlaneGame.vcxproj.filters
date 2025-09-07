@@ -820,6 +820,9 @@
     <ClCompile Include="mtgb\TerrainReader.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp">
+      <Filter>01Game\07TutorialScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1430,6 +1433,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\TerrainReader.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialScene\ImageAnimator.h">
+      <Filter>01Game\07TutorialScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

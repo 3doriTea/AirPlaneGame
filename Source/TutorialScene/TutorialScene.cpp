@@ -13,6 +13,7 @@
 #include "TextBoxBackground.h"
 #include "TextBoxTimeBar.h"
 #include "SpeechQueue.h"
+#include "ImageAnimator.h"
 
 namespace
 {
@@ -22,9 +23,9 @@ namespace
 	const float TEXT_BOX_START_WAIT_TIME{ 3 };
 
 	// 台本
-	// MEMO: Visual Studio の場合、tab文字で幅統一できる
 	SpeechQueue speechQueue
 	{ {
+		// MEMO: Visual Studio の場合、tab文字で幅統一できる
 		{ u8"こんにちは。オペレーターだよ。",								"Sound/Voice/001_ずんだもん（ノーマル）_こんにちは。オペレ….wav",	4.0 },  // 0
 		{ u8"まもなく、敵がいる地点に到着するよ。",							"Sound/Voice/002_ずんだもん（ノーマル）_まもなく、敵がいる….wav",	4.0 },  // 1
 		{ u8"その前に、操作に慣れておこう。",								"Sound/Voice/003_ずんだもん（ノーマル）_その前に、操作に慣….wav",	4.0 },  // 2
@@ -37,11 +38,28 @@ namespace
 		{ u8"←側の運転手は、スライダーを動かして飛行機の速度を変えられるよ。",	"Sound/Voice/010_ずんだもん（ノーマル）_右の、運転手は、ス….wav",	7.0 },  // 9
 		//{ u8"そろそろ敵が見えてくるはず、幸運を祈るよ。", "", 0 },
 	} };
+
+	// フライトスティックコントローラーの画像ファイル名
+	const std::string CONTROLLER_ANIM_IMAGE_FILE_A[TutorialScene::CI_MAX]
+	{
+		"Image/Hint-PitchDown.png",
+		"Image/Hint-PitchUp.png",
+		"Image/Hint-YawRight.png",
+		"Image/Hint-YawLeft.png",
+	};
+
+	// コントローラーアニメーションヒントの描画範囲
+	const RectF DRAW_RECT_CON_ANIM_HINT{ 760.0f, 120.0f, 400.0f, 520.0f };
+	// コントローラーアニメーションヒントの1フレーム時間
+	const float FRAME_TIME_SEC_CON_ANIM{ 0.5f };
 }
 
 TutorialScene::TutorialScene() :
 	hToPlaySceneTimer_{ nullptr },
-	textBoxToChangeTimeLeft_{ TEXT_BOX_START_WAIT_TIME }
+	textBoxToChangeTimeLeft_{ TEXT_BOX_START_WAIT_TIME },
+	pImageAnimatorA_{ nullptr },
+	pImageAnimatorB_{ nullptr },
+	hControllerImagesA_{}
 {
 }
 
@@ -55,6 +73,23 @@ void TutorialScene::Initialize()
 	TypeRegistry::Instance().Initialize();
 	MTImGui::Instance().Initialize();
 
+	// コントローラーアニメーションヒントの画像読み込みA
+	hControllerImagesA_.resize(CI_MAX);
+	for (int i = 0; i < CI_MAX; i++)
+	{
+		hControllerImagesA_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_A[i]);
+	}
+
+	// コントローラーアニメーションヒントの画像読み込みB
+	hControllerImagesB_.resize(CI_MAX);
+	for (int i = 0; i < CI_MAX; i++)
+	{
+		// TODO: 画像準備でき次第Bに変更
+		hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_A[i]);
+		// hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_B[i]);
+	}
+
+
 	// 一定時間経ったら必ずプレイシーンに遷移
 	hToPlaySceneTimer_ = Timer::AddAram(TO_PLAY_SCENE_WAIT_SEC, []()
 		{
@@ -62,9 +97,32 @@ void TutorialScene::Initialize()
 		});
 
 	state_
-		.OnUpdate(S_HANDSHAKE, []
-		{
-		});
+		.OnStart(S_STICK, [this]
+			{
+				pImageAnimatorA_ = Instantiate<ImageAnimator>(
+					ImageAnimator::Setting
+					{
+						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
+						.elements_ = hControllerImagesA_,
+						.uIParams_ = { 10 }
+					},
+					GameObjectLayer::A);
+				pImageAnimatorB_ = Instantiate<ImageAnimator>(
+					ImageAnimator::Setting
+					{
+						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
+						.elements_ = hControllerImagesB_,
+						.uIParams_ = { 10 }
+					},
+					GameObjectLayer::B);
+			})
+		.OnEnd(S_STICK, [this]
+			{
+				pImageAnimatorA_->DestroyMe();
+				pImageAnimatorB_->DestroyMe();
+			});
 
 	Audio::Clear();
 
@@ -108,6 +166,8 @@ void TutorialScene::Update()
 		return;  // 台本読み終わっているなら回帰
 	}
 
+	state_.Update();
+
 	textBoxToChangeTimeLeft_ -= Time::DeltaTimeF();
 	if (textBoxToChangeTimeLeft_ <= 0.0f)
 	{
@@ -115,13 +175,17 @@ void TutorialScene::Update()
 		if (speechQueue.TryGetNext(element))
 		{
 			textBoxToChangeTimeLeft_ += element.time_;
+			// 字幕タイマーセット！
 			pTextBoxTimeBar_->SetTimeLeftMax(element.time_);
+			// 字幕表示！
 			pTextBox_->Show(element.text_.data());
+			// テキスト読み上げる！
 			Game::System<Audio>().PlayOneShotFile(element.audioFile_.data());
+			// 次のステータスに変更
+			STATE nextState{ static_cast<STATE>(speechQueue.GetCurrentLine()) };
+			state_.Change(nextState);
 		}
 	}
-
-	state_.Update();
 }
 
 void TutorialScene::Draw() const

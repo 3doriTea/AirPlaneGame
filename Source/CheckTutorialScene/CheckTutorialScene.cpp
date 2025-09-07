@@ -172,6 +172,6 @@ const RectF CheckTutorialScene::GenSlideBar(const float _rate) const
 	return
 	{
 		RATE.point.x * SCREEN_SIZE.x, RATE.point.y * SCREEN_SIZE.y,
-		Mathf::Lerp(0.0f, RATE.size.x * SCREEN_SIZE.x, _rate), RATE.size.y * SCREEN_SIZE.y,
+		Mathf::LerpForward(0.0f, RATE.size.x * SCREEN_SIZE.x, _rate), RATE.size.y * SCREEN_SIZE.y,
 	};
 }
