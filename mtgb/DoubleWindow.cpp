@@ -64,7 +64,7 @@ void mtgb::DoubleWindow::Initialize()
 	Game::System<WindowContextResourceManager>().Get<WindowResource>(WindowContext::First).MarkInitialized();
 	Game::System<WindowContextResourceManager>().Get<WindowResource>(WindowContext::Second).MarkInitialized();
 
-	Game::System<WindowContextResourceManager>().ChangeResource(WindowContext::First);
+	Game::System<WindowContextResourceManager>().ChangeActiveResource(WindowContext::First);
 
 	SetDoubleWindowPos();
 

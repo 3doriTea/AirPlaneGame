@@ -40,17 +40,20 @@ void mtgb::DirectX11Manager::Update()
 				ImGui::PushID(&desc);
 				TypeRegistry::Instance().CallFunc(&desc, "AdapterDesc");
 				ImGui::PopID();
+				ImGui::Separator();
 			}
-			ImGui::Separator();
+
+			// ÉÇÉjÉ^Å[(DXGIOutput)ÇÃèÓïÒ
 			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
 			{
 				ImGui::PushID(&monitorInfo);
-				ImGui::Text("assignedIndex:%d",monitorInfo.adapterIndex);
-				ImGui::Text("outputIndex:%d",monitorInfo.outputIndex);
+				ImGui::LabelText("adapterIndex", "%d", monitorInfo.adapterIndex);
+				ImGui::LabelText("outputIndex","%d", monitorInfo.outputIndex);
 				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
 				ImGui::PopID();
+				ImGui::Separator();
 			}
-		}, "Adapter,OutputDesc", ShowType::Inspector);
+		}, "Adapter,OutputDesc", ShowType::Settings);
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()

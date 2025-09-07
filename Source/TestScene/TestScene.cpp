@@ -106,32 +106,8 @@ void TestScene::Update()
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
 
-	if (InputUtil::GetKeyDown(KeyCode::F11))
-	{
-		static bool flag = false;
-		if (flag)
-		{
-			flag = false;
-		}
-		else
-		{
-			flag = true;
-		}
-		WinCtxRes::SetFullscreen(flag, WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::F10))
-	{
-		static bool flag = false;
-		if (flag)
-		{
-			flag = false;
-		}
-		else
-		{
-			flag = true;
-		}
-		WinCtxRes::SetFullscreen(flag, WindowContext::Second);
-	}
+	
+	
 
 }
 

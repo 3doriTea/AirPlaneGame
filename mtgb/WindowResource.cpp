@@ -140,9 +140,11 @@ void WindowResource::Initialize(WindowContext _windowContext)
 	context_ = _windowContext;
 	isInitialized_ = false;
 
-	windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
-	windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
-	GetWindowRect(hWnd_, &windowedRect_);
+	currInfo_.windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
+	currInfo_.windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
+	GetWindowRect(hWnd_, &currInfo_.windowedRect_);
+
+	initialInfo_ = currInfo_;
 }
 
 void WindowResource::SetResource()
@@ -192,59 +194,77 @@ void mtgb::WindowResource::OnResize(WindowContext _windowContext, UINT _width, U
 
 }
 
-void mtgb::WindowResource::SetFullScreen(bool _fullscreen)
+void mtgb::WindowResource::SetWindowMode()
 {
-	
-	MONITORINFO monitorInfo;
-	//	ウィンドウに最も近いディスプレイ モニターへのハンドルを受け取る
-	GetMonitorInfo(MonitorFromWindow(hWnd_, MONITOR_DEFAULTTONEAREST), &monitorInfo);
-	
-	SetFullScreen(_fullscreen, monitorInfo.rcMonitor);
+	SetWindowModeImpl(currInfo_);
 }
 
-void mtgb::WindowResource::SetFullScreen(bool _fullscreen, const RECT& _monitorRect)
+
+//void mtgb::WindowResource::SetInitialWindowMode()
+//{
+//	SetWindowModeImpl(initialInfo_);
+//}
+
+void mtgb::WindowResource::SetFullScreen(const RECT& _monitorRect)
 {
-	if (_fullscreen)
-	{
-		// フルスクリーンになる
-		// ウィンドウスタイルを枠なしポップアップに変更
-		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_ & ~(WS_CAPTION | WS_THICKFRAME));
-		SetWindowLong(hWnd_, GWL_EXSTYLE, windowedExStyle_ & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
+	// フルスクリーンになる
+	isFullscreen_ = true;
 
-		// 指定されたモニター座標を直接使用
-		SetWindowPos(hWnd_, HWND_TOP,
-			_monitorRect.left, _monitorRect.top,// ウィンドウの位置
-			_monitorRect.right - _monitorRect.left,// ウィンドウのサイズ(幅)
-			_monitorRect.bottom - _monitorRect.top,// ウィンドウのサイズ(高さ)
-			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
-			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-	}
-	else
-	{
+	GetWindowInfo();
 
-		// ウィンドウモードに戻る
+	// ウィンドウスタイルを枠なしポップアップに変更
+	SetWindowLong(hWnd_, GWL_STYLE, currInfo_.windowedStyle_ & ~(WS_CAPTION | WS_THICKFRAME));
+	SetWindowLong(hWnd_, GWL_EXSTYLE, currInfo_.windowedExStyle_ & ~(WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE));
 
-		// ウィンドウスタイルを元に戻す
-		SetWindowLong(hWnd_, GWL_STYLE, windowedStyle_);
-		SetWindowLong(hWnd_, GWL_EXSTYLE, windowedExStyle_);
+	// 指定されたモニター座標を直接使用
+	SetWindowPos(hWnd_, HWND_TOP,
+		_monitorRect.left, _monitorRect.top,// ウィンドウの位置
+		_monitorRect.right - _monitorRect.left,// ウィンドウのサイズ(幅)
+		_monitorRect.bottom - _monitorRect.top,// ウィンドウのサイズ(高さ)
+		// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
+		SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 
-		// 保存しておいたウィンドウの位置、サイズを戻す
-		SetWindowPos(hWnd_, HWND_NOTOPMOST,
-			windowedRect_.left,
-			windowedRect_.top,
-			windowedRect_.right - windowedRect_.left,
-			windowedRect_.bottom - windowedRect_.top,
-			// オーナー(?)ウィンドウのZ順序は変更しない、スタイルの変更を適用
-			SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
-	}
 }
 
 void mtgb::WindowResource::GetWindowInfo()
 {
 	// 現在のウィンドウのスタイルと位置を保存
-	windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
-	windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
-	GetWindowRect(hWnd_, &windowedRect_);
+	currInfo_.windowedStyle_ = GetWindowLong(hWnd_, GWL_STYLE);
+	currInfo_.windowedExStyle_ = GetWindowLong(hWnd_, GWL_EXSTYLE);
+	GetWindowRect(hWnd_, &currInfo_.windowedRect_);
+}
+
+void mtgb::WindowResource::SetPosition(const RECT& _monitorRect)
+{
+	SetWindowPos(hWnd_, HWND_NOTOPMOST,
+		_monitorRect.left,
+		_monitorRect.top,
+		_monitorRect.right - _monitorRect.left,
+		_monitorRect.bottom - _monitorRect.top,
+		// オーナーウィンドウ(?)のZ順序は変更しない、スタイルの変更を適用
+		SWP_NOOWNERZORDER);
+
+	currInfo_.windowedRect_ = _monitorRect;
+}
+
+void mtgb::WindowResource::SetWindowModeImpl(WindowModeInfo _info)
+{
+	// ウィンドウモードに戻る
+	isFullscreen_ = false;
+
+	// ウィンドウスタイルを元に戻す
+	SetWindowLong(hWnd_, GWL_STYLE, _info.windowedStyle_);
+	SetWindowLong(hWnd_, GWL_EXSTYLE, _info.windowedExStyle_);
+
+	// 保存しておいたウィンドウの位置、サイズを戻す
+	RECT rect = _info.windowedRect_;
+	SetWindowPos(hWnd_, HWND_NOTOPMOST,
+		rect.left,
+		rect.top,
+		rect.right - rect.left,
+		rect.bottom - rect.top,
+		// オーナーウィンドウ(?)のZ順序は変更しない、スタイルの変更を適用
+		SWP_NOOWNERZORDER | SWP_FRAMECHANGED);
 }
 
 void mtgb::WindowResource::Release()

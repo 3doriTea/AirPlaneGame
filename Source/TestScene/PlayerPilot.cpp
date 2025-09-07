@@ -60,7 +60,7 @@ void PlayerPilot::Update()
 void PlayerPilot::Draw() const
 {
 	pTargetingSystem_->DrawUI();
-	Draw::ImmediateText("apple", { 0,0 }, 30);
+	Draw::ImmediateText("apple", { 0,0 }, 30,TextAlignment::center,UIParams{.layerFlag = GameObjectLayer::A});
 	Game::System<TrailEmitterSystem>().Render();
 }
 

@@ -15,7 +15,7 @@ namespace mtgb
 	public:
 		Direct3DResource();
 		~Direct3DResource();
-		Direct3DResource(const Direct3DResource& other);
+		//Direct3DResource(const Direct3DResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 		void Reset() override;

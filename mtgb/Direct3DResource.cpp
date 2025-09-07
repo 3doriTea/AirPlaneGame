@@ -15,15 +15,15 @@ mtgb::Direct3DResource::~Direct3DResource()
 	Release();
 }
 
-mtgb::Direct3DResource::Direct3DResource(const Direct3DResource& other)
-	:WindowContextResource(other)
-	,pRenderTargetView_{nullptr}
-	,pDepthStencil_{nullptr}
-	,pDepthStencilView_{nullptr}
-	,viewPort_{other.viewPort_ }
-{
-
-}
+//mtgb::Direct3DResource::Direct3DResource(const Direct3DResource& other)
+//	:WindowContextResource(other)
+//	,pRenderTargetView_{nullptr}
+//	,pDepthStencil_{nullptr}
+//	,pDepthStencilView_{nullptr}
+//	,viewPort_{other.viewPort_ }
+//{
+//
+//}
 
 void mtgb::Direct3DResource::Initialize(WindowContext _windowContext)
 {

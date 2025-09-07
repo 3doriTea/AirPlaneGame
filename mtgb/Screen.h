@@ -2,7 +2,6 @@
 #include "ISystem.h"
 #include "Vector2Int.h"
 #include "Vector2F.h"
-
 namespace mtgb
 {
 	class Screen : public ISystem
@@ -24,6 +23,14 @@ namespace mtgb
 		const Vector2F GetSizeRatio() const;
 		const mtgb::Vector2Int GetInitialSize() const;
 
+		
+
+		/// <summary>
+		/// <para> スクリーンのサイズを保持する</para>
+		/// <para> スクリーンのサイズを変えた時に呼び出す。また、予め登録されたコールバックが呼ばれる</para>
+		/// </summary>
+		/// <param name="_width"></param>
+		/// <param name="_height"></param>
 		void SetSize(int _width, int _height);
 
 	private:

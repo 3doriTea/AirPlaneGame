@@ -27,7 +27,11 @@ mtgb::InputResource::~InputResource()
 
 mtgb::InputResource::InputResource(const InputResource& other)
 	: WindowContextResource(other)
-	, isInitialized{false}
+	, pKeyDevice_{ other.pKeyDevice_ }       
+	, pMouseDevice_{ other.pMouseDevice_ }
+	, pJoystickDevice_{ other.pJoystickDevice_ }
+	, isInitialized{ other.isInitialized }
+	, assignedJoystickGuid_{ other.assignedJoystickGuid_ }
 {
 	if (other.pInputData_)
 	{
@@ -37,8 +41,14 @@ mtgb::InputResource::InputResource(const InputResource& other)
 	{
 		pInputData_ = nullptr;
 	}
-	pKeyDevice_ = nullptr;
-	pMouseDevice_ = nullptr;
+	if (other.pProxy_)
+	{
+		pProxy_ = new JoystickProxy(*other.pProxy_);
+	}
+	else
+	{
+		pProxy_ = nullptr;
+	}
 }
 
 void mtgb::InputResource::Initialize(WindowContext _windowContext)
@@ -68,7 +78,7 @@ void mtgb::InputResource::Initialize(WindowContext _windowContext)
 
 	if (_windowContext == WindowContext::First)
 	{
-		reservation.deviceType = DeviceType::FlightStick;
+		reservation.deviceType = DeviceType::Unknown;
 		name_ = "FirstWindowController";
 	}
 	else if (_windowContext == WindowContext::Second)

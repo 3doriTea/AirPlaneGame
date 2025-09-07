@@ -78,6 +78,11 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	MTImGui::Instance().ShowAll(ShowType::Inspector);
 	imGui.End();
 
+	// Settingsï\é¶
+	imGui.Begin(MTImGui::GetName(ShowType::Settings).data());
+	MTImGui::Instance().ShowAll(ShowType::Settings);
+	imGui.End();
+
 	// ÉçÉOï\é¶
 	imGui.Begin(Debug::GetName().data());
 

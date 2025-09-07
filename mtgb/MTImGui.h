@@ -8,11 +8,14 @@
 #include "TypeRegistry.h"
 #include <optional>
 #include <tuple>
-
+#include <map>
 namespace mtgb
 {
 
 	struct Vector3;
+
+	using ShowItem = std::pair<std::string, std::function<void()>>;
+	using ShowQueue = std::queue<ShowItem>;
 
 	/// <summary>
 		/// ImGuiÇ…ï\é¶ÇÇ∑ÇÈç€Ç…égÇ§
@@ -94,6 +97,10 @@ namespace mtgb
 			{
 				return "Game View";
 			}
+			if (_showType == ShowType::Settings)
+			{
+				return "Settings";
+			}
 
 			return "None";
 		}
@@ -106,7 +113,13 @@ namespace mtgb
 		/// </summary>
 		void SetupShowFunc();
 
+		void ShowListView(ShowType _show);
+
 		std::vector<ImGuiShowable*> showableObjs_;
+		
+		std::map<ShowType, ShowQueue> showQueues_;
+		std::map<ShowType, std::string> selectionNames_; // ShowTypeÇ≤Ç∆ÇÃëIëèÛë‘
+
 		std::queue<std::pair<std::string,std::function<void()>>> inspectorShowList_;
 		std::queue<std::function<void()>> sceneViewShowList_;
 

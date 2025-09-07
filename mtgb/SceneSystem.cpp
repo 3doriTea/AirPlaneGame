@@ -10,6 +10,13 @@
 #include "MTImGui.h"
 #include "RenderSystem.h"
 #include "InputData.h"
+#include "WindowManager.h"
+#include "CameraResource.h"
+#include "InputResource.h"
+#include "DXGIResource.h"
+#include "Direct3DResource.h"
+#include "Direct2DResource.h"
+#include "WindowResource.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr },
@@ -42,21 +49,23 @@ void mtgb::SceneSystem::Update()
 		return;  // ÉVÅ[ÉìÇ™Ç»Ç¢Ç»ÇÁâÒãA
 	}
 
-	if (InputUtil::GetKeyDown(KeyCode::J))
+	if (InputUtil::GetKeyDown(KeyCode::F11))
 	{
-		WinCtxRes::SetFullscreen(true, WindowContext::First);
+		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::First);
 	}
-	if (InputUtil::GetKeyDown(KeyCode::K))
+	if (InputUtil::GetKeyDown(KeyCode::F10))
 	{
-		WinCtxRes::SetFullscreen(false, WindowContext::First);
+		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::Second);
 	}
-	if (InputUtil::GetKeyDown(KeyCode::N))
+	if (InputUtil::GetKeyDown(KeyCode::X))
 	{
-		WinCtxRes::SetFullscreen(true, WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::M))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::Second);
+		Game::System<WinCtxResManager>().SwapResource<DXGIResource>();
+		Game::System<WinCtxResManager>().SwapResource<Direct2DResource>();
+		Game::System<WinCtxResManager>().SwapResource<Direct3DResource>();
+		Game::System<WinCtxResManager>().SwapResource<WindowResource>();
+		Game::System<WinCtxResManager>().SwapResource<InputResource>();
+		//Game::System<WinCtxResManager>().SwapResource<CameraResource>();
+		//Game::System<WinCtxResManager>().SwapAllResource();
 	}
 
 	WinCtxRes::ChangeResource(WindowContext::First);

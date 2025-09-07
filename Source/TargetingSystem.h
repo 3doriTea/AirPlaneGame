@@ -24,13 +24,11 @@ struct TargetingSystem
 	// TargetingSystemを所有するオブジェクトのTransform
 	Transform* ownerTransform;
 
-	// 機能
 	void SearchTargets();
 	void FireAtTarget();
 	Vector3 GetCurrentTargetPosition() const;
 	void DrawUI() const;
 
-	// 初期化
 	void Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize);
 
 	// ターゲットが存在するかチェック

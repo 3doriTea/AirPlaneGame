@@ -7,6 +7,8 @@
 #include "SceneSystem.h"
 #include "RectContainsInfo.h"
 #include "RectDetector.h"
+#include <string>
+#include <format>
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -77,10 +79,11 @@ void mtgb::MTImGui::SetupShowFunc()
             // WCHARの配列を文字列に変換して表示
             char description[256];
             WideCharToMultiByte(CP_UTF8, 0, _target->Description, -1, description, sizeof(description), nullptr, nullptr);
-            ImGui::Text("Description: %s", description);
-
+            ImGui::LabelText("Description", "%s", description);
+            /*std::string highPart = std::to_string(_target->AdapterLuid.HighPart);
+            ImGui::InputText("Adapter LUID:", highPart.data(), highPart.size() + 1, ImGuiInputTextFlags_ReadOnly);
             ImGui::Text("Adapter LUID: %08X-%08X", _target->AdapterLuid.HighPart, _target->AdapterLuid.LowPart);
-            ImGui::Text("Flags: 0x%X", _target->Flags);
+            ImGui::Text("Flags: 0x%X", _target->Flags);*/
         });
 
     Set<DXGI_OUTPUT_DESC>([](DXGI_OUTPUT_DESC* _target, const char* _name)
@@ -88,19 +91,57 @@ void mtgb::MTImGui::SetupShowFunc()
 			// WCHARの配列を文字列に変換して表示
 			char deviceName[64];
 			WideCharToMultiByte(CP_UTF8, 0, _target->DeviceName, -1, deviceName, sizeof(deviceName), nullptr, nullptr);
-			ImGui::Text("Device Name: %s", deviceName);
+			ImGui::LabelText("Device Name","%s" ,deviceName);
 
-			ImGui::Text("Desktop Coordinates: (%d, %d) - (%d, %d)",
-				_target->DesktopCoordinates.left, _target->DesktopCoordinates.top,
-				_target->DesktopCoordinates.right, _target->DesktopCoordinates.bottom);
-
-			ImGui::Text("Attached to Desktop: %s", _target->AttachedToDesktop ? "Yes" : "No");
-
-            // PVOID
-			ImGui::Text("Monitor Handle: %p", _target->Monitor);
-
-
+            ImGui::LabelText("DesktopCoordinates", "(%ld,%ld) - (%ld,%ld)", _target->DesktopCoordinates.left, _target->DesktopCoordinates.top,
+                _target->DesktopCoordinates.right, _target->DesktopCoordinates.bottom);
 		});
+}
+void mtgb::MTImGui::ShowListView(ShowType _show)
+{
+    auto& selectedName = selectionNames_[_show];
+    auto& queue = showQueues_[_show];
+
+    bool isSelected = false;
+    std::function<void()> selectedFunc = nullptr;
+
+    ImGui::BeginChild("List", ImVec2(200, 0), true);
+
+    while (!queue.empty())
+    {
+        const std::string& name = queue.front().first;
+        auto& func = queue.front().second;
+
+        if (!isSelected)
+        {
+            isSelected = selectedName == name;
+
+            // コピーキャプチャの場合は値が更新されないので、
+            // 選択済みの名前と一致していたら関数を更新
+            selectedFunc = func;
+        }
+
+        // 選択された項目の名前、表示関数を記録
+        if (ImGui::Selectable(name.c_str(), selectedName == name))
+        {
+            isSelected = true;
+            selectionNames_[_show] = name;
+            selectedFunc = func;
+        }
+
+        queue.pop();
+    }
+    ImGui::EndChild();
+
+    // Listの横に property表示
+    ImGui::SameLine();
+
+    ImGui::BeginChild("property", ImVec2(0, 0), true);
+    if (selectedFunc && isSelected)
+    {
+        selectedFunc();
+    }
+    ImGui::EndChild();
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
 {
@@ -124,55 +165,17 @@ void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float
 }
 void mtgb::MTImGui::ShowAll(ShowType show)
 {
-    if (show == ShowType::Inspector)
-    {
-
-        static std::string selectedName;
-        static std::function<void()> selectedFunc = nullptr;
-
-        bool isSelected = false;
-        ImGui::BeginChild("List", ImVec2(200, 0), true);
-        while (!inspectorShowList_.empty())
-        {
-            const std::string& name = inspectorShowList_.front().first;
-            auto& func = inspectorShowList_.front().second;
-
-            if (!isSelected)
-            {
-                isSelected = selectedName == name;
-
-                // 表示関数がコピーキャプチャのラムダ式の場合値が更新されないので、
-                // 選択済みの名前と表示リストの名前が一致していたら関数を更新
-                selectedFunc = func;
-            }
-
-            if (ImGui::Selectable(name.c_str(),selectedName == name))
-            {
-                isSelected = true;
-                selectedName = name;
-                selectedFunc = func;
-            }
-
-            inspectorShowList_.pop();
-        }
-        ImGui::EndChild();
-
-        ImGui::SameLine();
-
-        ImGui::BeginChild("property", ImVec2(0, 0), true);
-        if (selectedFunc && isSelected)
-        {
-            selectedFunc();
-        }
-        ImGui::EndChild();
-    }
-    else if (show == ShowType::SceneView)
+    if (show == ShowType::SceneView)
     {
         while (!sceneViewShowList_.empty())
         {
             sceneViewShowList_.front()();
             sceneViewShowList_.pop();
         }
+    }
+    else
+    {
+        ShowListView(show);
     }
 }
 
@@ -194,14 +197,17 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 
 void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
-    if (show == ShowType::Inspector)
+    if (show == ShowType::SceneView)
     {
-        inspectorShowList_.emplace(name,func);
-    }
-    else if (show == ShowType::SceneView)
-    {
+        // SceneViewは名前不要
         sceneViewShowList_.push(func);
     }
+    else
+    {
+        showQueues_[show].emplace(name, func);
+        //inspectorShowList_.emplace(name,func);
+    }
+    
 }
 
 

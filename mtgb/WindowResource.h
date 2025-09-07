@@ -14,7 +14,13 @@
 
 namespace mtgb
 {
-
+	// ウィンドウモード時の情報
+	struct WindowModeInfo
+	{
+		RECT windowedRect_;		//位置とサイズ
+		LONG windowedStyle_;	// スタイル
+		LONG windowedExStyle_;	// 拡張スタイル
+	};
 	class WindowResource : public WindowContextResource
 	{
 	public:
@@ -37,21 +43,32 @@ namespace mtgb
 		void MarkInitialized();
 		void OnResize(WindowContext _windowContext, UINT _width, UINT _height) override;
 
-		void SetFullScreen(bool _fullscreen);
-		void SetFullScreen(bool _fullscreen, const RECT& _monitorRect);
+		/// <summary>
+		/// 直前のウィンドウモードに戻る
+		/// </summary>
+		void SetWindowMode();
+		/// <summary>
+		/// 初期のウィンドウモードに戻す
+		/// </summary>
+		//void SetInitialWindowMode();
+		void SetFullScreen(const RECT& _monitorRect);
 		/// <summary>
 		/// フルスクリーンにする前に情報を保持しておく
 		/// </summary>
 		void GetWindowInfo();
+
+		bool IsFullScreen() const { return isFullscreen_; }
+		void SetPosition(const RECT& _monitorRect);
 	private:
+		void SetWindowModeImpl(WindowModeInfo _info);
 		WindowContext context_;
 		HWND hWnd_;
 		bool isActive_;
+		bool isFullscreen_; // フルスクリーンか否か
 
-		// ウィンドウモード時の情報
-		RECT windowedRect_;		//位置とサイズ
-		LONG windowedStyle_;	// スタイル
-		LONG windowedExStyle_;	// 拡張スタイル
+		WindowModeInfo currInfo_; // 現在のウィンドウモード時の情報
+		WindowModeInfo initialInfo_; // 初期のウィンドウモード時の情報
+
 
 		// 初期化が完了したか
 		bool isInitialized_;

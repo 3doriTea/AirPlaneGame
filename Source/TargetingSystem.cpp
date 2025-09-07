@@ -1,7 +1,7 @@
 #include "TargetingSystem.h"
 #include <algorithm>
 #include "TestScene/PlayerBullet.h"
-
+#include "DrawScreenUtility.h"
 void TargetingSystem::Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize)
 {
 	// Transform設定
@@ -36,6 +36,7 @@ TargetingSystem::TargetingSystem()
 	// レティクル矩形のサイズを設定
 	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };
 
+
 	// 検出距離、検出対象名設定
 	targetDetector.config.maxDistance = 100.0f;
 	targetDetector.config.targetName = "Enemy";
@@ -69,9 +70,9 @@ void TargetingSystem::SearchTargets()
 		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		
 		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
-		reticleRect.x =  currentTarget->screenPos.x - reticleRadius;
+		reticleRect.x =  currentTarget->screenPos.x - reticleRadius * ratio.x;
 		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
-		reticleRect.y = currentTarget->screenPos.y - reticleRadius;
+		reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
 		reticleRect.width = (reticleRadius * 2.0f);
 		//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
 		//reticleRect.width = reticleRadius * 2.0f * ratio.x;
@@ -113,11 +114,11 @@ void TargetingSystem::DrawUI() const
 	// ターゲット検出範囲を描画
 	Vector2F ratio =  Game::System<Screen>().GetSizeRatio();
 	//RectF detectionRect{ targetDetector.config.detectionRect.point / ratio,targetDetector.config.detectionRect.size / ratio };
-	Draw::Image(detectionFrameImage, targetDetector.config.detectionRect, uiParams);
+	Draw::Image(detectionFrameImage, { targetDetector.config.detectionRect.point * ratio,targetDetector.config.detectionRect.size * ratio}, uiParams);
 
 	// ターゲットがロックオンされている場合、レティクルを描画
 	if (HasTarget())
 	{
-		Draw::Image(targetReticleImage, reticleRect, uiParams);
+		Draw::Image(targetReticleImage, { reticleRect.point,reticleRect.size * ratio }, uiParams);
 	}
 }

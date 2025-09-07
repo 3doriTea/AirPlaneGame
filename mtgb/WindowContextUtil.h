@@ -43,12 +43,6 @@ namespace mtgb
 		/// <returns></returns>
 		HWND GetHWND(WindowContext ctx);
 
-		/// <summary>
-		/// そのウィンドウのフルスクリーンを制御する
-		/// </summary>
-		/// <param name="_fullscreen"></param>
-		/// <param name="_ctx"></param>
-		void SetFullscreen(bool _fullscreen, WindowContext _ctx);
-
+		
 	}
 }
