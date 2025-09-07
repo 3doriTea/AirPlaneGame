@@ -147,6 +147,11 @@ namespace mtgb
 		/// <param name="_entityId"></param>
 		static void RemoveEntityComponent(const EntityId _entityId);
 
+		/// <summary>
+		/// EntityId‚ğ¶¬‚µ‚Ä•Ô‚·
+		/// </summary>
+		/// <returns>¶¬‚µ‚½EntityId</returns>
+		static EntityId CreateEntity();
 	private:
 		/// <summary>
 		/// ƒVƒXƒeƒ€‚Ì‰Šú‰»‚ğ‚·‚é

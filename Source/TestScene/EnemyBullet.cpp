@@ -16,8 +16,8 @@ EnemyBullet::EnemyBullet(const Vector3& _position, const Quaternion& _quaternion
 	massert(hModelCollider_ >= 0 && "SphereColliderƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
 
 	pCollider_->type_ = Collider::TYPE_SPHERE;
-	pCollider_->sphere_.offset_ = Vector3::Zero();
-	pCollider_->sphere_.radius_ = 0.5f;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(0.5f);
 
 	// 3•bŒo‚Á‚½‚çÁ‚·
 	Timer::AddAram(3.0f, [this] { DestroyMe(); });

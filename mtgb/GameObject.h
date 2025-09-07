@@ -35,8 +35,8 @@ namespace mtgb
 		/// </summary>
 		/// <typeparam name="ComponentT">コンポーネントの型</typeparam>
 		/// <returns>コンポーネントのポインタ</returns>
-		template<class ComponentT>
-		ComponentT* Component();
+		template<class ComponentT, typename ...Args>
+		ComponentT* Component(Args&&... _args);
 
 		/// <summary>
 		/// ゲームオブジェクトをインスタンスする
@@ -95,10 +95,10 @@ namespace mtgb
 		std::bitset<COMPONENT_CAPACITY> componentsFlag_;  // コンポーネントのフラグ
 	};
 
-	template<class ComponentT>
-	inline ComponentT* GameObject::Component()
+	template<class ComponentT, typename ...Args>
+	inline ComponentT* GameObject::Component(Args&&... _args)
 	{
-		return &ComponentT::Get(entityId_);
+		return &ComponentT::Get(entityId_, std::forward<Args>(_args)...);
 	}
 
 	template<class GameObjectT, typename ...Args>

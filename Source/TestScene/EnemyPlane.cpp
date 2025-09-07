@@ -26,7 +26,8 @@ EnemyPlane::EnemyPlane(
 	.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
-	pCollider_{ Component<Collider>() },
+	pCollider_{ Component<Collider>()},
+	//pCollider_{ Component<Collider>()},
 	pTarget_{ &Transform::Get(_playerPlane) },
 	speed_{ 10.0f },
 	health_{},
@@ -34,8 +35,8 @@ EnemyPlane::EnemyPlane(
 	lockOnDistance_{ 30.0f }
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
-	pCollider_->sphere_.offset_ = Vector3::Zero();
-	pCollider_->sphere_.radius_ = 1.0f;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(1.0f);
 	timeSinceLastshot_ = 0.0f;
 	
 	//hText = Text::Load("apple", 72);
@@ -44,11 +45,16 @@ EnemyPlane::EnemyPlane(
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
+			GameObject* pTarget{ FindGameObject(_targetId) };
+			if (pTarget == nullptr)
+			{
+				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
+				return;
+			}
 			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			GameObject* pTarget{ FindGameObject(_targetId) };
 
-			massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
+			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
 			if (pTarget->GetName() == "PlayerBullet")
 			{
 				pTarget->DestroyMe();
