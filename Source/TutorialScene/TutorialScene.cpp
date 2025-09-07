@@ -14,6 +14,7 @@
 #include "TextBoxTimeBar.h"
 #include "SpeechQueue.h"
 #include "ImageAnimator.h"
+#include "ToPlayTimer.h"
 
 namespace
 {
@@ -36,7 +37,7 @@ namespace
 		{ u8"2人とも、スティックを倒して、方向を変えられるよ。",				"Sound/Voice/008_ずんだもん（ノーマル）_2人とも、スティッ….wav",	5.0 },  // 7
 		{ u8"トリガーを押すと、弾を発射できるよ。",							"Sound/Voice/009_ずんだもん（ノーマル）_トリガーを押すと、….wav",	5.0 },  // 8
 		{ u8"←側の運転手は、スライダーを動かして飛行機の速度を変えられるよ。",	"Sound/Voice/010_ずんだもん（ノーマル）_右の、運転手は、ス….wav",	7.0 },  // 9
-		//{ u8"そろそろ敵が見えてくるはず、幸運を祈るよ。", "", 0 },
+		{ u8"そろそろ到着するよ！幸運を祈るよ！",							"Sound/Voice/011_ずんだもん（ノーマル）_そろそろ到着するよ….wav", 4.0 },
 	} };
 
 	// フライトスティックコントローラーの画像ファイル名
@@ -152,6 +153,7 @@ void TutorialScene::Initialize()
 
 	pTextBoxBackground_ = Instantiate<TextBoxBackground>();
 	pTextBoxTimeBar_ = Instantiate<TextBoxTimeBar>();
+	Instantiate<ToPlayTimer>(TO_PLAY_SCENE_WAIT_SEC);
 }
 
 void TutorialScene::Update()
