@@ -4,6 +4,8 @@
 #include "Direct3DResource.h"
 #include "ISystem.h"
 #include "Screen.h"
+#include "Direct2DResource.h"
+
 using namespace mtgb;
 
 /// <summary>
@@ -23,6 +25,14 @@ WindowContext WinCtxRes::CurrContext()
 HWND WinCtxRes::GetHWND(WindowContext ctx)
 {
 	return WinCtxRes::Get<WindowResource>(ctx).GetHWND();
+}
+
+void mtgb::WinCtxRes::SwapWindow(WindowContext _ctx1, WindowContext _ctx2)
+{
+	Game::System<WinCtxResManager>().SwapResource<WindowResource>(_ctx1, _ctx2);
+	Game::System<WinCtxResManager>().SwapResource<DXGIResource>(_ctx1,_ctx2);
+	Game::System<WinCtxResManager>().SwapResource<Direct3DResource>(_ctx1, _ctx2);
+	Game::System<WinCtxResManager>().SwapResource<Direct2DResource>(_ctx1, _ctx2);
 }
 
 

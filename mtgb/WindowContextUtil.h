@@ -43,6 +43,12 @@ namespace mtgb
 		/// <returns></returns>
 		HWND GetHWND(WindowContext ctx);
 
-		
+		/// <summary>
+		/// <para> 二つのウィンドウの描画リソースを切り替える </para>
+		/// <para> 入力やカメラなどは切り換えない </para>
+		/// </summary>
+		/// <param name="_ctx1"></param>
+		/// <param name="_ctx2"></param>
+		void SwapWindow(WindowContext _ctx1 = WindowContext::First, WindowContext _ctx2 = WindowContext::Second);
 	}
 }

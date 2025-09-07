@@ -4,7 +4,7 @@
 #include "ReleaseUtility.h"
 #include <functional>
 #include <vector>
-
+#include <queue>
 namespace mtgb
 {
 	class SceneSystem : public ISystem
@@ -38,14 +38,27 @@ namespace mtgb
 		/// </summary>
 		/// <param name="_onMove">void()</param>
 		void OnMove(const std::function<void()>& _onMove) { onMoveListener_.push_back(_onMove); }
+		
+		/// <summary>
+		/// <para> 次のフレームのシーンの更新、描画前に実行するコールバックを登録 </para>
+		/// <para> コールバックは一回だけ実行され、その後破棄される </para>
+		/// </summary>
+		/// <param name="_callback">登録するコールバック</param>
+		void RegisterPendingCallback(std::function<void()> _callback);
 
+		/// <summary>
+		/// <para> 次のフレームのシーンの更新、描画前に実行するコールバックを実行</para>
+		/// <para> 一回だけ実行され、その後破棄される </para>
+		/// </summary>
+		void ExecutePendingCallbacks();
 	private:
 		void ChangeScene();
 
 	private:
 		GameScene* pNextScene_;
 
-		std::vector<std::function<void()>> onMoveListener_;
+		std::queue<std::function<void()>> pendingCallbacks_; // 次のフレームのシーンの更新、描画前に実行するコールバック
+		std::vector<std::function<void()>> onMoveListener_; // シーン遷移時に実行するコールバック
 	};
 
 	template<class NextSceneT, typename ...Args>

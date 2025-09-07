@@ -15,7 +15,6 @@
 #include "InputResource.h"
 #include "DXGIResource.h"
 #include "Direct3DResource.h"
-#include "Direct2DResource.h"
 #include "WindowResource.h"
 
 mtgb::SceneSystem::SceneSystem() :
@@ -49,6 +48,10 @@ void mtgb::SceneSystem::Update()
 		return;  // シーンがないなら回帰
 	}
 
+	// 更新、描画前にコールバック実行
+	ExecutePendingCallbacks();
+
+
 	if (InputUtil::GetKeyDown(KeyCode::F11))
 	{
 		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::First);
@@ -56,16 +59,6 @@ void mtgb::SceneSystem::Update()
 	if (InputUtil::GetKeyDown(KeyCode::F10))
 	{
 		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::X))
-	{
-		Game::System<WinCtxResManager>().SwapResource<DXGIResource>();
-		Game::System<WinCtxResManager>().SwapResource<Direct2DResource>();
-		Game::System<WinCtxResManager>().SwapResource<Direct3DResource>();
-		Game::System<WinCtxResManager>().SwapResource<WindowResource>();
-		Game::System<WinCtxResManager>().SwapResource<InputResource>();
-		//Game::System<WinCtxResManager>().SwapResource<CameraResource>();
-		//Game::System<WinCtxResManager>().SwapAllResource();
 	}
 
 	WinCtxRes::ChangeResource(WindowContext::First);
@@ -162,6 +155,20 @@ void mtgb::SceneSystem::Update()
 		{
 			itr++;
 		}
+	}
+}
+
+void mtgb::SceneSystem::RegisterPendingCallback(std::function<void()> _callback)
+{
+	pendingCallbacks_.push(_callback);
+}
+
+void mtgb::SceneSystem::ExecutePendingCallbacks()
+{
+	while (!pendingCallbacks_.empty())
+	{
+		pendingCallbacks_.front()();
+		pendingCallbacks_.pop();
 	}
 }
 

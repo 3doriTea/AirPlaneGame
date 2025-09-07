@@ -9,6 +9,8 @@
 #include "RectDetector.h"
 #include <string>
 #include <format>
+#include "WindowContextUtil.h"
+#include "InputResource.h"
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -23,7 +25,6 @@ void mtgb::MTImGui::Update()
     
     updatingImGuiShowable_ = true;
 
-    //ImGui::BeginChild("left")
     for (ImGuiShowable* obj : showableObjs_)
     {
         DirectShow([=]()
@@ -38,6 +39,47 @@ void mtgb::MTImGui::Update()
     }
 
     updatingImGuiShowable_ = false;
+
+    // Settingsウィンドウに表示
+    DirectShow([]()
+        {
+            if (ImGui::Button("SwapWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        WinCtxRes::SwapWindow();
+                        // CameraResourceは交換しない
+                        Game::System<WinCtxResManager>().SwapResource<InputResource>();
+                    });
+			}
+		}, "Window", ShowType::Settings);
+
+	DirectShow([]()
+		{
+			Game::System<SceneSystem>().RegisterPendingCallback([]()
+				{
+					if (ImGui::Button("EnumJoystick"))
+					{
+						Game::System<Input>().EnumJoystick();
+					}
+					if (ImGui::Button("SwapInput"))
+					{
+						Game::System<WinCtxResManager>().SwapResource<InputResource>();
+					}
+				});
+
+		}, "Input", ShowType::Settings);
+}
+void mtgb::MTImGui::SetWindowOpen(ShowType _showType, bool _flag)
+{
+    imguiWindowStates_[_showType].isOpen = _flag;
+}
+void mtgb::MTImGui::SetAllWindowOpen(ShowType _showType, bool _flag)
+{
+    for (auto& windowState : imguiWindowStates_)
+    {
+        windowState.second.isOpen = _flag;
+    }
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
@@ -99,7 +141,7 @@ void mtgb::MTImGui::SetupShowFunc()
 }
 void mtgb::MTImGui::ShowListView(ShowType _show)
 {
-    auto& selectedName = selectionNames_[_show];
+    auto& selectedName = imguiWindowStates_[_show].selectedName;
     auto& queue = showQueues_[_show];
 
     bool isSelected = false;
@@ -125,7 +167,7 @@ void mtgb::MTImGui::ShowListView(ShowType _show)
         if (ImGui::Selectable(name.c_str(), selectedName == name))
         {
             isSelected = true;
-            selectionNames_[_show] = name;
+            imguiWindowStates_[_show].selectedName = name;
             selectedFunc = func;
         }
 
@@ -163,7 +205,28 @@ void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float
         ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
     }
 }
-void mtgb::MTImGui::ShowAll(ShowType show)
+void mtgb::MTImGui::ShowWindow(ShowType _showType)
+{
+    ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
+
+    if (_showType == ShowType::SceneView)
+    {
+        imGui.Begin(GetName(ShowType::SceneView).data(),&imguiWindowStates_[_showType].isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+        
+        imGui.UpdateCamera(GetName(ShowType::SceneView).data());
+        imGui.RenderSceneView();
+        imGui.SetDrawList();
+    }
+    else
+    {
+        imGui.Begin(GetName(_showType).data(), &imguiWindowStates_[_showType].isOpen);
+    }
+
+    ExecuteShowQueue(_showType);
+
+    imGui.End();
+}
+void mtgb::MTImGui::ExecuteShowQueue(ShowType show)
 {
     if (show == ShowType::SceneView)
     {

@@ -66,22 +66,25 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	imGui.BeginImGuizmoFrame();
 
 	// SceneView表示
-	imGui.Begin(MTImGui::GetName(ShowType::SceneView).data(), ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+	/*imGui.Begin(MTImGui::GetName(ShowType::SceneView).data(), ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
 	imGui.UpdateCamera(MTImGui::GetName(ShowType::SceneView).data());
 	imGui.RenderSceneView();
 	imGui.SetDrawList();
-	MTImGui::Instance().ShowAll(ShowType::SceneView);
-	imGui.End();
+	MTImGui::Instance().ExecuteShowQueue(ShowType::SceneView);
+	imGui.End();*/
+	MTImGui::Instance().ShowWindow(ShowType::SceneView);
 
 	// Inspector表示
-	imGui.Begin(MTImGui::GetName(ShowType::Inspector).data());
-	MTImGui::Instance().ShowAll(ShowType::Inspector);
-	imGui.End();
+	/*imGui.Begin(MTImGui::GetName(ShowType::Inspector).data());
+	MTImGui::Instance().ExecuteShowQueue(ShowType::Inspector);
+	imGui.End();*/
+	MTImGui::Instance().ShowWindow(ShowType::Inspector);
 
 	// Settings表示
-	imGui.Begin(MTImGui::GetName(ShowType::Settings).data());
-	MTImGui::Instance().ShowAll(ShowType::Settings);
-	imGui.End();
+	/*imGui.Begin(MTImGui::GetName(ShowType::Settings).data());
+	MTImGui::Instance().ExecuteShowQueue(ShowType::Settings);
+	imGui.End();*/
+	MTImGui::Instance().ShowWindow(ShowType::Settings);
 
 	// ログ表示
 	imGui.Begin(Debug::GetName().data());
