@@ -5,20 +5,25 @@ using namespace mtgb;
 
 namespace
 {
-	char BACK_IMAGE_FILE[]{ "Image/TutorialTimerBack.png" };
+	char BACK_IMAGE_FILE_HIDE[]{ "Image/TutorialTimerBackBlack.png" };
+	char BACK_IMAGE_FILE_SHOW[]{ "Image/TutorialTimerBack.png" };
 	const float BEGIN_POS_Y{ -202.0f };  // 開始地点のy座標
 	// 表示中のパネル範囲
 	const RectF DRAW_RECT_STAY_PANEL{ 118.0f, 0.0f, 244.0f, 202.0f };
 	// 表示中の文字範囲
 	const RectF DRAW_RECT_STAY_TEXT{ 200.0f, 140.0f, 150.0f, 40.0f };
+	// 表示を被す範囲
+	const RectF DRAW_RECT_STAY_OVERLAY{ 122, 122.0f, 236.0f, 76.0f };
 	const UIParams UI_PARAM_PANEL{ 10 };
 	const UIParams UI_PARAM_TEXT{ 11 };
+	const UIParams UI_PARAM_OVERLAY{ 12 };
 	const int TEXT_FONT_SIZE{ 36 };
 	const float ANIM_TIME[ToPlayTimer::S_MAX]
 	{
 		5.0f,
 		52.0f,
-		3.0f,
+		1.0f,
+		2.0f,
 	};
 }
 
@@ -27,7 +32,8 @@ ToPlayTimer::ToPlayTimer(const float _timeSec) : GameObject(GameObjectBuilder()
 	timeLeft_{ ANIM_TIME[S_ENTER] },
 	totalTimeLeft_{ _timeSec }
 {
-	hBackImage_ = Image::Load(BACK_IMAGE_FILE);
+	hBackImageShow_ = Image::Load(BACK_IMAGE_FILE_SHOW);
+	hBackImageHide_ = Image::Load(BACK_IMAGE_FILE_HIDE);
 
 	// 各状態での描画
 	stat_
@@ -37,18 +43,28 @@ ToPlayTimer::ToPlayTimer(const float _timeSec) : GameObject(GameObjectBuilder()
 				RectF draw{ DRAW_RECT_STAY_PANEL };
 				draw.y = Mathf::Lerp(BEGIN_POS_Y, DRAW_RECT_STAY_PANEL.y, rate);
 
-				Draw::Image(hBackImage_, GenDrawScreenFrom(draw), UI_PARAM_PANEL);
+				Draw::Image(hBackImageHide_, GenDrawScreenFrom(draw), UI_PARAM_PANEL);
 			})
 		.OnUpdate(S_STAY, [this]
 			{
-				Draw::Image(hBackImage_, GenDrawScreenFrom(DRAW_RECT_STAY_PANEL), UI_PARAM_PANEL);
+				Draw::Image(hBackImageShow_, GenDrawScreenFrom(DRAW_RECT_STAY_PANEL), UI_PARAM_PANEL);
 
 				Draw::ImmediateText(
-					std::format("{:3.1f}", totalTimeLeft_),
+					std::format("{:3.1f}秒", totalTimeLeft_),
 					GenDrawScreenFrom(DRAW_RECT_STAY_TEXT),
-					TEXT_FONT_SIZE,
+					GenDrawScreenFontSize(TEXT_FONT_SIZE),
 					TextAlignment::middleLeft,
 					UI_PARAM_TEXT);
+			})
+		.OnUpdate(S_OVER, [this]
+			{
+				Draw::Image(hBackImageShow_, GenDrawScreenFrom(DRAW_RECT_STAY_PANEL), UI_PARAM_PANEL);
+
+				float rate{ 1.0f - timeLeft_ / ANIM_TIME[S_ENTER] };
+				RectF draw{ DRAW_RECT_STAY_OVERLAY };
+
+				draw.width = Mathf::Lerp(0.0f, DRAW_RECT_STAY_OVERLAY.width, rate);
+				Draw::Box(GenDrawScreenFrom(RectInt{ draw.x, draw.y, draw.width, draw.height }), Color::BLACK, UI_PARAM_OVERLAY);
 			})
 		.OnUpdate(S_EXIT, [this]
 			{
@@ -56,7 +72,7 @@ ToPlayTimer::ToPlayTimer(const float _timeSec) : GameObject(GameObjectBuilder()
 				RectF draw{ DRAW_RECT_STAY_PANEL };
 				draw.y = Mathf::Lerp(DRAW_RECT_STAY_PANEL.y, BEGIN_POS_Y, rate);
 
-				Draw::Image(hBackImage_, GenDrawScreenFrom(draw), UI_PARAM_PANEL);
+				Draw::Image(hBackImageHide_, GenDrawScreenFrom(draw), UI_PARAM_PANEL);
 			});
 }
 

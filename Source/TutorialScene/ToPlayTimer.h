@@ -15,6 +15,7 @@ public:
 	{
 		S_ENTER,  // でてくる
 		S_STAY,  // タイマー表示
+		S_OVER,  // 隠す
 		S_EXIT,  // ひっこむ
 		S_MAX,  // アニメーション状態の種類数
 	};
@@ -33,6 +34,7 @@ public:
 private:
 	float timeLeft_;
 	float totalTimeLeft_;
-	ImageHandle hBackImage_;
+	ImageHandle hBackImageShow_;
+	ImageHandle hBackImageHide_;
 	mtstat::MTStat<STATE> stat_;
 };
