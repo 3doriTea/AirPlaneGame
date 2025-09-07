@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 #include <concepts>
+#include <type_traits>
 
 namespace mtstat
 {
@@ -23,7 +24,7 @@ namespace mtstat
 		MTStat& OnUpdate(const StatEnumT _statEnum, const std::function<void()>& _callback);
 		MTStat& OnEnd(const StatEnumT _statEnum, const std::function<void()>& _callback);
 
-		void Update();
+		void Update() const;
 		void Change(const StatEnumT _nextStat);
 
 		const StatEnumT Current() const { return stat_; }
@@ -57,11 +58,11 @@ namespace mtstat
 	}
 
 	template<EnumT StatEnumT>
-	inline void MTStat<StatEnumT>::Update()
+	inline void MTStat<StatEnumT>::Update() const
 	{
 		if (updateFuncs_.count(stat_))
 		{
-			updateFuncs_[stat_]();
+			updateFuncs_.at(stat_)();
 		}
 	}
 	

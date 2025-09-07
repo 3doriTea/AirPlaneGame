@@ -190,9 +190,11 @@
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
+    <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
+    <ClCompile Include="Source\TutorialScene\ToPlayTimer.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
@@ -419,9 +421,11 @@
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
+    <ClInclude Include="Source\TutorialScene\ImageAnimator.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />
+    <ClInclude Include="Source\TutorialScene\ToPlayTimer.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Source\VVPlayer.h" />
     <ClInclude Include="Source\WingEffect.h" />

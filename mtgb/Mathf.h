@@ -11,7 +11,7 @@ namespace mtgb::Mathf
 	/// <param name="_b">b値</param>
 	/// <param name="_value">0.0f ~ 1.0f</param>
 	/// <returns>最小値から最大値を線形補間した_valueの値</returns>
-	static inline float Lerp(const float _a, const float _b, const float _value)
+	static inline float LerpForward(const float _a, const float _b, const float _value)
 	{
 		float min{ std::fminf(_a, _b) };
 		float max{ std::fmaxf(_a, _b) };
@@ -20,7 +20,21 @@ namespace mtgb::Mathf
 		return min + (max - min) * rate;
 	}
 
-	/*static inline float Lerp(const float _a, const float _b, const float _value)
+	/// <summary>
+	/// aからbを線形補間する
+	/// </summary>
+	/// <param name="_a">a値</param>
+	/// <param name="_b">b値</param>
+	/// <param name="_normal">0.0f ~ 1.0f</param>
+	/// <returns>最小値から最大値を線形補間した_valueの値</returns>
+	static inline float Lerp(const float _a, const float _b, const float _value)
+	{
+		float rate{ std::fmaxf(0.0f, std::fminf(_value, 1.0f)) };
+
+		return _a + (_b - _a) * rate;
+	}
+
+	/*static inline float LerpForward(const float _a, const float _b, const float _value)
 	{
 		float rate{ std::fmaxf(0.0f, std::fminf(_value, 1.0f)) };
 
