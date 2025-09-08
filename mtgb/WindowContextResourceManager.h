@@ -62,13 +62,13 @@ namespace mtgb
         template<typename ResourceT>
         void SwapResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);
         
-        /// <summary>
+       /* /// <summary>
         /// <para> 指定した二つのウィンドウの全リソースを交換する </para>
         /// <para> あくまでWindowContextが指すポインタを交換するだけなので画面が切り替わったりはしない。 </para>
         /// </summary>
         /// <param name="context1">デフォルトでFirst</param>
         /// <param name="context2">デフォルトでSecond</param>
-        void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);
+        void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);*/
 
         /// <summary>
         /// リソースを取得する
