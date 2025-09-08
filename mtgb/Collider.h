@@ -28,7 +28,8 @@ namespace mtgb
 		enum class ColliderTag
 		{
 			GAME_OBJECT, 
-			STAGE, 
+			STAGE,
+			STAGE_BOUNDARY, // ステージの境界、範囲外のコライダーを意味するタグ
 		};
 
 	public:

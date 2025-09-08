@@ -37,7 +37,10 @@ namespace mtgb
 		int WorldToCellIndex(float _point) const;
 		float CellIndexToWorld(int _cellIndex) const;
 		
-
+		/// <summary>
+		/// ステージの範囲外と範囲内の境界となるコライダーを作成する
+		/// </summary>
+		void GenerateStageBoundaryCollider();
 		int width, height;
 		float heightScale;
 		float widthScale;
@@ -47,6 +50,11 @@ namespace mtgb
 		std::vector<std::vector<float>> quadtreeHeightMap;
 		int divisions; //分割回数
 		int cellNum;
+
+		// ステージの最高高度
+		float highestHeight;
+		// 天井をステージの最高高度からどれだけ上に配置するかのオフセット
+		float ceilingOffset;
 
 		Transform* pTransform;
 		FBXModelHandle hModelCollider_;
@@ -62,6 +70,8 @@ namespace mtgb
 		, heightScale{200.0f}
 		, widthScale{5.0f}
 		, divisions{3}
+		, highestHeight{0.0f}
+		, ceilingOffset{10.0f}
 	{
 		stageBuffer.resize(width * height);
 		hModelCollider_ = Fbx::Load("Model/BoxCollider.fbx");
@@ -90,6 +100,7 @@ namespace mtgb
 		}*/
 
 		GenerateQuadtreeHeightMap();
+		GenerateStageBoundaryCollider();
 	}
 
 	template<typename StageDataBit>
@@ -158,7 +169,13 @@ namespace mtgb
 
 				StageDataBit value = stageBuffer[sourceY * width + sourceX];
 				float normalized = static_cast<float>(value) / (std::numeric_limits<StageDataBit>::max)();
-				quadtreeHeightMap[y][x] = normalized * heightScale;
+				float height = normalized * heightScale;
+				quadtreeHeightMap[y][x] = height;
+
+				if (highestHeight < height)
+				{
+					highestHeight = height;
+				}
 			}
 		}
 	}
@@ -264,5 +281,142 @@ namespace mtgb
 		// 中心基準の座標系にしてからワールド座標系に変換
 		return (_cellIndex - centerOffset) * widthScale;
 	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::GenerateStageBoundaryCollider()
+	{
+		float stageMin = CellIndexToWorld(0);
+		float stageMax = CellIndexToWorld(cellNum - 1);
+
+		
+		float wallHeight = highestHeight + ceilingOffset;
+		float wallThickness = widthScale;
+		
+		// +Z方向に位置する壁
+		{
+			EntityId id = Game::CreateEntity();
+			Collider* pCollider = &(Game::System<ColliderCP>().Get(id, Collider::ColliderTag::STAGE_BOUNDARY));
+			pCollider->type_ = Collider::TYPE_AABB;
+
+			Vector3 center =
+			{
+				(stageMin + stageMax) / 2.0f,
+				wallHeight / 2.0f,
+				stageMax + (wallThickness / 2.0f)
+			};
+
+			Vector3 extents =
+			{
+				(stageMax - stageMin) / 2.0f,
+				wallHeight / 2.0f,
+				wallThickness / 2.0f
+			};
+
+			pCollider->SetCenter(center);
+			pCollider->SetExtents(extents);
+			aabbs.push_back(pCollider);
+		}
+
+		// -Z方向に位置する壁
+		{
+			EntityId id = Game::CreateEntity();
+			Collider* pCollider = &(Game::System<ColliderCP>().Get(id, Collider::ColliderTag::STAGE_BOUNDARY));
+			pCollider->type_ = Collider::TYPE_AABB;
+
+			Vector3 center =
+			{
+				(stageMin + stageMax) / 2.0f,
+				wallHeight / 2.0f,
+				stageMin - (wallThickness / 2.0f)
+			};
+
+			Vector3 extents =
+			{
+				(stageMax - stageMin) / 2.0f,
+				wallHeight / 2.0f,
+				wallThickness / 2.0f
+			};
+
+			pCollider->SetCenter(center);
+			pCollider->SetExtents(extents);
+			aabbs.push_back(pCollider);
+		}
+
+		// +X方向に位置する壁
+		{
+			EntityId id = Game::CreateEntity();
+			Collider* pCollider = &(Game::System<ColliderCP>().Get(id, Collider::ColliderTag::STAGE_BOUNDARY));
+			pCollider->type_ = Collider::TYPE_AABB;
+
+			Vector3 center =
+			{
+				stageMax + (wallThickness / 2.0f),
+				wallHeight / 2.0f,
+				(stageMin + stageMax) / 2.0f
+			};
+
+			Vector3 extents =
+			{
+				wallThickness / 2.0f,
+				wallHeight / 2.0f,
+				(stageMax - stageMin) / 2.0f
+			};
+
+			pCollider->SetCenter(center);
+			pCollider->SetExtents(extents);
+			aabbs.push_back(pCollider);
+		}
+
+		// -X方向に位置する壁
+		{
+			EntityId id = Game::CreateEntity();
+			Collider* pCollider = &(Game::System<ColliderCP>().Get(id, Collider::ColliderTag::STAGE_BOUNDARY));
+			pCollider->type_ = Collider::TYPE_AABB;
+
+			Vector3 center =
+			{
+				stageMin - (wallThickness / 2.0f),
+				wallHeight / 2.0f,
+				(stageMin + stageMax) / 2.0f
+			};
+
+			Vector3 extents =
+			{
+				wallThickness / 2.0f,
+				wallHeight / 2.0f,
+				(stageMax - stageMin) / 2.0f
+			};
+
+			pCollider->SetCenter(center);
+			pCollider->SetExtents(extents);
+			aabbs.push_back(pCollider);
+		}
+
+		// +Y方向に位置する壁(天井)
+		{
+			EntityId id = Game::CreateEntity();
+			Collider* pCollider = &(Game::System<ColliderCP>().Get(id, Collider::ColliderTag::STAGE_BOUNDARY));
+			pCollider->type_ = Collider::TYPE_AABB;
+
+			Vector3 center =
+			{
+				(stageMin + stageMax) / 2.0f,
+				wallHeight + (wallThickness / 2.0f),
+				(stageMin + stageMax) / 2.0f
+			};
+
+			Vector3 extents =
+			{
+				(stageMax - stageMin) / 2.0f,
+				wallThickness / 2.0f,
+				(stageMax - stageMin) / 2.0f
+			};
+
+			pCollider->SetCenter(center);
+			pCollider->SetExtents(extents);
+			aabbs.push_back(pCollider);
+		}
+	}
+
 
 }
