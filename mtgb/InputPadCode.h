@@ -40,6 +40,7 @@ enum struct PadCode : uint8_t
 	Start = 9,
 };
 
+
 /// <summary>
 /// <para> フライトスティックのボタンコード </para>
 /// <para> どのインデックスがどのボタンかデバイスによって異なる可能性があるので注意 </para>

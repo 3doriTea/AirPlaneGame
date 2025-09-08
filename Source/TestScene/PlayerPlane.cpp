@@ -4,7 +4,9 @@ using namespace mtgb;
 
 namespace
 {
-	TextHandle testText_;
+	float defaultSpeed = 3.0f;
+	// Å‘å‚Ü‚Å‰Ÿ‚µž‚ñ‚¾Žž‚Ì‘¬“x
+	float maxTriggerSpeed = 6.0f;
 }
 
 #define __X m128_f32[0]
@@ -112,8 +114,14 @@ void PlayerPlane::Update()
 	//pTransform_->Right()
 	//Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
 
+	// ƒgƒŠƒK[‚Ì‰Ÿ‚µž‚Ý‹ï‡
+	float triggerValue = InputUtil::GetTrigger(FlightStickAxisCode::Slider, WindowContext::First);
 
-	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
+	// ‘¬“x‚Ì”{—¦‚ðŒvŽZ
+	float speedRatio = defaultSpeed + (maxTriggerSpeed - defaultSpeed) * triggerValue;
+
+	// ‘¬“x‚ð”½‰f
+	pRB_->velocity_ = pTransform_->Forward() * speedRatio;
 
 	MTImGui::Instance().DirectShow([this]() {
 		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
