@@ -11,13 +11,17 @@ namespace
 	// 表示中のパネル範囲
 	const RectF DRAW_RECT_STAY_PANEL{ 118.0f, 0.0f, 244.0f, 202.0f };
 	// 表示中の文字範囲
-	const RectF DRAW_RECT_STAY_TEXT{ 200.0f, 140.0f, 150.0f, 40.0f };
+	const RectF DRAW_RECT_STAY_TEXT{ 100.0f, 95.0f, 150.0f, 40.0f };
+	//const RectF DRAW_RECT_STAY_TEXT{ 200.0f, 140.0f, 150.0f, 40.0f };
+
 	// 表示を被す範囲
 	const RectF DRAW_RECT_STAY_OVERLAY{ 122, 122.0f, 236.0f, 76.0f };
 	const UIParams UI_PARAM_PANEL{ 10 };
 	const UIParams UI_PARAM_TEXT{ 11 };
 	const UIParams UI_PARAM_OVERLAY{ 12 };
-	const int TEXT_FONT_SIZE{ 36 };
+	const int TEXT_FONT_SIZE{ 30 };
+	//const int TEXT_FONT_SIZE{ 36 };
+
 	const float ANIM_TIME[ToPlayTimer::S_MAX]
 	{
 		5.0f,
@@ -51,8 +55,10 @@ ToPlayTimer::ToPlayTimer(const float _timeSec) : GameObject(GameObjectBuilder()
 
 				Draw::ImmediateText(
 					std::format("{:3.1f}秒", totalTimeLeft_),
-					GenDrawScreenFrom(DRAW_RECT_STAY_TEXT),
-					GenDrawScreenFontSize(TEXT_FONT_SIZE),
+					DRAW_RECT_STAY_TEXT,
+					TEXT_FONT_SIZE,
+					/*GenDrawScreenFrom(DRAW_RECT_STAY_TEXT),
+					GenDrawScreenFontSize(TEXT_FONT_SIZE),*/
 					TextAlignment::middleLeft,
 					UI_PARAM_TEXT);
 			})
