@@ -51,6 +51,10 @@ namespace
 
 	// コントローラーアニメーションヒントの描画範囲
 	const RectF DRAW_RECT_CON_ANIM_HINT{ 760.0f, 120.0f, 400.0f, 520.0f };
+	// 字幕の描画座標
+	const Vector2Int DRAW_POS_TEXT_BOX{ 320, 820 };
+	// 字幕のフォントサイズ
+	const int DRAW_FONT_TEXT_BOX{ 24 };
 	// コントローラーアニメーションヒントの1フレーム時間
 	const float FRAME_TIME_SEC_CON_ANIM{ 0.5f };
 }
@@ -147,7 +151,7 @@ void TutorialScene::Initialize()
 	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
 	pGunner->SetRadarUI(pGunnerRader);
 
-	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(Vector2Int{ 290, 790 }), GenDrawScreenFontSize(24));
+	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(DRAW_POS_TEXT_BOX), GenDrawScreenFontSize(DRAW_FONT_TEXT_BOX));
 	pTextBox_->SetPopTimeSec(0.1f);
 	pTextBox_->SetUIParams({ 6 });
 
