@@ -10,7 +10,7 @@ namespace mtgb
 		ScoreManager();
 		~ScoreManager();
 		void Initialize() override {}
-		void Update() override {}
+		void Update() override;
 
 		/// <summary>
 		/// ƒXƒRƒA‚ğ‘‰Á‚·‚é

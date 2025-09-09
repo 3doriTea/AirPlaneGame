@@ -5,9 +5,18 @@ namespace
 {
 	// UI設計時のキャンバスのサイズ
 	/*Vector2F CANVAS_SIZE{ 1920.0f,1080.0f };*/
-	RectF QUOTA_GAUGE_RECT{ 450.0f,50.0f,1020.0f,40.0f };
+	const RectF QUOTA_GAUGE_RECT{ 450.0f,50.0f,1020.0f,40.0f };
 	// 紫色
-	Color AFTER_QUOTA_BAR_COLOR = 0x800080;
+	const Color AFTER_QUOTA_BAR_COLOR = 0x800080;
+
+	// ゲージが満タンになる値
+	const uint32_t MAX_GAUGE_SCORE = 1000;
+
+	// ノルマ
+	const float QUOTA = 700;
+
+	// 進捗割合
+	float progress = 0;
 }
 
 QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
@@ -31,7 +40,7 @@ QuotaGauge::~QuotaGauge()
 
 void QuotaGauge::Update()
 {
-
+	progress = Game::System<ScoreManager>().GetScore();
 }
 
 void QuotaGauge::Draw() const
@@ -45,18 +54,19 @@ void QuotaGauge::Draw() const
 		{ QUOTA_GAUGE_RECT.size.x, QUOTA_GAUGE_RECT.size.y }
 	};
 	// 仮の進捗状況、ノルマを割合で
-	float progress = 0.3f;
-	float quota = 0.7f;
+	
+	float quotaRatio = QUOTA / MAX_GAUGE_SCORE;
+	float progressRatio = progress / MAX_GAUGE_SCORE;
 
 	Draw::Box(GenDrawScreenFrom(drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
 	//Draw::Image(afterQuotaBarImage_, GenDrawScreenFrom(drawRect), {0});
 
-	drawRect.width = QUOTA_GAUGE_RECT.width * quota;
+	drawRect.width = QUOTA_GAUGE_RECT.width * quotaRatio;
 
 	//Draw::Image(toQuotaBarImage_, GenDrawScreenFrom(drawRect), { 1 });
 	Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
 	
-	drawRect.width = QUOTA_GAUGE_RECT.width * progress;
+	drawRect.width = QUOTA_GAUGE_RECT.width * progressRatio;
 
 	Draw::Box(GenDrawScreenFrom(drawRect), Color::GREEN,{2});
 

@@ -42,6 +42,7 @@
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\ScoreManager.cpp" />
     <ClCompile Include="mtgb\TerrainReader.cpp" />
     <ClCompile Include="mtgb\TimeLimit.cpp" />
     <ClCompile Include="mtgb\Trail.cpp" />
@@ -160,7 +161,6 @@
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
-    <ClCompile Include="Source\ScoreManager.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
@@ -240,6 +240,7 @@
     <ClInclude Include="mtgb\RectContainsInfo.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
+    <ClInclude Include="mtgb\ScoreManager.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\ShowType.h" />
@@ -390,7 +391,6 @@
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
-    <ClInclude Include="Source\ScoreManager.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />

@@ -11,4 +11,7 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void End() override;
+private:
+	//TimeLimit* timeLimit_;
+
 };

@@ -15,6 +15,7 @@ namespace
 	const float ENEMY_SCALE{ 1.0f }; // スケール
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
+	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
 }
 
 EnemyPlane::EnemyPlane(
@@ -41,6 +42,7 @@ EnemyPlane::EnemyPlane(
 	
 	//hText = Text::Load("apple", 72);
 	//hModel_ = Fbx::Load("Model/Enemy01.fbx");
+	//hModel_ = Fbx::Load("Model / Terrain.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
@@ -80,6 +82,8 @@ void EnemyPlane::Update()
 	{
 		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
 		{
+			// スコア加算
+			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
 			DestroyMe();
 			return;
 		}

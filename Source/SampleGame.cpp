@@ -55,7 +55,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 
 	_register.Set<ImGuiRenderer>(SystemUpdateType::Frame);
-
+	_register.Set<ScoreManager>(SystemUpdateType::Frame);
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 

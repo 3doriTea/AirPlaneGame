@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 #include "TimeLimit.h"
 #include "TextBox.h"
-#include "ScoreManager.h"
+
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"

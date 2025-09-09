@@ -23,6 +23,8 @@ namespace mtgb
 {
 	//TerrainReader16* reader16;
 	TerrainReader8* reader8;
+	FBXModelHandle hTerrain;
+	Transform* pStageTransform;
 }
 
 TestScene::TestScene()
@@ -86,6 +88,13 @@ void TestScene::Initialize()
 	reader8->GenerateTerrainAABBs(&reader8->aabbs);
 
 	Instantiate<QuotaGauge>();
+	hTerrain =  Fbx::Load("Model/Terrain.fbx");
+	EntityId id = Game::CreateEntity();
+	pStageTransform = &Transform::Get(id);
+
+	//timeLimit_ = Instantiate<TimeLimit>();
+	
+
 }
 
 void TestScene::Update()
@@ -107,17 +116,12 @@ void TestScene::Update()
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
-
-	
-	
-
 }
 
 void TestScene::Draw() const
 {
-	//reader16->TestDraw();
-	//5184
 	reader8->TestDraw();
+	Draw::FBXModel(hTerrain,*pStageTransform,0);
 }
 
 void TestScene::End()
