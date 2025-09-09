@@ -52,7 +52,8 @@ void PlayScene::Initialize()
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
 	Instantiate<Player>(WindowContext::First);
-	Instantiate<Enemy>(Vector3{ 0, 0, 10 });
+	//Instantiate<Enemy>(Vector3{ 0, 0, 10 });
+	// TODO: エネミーコントローラーからスポーンさせるスポーンさせる
 	timeLimit_ = Instantiate<TimeLimit>();
 	timeLimit_->RegisterOnEndTimerCallback([]() 
 		{

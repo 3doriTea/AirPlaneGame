@@ -2,7 +2,7 @@
 #include "../mtgb/DirectX11Draw.h"
 
 
-Enemy::Enemy(const Vector3& _position) : GameObject(GameObjectBuilder()
+Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObject(GameObjectBuilder()
 	.SetName("Enemy")
 	.SetPosition(_position)
 	.SetRotate(Quaternion::Identity())
@@ -31,6 +31,13 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
+	//FindGameObject(_controllerId)
+
+	ai_.SetInputData(
+	{
+		.playerPos = {},
+		.pSelfTrans = pTransform_,
+	});
 }
 
 void Enemy::Draw() const

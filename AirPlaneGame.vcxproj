@@ -388,6 +388,7 @@
     <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\ScoreManager.h" />
     <ClInclude Include="Source\TargetingSystem.h" />

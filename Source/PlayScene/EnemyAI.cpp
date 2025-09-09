@@ -6,6 +6,10 @@ namespace
 	const float SLEEP_DISTANCE{ 100 };
 	// 回避行動をとる距離
 	const float AVOID_DISTANCE{ 20 };
+	// 回避行動として注目する座標 プラス方向
+	const float AVOID_LOOK_POS_ADD_Y{ 20 };
+	// 回避行動として注目する座標 マイナス方向
+	const float AVOID_LOOK_POS_SUB_Y{ 20 };
 }
 
 EnemyAI::EnemyAI()
@@ -27,16 +31,20 @@ EnemyAI::EnemyAI()
 		{
 			out_.isActive = true;  // スリープ終了でアクティブ化
 		})
+
 		.OnUpdate(S_SEARCH, [this]
 		{
-			{ /* TODO:索敵行動 */ }
+			{ /* TODO:索敵行動 */
+				out_.lookPosition = input_.playerPos;
+			}
 
 			if (IsForwardToPlayerDir())
 			{
 				sMain_.Change(S_FIGHT);
 			}
 		})
-		.OnUpdate(S_FIGHT, [this]
+
+		.OnStart(S_FIGHT, [this]
 		{
 			// 最初のStartを呼び出すために変更
 			sFight_.Change(SF_LOOK_AT_PLAYER);
@@ -48,11 +56,51 @@ EnemyAI::EnemyAI()
 		});
 
 	sFight_
+		.OnStart(SF_LOOK_AT_PLAYER, [this] { out_.isFire = true; })
 		.OnUpdate(SF_LOOK_AT_PLAYER, [this]
 		{
-			//if ()
-		});
+			out_.lookPosition = input_.playerPos;
 
+			// 衝突回避範囲内なら、回避行動に遷移
+			if (GetToPlayerDistance() < AVOID_DISTANCE)
+			{
+				sFight_.Change(SF_AVOID);
+			}
+		})
+		.OnStart(SF_LOOK_AT_PLAYER, [this] { out_.isFire = false; })
+
+		.OnUpdate(SF_AVOID, [this]
+		{
+			// プレイヤーより座標が上なら上方向に回避
+			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)
+			{
+				out_.lookPosition = input_.playerPos + Vector3::Up() * AVOID_LOOK_POS_ADD_Y;
+			}
+			// プレイヤーより座標が下なら下方向に回避
+			else
+			{
+				out_.lookPosition = input_.playerPos + Vector3::Down() * AVOID_LOOK_POS_ADD_Y;
+			}
+
+			sFight_.Change(SF_ROUND);
+		})
+
+		.OnStart(SF_ROUND, [this]{ out_.isRound = true; })
+		.OnUpdate(SF_ROUND, [this]
+		{
+			// プレイヤーの前にいるなら回避行動に遷移
+			if (IsForwardToPlayerDir())
+			{
+				sFight_.Change(SF_AVOID);
+			}
+			// プレイヤーの後ろにいるなら索敵に遷移
+			else
+			{
+				sMain_.Change(S_SEARCH);
+			}
+		})
+		.OnEnd(SF_ROUND, [this]{ out_.isRound = false; })
+;
 	// 最初のStartを呼び出すために変更する
 	sMain_.Change(S_SLEEP);
 }

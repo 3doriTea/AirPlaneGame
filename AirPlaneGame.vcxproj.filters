@@ -1449,6 +1449,9 @@
     <ClInclude Include="Source\PlayScene\EnemyAI.h">
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
+    <ClInclude Include="Source\PlayScene\EnemiesController.h">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
