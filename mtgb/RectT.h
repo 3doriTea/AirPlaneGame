@@ -34,6 +34,14 @@ namespace mtgb
 			width{ static_cast<T>(_width)},
 			height{static_cast<T>(_height)}
 		{ }
+		template<typename U>
+		RectT(const RectT<U>& _other)
+			: x{static_cast<T>(_other.x)}
+			, y{static_cast<T>(_other.y)}
+			, width{static_cast<T>(_other.width)}
+			, height{static_cast<T>(_other.height)}
+		{
+		}
 		RectT(const Vector2T<T>& _point,const Vector2T<T>& _size):
 			point{ _point },
 			size{ _size }

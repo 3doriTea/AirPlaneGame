@@ -6,6 +6,8 @@ namespace
 	// UI設計時のキャンバスのサイズ
 	/*Vector2F CANVAS_SIZE{ 1920.0f,1080.0f };*/
 	RectF QUOTA_GAUGE_RECT{ 450.0f,50.0f,1020.0f,40.0f };
+	// 紫色
+	Color AFTER_QUOTA_BAR_COLOR = 0x800080;
 }
 
 QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
@@ -46,14 +48,16 @@ void QuotaGauge::Draw() const
 	float progress = 0.3f;
 	float quota = 0.7f;
 
-	Draw::Image(afterQuotaBarImage_, GenDrawScreenFrom(drawRect), {0});
+	Draw::Box(GenDrawScreenFrom(drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
+	//Draw::Image(afterQuotaBarImage_, GenDrawScreenFrom(drawRect), {0});
 
 	drawRect.width = QUOTA_GAUGE_RECT.width * quota;
 
-	Draw::Image(toQuotaBarImage_, GenDrawScreenFrom(drawRect), { 1 });
+	//Draw::Image(toQuotaBarImage_, GenDrawScreenFrom(drawRect), { 1 });
+	Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
 	
 	drawRect.width = QUOTA_GAUGE_RECT.width * progress;
 
-	Draw::Image(currentScoreBarImage_, GenDrawScreenFrom(drawRect), {2});
+	Draw::Box(GenDrawScreenFrom(drawRect), Color::GREEN,{2});
 
 }
