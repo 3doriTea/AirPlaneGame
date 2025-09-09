@@ -814,9 +814,6 @@
     <ClCompile Include="mtgb\UIDrawCommand.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="DrawScreenUtility.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="mtgb\TerrainReader.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
@@ -828,6 +825,9 @@
     </ClCompile>
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\QuotaGauge.cpp">
+      <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1431,9 +1431,6 @@
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DrawScreenUtility.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\MTBit\BitFlag.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
@@ -1450,6 +1447,9 @@
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayScene\EnemiesController.h">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\QuotaGauge.h">
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
   </ItemGroup>

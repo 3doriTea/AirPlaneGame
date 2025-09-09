@@ -15,7 +15,7 @@
 #include "../TestScene/UI/OrderText.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 #include "../TutorialScene/TutorialScene.h"
-
+#include "../PlayScene/QuotaGauge.h"
 #include "TerrainReader.h"
 using namespace mtgb;
 
@@ -84,6 +84,8 @@ void TestScene::Initialize()
 	reader8->ReadTerrain("terrain.raw");
 	//reader8->GenerateQuadtreeHeightMap();
 	reader8->GenerateTerrainAABBs(&reader8->aabbs);
+
+	Instantiate<QuotaGauge>();
 }
 
 void TestScene::Update()

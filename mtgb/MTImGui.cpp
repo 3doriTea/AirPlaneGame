@@ -11,6 +11,7 @@
 #include <format>
 #include "WindowContextUtil.h"
 #include "InputResource.h"
+#include "WindowResource.h"
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -52,21 +53,43 @@ void mtgb::MTImGui::Update()
                         Game::System<WinCtxResManager>().SwapResource<InputResource>();
                     });
 			}
+
+            if (ImGui::Button("ChangeFullscreenNearestMonitor : FirstWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WindowManager>().ChangeFullScreenStateNearestMonitor(WindowContext::First);
+                    });
+            }
+
+            if (ImGui::Button("ChangeFullscreenNearestMonitor : SecondWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WindowManager>().ChangeFullScreenStateNearestMonitor(WindowContext::Second);
+                    });
+            }
 		}, "Window", ShowType::Settings);
 
 	DirectShow([]()
 		{
-			Game::System<SceneSystem>().RegisterPendingCallback([]()
-				{
-					if (ImGui::Button("EnumJoystick"))
-					{
-						Game::System<Input>().EnumJoystick();
-					}
-					if (ImGui::Button("SwapInput"))
-					{
-						Game::System<WinCtxResManager>().SwapResource<InputResource>();
-					}
-				});
+            if (ImGui::Button("EnumJoystick"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<Input>().EnumJoystick();
+
+                    });
+            }
+            if (ImGui::Button("SwapInput"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WinCtxResManager>().SwapResource<InputResource>();
+                    });
+
+            }
+			
 
 		}, "Input", ShowType::Settings);
 }

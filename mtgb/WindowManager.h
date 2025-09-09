@@ -63,6 +63,11 @@ namespace mtgb
 		static void ChangeFullScreenState(WindowContext _ctx);
 
 		/// <summary>
+		/// ウィンドウが一番近い場所にあるモニターでフルスクリーン状態を切り替える
+		/// </summary>
+		static void ChangeFullScreenStateNearestMonitor(WindowContext _ctx);
+
+		/// <summary>
 		/// <para> フルスクリーン状態を切り替える </para>
 		/// </summary>
 		/// <param name="_ctx">切り替えるウィンドウ</param>
