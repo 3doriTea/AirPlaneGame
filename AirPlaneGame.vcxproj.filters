@@ -826,6 +826,9 @@
     <ClCompile Include="Source\TutorialScene\ToPlayTimer.cpp">
       <Filter>01Game\07TutorialScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\EnemyAI.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1442,6 +1445,9 @@
     </ClInclude>
     <ClInclude Include="Source\TutorialScene\ToPlayTimer.h">
       <Filter>01Game\07TutorialScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\EnemyAI.h">
+      <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
