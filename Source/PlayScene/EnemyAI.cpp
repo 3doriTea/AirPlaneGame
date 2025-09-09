@@ -50,7 +50,7 @@ EnemyAI::EnemyAI()
 	sFight_
 		.OnUpdate(SF_LOOK_AT_PLAYER, [this]
 		{
-			if ()
+			//if ()
 		});
 
 	// Å‰‚ÌStart‚ğŒÄ‚Ño‚·‚½‚ß‚É•ÏX‚·‚é
