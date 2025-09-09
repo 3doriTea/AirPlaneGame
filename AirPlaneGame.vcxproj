@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DrawScreenUtility.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp" />
     <ClCompile Include="ImGui\ImCurveEdit.cpp" />
     <ClCompile Include="ImGui\ImGradient.cpp" />
@@ -160,6 +159,7 @@
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
+    <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\ScoreManager.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
@@ -200,7 +200,6 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DrawScreenUtility.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
@@ -389,6 +388,7 @@
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
+    <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
     <ClInclude Include="Source\ScoreManager.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />

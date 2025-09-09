@@ -51,7 +51,10 @@ namespace mtgb
 		/// 初期のウィンドウモードに戻す
 		/// </summary>
 		//void SetInitialWindowMode();
+
 		void SetFullScreen(const RECT& _monitorRect);
+
+		
 		/// <summary>
 		/// フルスクリーンにする前に情報を保持しておく
 		/// </summary>

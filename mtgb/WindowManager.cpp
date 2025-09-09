@@ -139,6 +139,21 @@ void mtgb::WindowManager::ChangeFullScreenState(WindowContext _ctx)
 	ChangeFullScreenState(_ctx, WinCtxRes::Get<DXGIResource>(_ctx).GetAssignedMonitorRect());
 }
 
+void mtgb::WindowManager::ChangeFullScreenStateNearestMonitor(WindowContext _ctx)
+{
+	WindowResource& winRes = WinCtxRes::Get<WindowResource>(_ctx);
+
+	HMONITOR hMonitor = MonitorFromWindow(winRes.GetHWND(), MONITOR_DEFAULTTONEAREST);
+	MONITORINFO mInfo = {};
+	mInfo.cbSize = sizeof(MONITORINFO);
+
+	if (GetMonitorInfo(hMonitor, &mInfo))
+	{
+		RECT monitorRect = mInfo.rcMonitor;
+		ChangeFullScreenState(_ctx,monitorRect);
+	}
+}
+
 void mtgb::WindowManager::ChangeFullScreenState(WindowContext _ctx, const RECT& _rect)
 {
 	UINT winWidth, winHeight;

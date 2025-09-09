@@ -226,6 +226,8 @@ void mtgb::WindowResource::SetFullScreen(const RECT& _monitorRect)
 
 }
 
+
+
 void mtgb::WindowResource::GetWindowInfo()
 {
 	// 現在のウィンドウのスタイルと位置を保存

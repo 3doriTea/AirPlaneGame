@@ -14,7 +14,7 @@ namespace mtgb
 		void Update() override;
 
 		inline const Vector2Int GetSize() const { return size_; }
-		inline const Vector2F GetSizeF() const { return Vector2F{ static_cast<float>(initialSize_.x),static_cast<float>(initialSize_.y) }; }
+		inline const Vector2F GetSizeF() const { return Vector2F{ static_cast<float>(size_.x),static_cast<float>(size_.y) }; }
 		//inline const Vector2Int GetInitialSize() const { return Vector2Int{ initialWidth_,initialHeight_ }; }
 		/// <summary>
 		/// 初期値を1としたときのスクリーンサイズの比率を返す
@@ -27,7 +27,6 @@ namespace mtgb
 
 		/// <summary>
 		/// <para> スクリーンのサイズを保持する</para>
-		/// <para> スクリーンのサイズを変えた時に呼び出す。また、予め登録されたコールバックが呼ばれる</para>
 		/// </summary>
 		/// <param name="_width"></param>
 		/// <param name="_height"></param>

@@ -124,18 +124,18 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	{
 		.DepthEnable = TRUE,	//深度テストを行うかどうか
 		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
-		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
+		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL, // 深度の比較方法 : LESS_EQUALは深度が元データ以下の場合に成功
 		.StencilEnable = TRUE,  //ステンシルテストを行うかどうか
 		.StencilReadMask = {},
 		.StencilWriteMask = {},
-		.FrontFace
+		.FrontFace // カメラを向いているピクセルの深度、ステンシルテストの結果に対する操作を指定
 		{
-			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
-			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP, // ステンシルテスト失敗時
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP, // ステンシルテスト成功、深度テスト失敗時
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP, // 深度、ステンシルの両方のテストに成功時
+			.StencilFunc = D3D11_COMPARISON_ALWAYS, // ステンシルデータと既存のステンシルデータを比較する関数(公式のをコピペ)
 		},
-		.BackFace
+		.BackFace // カメラを向いていないピクセルの深度、ステンシルテストの結果に対する操作を指定
 		{
 			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
 			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
