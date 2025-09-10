@@ -22,22 +22,12 @@ EnemyAI::EnemyAI()
 		.OnUpdate(S_SLEEP, [this]
 		{
 			out_.isActive = true;
-			if (IsForwardToPlayerDir())
-			{
-				LOGF("前にいる！\n");
-			}
-			else
-			{
-				LOGF("後ろにいる！\n");
-			}
-			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 1;
-
-			return;
 			// プレイヤーとの距離がアクティブ範囲内なら、索敵行動に遷移
 			if (GetToPlayerDistance() <= SLEEP_DISTANCE)
-			{
+				LOGF("探索だ！\n");
+			/*{
 				sMain_.Change(S_SEARCH);
-			}
+			}*/
 		})
 		.OnEnd(S_SLEEP, [this]
 		{
