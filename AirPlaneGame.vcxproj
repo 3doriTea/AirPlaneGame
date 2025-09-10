@@ -159,6 +159,7 @@
     <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />

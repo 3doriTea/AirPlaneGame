@@ -3,9 +3,9 @@
 namespace
 {
 	// アクティブ範囲距離
-	const float SLEEP_DISTANCE{ 100 };
+	const float SLEEP_DISTANCE{ 300 };
 	// 回避行動をとる距離
-	const float AVOID_DISTANCE{ 20 };
+	const float AVOID_DISTANCE{ 50 };
 	// 回避行動として注目する座標 プラス方向
 	const float AVOID_LOOK_POS_ADD_Y{ 20 };
 	// 回避行動として注目する座標 マイナス方向
@@ -21,6 +21,18 @@ EnemyAI::EnemyAI()
 		})
 		.OnUpdate(S_SLEEP, [this]
 		{
+			out_.isActive = true;
+			if (IsForwardToPlayerDir())
+			{
+				LOGF("前にいる！\n");
+			}
+			else
+			{
+				LOGF("後ろにいる！\n");
+			}
+			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 1;
+
+			return;
 			// プレイヤーとの距離がアクティブ範囲内なら、索敵行動に遷移
 			if (GetToPlayerDistance() <= SLEEP_DISTANCE)
 			{
@@ -35,7 +47,7 @@ EnemyAI::EnemyAI()
 		.OnUpdate(S_SEARCH, [this]
 		{
 			{ /* TODO:索敵行動 */
-				out_.lookPosition = input_.playerPos;
+				out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 1;
 			}
 
 			if (IsForwardToPlayerDir())
@@ -48,6 +60,8 @@ EnemyAI::EnemyAI()
 		{
 			// 最初のStartを呼び出すために変更
 			sFight_.Change(SF_LOOK_AT_PLAYER);
+
+			LOGF("S_FIGHT\n");
 		})
 		.OnUpdate(S_FIGHT,  [this]
 		{
@@ -59,6 +73,8 @@ EnemyAI::EnemyAI()
 		.OnStart(SF_LOOK_AT_PLAYER, [this] { out_.isFire = true; })
 		.OnUpdate(SF_LOOK_AT_PLAYER, [this]
 		{
+			LOGF("SF_LOOK_AT_PLAYER\n");
+
 			out_.lookPosition = input_.playerPos;
 
 			// 衝突回避範囲内なら、回避行動に遷移
@@ -71,6 +87,8 @@ EnemyAI::EnemyAI()
 
 		.OnUpdate(SF_AVOID, [this]
 		{
+			LOGF("SF_AVOID\n");
+
 			// プレイヤーより座標が上なら上方向に回避
 			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)
 			{
@@ -88,6 +106,10 @@ EnemyAI::EnemyAI()
 		.OnStart(SF_ROUND, [this]{ out_.isRound = true; })
 		.OnUpdate(SF_ROUND, [this]
 		{
+			LOGF("SF_ROUND\n");
+
+
+			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーの前にいるなら回避行動に遷移
 			if (IsForwardToPlayerDir())
 			{
@@ -112,11 +134,11 @@ const float EnemyAI::GetToPlayerDistance() const
 
 const bool EnemyAI::IsForwardToPlayerDir() const
 {
-	Vector3 vRight{ input_.pSelfTrans->Right() };
-	Vector3 vDir{ input_.playerPos - input_.pSelfTrans->GetWorldPosition() };
+	Vector3 vForward{ input_.pSelfTrans->Forward() };
+	Vector3 vDir{ Vector3::Normalize(input_.playerPos - input_.pSelfTrans->GetWorldPosition()) };
 
 	// プレイヤーが前方向に居るなら、戦闘行動に遷移
-	float angle{ DirectX::XMVectorGetX(DirectX::XMVector3Dot(vRight, vDir)) };
+	float angle{ DirectX::XMVectorGetX(DirectX::XMVector3Dot(vForward, vDir)) };
 	// cosが0未満なら前方向
-	return angle < 0;
+	return angle > 0;
 }
