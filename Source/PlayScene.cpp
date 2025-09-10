@@ -10,6 +10,11 @@
 #include "ResultScene.h"
 #include "TimeLimit.h"
 #include "OverScene.h"
+#include "PlayScene/EnemiesController.h"
+#include "TestScene/PlayerPlane.h"
+#include "TestScene/PlayerPilot.h"
+#include "TestScene/PlayerGunner.h"
+
 using namespace mtgb;
 using Network::PIIO;
 
@@ -32,28 +37,39 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	TypeRegistry::Instance();
+	TypeRegistry::Instance().Initialize();
+	MTImGui::Instance().Initialize();
+
 	Audio::Clear();
 
 	Instantiate<Background>();
 
-	//hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -10 }));
-	//SetCameraGameObject(Instantiate<Camera>());
-	//WinCtxRes::Get<CameraResource>(WindowContext::First).SetCamera(Instantiate<Camera>(WindowContext::First));
-	//WinCtxRes::Get<CameraResource>(WindowContext::Second).SetCamera(Instantiate<Camera>(WindowContext::Second));
-	//hCamera1_ = Game::System<CameraSystem>().RegisterCamera()
-	hCamera1_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ -10, 0, -30 }, WindowContext::First));
-	hCamera2_ = RegisterCameraGameObject(Instantiate<Camera>(Vector3{ 10, 0, -10 }, WindowContext::Second));
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
 
-	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
-	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
+	PlayerPilot* pPilot{ Instantiate<PlayerPilot>(eIdPlayer) };
+	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
+
+	PlayerGunner* pGunner{ Instantiate<PlayerGunner>(eIdPlayer) };
+	CameraHandleInScene hCamera2 = RegisterCameraGameObject(pGunner);
+
+
+	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
+	pEnemiesController->Spawan({ 0, 0, 100 });
+	//pEnemiesController->Spawan({ 0, 50, 300 });
+	//pEnemiesController->Spawan({ 0, -50, 500 });
+	//pEnemiesController->Spawan({ 0, 0, 1000 });
+
+	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
+	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
+
 	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<SkySphere>();
 	//Instantiate<Reticle>();
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
-	Instantiate<Player>(WindowContext::First);
-	//Instantiate<Enemy>(Vector3{ 0, 0, 10 });
-	// TODO: エネミーコントローラーからスポーンさせるスポーンさせる
+	//Instantiate<Player>(WindowContext::First);
 	timeLimit_ = Instantiate<TimeLimit>();
 	timeLimit_->RegisterOnEndTimerCallback([]() 
 		{
@@ -61,6 +77,7 @@ void PlayScene::Initialize()
 		});
 	// 表示したいテキストを開始
 
+	// ラズパイと通信を開始
 	ppiio_->Start(SERVER_IPEP);
 }
 

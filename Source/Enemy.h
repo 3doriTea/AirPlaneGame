@@ -2,6 +2,8 @@
 #include <mtgb.h>
 #include "PlayScene/EnemyAI.h"
 
+class EnemiesController;
+
 class Enemy : public GameObject
 {
 public:
@@ -10,17 +12,19 @@ public:
 
 	void Update() override;
 	void Draw() const override;
-	void Search();
 private:
 	int hp_;
 	float speed_;
 	Transform* pTransform_;
 	//OBJModelHandle hModel_;
-
+	EntityId controllerId_;
 
 	FBXModelHandle hModel_;
 	FBXModelHandle hModelCollider_;
 	float radius_;
 
 	EnemyAI ai_;  // ai
+
+	RigidBody* pRigidBody_;
+	EnemiesController* pEnemiesController_;
 };
