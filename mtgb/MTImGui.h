@@ -117,6 +117,7 @@ namespace mtgb
 
 		void SetWindowOpen(ShowType _showType, bool _flag);
 		void SetAllWindowOpen(ShowType _showType, bool _flag);
+		void ShowLog();
 	private:
 		MTImGui() = default;
 		MTImGui(const MTImGui& other) = delete;

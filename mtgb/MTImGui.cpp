@@ -12,6 +12,7 @@
 #include "WindowContextUtil.h"
 #include "InputResource.h"
 #include "WindowResource.h"
+#include "Debug.h"
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -103,6 +104,88 @@ void mtgb::MTImGui::SetAllWindowOpen(ShowType _showType, bool _flag)
     {
         windowState.second.isOpen = _flag;
     }
+}
+void mtgb::MTImGui::ShowLog()
+{
+    using mtgb::Debug;
+    const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
+
+    // フィルター用のカテゴリ一覧を作成
+    static std::set<std::string> availableCategories;
+    static std::string selectedCategory = "All";
+
+    // カテゴリを収集
+    availableCategories.clear();
+    availableCategories.insert("All");
+    for (const auto& log : logs)
+    {
+        if (!log.category.empty())
+        {
+            availableCategories.insert(log.category);
+        }
+    }
+
+    ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
+
+    imGui.Begin(Debug::GetName().data());
+
+    // カテゴリフィルター用のコンボボックス
+    if (ImGui::BeginCombo("Category Filter", selectedCategory.c_str()))
+    {
+        for (const auto& category : availableCategories)
+        {
+            bool isSelected = (selectedCategory == category);
+            if (ImGui::Selectable(category.c_str(), isSelected))
+            {
+                selectedCategory = category;
+            }
+            if (isSelected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    static int selectedLog = -1;
+    int idx = 0;
+    int displayIdx = 0;
+
+    for (const mtgb::LogEntry& log : logs)
+    {
+        // フィルター適用
+        if (selectedCategory != "All" && log.category != selectedCategory)
+        {
+            ++idx;
+            continue;
+        }
+
+        std::string text = "[" + log.category + "] " + log.msg + " (" + std::to_string(log.count) + ")";
+
+        if (ImGui::Selectable(text.c_str(), selectedLog == idx))
+        {
+            selectedLog = idx;
+        }
+        ++idx;
+        ++displayIdx;
+    }
+
+    // ログの詳細表示
+    if (selectedLog >= 0)
+    {
+        auto it = logs.begin();
+        std::advance(it, selectedLog);
+
+        ImGui::Begin("Log Details");
+        ImGui::Text("Category: %s", it->category.c_str());
+        ImGui::Text("File: %s", it->file.c_str());
+        ImGui::Text("Line: %d", it->line);
+        ImGui::Text("Function: %s", it->func.c_str());
+        ImGui::End();
+    }
+
+    imGui.End();
+
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
