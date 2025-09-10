@@ -13,7 +13,7 @@ namespace
 	const uint32_t MAX_GAUGE_SCORE = 1000;
 
 	// ÉmÉãÉ}
-	const float QUOTA = 700;
+	float QUOTA = 700;
 
 	// êiíªäÑçá
 	float progress = 0;
@@ -24,14 +24,12 @@ QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
 	.SetRotate(Quaternion::Identity())
 	.Build())
 {
-	currentScoreBarImage_ = Image::Load("Image/greenScoreBar.png");
-	toQuotaBarImage_ = Image::Load("Image/redScoreBar.png");
-	afterQuotaBarImage_ = Image::Load("Image/purpleScoreBar.png");
 
 	currentScoreBarRect_.point = QUOTA_GAUGE_RECT.point;
 	toQuotaBarRect_.point = QUOTA_GAUGE_RECT.point;
 	afterQuotaBarRect_.point = QUOTA_GAUGE_RECT.point;
 
+	QUOTA = Game::System<ScoreManager>().GetQuotaScore();
 }
 
 QuotaGauge::~QuotaGauge()
@@ -59,11 +57,9 @@ void QuotaGauge::Draw() const
 	float progressRatio = progress / MAX_GAUGE_SCORE;
 
 	Draw::Box(GenDrawScreenFrom(drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
-	//Draw::Image(afterQuotaBarImage_, GenDrawScreenFrom(drawRect), {0});
 
 	drawRect.width = QUOTA_GAUGE_RECT.width * quotaRatio;
 
-	//Draw::Image(toQuotaBarImage_, GenDrawScreenFrom(drawRect), { 1 });
 	Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
 	
 	drawRect.width = QUOTA_GAUGE_RECT.width * progressRatio;

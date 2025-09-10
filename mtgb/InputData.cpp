@@ -169,7 +169,7 @@ const float mtgb::InputUtil::GetTrigger(FlightStickAxisCode _flightStickCode, Wi
 	const InputData& input = GetInput(_context);
 	switch (_flightStickCode)
 	{
-	case FlightStickAxisCode::Slider: return static_cast<float>(input.joyStateCurrent_.lRx) / JOY_AXIS_MAX;
+	case FlightStickAxisCode::Slider: return static_cast<float>(input.joyStateCurrent_.rglSlider[0]) / JOY_AXIS_MAX;
 	default: return 0.0f;
 	}
 }

@@ -16,15 +16,17 @@
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 #include "../TutorialScene/TutorialScene.h"
 #include "../PlayScene/QuotaGauge.h"
+#include "../OverScene.h"
 #include "TerrainReader.h"
+#include "TimeLimit.h"
 using namespace mtgb;
 
 namespace mtgb
 {
 	//TerrainReader16* reader16;
 	TerrainReader8* reader8;
-	FBXModelHandle hTerrain;
-	Transform* pStageTransform;
+	TimeLimit* timeLimit_;
+
 }
 
 TestScene::TestScene()
@@ -88,13 +90,14 @@ void TestScene::Initialize()
 	reader8->GenerateTerrainAABBs(&reader8->aabbs);
 
 	Instantiate<QuotaGauge>();
-	hTerrain =  Fbx::Load("Model/Terrain.fbx");
-	EntityId id = Game::CreateEntity();
-	pStageTransform = &Transform::Get(id);
-
-	//timeLimit_ = Instantiate<TimeLimit>();
 	
 
+	timeLimit_ = Instantiate<TimeLimit>(60.0f);
+	timeLimit_->StartTimer();
+	timeLimit_->RegisterOnEndTimerCallback([]()
+		{
+			Game::System<SceneSystem>().Move<OverScene>();
+		});
 }
 
 void TestScene::Update()
@@ -121,7 +124,8 @@ void TestScene::Update()
 void TestScene::Draw() const
 {
 	reader8->TestDraw();
-	Draw::FBXModel(hTerrain,*pStageTransform,0);
+
+	
 }
 
 void TestScene::End()

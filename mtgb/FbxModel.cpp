@@ -31,6 +31,7 @@ void mtgb::FbxModel::Load(const std::string& _fileName)
 	FbxImporter* fbxImporter{ FbxImporter::Create(pFbxManager, "imp") };
 
 	FbxIOSettings* ios = FbxIOSettings::Create(pFbxManager, IOSROOT);
+
 	pFbxManager->SetIOSettings(ios);
 	if (!fbxImporter->Initialize(fileName.Buffer(), -1, ios)) {
 		MessageBoxA(NULL, fbxImporter->GetStatus().GetErrorString(), "FBX Import Error", MB_OK);

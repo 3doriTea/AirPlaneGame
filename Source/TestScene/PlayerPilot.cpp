@@ -32,6 +32,7 @@ PlayerPilot::~PlayerPilot()
 void PlayerPilot::Update()
 {
 	pTargetingSystem_->SearchTargets();
+	
 	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(FlightStickCode::Thumb,WindowContext::First))
 	{
 		pTargetingSystem_->FireAtTarget();

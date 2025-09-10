@@ -116,9 +116,11 @@ void PlayerPlane::Update()
 
 	// ƒgƒŠƒK[‚Ì‰Ÿ‚µž‚Ý‹ï‡
 	float triggerValue = InputUtil::GetTrigger(FlightStickAxisCode::Slider, WindowContext::First);
-
+	triggerValue = -(triggerValue - 1.0f);
+	
 	// ‘¬“x‚Ì”{—¦‚ðŒvŽZ
 	float speedRatio = defaultSpeed + (maxTriggerSpeed - defaultSpeed) * triggerValue;
+	
 
 	// ‘¬“x‚ð”½‰f
 	pRB_->velocity_ = pTransform_->Forward() * speedRatio;

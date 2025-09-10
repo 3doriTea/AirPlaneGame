@@ -20,14 +20,26 @@ namespace mtgb
 		/// <summary>
 		/// 現在のスコアを取得する
 		/// </summary>
-		static int32_t GetScore() { return score_; }
+		static int32_t GetScore();
 
+		/// <summary>
+		/// ノルマのスコアを取得する
+		/// </summary>
+		/// <returns></returns>
+		static int32_t GetQuotaScore();
 		/// <summary>
 		/// スコアをリセットする
 		/// </summary>
-		static void ResetScore() { score_ = 0; }
+		static void ResetScore();
 
+		/// <summary>
+		/// ノルマを達成したか
+		/// </summary>
+		/// <returns>達成しているなら真を返す</returns>
+		static bool AchievedQuota();
 	private:
 		static int32_t score_;
+		// ノルマのスコア
+		static int32_t quotaScore_;
 	};
 }

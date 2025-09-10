@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
+
 class TestScene : public mtgb::GameScene
 {
 public:
@@ -12,6 +13,5 @@ public:
 	void Draw() const override;
 	void End() override;
 private:
-	//TimeLimit* timeLimit_;
 
 };
