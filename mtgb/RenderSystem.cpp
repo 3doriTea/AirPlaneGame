@@ -54,118 +54,30 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 	ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
 
-	// RenderTargetViewをImGui用に切り替え
-	imGui.SetImGuizmoRenderTargetView();
-	
-	DirectX11Draw::Begin();
-	imGui.SetGameViewCamera();
-	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
-	Draw::FlushUIDrawCommands(GameObjectLayer::A | GameObjectLayer::B);
-
 	imGui.BeginFrame();
 	imGui.BeginImGuizmoFrame();
 
-	// SceneView表示
-	/*imGui.Begin(MTImGui::GetName(ShowType::SceneView).data(), ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
-	imGui.UpdateCamera(MTImGui::GetName(ShowType::SceneView).data());
-	imGui.RenderSceneView();
-	imGui.SetDrawList();
-	MTImGui::Instance().ExecuteShowQueue(ShowType::SceneView);
-	imGui.End();*/
-	MTImGui::Instance().ShowWindow(ShowType::SceneView);
-
 	// Inspector表示
-	/*imGui.Begin(MTImGui::GetName(ShowType::Inspector).data());
-	MTImGui::Instance().ExecuteShowQueue(ShowType::Inspector);
-	imGui.End();*/
 	MTImGui::Instance().ShowWindow(ShowType::Inspector);
 
 	// Settings表示
-	/*imGui.Begin(MTImGui::GetName(ShowType::Settings).data());
-	MTImGui::Instance().ExecuteShowQueue(ShowType::Settings);
-	imGui.End();*/
 	MTImGui::Instance().ShowWindow(ShowType::Settings);
 
 	// ログ表示
-	imGui.Begin(Debug::GetName().data());
+	MTImGui::Instance().ShowLog();
 
-	using mtgb::Debug;
-	const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
+	// SceneView表示
 
-	// フィルター用のカテゴリ一覧を作成
-	static std::set<std::string> availableCategories;
-	static std::string selectedCategory = "All";
-	
-	// カテゴリを収集
-	availableCategories.clear();
-	availableCategories.insert("All");
-	for (const auto& log : logs)
-	{
-		if (!log.category.empty())
-		{
-			availableCategories.insert(log.category);
-		}
-	}
+	// RenderTargetViewをImGui用に切り替え
+	imGui.SetImGuizmoRenderTargetView();
 
-	// カテゴリフィルター用のコンボボックス
-	if (ImGui::BeginCombo("Category Filter", selectedCategory.c_str()))
-	{
-		for (const auto& category : availableCategories)
-		{
-			bool isSelected = (selectedCategory == category);
-			if (ImGui::Selectable(category.c_str(), isSelected))
-			{
-				selectedCategory = category;
-			}
-			if (isSelected)
-			{
-				ImGui::SetItemDefaultFocus();
-			}
-		}
-		ImGui::EndCombo();
-	}
+	DirectX11Draw::Begin();
+	imGui.SetGameViewCamera();
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
 
-	static int selectedLog = -1;
-	int idx = 0;
-	int displayIdx = 0;
-	
-	for (const mtgb::LogEntry& log : logs)
-	{
-		// フィルター適用
-		if (selectedCategory != "All" && log.category != selectedCategory)
-		{
-			++idx;
-			continue;
-		}
-
-		std::string text = "[" + log.category + "] " + log.msg + " (" + std::to_string(log.count) + ")";
-
-		if (ImGui::Selectable(text.c_str(), selectedLog == idx))
-		{
-			selectedLog = idx;
-		}
-		++idx;
-		++displayIdx;
-	}
-
-	// ログの詳細表示
-	if (selectedLog >= 0)
-	{
-		auto it = logs.begin();
-		std::advance(it, selectedLog);
-
-		ImGui::Begin("Log Details");
-		ImGui::Text("Category: %s", it->category.c_str());
-		ImGui::Text("File: %s", it->file.c_str());
-		ImGui::Text("Line: %d", it->line);
-		ImGui::Text("Function: %s", it->func.c_str());
-		ImGui::End();
-	}
-
-	imGui.End();
+	MTImGui::Instance().ShowWindow(ShowType::SceneView);
 
 	imGui.EndFrame();
-
 }
 
 void mtgb::RenderSystem::RenderGameView(GameScene& _scene)
