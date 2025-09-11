@@ -336,6 +336,9 @@ void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)
 			pCameraTransform_->rotate *= qYaw;
 			pCameraTransform_->rotate *= qPitch;
 
+			// “ª‚Íã•ûŒü‚É
+			//Vector3 forward{ pCameraTransform_->Forward()}
+
 		}
 	}
 

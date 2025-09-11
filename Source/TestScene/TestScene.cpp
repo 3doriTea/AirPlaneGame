@@ -85,7 +85,8 @@ void TestScene::Initialize()
 	reader16->ReadTerrain("terrain16.raw");*/
 
 	reader8 = new TerrainReader8();
-	reader8->ReadTerrain("terrain.raw");
+	reader8->Initialize();
+	//reader8->ReadTerrain("terrain.raw");
 	//reader8->GenerateQuadtreeHeightMap();
 	//reader8->GenerateTerrainAABBs(&reader8->aabbs);
 

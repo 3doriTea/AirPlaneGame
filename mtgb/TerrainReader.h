@@ -20,6 +20,7 @@
 #include "DirectX11Draw.h"
 #include "IncludingWindows.h"
 #include "Vector2.h"
+#include "IShader.h"
 using Microsoft::WRL::ComPtr;
 
 namespace mtgb
@@ -38,11 +39,12 @@ namespace mtgb
 	};
 
 	template<typename StageDataBit>
-	class TerrainReader
+	class TerrainReader : IShader
 	{
 	public:
 		TerrainReader();
 		void ReadTerrain(const char* fileName);
+		void Initialize() override;
 		float GetHeightAt(float x, float z) const;
 		void GenerateQuadtreeHeightMap();
 		void GenerateTerrainAABBs(std::vector<Collider*>* _aabbs);
@@ -62,8 +64,11 @@ namespace mtgb
 		float CellIndexToWorld(int _cellIndex) const;
 		
 		void GenerateTerrainMesh();
-		void CreateVertexBuffer();
-		void CreateIndexBuffer();
+		
+		void InitializeVertexBuffer(ID3D11Device* _pDevice) override;
+		void InitializeIndexBuffer(ID3D11Device* _pDevice) override;
+		void InitializeConstantBuffer(ID3D11Device* _pDevice) override;
+
 		void CreateTextureMipmap(const char* _fileName);
 		void DrawTerran() const;
 
@@ -153,11 +158,23 @@ namespace mtgb
 			}
 		}*/
 
+		
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::Initialize()
+	{
+		ReadTerrain("terrain.raw");
 		GenerateQuadtreeHeightMap();
 		GenerateStageBoundaryCollider();
 		GenerateTerrainAABBs(&aabbs);
 		GenerateTerrainMesh();
+
+		IShader::Initialize();
+		
 	}
+
+	
 
 	template<typename StageDataBit>
 	inline float TerrainReader<StageDataBit>::GetHeightAt(float x, float z) const
@@ -399,20 +416,19 @@ namespace mtgb
 		// 法線計算
 		GenerateNormals();
 		
-		//CreateVertexBuffer();
-		//CreateIndexBuffer();
-		//CreateTextureMipmap("");
+		
+		
 	}
 
 	template<typename StageDataBit>
-	inline void TerrainReader<StageDataBit>::CreateVertexBuffer()
+	inline void TerrainReader<StageDataBit>::InitializeVertexBuffer(ID3D11Device* _pDevice)
 	{
 		D3D11_BUFFER_DESC bufferDesc =
 		{
 			.ByteWidth = static_cast<UINT>(sizeof(TerrainVertex) * vertices_.size()),
 			.Usage = D3D11_USAGE_DEFAULT,
 			.BindFlags = D3D11_BIND_VERTEX_BUFFER,
-			.CPUAccessFlas = 0,
+			.CPUAccessFlags = 0,
 		};
 
 		D3D11_SUBRESOURCE_DATA initData =
@@ -420,18 +436,18 @@ namespace mtgb
 			.pSysMem = vertices_.data()
 		};
 
-		HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(
+		HRESULT hResult = _pDevice->CreateBuffer(
 			&bufferDesc, &initData, &pVertexBuffer_);
 
 		massert(SUCCEEDED(hResult) && "頂点バッファの作成に失敗");
 	}
 
 	template<typename StageDataBit>
-	inline void TerrainReader<StageDataBit>::CreateIndexBuffer()
+	inline void TerrainReader<StageDataBit>::InitializeIndexBuffer(ID3D11Device* _pDevice)
 	{
 		D3D11_BUFFER_DESC bufferDesc =
 		{
-			.ByteWidth = static_cast<UINT>( sizeof(DWORD) * indices_.size()),
+			.ByteWidth = static_cast<UINT>(sizeof(DWORD) * indices_.size()),
 			.Usage = D3D11_USAGE_DEFAULT,
 			.BindFlags = D3D11_BIND_INDEX_BUFFER,
 			.CPUAccessFlags = 0
@@ -442,12 +458,19 @@ namespace mtgb
 			.pSysMem = indices_.data()
 		};
 
-		HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(
+		HRESULT hResult = _pDevice->CreateBuffer(
 			&bufferDesc, &initData, &pIndexBuffer_
 		);
 
 		massert(SUCCEEDED(hResult) && "インデックスバッファの作成に失敗");
 	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::InitializeConstantBuffer(ID3D11Device* _pDevice)
+	{
+	}
+
+	
 
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::CreateTextureMipmap(const char* _fileName)
