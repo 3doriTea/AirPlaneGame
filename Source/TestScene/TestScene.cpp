@@ -85,11 +85,8 @@ void TestScene::Initialize()
 	/*reader16 = new TerrainReader16();
 	reader16->ReadTerrain("terrain16.raw");*/
 
-	/*reader8 = new TerrainReader8();
-	reader8->Initialize();*/
-	//reader8->ReadTerrain("terrain.raw");
-	//reader8->GenerateQuadtreeHeightMap();
-	//reader8->GenerateTerrainAABBs(&reader8->aabbs);
+	reader8 = new TerrainReader8();
+	reader8->Initialize();
 
 	Instantiate<QuotaGauge>();
 	
@@ -125,7 +122,7 @@ void TestScene::Update()
 
 void TestScene::Draw() const
 {
-	//reader8->TestDraw();
+	reader8->TestDraw();
 	
 	
 }

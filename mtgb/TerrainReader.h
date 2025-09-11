@@ -21,6 +21,8 @@
 #include "IncludingWindows.h"
 #include "Vector2.h"
 #include "IShader.h"
+#include "CameraSystem.h"
+#include "MTStringUtility.h"
 using Microsoft::WRL::ComPtr;
 
 namespace mtgb
@@ -38,6 +40,13 @@ namespace mtgb
 		Vector2 uv;
 	};
 
+	struct TerrainConstantBuffer
+	{
+		DirectX::XMMATRIX matWVP;
+		DirectX::XMMATRIX matNormalTrans;
+		DirectX::XMFLOAT4 lightDir;
+	};
+	
 	template<typename StageDataBit>
 	class TerrainReader : IShader
 	{
@@ -69,7 +78,7 @@ namespace mtgb
 		void InitializeIndexBuffer(ID3D11Device* _pDevice) override;
 		void InitializeConstantBuffer(ID3D11Device* _pDevice) override;
 
-		void CreateTextureMipmap(const char* _fileName);
+		void CreateTextureMipmap(const std::wstring& _fileName);
 		void DrawTerran() const;
 
 		/// <summary>
@@ -83,14 +92,12 @@ namespace mtgb
 
 		// Comオブジェクト
 		// バッファ
-		ComPtr<ID3D11Buffer> pVertexBuffer_;
-		ComPtr<ID3D11Buffer> pIndexBuffer_;
+		/*ComPtr<ID3D11Buffer> pVertexBuffer_;
+		ComPtr<ID3D11Buffer> pIndexBuffer_;*/
 
 		// テクスチャ
 		//ComPtr<ID3D11Texture2D> pTexture_;
 		Texture2D pTexture_;
-		ComPtr<ID3D11ShaderResourceView> pSRV_;
-		ComPtr<ID3D11SamplerState> pSamplerState_;
 
 		// ミップマップレベル
 		int mipLevels_;
@@ -134,8 +141,9 @@ namespace mtgb
 	{
 		stageBuffer.resize(width * height);
 		hModelCollider_ = Fbx::Load("Model/BoxCollider.fbx");
-		pTransform = new Transform();
-
+		EntityId id = Game::CreateEntity();
+		pTransform = &(Transform::Get(id));
+		pTransform->scale = { 1,1,1 };
 	}
 
 	template<typename StageDataBit>
@@ -164,6 +172,7 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::Initialize()
 	{
+		CreateTextureMipmap(ToWString(std::string{ "Image/Dirt.png" }));
 		ReadTerrain("terrain.raw");
 		GenerateQuadtreeHeightMap();
 		GenerateStageBoundaryCollider();
@@ -299,24 +308,44 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::TestDraw()
 	{
-		DirectX11Draw::pContext_->IASetVertexBuffers(0, 1, pVertexBuffer_.GetAddressOf());
+		DirectX11Draw::SetIsWriteToDepthBuffer(true);
+		DirectX11Draw::SetShader(ShaderType::Terrain);
+		
+		ID3D11ShaderResourceView* pSRV = pTexture_.GetShaderResourceView();
+		ID3D11SamplerState* pSampler = pTexture_.GetSamplerState();
 
-			UINT stride{ sizeof(TerrainVertex) };
-			UINT offset{ 0 };
-			//DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_().GetAddressOf());
-			
-			DirectX11Draw::SetShader(ShaderType::FbxParts);
+		IShader::Draw<TerrainConstantBuffer, TerrainVertex>(
+			// コンスタントバッファ書き込み
+			[&](TerrainConstantBuffer* _pConstantBuffer)
+			{
+				const CameraSystem& camera = Game::System<CameraSystem>();
 
-			UINT stride{ sizeof(int) };
-			UINT offset{ 0 };
-			DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
+				Matrix4x4 world;
+				pTransform->GenerateWorldMatrix(&world);
 
-			ID3D11SamplerState* pSampler = pTexture_.GetSamplerState();
-			DirectX11Draw::pContext_->PSGetSamplers(0, 1, &pSampler);
+				Matrix4x4 view, proj;
+				camera.GetViewMatrix(&view);
+				camera.GetProjMatrix(&proj);
 
-			ID3D11ShaderResourceView* pSRV = pTexture_.GetShaderResourceView();
-			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pSRV);
-			DirectX11Draw::pContext_->DrawIndexed(indices_.size(),0,0);
+				_pConstantBuffer->matWVP = DirectX::XMMatrixTranspose(world * view * proj);
+				_pConstantBuffer->matNormalTrans = DirectX::XMMatrixTranspose(pTransform->matrixRotate_ * DirectX::XMMatrixInverse(nullptr, pTransform->matrixScale_));
+				_pConstantBuffer->lightDir = DirectX::XMFLOAT4(0.0f, -1.0f, 0.0f, 0.0f);
+			},
+			[&](ID3D11DeviceContext* _pContext)
+			{
+
+				_pContext->PSSetShaderResources(0, 1, &pSRV);
+				_pContext->PSSetSamplers(0, 1, &pSampler);
+			}, static_cast<int>(indices_.size()));
+
+		for (int z = 0; z < cellNum; z++)
+		{
+			for (int x = 0; x < cellNum; x++)
+			{
+				
+				aabbs[z * cellNum + x]->Draw();
+			}
+		}
 	}
 
 	template<typename StageDataBit>
@@ -334,8 +363,8 @@ namespace mtgb
 		// セル単位に変換した値をオフセット分ずらす
 		int cellIndex = cell + centerOffset;
 
-		// 境界チェック
-		if (cellIndex < 0 || cellIndex >= cellNum)
+		// 境界チェック（頂点数に合わせて0からcellNumまで）
+		if (cellIndex < 0 || cellIndex > cellNum)
 		{
 			return -1;
 		}
@@ -348,8 +377,8 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline float TerrainReader<StageDataBit>::CellIndexToWorld(int _cellIndex) const
 	{
-		// 境界チェック
-		if (_cellIndex < 0 || _cellIndex >= cellNum)
+		// 境界チェック（頂点数に合わせて0からcellNumまで）
+		if (_cellIndex < 0 || _cellIndex > cellNum)
 		{
 			return 0.0f;
 		}
@@ -366,7 +395,7 @@ namespace mtgb
 		vertices_.clear();
 		indices_.clear();
 
-		// 頂点生成
+		// 頂点生成のみ
 		for (int z = 0; z <= cellNum; z++)
 		{
 			for (int x = 0; x <= cellNum; x++)
@@ -375,7 +404,7 @@ namespace mtgb
 
 				// 位置
 				vertex.position.x = CellIndexToWorld(x);
-				vertex.position.y = GetHeightAt(x, z);
+				vertex.position.y = quadtreeHeightMap[z][x];  
 				vertex.position.z = CellIndexToWorld(z);
 
 				// UV座標 (0.0～1.0)
@@ -383,38 +412,29 @@ namespace mtgb
 				vertex.uv.y = static_cast<float>(z) / cellNum;
 				
 				vertices_.push_back(vertex);
+			}
+		}
 
-				// インデックス生成
+		// インデックス生成（ポリゴン単位）
+		for (int z = 0; z < cellNum; z++)  // cellNum-1まで（ポリゴン数）
+		{
+			for (int x = 0; x < cellNum; x++)  // cellNum-1まで（ポリゴン数）
+			{
+				// 四角形の4つの頂点インデックス
 				int topLeft = z * (cellNum + 1) + x;
 				int topRight = topLeft + 1;
 				int bottomLeft = (z + 1) * (cellNum + 1) + x;
 				int bottomRight = bottomLeft + 1;
 
-				// 一つ目の三角形
-				{
-					// 反時計回り
-					indices_.push_back(topLeft);
-					indices_.push_back(bottomLeft);
-					indices_.push_back(topRight);
-					// 時計回り
-					/*indices_.push_back(topLeft);
-					indices_.push_back(topRight);
-					indices_.push_back(bottomLeft);*/
-				}
-				
+				// 一つ目の三角形 (時計回り)
+				indices_.push_back(topLeft);
+				indices_.push_back(topRight);
+				indices_.push_back(bottomLeft);
 
-				// 二つ目の三角形
-				{
-					// 反時計回り
-					indices_.push_back(topRight);
-					indices_.push_back(bottomLeft);
-					indices_.push_back(bottomRight);
-					// 時計回り
-					/*indices_.push_back(topRight);
-					indices_.push_back(bottomRight);
-					indices_.push_back(bottomLeft);*/
-				}
-
+				// 二つ目の三角形 (時計回り)
+				indices_.push_back(topRight);
+				indices_.push_back(bottomRight);
+				indices_.push_back(bottomLeft);
 			}
 		}
 
@@ -473,12 +493,28 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::InitializeConstantBuffer(ID3D11Device* _pDevice)
 	{
+		D3D11_BUFFER_DESC bufferDesc =
+		{
+			.ByteWidth = sizeof(TerrainConstantBuffer),
+			.Usage = D3D11_USAGE_DYNAMIC,
+			.BindFlags = D3D11_BIND_CONSTANT_BUFFER,
+			.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE
+		};
+
+		HRESULT hResult = _pDevice->CreateBuffer(
+			&bufferDesc,
+			nullptr,
+			pConstantBuffer_.ReleaseAndGetAddressOf()
+		);
+
+		massert(SUCCEEDED(hResult)
+			&& "コンスタントバッファの作成に失敗 @FbxParts::InitializeConstantBuffer");
 	}
 
 	
 
 	template<typename StageDataBit>
-	inline void TerrainReader<StageDataBit>::CreateTextureMipmap(const char* _fileName)
+	inline void TerrainReader<StageDataBit>::CreateTextureMipmap(const std::wstring& _fileName)
 	{
 		pTexture_.Load(_fileName);
 	}

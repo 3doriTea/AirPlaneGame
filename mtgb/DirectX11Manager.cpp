@@ -762,6 +762,30 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			&cRasterizerDesc);
 	}
 
+	// Terrain
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
+				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Terrain.hlsl",
+			ShaderType::Terrain,
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
 	// トレイルシェーダの読み込み
 	{
 		const D3D11_INPUT_ELEMENT_DESC INPUT_ELEMENT_DESC_TRAIL[]
