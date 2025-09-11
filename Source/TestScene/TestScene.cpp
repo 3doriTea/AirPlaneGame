@@ -46,7 +46,8 @@ void TestScene::Initialize()
 	MTImGui::Instance().Initialize();
 
 	Audio::Clear();
-
+	
+	Game::System<ScoreManager>().ResetScore();
 	Instantiate<SkySphere>();
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
