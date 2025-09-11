@@ -10,6 +10,8 @@ namespace
 	const float AVOID_LOOK_POS_ADD_Y{ 5 };
 	// 回避行動として注目する座標 マイナス方向
 	const float AVOID_LOOK_POS_SUB_Y{ 5 };
+	// 見つかる視野角
+	const float FOUND_FOV{ 60.0f };
 }
 
 EnemyAI::EnemyAI()
@@ -40,19 +42,29 @@ EnemyAI::EnemyAI()
 				Vector3 pPos{ input_.playerPos };
 				Vector3 sPos{ input_.pSelfTrans->GetWorldPosition() };
 				out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 2;
-				/*if (pPos.y < sPos.y)
+				if (std::fabsf(pPos.y - sPos.y) < 10.0f)
 				{
-					out_.lookPosition += Vector3::Down();
+
+				}
+				else if (pPos.y < sPos.y)
+				{
+					out_.lookPosition += Vector3::Down() * 10.0f;
 				}
 				else
 				{
-					out_.lookPosition += Vector3::Up();
-				}*/
+					out_.lookPosition += Vector3::Up() * 10.0f;
+				}
 
 				out_.lookPosition += (pPos - sPos).Normalize() * 1.1f;
 			}
 
-			if (IsForwardToPlayerDir())
+			// アクティブ範囲外まで逃げたならプレイヤー方向に向く
+			if (GetToPlayerDistance() >= SLEEP_DISTANCE)
+			{
+				sFight_.Change(SF_LOOK_AT_PLAYER);
+			}
+			// プレイヤーが視野に入ったら攻撃行動
+			else if (IsForwardToPlayerDir())
 			{
 				sMain_.Change(S_FIGHT);
 			}
@@ -142,5 +154,5 @@ const bool EnemyAI::IsForwardToPlayerDir() const
 	// プレイヤーが前方向に居るなら、戦闘行動に遷移
 	float angle{ DirectX::XMVectorGetX(DirectX::XMVector3Dot(vForward, vDir)) };
 	// cosが0未満なら前方向
-	return angle > 0;
+	return angle > std::cosf(DirectX::XMConvertToRadians(FOUND_FOV));
 }

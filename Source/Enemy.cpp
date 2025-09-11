@@ -14,6 +14,8 @@ namespace
 	const float ONE_SHOT_TIME_SEC{ 0.25f };     // 1”­Œ‚‚Á‚½‚ ‚Æ‚Ì‘Ò‹@ŽžŠÔ(•b)
 	const float RELOAD_TIME_SEC{ 1.0f };      // ƒŠƒ[ƒh’†‚Ì‘Ò‹@ŽžŠÔ(•b)
 	const int BULLET_COUNT{ 5 };          // ƒŠƒ[ƒh‚Ü‚Å‚ÉŒ‚‚Ä‚é’e”
+
+	const float ROUND_SPEED{ 1.0f };  // ‰ñ“]”òs’†‚Ì1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x
 }
 
 Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObject(GameObjectBuilder()
@@ -81,6 +83,11 @@ void Enemy::Update()
 
 	Quaternion currentQua{ pTransform_->rotate };
 
+	if (outData.isRound)
+	{
+		currentQua *= XMQuaternionRotationAxis(pTransform_->Forward(), Time::DeltaTimeF() * ROUND_SPEED);
+	}
+
 	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
 
 	/*if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(toPlayerDir, pTransform_->Right())) < 0)
@@ -93,12 +100,12 @@ void Enemy::Update()
 		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, -1) };
 		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
 	}*/
-	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 10.0f);
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 1.0f);
 
 
 	// ‘O•ûŒüA“ª‚Íã•ûŒü‚É
 	Vector3 forward{ pTransform_->Forward() };
-	//currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
 	pTransform_->rotate = currentQua;
 
