@@ -34,6 +34,8 @@ EnemyAI::EnemyAI()
 
 		.OnUpdate(S_SEARCH, [this]
 		{
+			LOGF("S_SEARCH\n");
+
 			{ /* TODO:õ“Gs“® */
 				out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 1;
 			}
