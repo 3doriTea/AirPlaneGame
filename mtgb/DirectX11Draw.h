@@ -95,7 +95,6 @@ namespace mtgb
 		friend class ImGuiRenderer;
 		friend class FbxParts;
 		friend class Trail;
-		friend class TerrainReader<uint8_t>;
 		friend class DoubleWindow;
 		friend class SceneSystem;
 		friend class RenderSystem;
