@@ -73,7 +73,7 @@ void Player::Update()
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Space,context_))
 	{
-		Instantiate<Bullet>(pTransform_->position);
+		//Instantiate<Bullet>(pTransform_->position, Bullet::Type::Player);
 	}
 
 	if (InputUtil::GetKeyDown(KeyCode::F,context_))

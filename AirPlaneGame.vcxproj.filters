@@ -802,9 +802,6 @@
     <ClCompile Include="Source\TestScene\EnemyBullet.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ScoreManager.cpp">
-      <Filter>01Game\01Common</Filter>
-    </ClCompile>
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
@@ -827,6 +824,15 @@
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\ScoreManager.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\Gun.cpp">
       <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1419,9 +1425,6 @@
     <ClInclude Include="Source\TestScene\EnemyBullet.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ScoreManager.h">
-      <Filter>01Game\01Common</Filter>
-    </ClInclude>
     <ClInclude Include="mtgb\MonitorInfo.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
@@ -1450,6 +1453,12 @@
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
     <ClInclude Include="Source\PlayScene\QuotaGauge.h">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\ScoreManager.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Gun.h">
       <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -37,7 +37,19 @@ EnemyAI::EnemyAI()
 			LOGF("S_SEARCH\n");
 
 			{ /* TODO:õ“Gs“® */
-				out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 1;
+				Vector3 pPos{ input_.playerPos };
+				Vector3 sPos{ input_.pSelfTrans->GetWorldPosition() };
+				out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10 + input_.pSelfTrans->Right() * 2;
+				/*if (pPos.y < sPos.y)
+				{
+					out_.lookPosition += Vector3::Down();
+				}
+				else
+				{
+					out_.lookPosition += Vector3::Up();
+				}*/
+
+				out_.lookPosition += (pPos - sPos).Normalize() * 1.1f;
 			}
 
 			if (IsForwardToPlayerDir())

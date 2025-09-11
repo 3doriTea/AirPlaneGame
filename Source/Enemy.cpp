@@ -9,6 +9,11 @@ namespace
 	const float DEFAULT_SPEED{ 10.0f };
 	// デフォルトの耐久値
 	const int DEFAULT_HP{ 100 };
+	
+
+	const float ONE_SHOT_TIME_SEC{ 0.25f };     // 1発撃ったあとの待機時間(秒)
+	const float RELOAD_TIME_SEC{ 1.0f };      // リロード中の待機時間(秒)
+	const int BULLET_COUNT{ 5 };          // リロードまでに撃てる弾数
 }
 
 Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObject(GameObjectBuilder()
@@ -22,7 +27,17 @@ Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObjec
 	radius_{ 30 },
 	speed_{ DEFAULT_SPEED },
 	pRigidBody_{ Component<RigidBody>() },
-	controllerId_{ _controllerId }
+	controllerId_{ _controllerId },
+	gun_
+	{
+		Gun::Setting  // 銃器の設定
+		{
+			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
+			.reloadTimeSec = RELOAD_TIME_SEC,
+			.bulletCount = BULLET_COUNT,
+			.bulletType = Bullet::Type::Enemy,
+		}
+	}
 {
 	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
@@ -58,9 +73,10 @@ void Enemy::Update()
 		return;
 	}
 
+	gun_.Update();
 	if (outData.isFire)
 	{
-		// TODO: 撃つ
+		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate);
 	}
 
 	Quaternion currentQua{ pTransform_->rotate };
@@ -77,12 +93,12 @@ void Enemy::Update()
 		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, -1) };
 		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
 	}*/
-	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF());
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 10.0f);
 
 
 	// 前方向、頭は上方向に
 	Vector3 forward{ pTransform_->Forward() };
-	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+	//currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 
 	pTransform_->rotate = currentQua;
 
