@@ -6,7 +6,7 @@
 namespace
 {
 	// デフォルトの敵スピード
-	const float DEFAULT_SPEED{ 5.0f };
+	const float DEFAULT_SPEED{ 10.0f };
 	// デフォルトの耐久値
 	const int DEFAULT_HP{ 100 };
 }
@@ -63,8 +63,28 @@ void Enemy::Update()
 		// TODO: 撃つ
 	}
 
+	Quaternion currentQua{ pTransform_->rotate };
+
 	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
-	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF());
+
+	/*if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(toPlayerDir, pTransform_->Right())) < 0)
+	{
+		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, 1) };
+		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
+	}
+	else
+	{
+		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, -1) };
+		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
+	}*/
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF());
+
+
+	// 前方向、頭は上方向に
+	Vector3 forward{ pTransform_->Forward() };
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+
+	pTransform_->rotate = currentQua;
 
 	pRigidBody_->velocity_ = pTransform_->Forward() * speed_;
 }
