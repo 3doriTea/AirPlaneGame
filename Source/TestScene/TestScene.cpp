@@ -63,10 +63,10 @@ void TestScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<EnemyPlane>(Vector3{ 0, 3, 40 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
+	/*Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);*/
 
 	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
 
@@ -87,7 +87,7 @@ void TestScene::Initialize()
 	reader8 = new TerrainReader8();
 	reader8->ReadTerrain("terrain.raw");
 	//reader8->GenerateQuadtreeHeightMap();
-	reader8->GenerateTerrainAABBs(&reader8->aabbs);
+	//reader8->GenerateTerrainAABBs(&reader8->aabbs);
 
 	Instantiate<QuotaGauge>();
 	

@@ -14,6 +14,14 @@
 #include "Fbx.h"
 #include "ColliderCP.h"
 #include "Collider.h"
+#include <d3d11.h>
+#include <DirectXMath.h>
+#include "Texture2D.h"
+#include "DirectX11Draw.h"
+#include "IncludingWindows.h"
+#include "Vector2.h"
+using Microsoft::WRL::ComPtr;
+
 namespace mtgb
 {
 
@@ -22,7 +30,12 @@ namespace mtgb
 		Vector3 min, max;
 	};
 
-	
+	struct TerrainVertex
+	{
+		Vector3 position;
+		Vector3 normal;
+		Vector2 uv;
+	};
 
 	template<typename StageDataBit>
 	class TerrainReader
@@ -34,13 +47,52 @@ namespace mtgb
 		void GenerateQuadtreeHeightMap();
 		void GenerateTerrainAABBs(std::vector<Collider*>* _aabbs);
 		void TestDraw();
+		/// <summary>
+		/// <para> ワールド座標からそれに対応する terrainのセルの番号を返す </para>
+		/// <para> terrainの真ん中を(0,0)、原点とする </para>
+		/// </summary>
+		/// <param name="_point">セルの番号</param>
+		/// <returns></returns>
 		int WorldToCellIndex(float _point) const;
+		/// <summary>
+		/// <para> terrainのセルの番号からワールド座標を返す </para>
+		/// </summary>
+		/// <param name="_cellIndex"></param>
+		/// <returns></returns>
 		float CellIndexToWorld(int _cellIndex) const;
 		
+		void GenerateTerrainMesh();
+		void CreateVertexBuffer();
+		void CreateIndexBuffer();
+		void CreateTextureMipmap(const char* _fileName);
+		void DrawTerran() const;
+
 		/// <summary>
 		/// ステージの範囲外と範囲内の境界となるコライダーを作成する
 		/// </summary>
 		void GenerateStageBoundaryCollider();
+	private:
+		// メッシュのデータ
+		std::vector<TerrainVertex> vertices_;
+		std::vector<DWORD> indices_;
+
+		// Comオブジェクト
+		// バッファ
+		ComPtr<ID3D11Buffer> pVertexBuffer_;
+		ComPtr<ID3D11Buffer> pIndexBuffer_;
+
+		// テクスチャ
+		//ComPtr<ID3D11Texture2D> pTexture_;
+		Texture2D pTexture_;
+		ComPtr<ID3D11ShaderResourceView> pSRV_;
+		ComPtr<ID3D11SamplerState> pSamplerState_;
+
+		// ミップマップレベル
+		int mipLevels_;
+
+		void GenerateNormals();
+		Vector3 CalculateNormal(int _x, int _z) const;
+
 		int width, height;
 		float heightScale;
 		float widthScale;
@@ -58,6 +110,8 @@ namespace mtgb
 
 		Transform* pTransform;
 		FBXModelHandle hModelCollider_;
+
+
 	};
 
 	using TerrainReader8 = TerrainReader<uint8_t>;
@@ -101,6 +155,8 @@ namespace mtgb
 
 		GenerateQuadtreeHeightMap();
 		GenerateStageBoundaryCollider();
+		GenerateTerrainAABBs(&aabbs);
+		GenerateTerrainMesh();
 	}
 
 	template<typename StageDataBit>
@@ -283,6 +339,129 @@ namespace mtgb
 	}
 
 	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::GenerateTerrainMesh()
+	{
+		vertices_.clear();
+		indices_.clear();
+
+		// 頂点生成
+		for (int z = 0; z <= cellNum; z++)
+		{
+			for (int x = 0; x <= cellNum; x++)
+			{
+				TerrainVertex vertex;
+
+				// 位置
+				vertex.position.x = CellIndexToWorld(x);
+				vertex.position.y = GetHeightAt(x, z);
+				vertex.position.z = CellIndexToWorld(z);
+
+				// UV座標 (0.0～1.0)
+				vertex.uv.x = static_cast<float>(x) / cellNum;
+				vertex.uv.y = static_cast<float>(z) / cellNum;
+				
+				vertices_.push_back(vertex);
+
+				// インデックス生成
+				int topLeft = z * (cellNum + 1) + x;
+				int topRight = topLeft + 1;
+				int bottomLeft = (z + 1) * (cellNum + 1) + x;
+				int bottomRight = bottomLeft + 1;
+
+				// 一つ目の三角形
+				{
+					// 反時計回り
+					indices_.push_back(topLeft);
+					indices_.push_back(bottomLeft);
+					indices_.push_back(topRight);
+					// 時計回り
+					/*indices_.push_back(topLeft);
+					indices_.push_back(topRight);
+					indices_.push_back(bottomLeft);*/
+				}
+				
+
+				// 二つ目の三角形
+				{
+					// 反時計回り
+					indices_.push_back(topRight);
+					indices_.push_back(bottomLeft);
+					indices_.push_back(bottomRight);
+					// 時計回り
+					/*indices_.push_back(topRight);
+					indices_.push_back(bottomRight);
+					indices_.push_back(bottomLeft);*/
+				}
+
+			}
+		}
+
+		// 法線計算
+		GenerateNormals();
+		
+		//CreateVertexBuffer();
+		//CreateIndexBuffer();
+		//CreateTextureMipmap("");
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::CreateVertexBuffer()
+	{
+		D3D11_BUFFER_DESC bufferDesc =
+		{
+			.ByteWidth = static_cast<UINT>(sizeof(TerrainVertex) * vertices_.size()),
+			.Usage = D3D11_USAGE_DEFAULT,
+			.BindFlags = D3D11_BIND_VERTEX_BUFFER,
+			.CPUAccessFlas = 0,
+		};
+
+		D3D11_SUBRESOURCE_DATA initData =
+		{
+			.pSysMem = vertices_.data()
+		};
+
+		HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(
+			&bufferDesc, &initData, &pVertexBuffer_);
+
+		massert(SUCCEEDED(hResult) && "頂点バッファの作成に失敗");
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::CreateIndexBuffer()
+	{
+		D3D11_BUFFER_DESC bufferDesc =
+		{
+			.ByteWidth = static_cast<UINT>( sizeof(DWORD) * indices_.size()),
+			.Usage = D3D11_USAGE_DEFAULT,
+			.BindFlags = D3D11_BIND_INDEX_BUFFER,
+			.CPUAccessFlags = 0
+		};
+
+		D3D11_SUBRESOURCE_DATA initData =
+		{
+			.pSysMem = indices_.data()
+		};
+
+		HRESULT hResult = DirectX11Draw::pDevice_->CreateBuffer(
+			&bufferDesc, &initData, &pIndexBuffer_
+		);
+
+		massert(SUCCEEDED(hResult) && "インデックスバッファの作成に失敗");
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::CreateTextureMipmap(const char* _fileName)
+	{
+		pTexture_.Load(_fileName);
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::DrawTerran() const
+	{
+		
+	}
+
+	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::GenerateStageBoundaryCollider()
 	{
 		float stageMin = CellIndexToWorld(0);
@@ -416,6 +595,43 @@ namespace mtgb
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);
 		}
+	}
+
+	template<typename StageDataBit>
+	inline void TerrainReader<StageDataBit>::GenerateNormals()
+	{
+		for (int z = 0; z <= cellNum; z++)
+		{
+			for (int x = 0; x <= cellNum; x++)
+			{
+				int index = z * (cellNum + 1) + x;
+				vertices_[index].normal = CalculateNormal(x, z);
+			}
+		}
+	}
+
+	template<typename StageDataBit>
+	inline Vector3 TerrainReader<StageDataBit>::CalculateNormal(int _x, int _z) const
+	{
+		Vector3 normal = Vector3::Zero();
+
+		// 周囲の高さから法線を計算
+		// _x,_zが端の場合に配列外参照しないように境界チェックを行う
+		float heightLeft = (_x > 0) ? quadtreeHeightMap[_z][_x - 1] : quadtreeHeightMap[_z][_x];
+		float heightRight = (_x < cellNum) ? quadtreeHeightMap[_z][_x + 1] : quadtreeHeightMap[_z][_x];
+		float heightDown = (_z > 0) ? quadtreeHeightMap[_z - 1][_x] : quadtreeHeightMap[_z][_x];
+		float heightUp = (_z < cellNum) ? quadtreeHeightMap[_z + 1][_x] : quadtreeHeightMap[_z][_x];
+
+		// 左右の高低差
+		normal.x = heightLeft - heightRight;
+		
+		// 法線にy方向を向かせる
+		normal.y = 2.0f * widthScale;
+
+		// 上下の高低差
+		normal.z = heightDown - heightUp;
+
+		return Vector3::Normalize(normal);
 	}
 
 
