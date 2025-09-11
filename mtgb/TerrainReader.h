@@ -299,19 +299,24 @@ namespace mtgb
 	template<typename StageDataBit>
 	inline void TerrainReader<StageDataBit>::TestDraw()
 	{
-		for (int z = 0; z < cellNum; z++)
-		{
-			for (int x = 0; x < cellNum; x++)
-			{
-				/*DirectX::BoundingBox& box = aabbs[z * cellNum + x];
-				pTransform->position = DirectX::XMLoadFloat3(&box.Center);
-				pTransform->scale = DirectX::XMLoadFloat3(&box.Extents) * 2;
+		DirectX11Draw::pContext_->IASetVertexBuffers(0, 1, pVertexBuffer_.GetAddressOf());
 
-				pTransform->Compute();
-				Draw::FBXModel(hModelCollider_, *pTransform,0,ShaderType::Debug3D);*/
-				aabbs[z * cellNum + x]->Draw();
-			}
-		}
+			UINT stride{ sizeof(TerrainVertex) };
+			UINT offset{ 0 };
+			//DirectX11Draw::pContext_->VSSetConstantBuffers(0, 1, pConstantBuffer_().GetAddressOf());
+			
+			DirectX11Draw::SetShader(ShaderType::FbxParts);
+
+			UINT stride{ sizeof(int) };
+			UINT offset{ 0 };
+			DirectX11Draw::pContext_->IASetIndexBuffer(pIndexBuffer_.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+			ID3D11SamplerState* pSampler = pTexture_.GetSamplerState();
+			DirectX11Draw::pContext_->PSGetSamplers(0, 1, &pSampler);
+
+			ID3D11ShaderResourceView* pSRV = pTexture_.GetShaderResourceView();
+			DirectX11Draw::pContext_->PSSetShaderResources(0, 1, &pSRV);
+			DirectX11Draw::pContext_->DrawIndexed(indices_.size(),0,0);
 	}
 
 	template<typename StageDataBit>

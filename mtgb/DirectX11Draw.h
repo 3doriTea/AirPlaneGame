@@ -6,7 +6,6 @@
 #include "ShaderType.h"
 #include <dxgi.h>
 #include "MonitorInfo.h"
-
 using Microsoft::WRL::ComPtr;
 
 struct ID3D11Device;
@@ -96,7 +95,7 @@ namespace mtgb
 		friend class ImGuiRenderer;
 		friend class FbxParts;
 		friend class Trail;
-
+		friend class TerrainReader<uint8_t>;
 		friend class DoubleWindow;
 		friend class SceneSystem;
 		friend class RenderSystem;
