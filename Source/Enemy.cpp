@@ -6,7 +6,7 @@
 namespace
 {
 	// デフォルトの敵スピード
-	const float DEFAULT_SPEED{ 2.0f };
+	const float DEFAULT_SPEED{ 5.0f };
 	// デフォルトの耐久値
 	const int DEFAULT_HP{ 100 };
 }
@@ -64,7 +64,7 @@ void Enemy::Update()
 	}
 
 	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
-	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), 0.1f);
+	pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF());
 
 	pRigidBody_->velocity_ = pTransform_->Forward() * speed_;
 }

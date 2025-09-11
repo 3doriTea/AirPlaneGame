@@ -7,9 +7,9 @@ namespace
 	// 回避行動をとる距離
 	const float AVOID_DISTANCE{ 50 };
 	// 回避行動として注目する座標 プラス方向
-	const float AVOID_LOOK_POS_ADD_Y{ 20 };
+	const float AVOID_LOOK_POS_ADD_Y{ 5 };
 	// 回避行動として注目する座標 マイナス方向
-	const float AVOID_LOOK_POS_SUB_Y{ 20 };
+	const float AVOID_LOOK_POS_SUB_Y{ 5 };
 }
 
 EnemyAI::EnemyAI()
@@ -21,13 +21,11 @@ EnemyAI::EnemyAI()
 		})
 		.OnUpdate(S_SLEEP, [this]
 		{
-			out_.isActive = true;
 			// プレイヤーとの距離がアクティブ範囲内なら、索敵行動に遷移
 			if (GetToPlayerDistance() <= SLEEP_DISTANCE)
-				LOGF("探索だ！\n");
-			/*{
+			{
 				sMain_.Change(S_SEARCH);
-			}*/
+			}
 		})
 		.OnEnd(S_SLEEP, [this]
 		{
@@ -79,15 +77,16 @@ EnemyAI::EnemyAI()
 		{
 			LOGF("SF_AVOID\n");
 
+			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーより座標が上なら上方向に回避
 			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)
 			{
-				out_.lookPosition = input_.playerPos + Vector3::Up() * AVOID_LOOK_POS_ADD_Y;
+				out_.lookPosition += Vector3::Up() * AVOID_LOOK_POS_ADD_Y;
 			}
 			// プレイヤーより座標が下なら下方向に回避
 			else
 			{
-				out_.lookPosition = input_.playerPos + Vector3::Down() * AVOID_LOOK_POS_ADD_Y;
+				out_.lookPosition += Vector3::Down() * AVOID_LOOK_POS_ADD_Y;
 			}
 
 			sFight_.Change(SF_ROUND);
@@ -98,15 +97,14 @@ EnemyAI::EnemyAI()
 		{
 			LOGF("SF_ROUND\n");
 
-
 			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーの前にいるなら回避行動に遷移
 			if (IsForwardToPlayerDir())
 			{
 				sFight_.Change(SF_AVOID);
 			}
-			// プレイヤーの後ろにいるなら索敵に遷移
-			else
+			// プレイヤーの後ろにいる && 回避行動圏外なら索敵に遷移
+			else if (GetToPlayerDistance() >= AVOID_DISTANCE)
 			{
 				sMain_.Change(S_SEARCH);
 			}
