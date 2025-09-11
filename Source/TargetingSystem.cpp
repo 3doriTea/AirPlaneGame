@@ -1,6 +1,6 @@
 #include "TargetingSystem.h"
 #include <algorithm>
-#include "TestScene/PlayerBullet.h"
+#include "Bullet.h"
 #include "DrawScreenUtility.h"
 void TargetingSystem::Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize)
 {
@@ -91,7 +91,7 @@ void TargetingSystem::FireAtTarget()
 	{
 		Vector3 targetDirection = Vector3::Normalize(currentTarget->worldPos - ownerTransform->GetWorldPosition());
 		Quaternion fireDirection = Quaternion::LookRotation(targetDirection, Vector3::Up());
-		GameObject::Instantiate<PlayerBullet>(ownerTransform->GetWorldPosition(), fireDirection);
+		GameObject::Instantiate<Bullet>(ownerTransform->GetWorldPosition(), fireDirection, Bullet::Type::Player);
 	}
 }
 

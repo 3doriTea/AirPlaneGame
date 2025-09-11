@@ -1,6 +1,8 @@
 #pragma once
 #include <mtgb.h>
 #include "PlayScene/EnemyAI.h"
+#include "PlayScene/Gun.h"
+
 
 class EnemiesController;
 
@@ -24,6 +26,8 @@ private:
 	float radius_;
 
 	EnemyAI ai_;  // ai
+
+	Gun gun_;  // 機銃管理の部品クラス
 
 	RigidBody* pRigidBody_;
 	EnemiesController* pEnemiesController_;

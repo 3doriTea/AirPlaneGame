@@ -832,6 +832,9 @@
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\Gun.cpp">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1454,6 +1457,9 @@
     </ClInclude>
     <ClInclude Include="mtgb\ScoreManager.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\Gun.h">
+      <Filter>01Game\03PlayScene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
