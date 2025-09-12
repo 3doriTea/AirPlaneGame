@@ -19,6 +19,8 @@
 #include "../OverScene.h"
 #include "TerrainReader.h"
 #include "TimeLimit.h"
+#include "../PlayScene/EnemiesController.h"
+
 using namespace mtgb;
 
 namespace mtgb
@@ -64,7 +66,15 @@ void TestScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
+	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
+	pEnemiesController->Spawan({ 0, 0, 100 });
+	pEnemiesController->Spawan({ 0, 0, 300 });
+	pEnemiesController->Spawan({ 0, -100, 500 });
+	pEnemiesController->Spawan({ 100, 0, 500 });
+	pEnemiesController->Spawan({ 300, 0, 500 });
+	pEnemiesController->Spawan({ 300, 0, 500 });
+
+	//Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
 	/*Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);*/

@@ -1,6 +1,7 @@
 #include "EnemyPlane.h"
 #include "../TrailEmitterSystem.h"
 #include "EnemyBullet.h"
+#include "../PlayScene/EnemiesController.h"
 
 using namespace mtgb;
 
@@ -16,24 +17,49 @@ namespace
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
 	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
+
+	// デフォルトの敵スピード
+	const float DEFAULT_SPEED{ 10.0f };
+	// デフォルトの耐久値
+	const int DEFAULT_HP{ 100 };
+
+
+	const float ONE_SHOT_TIME_SEC{ 0.25f };     // 1発撃ったあとの待機時間(秒)
+	const float RELOAD_TIME_SEC{ 1.0f };      // リロード中の待機時間(秒)
+	const int BULLET_COUNT{ 5 };          // リロードまでに撃てる弾数
+
+	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
 }
 
 EnemyPlane::EnemyPlane(
 	const Vector3& _worldPosition,
-	const EntityId _playerPlane) : GameObject(GameObjectBuilder()
+	const EntityId _playerPlane,
+	const EntityId _controllerId) : GameObject(GameObjectBuilder()
 	.SetName("Enemy")
 	.SetPosition(_worldPosition)
-	.SetScale({ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE})
+	.SetScale({ ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE })
 	.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
 	pCollider_{ Component<Collider>()},
 	//pCollider_{ Component<Collider>()},
 	pTarget_{ &Transform::Get(_playerPlane) },
+	controllerId_{ _controllerId },
 	speed_{ 10.0f },
 	health_{},
 	lockOnAngle_{ 45.0f },
-	lockOnDistance_{ 30.0f }
+	lockOnDistance_{ 30.0f },
+	gun_
+	{
+		Gun::Setting  // 銃器の設定
+		{
+			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
+			.reloadTimeSec = RELOAD_TIME_SEC,
+			.bulletCount = BULLET_COUNT,
+			.bulletType = Bullet::Type::Enemy,
+		}
+	},
+	ai_{}
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
@@ -69,6 +95,13 @@ EnemyPlane::EnemyPlane(
 			}
 		});
 
+	pEnemiesController_ = dynamic_cast<EnemiesController*>(FindGameObject(controllerId_));
+	if (pEnemiesController_ == nullptr)
+	{
+		massert(false && "pEnemiesControllerが見つかりませんでした。 @Enemy::Update");
+		return;
+	}
+
 	//Game::System<TrailEmitterSystem>().
 }
 
@@ -99,6 +132,57 @@ void EnemyPlane::Update()
 
 		return;
 	}
+
+	ai_.SetInputData(
+		{
+			.playerPos = pEnemiesController_->GetPlayerPosition(),
+			.pSelfTrans = pTransform_,
+		});
+
+	ai_.Update();
+	const EnemyAI::OutData& outData{ ai_.GetOutData() };
+
+	if (outData.isActive == false)
+	{
+		return;
+	}
+
+	gun_.Update();
+	if (outData.isFire)
+	{
+		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate);
+	}
+
+	Quaternion currentQua{ pTransform_->rotate };
+
+	if (outData.isRound)
+	{
+		currentQua *= XMQuaternionRotationAxis(pTransform_->Forward(), Time::DeltaTimeF() * ROUND_SPEED);
+	}
+
+	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
+
+	/*if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(toPlayerDir, pTransform_->Right())) < 0)
+	{
+		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, 1) };
+		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
+	}
+	else
+	{
+		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, -1) };
+		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
+	}*/
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 1.0f);
+
+
+	// 前方向、頭は上方向に
+	Vector3 forward{ pTransform_->Forward() };
+	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+
+	pTransform_->rotate = currentQua;
+
+	pRB_->velocity_ = pTransform_->Forward() * speed_;
+
 	if (lockOnTarget_)
 	{
 		/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
@@ -114,20 +198,20 @@ void EnemyPlane::Update()
 	// もしターゲットしているなら、弾を打つ
 	timeSinceLastshot_ += Time::DeltaTimeF();
 
-	std::vector<EnemyBullet*> bullets;
-	FindGameObjects<EnemyBullet>(&bullets);
+	//std::vector<EnemyBullet*> bullets;
+	//FindGameObjects<EnemyBullet>(&bullets);
 
-	if (lockOnTarget_ && timeSinceLastshot_ >= SHOOT_COOLDOWN)
-	{
-		// 弾の数を制限して、弾の数が5以上の場合は撃たないようにする
-		if (bullets.size() >= MAX_BULLETS)
-		{
-			return;
-		}
-		
-		GameObject::Instantiate<EnemyBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
-		timeSinceLastshot_ = 0.0f;
-	}
+	//if (lockOnTarget_ && timeSinceLastshot_ >= SHOOT_COOLDOWN)
+	//{
+	//	// 弾の数を制限して、弾の数が5以上の場合は撃たないようにする
+	//	if (bullets.size() >= MAX_BULLETS)
+	//	{
+	//		return;
+	//	}
+	//	
+	//	GameObject::Instantiate<EnemyBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
+	//	timeSinceLastshot_ = 0.0f;
+	//}
 
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DrawVec(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);

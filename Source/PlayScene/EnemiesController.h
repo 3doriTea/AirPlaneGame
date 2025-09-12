@@ -26,4 +26,5 @@ public:
 private:
 	Transform* pPlayerTransform_;
 	Vector3 playerPosition_;
+	EntityId playerId_;
 };

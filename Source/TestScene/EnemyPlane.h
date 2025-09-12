@@ -1,11 +1,15 @@
 #pragma once
 #include <mtgb.h>
 #include "../Health.h"
+#include "../PlayScene/EnemyAI.h"
+#include "../PlayScene/Gun.h"
+
+class EnemiesController;
 
 class EnemyPlane : public GameObject
 {
 public:
-	EnemyPlane(const Vector3& _worldPosition, const EntityId _playerPlane);
+	EnemyPlane(const Vector3& _worldPosition, const EntityId _playerPlane, const EntityId _controllerId);
 	~EnemyPlane();
 
 	void Update() override;
@@ -18,6 +22,12 @@ private:
 	Collider* pCollider_;
 	Transform* pTarget_;
 	Transform* pTransform_;
+
+	EnemyAI ai_;  // ai
+	Gun gun_;     // 機銃管理の部品クラス
+
+	EnemiesController* pEnemiesController_;
+	EntityId controllerId_;
 
 	Health health_;   // 体力
 	float speed_;  // 移動速度 m/s
