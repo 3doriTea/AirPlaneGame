@@ -56,14 +56,17 @@ void QuotaGauge::Draw() const
 	float quotaRatio = QUOTA / MAX_GAUGE_SCORE;
 	float progressRatio = progress / MAX_GAUGE_SCORE;
 
+	//Draw::Box((drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
 	Draw::Box(GenDrawScreenFrom(drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
 
 	drawRect.width = QUOTA_GAUGE_RECT.width * quotaRatio;
 
 	Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
+	//Draw::Box((drawRect), Color::RED,{ 1 });
 	
 	drawRect.width = QUOTA_GAUGE_RECT.width * progressRatio;
 
 	Draw::Box(GenDrawScreenFrom(drawRect), Color::GREEN,{2});
+	//Draw::Box((drawRect), Color::GREEN,{2});
 
 }

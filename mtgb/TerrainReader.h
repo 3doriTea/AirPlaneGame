@@ -133,11 +133,11 @@ namespace mtgb
 	inline TerrainReader<StageDataBit>::TerrainReader()
 		: width{513}
 		, height{513}
-		, heightScale{200.0f}
-		, widthScale{5.0f}
+		, heightScale{50.0f}
+		, widthScale{10.0f}
 		, divisions{3}
 		, highestHeight{0.0f}
-		, ceilingOffset{10.0f}
+		, ceilingOffset{100.0f}
 	{
 		stageBuffer.resize(width * height);
 		hModelCollider_ = Fbx::Load("Model/BoxCollider.fbx");

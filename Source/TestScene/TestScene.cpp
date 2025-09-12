@@ -77,7 +77,7 @@ void TestScene::Initialize()
 	//Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
 	/*Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);*/
+	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
 
 	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
 
@@ -101,7 +101,7 @@ void TestScene::Initialize()
 	Instantiate<QuotaGauge>();
 	
 
-	timeLimit_ = Instantiate<TimeLimit>(60.0f);
+	timeLimit_ = Instantiate<TimeLimit>(180.0f);
 	timeLimit_->StartTimer();
 	timeLimit_->RegisterOnEndTimerCallback([]()
 		{
