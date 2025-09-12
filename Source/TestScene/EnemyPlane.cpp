@@ -2,6 +2,7 @@
 #include "../TrailEmitterSystem.h"
 #include "EnemyBullet.h"
 #include "../PlayScene/EnemiesController.h"
+#include "../Bullet.h"
 
 using namespace mtgb;
 
@@ -63,7 +64,7 @@ EnemyPlane::EnemyPlane(
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
-	pCollider_->SetRadius(1.0f);
+	pCollider_->SetRadius(2.0f);
 	timeSinceLastshot_ = 0.0f;
 	
 	//hText = Text::Load("apple", 72);
@@ -83,8 +84,20 @@ EnemyPlane::EnemyPlane(
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 
 			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
-			if (pTarget->GetName() == "PlayerBullet")
+			if (pTarget->GetName() == "bullet")
 			{
+				Bullet* pBullet{ dynamic_cast<Bullet*>(pTarget) };
+
+				if (pBullet == nullptr)
+				{
+					return;
+				}
+
+				if (pBullet->GetType() != Bullet::Type::Player)
+				{
+					return;
+				}
+
 				pTarget->DestroyMe();
 				health_.Damage(HIT_DAMAGE);
 				if (health_.IsDead())
