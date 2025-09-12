@@ -12,7 +12,7 @@ namespace
 	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // 墜落中のz軸回転(1秒間あたりの回転角度)
 	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
-	const float ENEMY_SCALE{ 1.0f }; // スケール
+	const float ENEMY_SCALE{ 0.5f }; // スケール
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
 }
@@ -39,7 +39,7 @@ EnemyPlane::EnemyPlane(
 	timeSinceLastshot_ = 0.0f;
 	
 	//hText = Text::Load("apple", 72);
-	//hModel_ = Fbx::Load("Model/Enemy01.fbx");
+	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
@@ -125,7 +125,7 @@ void EnemyPlane::Update()
 
 void EnemyPlane::Draw() const
 {
-	//Draw::FBXModel(hModel_, *pTransform_, 0);
+	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
 	
