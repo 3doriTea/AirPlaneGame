@@ -12,7 +12,7 @@ namespace
 	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // 墜落中のz軸回転(1秒間あたりの回転角度)
 	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
-	const float ENEMY_SCALE{ 1.0f }; // スケール
+	const float ENEMY_SCALE{ 0.5f }; // スケール
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
 	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
