@@ -98,7 +98,8 @@ namespace mtgb
 		static void FBXModel(
 			const FBXModelHandle _hFBXModel,
 			const Transform& _pTransform,
-			const int _frame);
+			const int _frame,
+			ShaderType _shaderType = ShaderType::FbxParts);
 
 		/// <summary>
 		/// <para> 事前にLoadをしたテキストを描画 </para>

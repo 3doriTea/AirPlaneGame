@@ -1,10 +1,11 @@
 #include "ResourceCollection.h"
 #include "WindowContextResource.h"
 
-mtgb::ResourceCollection::ResourceCollection(ResourceCollection&& other) noexcept
-    :resourceCollection_(std::move(other.resourceCollection_))
-    , insertionOrder_(std::move(other.insertionOrder_))
-{}
+//mtgb::ResourceCollection::ResourceCollection(ResourceCollection&& other) noexcept
+//    :resourceCollection_(std::move(other.resourceCollection_))
+//    , insertionOrder_(std::move(other.insertionOrder_))
+//{
+//}
 
 mtgb::ResourceCollection::~ResourceCollection()
 {
@@ -14,6 +15,11 @@ mtgb::ResourceCollection::~ResourceCollection()
 mtgb::ResourceCollection::ResourceCollection(const ResourceCollection& other)
 {
     Copy(other);
+}
+
+void mtgb::ResourceCollection::Swap(ResourceCollection& other)
+{
+    std::swap(resourceCollection_, other.resourceCollection_);
 }
 
 void mtgb::ResourceCollection::Copy(const ResourceCollection& other)
@@ -43,8 +49,8 @@ mtgb::ResourceCollection mtgb::ResourceCollection::operator=(const ResourceColle
 {
     if (this != &other)
     {
-        // 既存リソースの解放
-        Release();
+        ////既存リソースの解放
+        //Release();
         this->Copy(other);
     }
     return *this;

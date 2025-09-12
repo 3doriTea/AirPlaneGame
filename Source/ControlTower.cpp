@@ -9,8 +9,8 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	,detectionRadius_{30.0f}
 	
 {
-	pGunner_ = { nullptr,INVALD_ENTITY };
-	pPilot_ = { nullptr,INVALD_ENTITY };
+	pGunner_ = { nullptr,INVALID_HANDLE };
+	pPilot_ = { nullptr,INVALID_HANDLE };
 }
 
 ControlTower::~ControlTower()

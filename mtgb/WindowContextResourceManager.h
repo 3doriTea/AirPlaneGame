@@ -15,8 +15,6 @@ typedef struct HWND__* HWND;
 
 namespace mtgb
 {
-
-    
     /// <summary>
     /// ウィンドウごとのリソースを管理するクラス
     /// </summary>
@@ -44,7 +42,7 @@ namespace mtgb
         /// リソースを切り替える
         /// </summary>
         /// <param name="windowContext">切り替えるウィンドウの識別子</param>
-        void ChangeResource(WindowContext windowContext);
+        void ChangeActiveResource(WindowContext windowContext);
 
         /// <summary>
         /// 全リソースのOnResizeを呼びだす
@@ -53,9 +51,24 @@ namespace mtgb
         /// <param name="width"></param>
         /// <param name="height"></param>
         void OnResizeAll(WindowContext windowContext, UINT width, UINT height);
+
+        /// <summary>
+        /// 指定した二つのウィンドウの指定したリソースを交換する
+        /// 対応する入力機器を取り替える際などに使う
+        /// </summary>
+        /// <typeparam name="ResourceT">指定するリソースの型</typeparam>
+        /// <param name="context1">デフォルトでFirst</param>
+        /// <param name="context2">デフォルトでSecond</param>
         template<typename ResourceT>
         void SwapResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);
-      /*  void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);*/
+        
+       /* /// <summary>
+        /// <para> 指定した二つのウィンドウの全リソースを交換する </para>
+        /// <para> あくまでWindowContextが指すポインタを交換するだけなので画面が切り替わったりはしない。 </para>
+        /// </summary>
+        /// <param name="context1">デフォルトでFirst</param>
+        /// <param name="context2">デフォルトでSecond</param>
+        void SwapAllResource(WindowContext context1 = WindowContext::First, WindowContext context2 = WindowContext::Second);*/
 
         /// <summary>
         /// リソースを取得する
@@ -108,6 +121,12 @@ namespace mtgb
     template<typename ResourceT>
     inline void WindowContextResourceManager::SwapResource(WindowContext context1, WindowContext context2)
     {
+        // 念のため同じウィンドウを指定していないか確認
+        if (context1 == context2)
+        {
+            return;
+        }
+
         // context1,2のResourceCollectionが登録されている確認
         auto itr1 = collectionMap_.find(context1);
         auto itr2 = collectionMap_.find(context2);

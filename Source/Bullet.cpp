@@ -5,23 +5,29 @@ using namespace mtgb;
 
 namespace
 {
-	const float BULLET_SPEED{ 10.f }; // 1秒当たりの移動ピクセルスピード
-	int timer{ 0 };
+	const float BULLET_SPEED{ 100.f }; // 1秒当たりの移動ピクセルスピード
 }
 
-Bullet::Bullet(const Vector3& _position) : GameObject(GameObjectBuilder()
+Bullet::Bullet(const Vector3& _position, const Quaternion& _quaternion, const Type bulletType_) : GameObject(GameObjectBuilder()
 		.SetName("bullet")
 		.SetPosition(_position)
-		.SetRotate({})
+		.SetRotate(_quaternion)
 		.SetScale(Vector3::One())
 		.Build()),
 	pTransform_{ Component<Transform>() },
-	pRb_{ Component<RigidBody>() }
+	pRb_{ Component<RigidBody>() },
+	pCollider_{ Component<Collider>() },
+	type_{ bulletType_ }
 {
-	//hImage_ = Image::Load("Image/bullet.png");
-	hModel_ = Fbx::Load("Model/gCube.fbx");
-	pRb_->velocity_ = { 0, 0, 0 };
-	pTransform_->scale = Vector3(1.f, 1.f, 1.f);
+	hModel_ = Fbx::Load("Model/NewBullet.fbx");
+	massert(hModel_ >= 0 && "弾のモデルの読み込みに失敗");
+
+	pCollider_->type_ = Collider::TYPE_SPHERE;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(0.5f);
+
+	// 3秒経ったら消す
+	Timer::AddAram(3.0f, [this] { DestroyMe(); });
 }
 
 Bullet::~Bullet()
@@ -30,18 +36,11 @@ Bullet::~Bullet()
 
 void Bullet::Update()
 {
-	timer += 1;
-	if (timer >= 300)
-	{
-		timer = 0;
-		DestroyMe();
-	}
-	pRb_->velocity_ = { 0, 0, BULLET_SPEED };
+	pRb_->velocity_ = pTransform_->Forward() * BULLET_SPEED;
 }
 
 void Bullet::Draw() const
 {
-
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-
+	pCollider_->Draw();
 }

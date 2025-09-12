@@ -5,29 +5,80 @@
 #include "Draw.h"
 #include "Debug.h"
 
-mtgb::Collider::Collider(const EntityId _entityId) :
-	IComponent{ _entityId },
-	pTransform_{ &Transform::Get(_entityId) }
+namespace
 {
-	// BoundingSphereを初期化
-	computeSphere_ = DirectX::BoundingSphere();
+	mtgb::Matrix4x4 matrix{};
+}
+
+mtgb::Collider::Collider(EntityId _entityId) 
+	: IComponent{ _entityId }
+	, pTransform_{&Transform::Get(_entityId)}
+	, isStatic_{false}
+	, colliderTag_{ColliderTag::GAME_OBJECT}
+{
+}
+
+
+
+mtgb::Collider::Collider(EntityId _entityId, ColliderTag _colliderTag)
+	: IComponent{ _entityId }
+	, colliderTag_{_colliderTag}
+{
+
+	switch (_colliderTag)
+	{
+		// 現在はゲームオブジェクトは動的、ステージは静的と断定しているが
+		// 動的なステージなども追加されるかもしれないので注意
+	case ColliderTag::GAME_OBJECT:
+		isStatic_ = false;
+		pTransform_ = &Transform::Get(_entityId);
+		break;
+	case ColliderTag::STAGE:
+		isStatic_ = true;
+		pTransform_ = nullptr;
+		break;
+	}
+	
 }
 
 mtgb::Collider::~Collider()
 {
 }
 
-void mtgb::Collider::InitializeBoundingSphere()
+void mtgb::Collider::UpdateBoundingData()
 {
-	if (type_ == TYPE_SPHERE)
+	switch (type_)
 	{
-		// Transformから現在の位置を取得してBoundingSphereを更新
-		static Matrix4x4 matrix{};
-		pTransform_->GenerateWorldMatrix(&matrix);
-		Vector3 worldPosition = sphere_.offset_ * matrix;
+	case TYPE_SPHERE:
+		UpdateBoundingSphere();
+		break;
+	case TYPE_AABB:
+		UpdateBoundingBox();
+		break;
+	case TYPE_CAPSULE:
+		// TODO: カプセル初期化
+		break;
+	}
+}
+
+void mtgb::Collider::UpdateBoundingSphere()
+{
+	// Transformから現在の位置を取得してBoundingSphereを更新
+	
+	//pTransform_->GenerateWorldMatrix(&matrix);
 		
-		computeSphere_.Center = DirectX::XMFLOAT3(worldPosition.x, worldPosition.y, worldPosition.z);
-		computeSphere_.Radius = sphere_.radius_;
+	//computeSphere_.Center = pTransform_->position + computeSphere_.Center;
+	//computeSphere_.Center = Vector3(computeSphere_.Center) * matrix;
+	computeSphere_.Center = pTransform_->position;
+}
+
+void mtgb::Collider::UpdateBoundingBox()
+{
+	if (!isStatic_)
+	{
+		/*pTransform_->GenerateWorldMatrix(&matrix);
+		computeBox_.Center = Vector3(computeBox_.Center) * matrix;*/
+		computeBox_.Center = pTransform_->position;
 	}
 }
 
@@ -35,42 +86,43 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 {
 	using DirectX::XMVector3TransformCoord;
 
-	static Matrix4x4 matrix{};
+	// ステージ同士は接触しないものとする
+	if (colliderTag_ == ColliderTag::STAGE && _other.colliderTag_ == ColliderTag::STAGE)
+	{
+		return false;
+	}
+
 	if (type_ == _other.type_)
 	{
 		if (type_ == TYPE_SPHERE)
 		{
-			pTransform_->GenerateWorldMatrix(&matrix);
-			Vector3 worldPosition{ sphere_.offset_ * matrix };
+			//pTransform_->GenerateWorldMatrix(&matrix);
+			//Vector3 worldPosition{ Vector3(computeSphere_.Center) * matrix };
 
-			_other.pTransform_->GenerateWorldMatrix(&matrix);
-			Vector3 otherWorldPosition{ _other.sphere_.offset_ * matrix };
+			//_other.pTransform_->GenerateWorldMatrix(&matrix);
+			//Vector3 otherWorldPosition{ (_other.computeSphere_.Center) * matrix };
 
-			float distance{ (otherWorldPosition - worldPosition).Size() };
-			float hitDistance{ sphere_.radius_ + _other.sphere_.radius_ };
+			//float distance{ (otherWorldPosition - worldPosition).Size() };
+			//float hitDistance{ computeSphere_.Radius + _other.computeSphere_.Radius};
 
-			//return computeSphere_.Intersects(_other.computeSphere_);
-
-			// 距離が双方の球の半径よりも小さければ当たっている
-			return (distance <= hitDistance);
-
-			//DirectX::ContainmentType type{ computeSphere_.Contains(_other.computeSphere_) };
-			//return type != DirectX::ContainmentType::DISJOINT;
+			//// 距離が双方の球の半径よりも小さければ当たっている
+			//return (distance <= hitDistance);
+			return computeSphere_.Intersects(_other.computeSphere_);
 		}
-		else if (type_ == TYPE_CAPSULE)
+		else if (type_ == TYPE_AABB)
 		{
-			// TODO: カプセル同士の当たり判定
+			return computeBox_.Intersects(_other.computeBox_);
 		}
 	}
 	else
 	{
 		if (type_ == TYPE_SPHERE)
-		{
-			// TODO: 球とカプセルの当たり判定
+		{	
+			return computeSphere_.Intersects(_other.computeBox_);
 		}
-		else if (type_ == TYPE_CAPSULE)
+		else if (type_ == TYPE_AABB)
 		{
-			// TODO: カプセルと球の当たり判定
+			return computeBox_.Intersects(_other.computeSphere_);
 		}
 	}
 
@@ -79,9 +131,13 @@ bool mtgb::Collider::IsHit(const Collider& _other) const
 
 bool mtgb::Collider::IsHit(const Vector3& _origin, const Vector3& _dir, float* dist)
 {
+	/////
+	// DirectXCollision.hのBoundingSphere::Intersectsをコピペした。
+	// 何故かIntersectsに実引数が正常に渡されないから。
+	/////
 	using namespace DirectX;
 	// まずBoundingSphereを最新状態に更新
-	const_cast<Collider*>(this)->InitializeBoundingSphere();
+	//const_cast<Collider*>(this)->UpdateBoundingData();
 	
 	// 方向ベクトルを正規化（元のベクトルは保持）
 	Vector3 normalizedDir = Vector3::Normalize(_dir);
@@ -173,12 +229,12 @@ bool mtgb::Collider::IsHit(const Vector3& _center, float _radius) const
 	if (type_ == TYPE_SPHERE)
 	{
 		pTransform_->GenerateWorldMatrix(&matrix);
-		Vector3 worldPosition{ sphere_.offset_ * matrix };
+		Vector3 worldPosition{ Vector3(computeSphere_.Center) * matrix };
 
 		// 引数で球を作る
 
 		float distance{ (_center - worldPosition).Size() };
-		float hitDistance{ sphere_.radius_ + _radius };
+		float hitDistance{ computeSphere_.Radius + _radius };
 
 		// 距離が双方の球の半径よりも小さければ当たっている
 		return (distance <= hitDistance);
@@ -192,20 +248,75 @@ bool mtgb::Collider::IsHit(const Vector3& _center, float _radius) const
 	return false;
 }
 
+void mtgb::Collider::SetCenter(const Vector3& _center)
+{
+	if (type_ == TYPE_AABB)
+	{
+		computeBox_.Center = _center;
+	}
+	else
+	{
+		computeSphere_.Center = _center;
+	}
+}
+
+void mtgb::Collider::SetExtents(const Vector3& _extents)
+{
+	computeBox_.Extents = _extents;
+}
+
+void mtgb::Collider::SetRadius(float _radius)
+{
+	computeSphere_.Radius = _radius;
+}
+
 void mtgb::Collider::Draw() const
 {
 	static Transform copyTransform{};
+
+	//Draw::SetShaderOnce(ShaderType::Debug3D);
+
 	switch (type_)
 	{
 	case mtgb::Collider::TYPE_SPHERE:
 		copyTransform = *pTransform_;
-		copyTransform.scale = Vector3::One() * sphere_.radius_;
-		copyTransform.position += sphere_.offset_;
+		copyTransform.scale *= Vector3::One() * computeSphere_.Radius;
+		//copyTransform.position += computeSphere_.Center;
 		copyTransform.Compute();
-		Draw::SetShaderOnce(ShaderType::Debug3D);
-		Draw::FBXModel(hSphereModel_, copyTransform, 0);
+		Draw::FBXModel(hSphereModel_, copyTransform, 0,ShaderType::Debug3D);
 		break;
 	case mtgb::Collider::TYPE_CAPSULE:
+		break;
+	case mtgb::Collider::TYPE_AABB:
+
+
+		if (!isStatic_)
+		{
+			copyTransform = *pTransform_;
+		}
+		else
+		{
+			copyTransform.parent = INVALD_ENTITY;
+		}
+		
+		// 軸並行なので回転はなし
+		copyTransform.rotate = Quaternion{};
+
+		if (isStatic_)
+		{
+			// 静的、transform不要なのでそのまま代入
+			copyTransform.position = computeBox_.Center;
+			copyTransform.scale = computeBox_.Extents * 2.0f;
+		}
+		else
+		{
+			// transformに合わせて位置、サイズを調整
+			//copyTransform.position += computeBox_.Center;
+			copyTransform.scale *= computeBox_.Extents * 2.0f;
+		}
+		
+		copyTransform.Compute();
+		Draw::FBXModel(hBoxModel_, copyTransform, 0, ShaderType::Debug3D);
 		break;
 	default:
 		break;
@@ -213,3 +324,4 @@ void mtgb::Collider::Draw() const
 }
 
 mtgb::FBXModelHandle mtgb::Collider::hSphereModel_{ mtgb::INVALID_HANDLE };
+mtgb::FBXModelHandle mtgb::Collider::hBoxModel_{ mtgb::INVALID_HANDLE };

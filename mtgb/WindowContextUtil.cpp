@@ -4,6 +4,8 @@
 #include "Direct3DResource.h"
 #include "ISystem.h"
 #include "Screen.h"
+#include "Direct2DResource.h"
+
 using namespace mtgb;
 
 /// <summary>
@@ -25,34 +27,19 @@ HWND WinCtxRes::GetHWND(WindowContext ctx)
 	return WinCtxRes::Get<WindowResource>(ctx).GetHWND();
 }
 
-void mtgb::WinCtxRes::SetFullscreen(bool _fullscreen, WindowContext _ctx)
+void mtgb::WinCtxRes::SwapWindow(WindowContext _ctx1, WindowContext _ctx2)
 {
-	if (_fullscreen)
-	{
-		Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).GetWindowInfo();
-	}
-	Game::System<WinCtxResManager>().Get<DXGIResource>(_ctx).SetFullscreen(_fullscreen);
-
-	RECT monitorRect = WinCtxRes::Get<DXGIResource>(_ctx).GetAssignedMonitorRect();
-
-	Game::System<WinCtxResManager>().Get<WindowResource>(_ctx).SetFullScreen(_fullscreen,monitorRect);
-
-	UINT width, height;
-	if (_fullscreen)
-	{
-		width = monitorRect.right - monitorRect.left; 
-		height = monitorRect.bottom - monitorRect.top;
-	}
-	else
-	{
-		Vector2Int initialSize = Game::System<Screen>().GetInitialSize();
-		width = static_cast<UINT>(initialSize.x);
-		height = static_cast<UINT>(initialSize.y);
-	}
-	Game::System<WindowManager>().ResizeWindow(_ctx, width,height);
+	Game::System<WinCtxResManager>().SwapResource<WindowResource>(_ctx1, _ctx2);
+	Game::System<WinCtxResManager>().SwapResource<DXGIResource>(_ctx1,_ctx2);
+	Game::System<WinCtxResManager>().SwapResource<Direct3DResource>(_ctx1, _ctx2);
+	Game::System<WinCtxResManager>().SwapResource<Direct2DResource>(_ctx1, _ctx2);
 }
+
+
+
+
 
 void WinCtxRes::ChangeResource(WindowContext ctx)
 {
-	Game::System<WinCtxResManager>().ChangeResource(ctx);
+	Game::System<WinCtxResManager>().ChangeActiveResource(ctx);
 }

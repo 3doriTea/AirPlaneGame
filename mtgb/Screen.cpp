@@ -41,10 +41,14 @@ const mtgb::Vector2Int mtgb::Screen::GetInitialSize() const
 	return initialSize_;
 }
 
+
+
 void mtgb::Screen::SetSize(int _width, int _height)
 {
 	size_.x = _width;
 	size_.y = _height;
 
 	sizeRatio_ = { (static_cast<float>(size_.x) / initialSize_.x),static_cast<float>(size_.y) / initialSize_.y };
+
+	
 }

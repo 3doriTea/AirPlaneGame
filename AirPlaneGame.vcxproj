@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DrawScreenUtility.cpp" />
     <ClCompile Include="ImGui\GraphEditor.cpp" />
     <ClCompile Include="ImGui\ImCurveEdit.cpp" />
     <ClCompile Include="ImGui\ImGradient.cpp" />
@@ -43,6 +42,7 @@
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
+    <ClCompile Include="mtgb\ScoreManager.cpp" />
     <ClCompile Include="mtgb\TerrainReader.cpp" />
     <ClCompile Include="mtgb\TimeLimit.cpp" />
     <ClCompile Include="mtgb\Trail.cpp" />
@@ -159,7 +159,10 @@
     <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
-    <ClCompile Include="Source\ScoreManager.cpp" />
+    <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
+    <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
+    <ClCompile Include="Source\PlayScene\Gun.cpp" />
+    <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
@@ -190,14 +193,15 @@
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
+    <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
+    <ClCompile Include="Source\TutorialScene\ToPlayTimer.cpp" />
     <ClCompile Include="Source\TutorialScene\TutorialScene.cpp" />
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DrawScreenUtility.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
@@ -238,10 +242,14 @@
     <ClInclude Include="mtgb\RectContainsInfo.h" />
     <ClInclude Include="mtgb\ReflectionInfo.h" />
     <ClInclude Include="mtgb\RenderSystem.h" />
+    <ClInclude Include="mtgb\ScoreManager.h" />
     <ClInclude Include="mtgb\ShowAttributes.h" />
     <ClInclude Include="mtgb\ShowFunc.h" />
     <ClInclude Include="mtgb\ShowType.h" />
-    <ClInclude Include="mtgb\TerrainReader.h" />
+    <ClInclude Include="mtgb\TerrainReader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="mtgb\TextAlignment.h" />
     <ClInclude Include="mtgb\TimeLimit.h" />
     <ClInclude Include="mtgb\Trail.h" />
@@ -382,7 +390,10 @@
     <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
-    <ClInclude Include="Source\ScoreManager.h" />
+    <ClInclude Include="Source\PlayScene\EnemiesController.h" />
+    <ClInclude Include="Source\PlayScene\EnemyAI.h" />
+    <ClInclude Include="Source\PlayScene\Gun.h" />
+    <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />
@@ -416,9 +427,11 @@
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
+    <ClInclude Include="Source\TutorialScene\ImageAnimator.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />
+    <ClInclude Include="Source\TutorialScene\ToPlayTimer.h" />
     <ClInclude Include="Source\TutorialScene\TutorialScene.h" />
     <ClInclude Include="Source\VVPlayer.h" />
     <ClInclude Include="Source\WingEffect.h" />
@@ -495,6 +508,16 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Terrain.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Trail.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>

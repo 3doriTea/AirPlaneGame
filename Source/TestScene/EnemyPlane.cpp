@@ -15,6 +15,7 @@ namespace
 	const float ENEMY_SCALE{ 0.5f }; // スケール
 	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
+	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
 }
 
 EnemyPlane::EnemyPlane(
@@ -26,7 +27,8 @@ EnemyPlane::EnemyPlane(
 	.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
-	pCollider_{ Component<Collider>() },
+	pCollider_{ Component<Collider>()},
+	//pCollider_{ Component<Collider>()},
 	pTarget_{ &Transform::Get(_playerPlane) },
 	speed_{ 10.0f },
 	health_{},
@@ -34,21 +36,27 @@ EnemyPlane::EnemyPlane(
 	lockOnDistance_{ 30.0f }
 {
 	pCollider_->type_ = Collider::TYPE_SPHERE;
-	pCollider_->sphere_.offset_ = Vector3::Zero();
-	pCollider_->sphere_.radius_ = 1.0f;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(1.0f);
 	timeSinceLastshot_ = 0.0f;
 	
 	//hText = Text::Load("apple", 72);
+	//hModel_ = Fbx::Load("Model/Terrain.fbx");
 	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
+			GameObject* pTarget{ FindGameObject(_targetId) };
+			if (pTarget == nullptr)
+			{
+				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
+				return;
+			}
 			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			GameObject* pTarget{ FindGameObject(_targetId) };
 
-			massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
+			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
 			if (pTarget->GetName() == "PlayerBullet")
 			{
 				pTarget->DestroyMe();
@@ -74,6 +82,8 @@ void EnemyPlane::Update()
 	{
 		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
 		{
+			// スコア加算
+			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
 			DestroyMe();
 			return;
 		}

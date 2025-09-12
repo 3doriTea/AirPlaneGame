@@ -44,11 +44,11 @@ namespace mtgb
 		HWND GetHWND(WindowContext ctx);
 
 		/// <summary>
-		/// そのウィンドウのフルスクリーンを制御する
+		/// <para> 二つのウィンドウの描画リソースを切り替える </para>
+		/// <para> 入力やカメラなどは切り換えない </para>
 		/// </summary>
-		/// <param name="_fullscreen"></param>
-		/// <param name="_ctx"></param>
-		void SetFullscreen(bool _fullscreen, WindowContext _ctx);
-
+		/// <param name="_ctx1"></param>
+		/// <param name="_ctx2"></param>
+		void SwapWindow(WindowContext _ctx1 = WindowContext::First, WindowContext _ctx2 = WindowContext::Second);
 	}
 }

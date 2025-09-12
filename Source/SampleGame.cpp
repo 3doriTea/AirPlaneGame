@@ -55,7 +55,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 
 	_register.Set<ImGuiRenderer>(SystemUpdateType::Frame);
-
+	_register.Set<ScoreManager>(SystemUpdateType::Frame);
 
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 
@@ -69,9 +69,9 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	_register.Set<Fbx>(SystemUpdateType::Frame);
 	_register.Set<Text>(SystemUpdateType::Frame);
 
+	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<ColliderCP>(SystemUpdateType::Frame, true);
 	_register.Set<RigidBodyCP>(SystemUpdateType::Frame, true);
-	_register.Set<TransformCP>(SystemUpdateType::Frame, true);
 	_register.Set<AudioPlayerCP>(SystemUpdateType::Frame, true);
 
 

@@ -18,23 +18,24 @@ namespace mtgb
 
         ResourceCollection() = default;
         ResourceCollection(const ResourceCollection& other);
-        ResourceCollection(ResourceCollection&& other) noexcept;
+        //ResourceCollection(ResourceCollection&& other) noexcept;
         ~ResourceCollection();
 
         ResourceCollection operator=(const ResourceCollection& other);
         WindowContextResource*& operator[](const std::type_index& key);
         const WindowContextResource* operator[](const std::type_index& key) const;
 
+        void Swap(ResourceCollection& other);
         /// <summary>
-        /// ディープコピーする
+        /// コピーする
         /// </summary>
-        /// <param name="other">ディープコピーされるリソース群</param>
+        /// <param name="other">コピーされるリソース群</param>
         void Copy(const ResourceCollection& other);
 
         /// <summary>
-        /// ディープコピーしたものを返す
+        /// ピーしたものを返す
         /// </summary>
-        /// <returns>ディープコピーされたリソース群</returns>
+        /// <returns>コピーされたリソース群</returns>
         ResourceCollection Clone() const;
         void Release();
 

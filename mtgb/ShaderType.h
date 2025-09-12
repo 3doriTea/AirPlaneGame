@@ -16,6 +16,7 @@ namespace mtgb
 		Debug3D,
 		Ground,
 		Trail,
+		Terrain,
 		Max,
 	};
 }

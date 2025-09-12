@@ -10,6 +10,9 @@
 #include "ISystem.h"
 #include "MTStringUtility.h"
 #include "ImGuiRenderer.h"
+#include "WindowContextUtil.h"
+#include "DXGIResource.h"
+#include "Screen.h"
 
 MSG* mtgb::WindowManager::pPeekedMessage_{ nullptr };
 std::map<mtgb::WindowContext, mtgb::WindowConfig> mtgb::WindowManager::windowConfigMap_;
@@ -124,9 +127,55 @@ mtgb::WindowConfig mtgb::WindowManager::GetWindowConfig(WindowContext windowCont
 	return itr->second;
 }
 
+
+
 mtgb::WindowResource& mtgb::WindowManager::GetWindowResource(WindowContext windowContext)
 {
 	return Game::System<WindowContextResourceManager>().Get<WindowResource>(windowContext);
+}
+
+void mtgb::WindowManager::ChangeFullScreenState(WindowContext _ctx)
+{
+	ChangeFullScreenState(_ctx, WinCtxRes::Get<DXGIResource>(_ctx).GetAssignedMonitorRect());
+}
+
+void mtgb::WindowManager::ChangeFullScreenStateNearestMonitor(WindowContext _ctx)
+{
+	WindowResource& winRes = WinCtxRes::Get<WindowResource>(_ctx);
+
+	HMONITOR hMonitor = MonitorFromWindow(winRes.GetHWND(), MONITOR_DEFAULTTONEAREST);
+	MONITORINFO mInfo = {};
+	mInfo.cbSize = sizeof(MONITORINFO);
+
+	if (GetMonitorInfo(hMonitor, &mInfo))
+	{
+		RECT monitorRect = mInfo.rcMonitor;
+		ChangeFullScreenState(_ctx,monitorRect);
+	}
+}
+
+void mtgb::WindowManager::ChangeFullScreenState(WindowContext _ctx, const RECT& _rect)
+{
+	UINT winWidth, winHeight;
+
+	WindowResource& winRes = WinCtxRes::Get<WindowResource>(_ctx);
+	if (!winRes.IsFullScreen())
+	{
+		winRes.SetFullScreen(_rect);
+
+		winWidth = _rect.right - _rect.left;
+		winHeight = _rect.bottom - _rect.top;
+	}
+	else
+	{
+		winRes.SetWindowMode();
+
+		Vector2Int initialSize = Game::System<Screen>().GetInitialSize();
+		winWidth = static_cast<UINT>(initialSize.x);
+		winHeight = static_cast<UINT>(initialSize.y);
+	}
+
+	ResizeWindow(_ctx, winWidth, winHeight);
 }
 
 void mtgb::WindowManager::ResizeWindow(WindowContext _windowContext, UINT _width, UINT _height)
@@ -149,3 +198,59 @@ void mtgb::WindowManager::ResizeWindow(WindowContext _windowContext, UINT _width
 		Game::System<ImGuiRenderer>().OnResize(_width,_height);
 	}
 }
+
+#pragma region SwapWindowPos()
+//void mtgb::WindowManager::SwapWindowPos(WindowContext _ctx1, WindowContext _ctx2)
+//{
+//	DXGIResource& dxgiRes1 = WinCtxRes::Get<DXGIResource>(_ctx1);
+//	DXGIResource& dxgiRes2 = WinCtxRes::Get<DXGIResource>(_ctx2);
+//
+//	RECT monitorRect1 = dxgiRes1.GetAssignedMonitorRect();
+//	RECT monitorRect2 = dxgiRes2.GetAssignedMonitorRect();
+//
+//	WindowResource& winRes1 = WinCtxRes::Get<WindowResource>(_ctx1);
+//	WindowResource& winRes2 = WinCtxRes::Get<WindowResource>(_ctx2);
+//
+//	bool win1IsFullScreen = winRes1.IsFullScreen();
+//	bool win2IsFullScreen = winRes2.IsFullScreen();
+//	
+//	
+//	 
+//	// どちらもフルスクリーン
+//	if (win1IsFullScreen == true && win2IsFullScreen == true)
+//	{
+//		UINT win1Width = monitorRect1.right - monitorRect1.left;
+//		UINT win2Width = monitorRect2.right - monitorRect2.left;
+//
+//		UINT win1Height = monitorRect1.bottom - monitorRect1.top;
+//		UINT win2Height = monitorRect2.bottom - monitorRect2.top;
+//
+//		// スクリーンのサイズが違うか
+//		if (win1Width != win2Width || win1Height != win2Height)
+//		{
+//			// サイズも変更
+//			winRes1.SetFullScreen(monitorRect2);
+//			winRes2.SetFullScreen(monitorRect1);
+//		}
+//		else
+//		{
+//			// 位置だけ変更
+//			winRes1.SetPosition(monitorRect2);
+//			winRes2.SetPosition(monitorRect1);
+//		}
+//	}
+//	// どちらもウィンドウモード
+//	else if (win1IsFullScreen == false && win2IsFullScreen == false)
+//	{
+//		// 位置だけ変更
+//		winRes1.SetPosition(monitorRect2);
+//		winRes2.SetPosition(monitorRect1);
+//	}
+//	// どちらかがフルスクリーン、どちらかがウィンドウモード
+//	else
+//	{
+//		ChangeFullScreenState(_ctx1, monitorRect2);
+//		ChangeFullScreenState(_ctx2, monitorRect1);
+//	}
+//}
+#pragma endregion

@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
+
 class TestScene : public mtgb::GameScene
 {
 public:
@@ -11,4 +12,6 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void End() override;
+private:
+
 };

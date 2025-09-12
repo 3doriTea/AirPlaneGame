@@ -93,13 +93,35 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 	// 画像のサイズをVector2Intに変換してメンバ変数に入れておく
 	size_ = Vector2Int{ static_cast<int>(imageWidth), static_cast<int>(imageHeight) };
 
+	// ピクセルデータを一時的に保存するバッファを用意
+	std::vector<BYTE> pixelData(imageWidth * imageHeight * 4);
+	UINT stride = imageWidth * 4;
+
+	hResult = pFormatConverter->CopyPixels(
+		nullptr,
+		stride,
+		static_cast<UINT>(pixelData.size()),
+		pixelData.data());
+
+	/*hResult = pFormatConverter->CopyPixels(
+		nullptr,
+		hMappedSubresource.RowPitch,
+		imageHeight * hMappedSubresource.RowPitch,
+		static_cast<BYTE*>(hMappedSubresource.pData));*/
+
+	massert(SUCCEEDED(hResult)
+		&& "テクスチャのピクセルコピーに失敗 @Texture2D::Load");
+
+	// ミップマップレベルを計算
+	int mipLevels = static_cast<int>(std::floor(std::log2((std::max)(imageWidth, imageHeight)))) + 1;
+
 	ID3D11Texture2D* pTexture{ nullptr };
 
 	const D3D11_TEXTURE2D_DESC TEXTURE2D_DESC  // テクスチャの設定
 	{
 		.Width = static_cast<UINT>(size_.x),
 		.Height = static_cast<UINT>(size_.y),
-		.MipLevels = 1,
+		.MipLevels = static_cast<UINT>(mipLevels),
 		.ArraySize = 1,
 		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
 		.SampleDesc
@@ -107,10 +129,14 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 			.Count = 1,
 			.Quality = 0
 		},
-		.Usage = D3D11_USAGE_DYNAMIC,
-		.BindFlags = D3D11_BIND_SHADER_RESOURCE,
-		.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
-		.MiscFlags = 0,
+		.Usage = D3D11_USAGE_DEFAULT,
+		//.Usage = D3D11_USAGE_DYNAMIC,
+		.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET,
+		//.BindFlags = D3D11_BIND_SHADER_RESOURCE,
+		.CPUAccessFlags = 0,
+		//.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE,
+		.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS,
+		//.MiscFlags = 0,
 	};
 
 	// 2Dテクスチャを作成する
@@ -124,27 +150,20 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 
 	D3D11_MAPPED_SUBRESOURCE hMappedSubresource{};
 
-	// テクスチャをマップ(登録)する
-	hResult = DirectX11Draw::pContext_->Map(
-		pTexture,
-		0U,
-		D3D11_MAP_WRITE_DISCARD,
-		0U,
-		&hMappedSubresource);
+	//// テクスチャをマップ(登録)する
+	//hResult = DirectX11Draw::pContext_->Map(
+	//	pTexture,
+	//	0U,
+	//	D3D11_MAP_WRITE_DISCARD,
+	//	0U,
+	//	&hMappedSubresource);
 
-	massert(SUCCEEDED(hResult)  // テクスチャのマップに成功
-		&& "テクスチャのマップに失敗 @Texture2D::Load");
+	//massert(SUCCEEDED(hResult)  // テクスチャのマップに成功
+	//	&& "テクスチャのマップに失敗 @Texture2D::Load");
 
-	hResult = pFormatConverter->CopyPixels(
-		nullptr,
-		hMappedSubresource.RowPitch,
-		imageHeight * hMappedSubresource.RowPitch,
-		static_cast<BYTE*>(hMappedSubresource.pData));
+	
 
-	massert(SUCCEEDED(hResult)
-		&& "テクスチャのピクセルコピーに失敗 @Texture2D::Load");
-
-	DirectX11Draw::pContext_->Unmap(pTexture, 0U);
+	/*DirectX11Draw::pContext_->Unmap(pTexture, 0U);*/
 
 	const D3D11_SHADER_RESOURCE_VIEW_DESC SHADER_RESOURCE_VIEW_DESC
 	{
@@ -153,7 +172,7 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 		.Texture2D
 		{
 			.MostDetailedMip = 0U,
-			.MipLevels = 1U,
+			.MipLevels = static_cast<UINT>(mipLevels),
 		}
 	};
 
@@ -165,13 +184,26 @@ void mtgb::Texture2D::Load(const std::wstring& _fileName)
 	massert(SUCCEEDED(hResult)  // テクスチャ用シェーダリソースビューの作成に成功
 		&& "テクスチャ用シェーダリソースビューの作成に失敗  @Texture2D::Load");
 
-	const D3D11_SAMPLER_DESC SAMPLER_DESC  // サンプラーステートの設定
+	// CPU側のデータをGPUへ書き込む
+	DirectX11Draw::pContext_->UpdateSubresource(
+		pTexture,           // リソース
+		0,                  // サブリソースインデックス（最高解像度ミップ）
+		nullptr,            // 更新範囲（全体）
+		pixelData.data(),   // ピクセルデータ
+		stride,             // 行ピッチ
+		0);
+	
+	// ミップマップを生成
+	DirectX11Draw::pContext_->GenerateMips(pShaderResourceView_.Get());
+
+	// サンプラーステートの設定(ミップマップ対応に)
+	const D3D11_SAMPLER_DESC SAMPLER_DESC  
 	{
 		// MEMO: サンプリングするときのフィルタ (かなり種類多い)
 		//     : Unityのテクスチャ設定みたいな感じ
 		//  REF: https://learn.microsoft.com/ja-jp/windows/win32/api/d3d11/ne-d3d11-d3d11_filter
-		.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
-		//.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		//.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
+		.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR,
 		.AddressU = D3D11_TEXTURE_ADDRESS_WRAP,
 		.AddressV = D3D11_TEXTURE_ADDRESS_WRAP,
 		.AddressW = D3D11_TEXTURE_ADDRESS_WRAP,

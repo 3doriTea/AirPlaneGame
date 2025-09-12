@@ -5,7 +5,7 @@ class ResultLogo : public GameObject
 {
 public:
 	ResultLogo();
-	ResultLogo(mtgb::WindowContext context);
+	ResultLogo(mtgb::WindowContext _context);
 	~ResultLogo();
 
 	void Update() override;

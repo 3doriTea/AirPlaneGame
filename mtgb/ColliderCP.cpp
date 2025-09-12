@@ -23,6 +23,10 @@ void mtgb::ColliderCP::Start()
 	Collider::hSphereModel_ = Fbx::Load("Model/SphereCollider.fbx");
 	massert(Collider::hSphereModel_ >= 0
 		&& "SphereColliderƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s @ColliderCP::Start");
+
+	Collider::hBoxModel_ = Fbx::Load("Model/BoxCollider.fbx");
+	massert(Collider::hBoxModel_ >= 0
+		&& "BoxColliderƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s @ColliderCP::Start");
 }
 
 void mtgb::ColliderCP::Update()
@@ -34,19 +38,21 @@ void mtgb::ColliderCP::Update()
 		{
 			pool_[i].onColliders_.clear();
 
-			switch (pool_[i].type_)
-			{
-			case Collider::TYPE_CAPSULE:
-				// TODO: ƒJƒvƒZƒ‹Œ^‚ÌŒvŽZ
-				break;
-			case Collider::TYPE_SPHERE:
-				pool_[i].pTransform_->GenerateWorldMatrix(&matrix);
-				pool_[i].computeSphere_.Center = pool_[i].sphere_.offset_ * matrix;
-				pool_[i].computeSphere_.Radius = pool_[i].sphere_.radius_;
-				break;
-			default:
-				break;
-			}
+			pool_[i].UpdateBoundingData();
+
+			//switch (pool_[i].type_)
+			//{
+			//case Collider::TYPE_CAPSULE:
+			//	// TODO: ƒJƒvƒZƒ‹Œ^‚ÌŒvŽZ
+			//	break;
+			//case Collider::TYPE_SPHERE:
+			//	pool_[i].pTransform_->GenerateWorldMatrix(&matrix);
+			//	pool_[i].computeSphere_.Center = pool_[i].sphere_.offset_ * matrix;
+			//	pool_[i].computeSphere_.Radius = pool_[i].sphere_.radius_;
+			//	break;
+			//default:
+			//	break;
+			//}
 		}
 	}
 
@@ -63,8 +69,8 @@ void mtgb::ColliderCP::Update()
 						pool_[i].onColliders_.insert(&pool_[j]);
 						pool_[j].onColliders_.insert(&pool_[i]);
 						
-						LOGF("Add %d and %d\n", pool_[i].GetEntityId(), pool_[j].GetEntityId());
-						LOGIMGUI("Add %d and %d", pool_[i].GetEntityId(), pool_[j].GetEntityId());
+						/*LOGF("Add %d and %d\n", pool_[i].GetEntityId(), pool_[j].GetEntityId());
+						LOGIMGUI("Add %d and %d", pool_[i].GetEntityId(), pool_[j].GetEntityId());*/
 					}
 				}
 			}
@@ -108,7 +114,7 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vec
 				EntityId id = poolId_[i];
 				if(RaycastHit(_origin,_dir,&distance,id))
 				{
-					Game::System<TransformCP>().TryGet(pTransform, id);
+					//Game::System<TransformCP>().TryGet(pTransform, id);
 					if(distance < nearest)
 					{
 						nearest = distance;

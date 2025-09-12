@@ -13,11 +13,20 @@ namespace mtgb
 		Vector3() :
 			Vector3{ 0, 0, 0 }
 		{}
+		Vector3(const Vector3& _other) :
+			Vector3{_other.x,_other.y,_other.z}
+		{}
+		Vector3(const DirectX::XMFLOAT3& _other) :
+			Vector3{ _other.x,_other.y,_other.z }
+		{}
 		Vector3(const DirectX::XMVECTOR& _v) :
 			Vector3{ _v.m128_f32[0], _v.m128_f32[1], _v.m128_f32[2] }
 		{}
 
 		inline operator DirectX::XMVECTOR() const { return DirectX::XMLoadFloat3(this); }
+
+		//inline Vector3& operator=(const Vector3& _other) { x = _other.x; y = _other.y; z = _other.z; return *this; }
+		//inline Vector3& operator=(const DirectX::XMFLOAT3& _other) { x = _other.x; y = _other.y; z = _other.z; return *this; }
 
 		inline Vector3& operator*=(const DirectX::XMMATRIX _matrix)
 		{
@@ -32,6 +41,8 @@ namespace mtgb
 			return *this;
 		}
 		inline Vector3& operator*=(const float _value) { x *= _value; y *= _value; z *= _value;  return *this; }
+		inline Vector3& operator*=(const Vector3& _other) { x *= _other.x; y *= _other.y; z *= _other.z; return *this; }
+		inline Vector3& operator/=(const Vector3& _other) { x /= _other.y; y /= _other.y; z /= _other.z; return *this; }
 		inline Vector3& operator/=(const float _value) { x /= _value; y /= _value; z /= _value;  return *this; }
 		inline Vector3& operator%=(const float _value) { x = std::fmodf(x, _value); y = std::fmodf(y, _value); z = std::fmodf(z, _value);  return *this; }
 		inline Vector3& operator+=(const Vector3& _other) { x += _other.x; y += _other.y; z += _other.z; return *this; }

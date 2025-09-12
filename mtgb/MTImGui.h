@@ -8,12 +8,20 @@
 #include "TypeRegistry.h"
 #include <optional>
 #include <tuple>
-
+#include <map>
 namespace mtgb
 {
 
 	struct Vector3;
 
+	using ShowItem = std::pair<std::string, std::function<void()>>;
+	using ShowQueue = std::queue<ShowItem>;
+
+	struct ImGuiWindowState
+	{
+		std::string selectedName;
+		bool isOpen = false;
+	};
 	/// <summary>
 		/// ImGuiに表示をする際に使う
 		/// </summary>
@@ -31,10 +39,15 @@ namespace mtgb
 		void Update();
 
 		/// <summary>
+		/// ImGuiウィンドウの表示、キュー内の表示関数の一括実行、ImGuiウィンドウのEnd()までを行う
+		/// </summary>
+		/// <param name="_showType"></param>
+		void ShowWindow(ShowType _showType);
+		/// <summary>
 		/// 表示キューを一括実行し、クリア
 		/// </summary>
 		/// <param name="show"></param>
-		void ShowAll(ShowType show);
+		void ExecuteShowQueue(ShowType show);
 
 		/// <summary>
 		/// 型を指定して表示キューに積む
@@ -94,9 +107,17 @@ namespace mtgb
 			{
 				return "Game View";
 			}
+			if (_showType == ShowType::Settings)
+			{
+				return "Settings";
+			}
 
 			return "None";
 		}
+
+		void SetWindowOpen(ShowType _showType, bool _flag);
+		void SetAllWindowOpen(ShowType _showType, bool _flag);
+		void ShowLog();
 	private:
 		MTImGui() = default;
 		MTImGui(const MTImGui& other) = delete;
@@ -106,7 +127,13 @@ namespace mtgb
 		/// </summary>
 		void SetupShowFunc();
 
+		void ShowListView(ShowType _show);
+
 		std::vector<ImGuiShowable*> showableObjs_;
+		
+		std::map<ShowType, ShowQueue> showQueues_;
+		std::map<ShowType, ImGuiWindowState> imguiWindowStates_; // ShowTypeごとのウィンドウの状態
+
 		std::queue<std::pair<std::string,std::function<void()>>> inspectorShowList_;
 		std::queue<std::function<void()>> sceneViewShowList_;
 

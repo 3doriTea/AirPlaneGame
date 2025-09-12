@@ -15,13 +15,18 @@
 #include "../TestScene/UI/OrderText.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 #include "../TutorialScene/TutorialScene.h"
-
-//#include "TerrainReader.h"
+#include "../PlayScene/QuotaGauge.h"
+#include "../OverScene.h"
+#include "TerrainReader.h"
+#include "TimeLimit.h"
 using namespace mtgb;
 
 namespace mtgb
 {
 	//TerrainReader16* reader16;
+	TerrainReader8* reader8;
+	TimeLimit* timeLimit_;
+
 }
 
 TestScene::TestScene()
@@ -31,6 +36,7 @@ TestScene::TestScene()
 TestScene::~TestScene()
 {
 	//delete reader16;
+	delete reader8;
 }
 
 void TestScene::Initialize()
@@ -40,7 +46,8 @@ void TestScene::Initialize()
 	MTImGui::Instance().Initialize();
 
 	Audio::Clear();
-
+	
+	Game::System<ScoreManager>().ResetScore();
 	Instantiate<SkySphere>();
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
@@ -57,10 +64,10 @@ void TestScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	Instantiate<EnemyPlane>(Vector3{ 0, 3, 40 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
+	/*Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
 	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
+	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);*/
 
 	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
 
@@ -75,8 +82,21 @@ void TestScene::Initialize()
 	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
 	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
 
-	//reader16 = new TerrainReader16();
-	//reader16->ReadTerrain("terrain16.raw");
+	/*reader16 = new TerrainReader16();
+	reader16->ReadTerrain("terrain16.raw");*/
+
+	reader8 = new TerrainReader8();
+	reader8->Initialize();
+
+	Instantiate<QuotaGauge>();
+	
+
+	timeLimit_ = Instantiate<TimeLimit>(60.0f);
+	timeLimit_->StartTimer();
+	timeLimit_->RegisterOnEndTimerCallback([]()
+		{
+			Game::System<SceneSystem>().Move<OverScene>();
+		});
 }
 
 void TestScene::Update()
@@ -98,39 +118,13 @@ void TestScene::Update()
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
-
-	if (InputUtil::GetKeyDown(KeyCode::F11))
-	{
-		static bool flag = false;
-		if (flag)
-		{
-			flag = false;
-		}
-		else
-		{
-			flag = true;
-		}
-		WinCtxRes::SetFullscreen(flag, WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::F10))
-	{
-		static bool flag = false;
-		if (flag)
-		{
-			flag = false;
-		}
-		else
-		{
-			flag = true;
-		}
-		WinCtxRes::SetFullscreen(flag, WindowContext::Second);
-	}
-
 }
 
 void TestScene::Draw() const
 {
-	//reader16->TestDraw();
+	reader8->TestDraw();
+	
+	
 }
 
 void TestScene::End()

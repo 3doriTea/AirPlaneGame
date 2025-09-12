@@ -39,6 +39,8 @@ namespace mtgb
 		static const bool GetGamePadUp(const FlightStickCode _flightStickCode, WindowContext _context = mtgb::WindowContext::Both);
 		//static inline const size_t* GetActiveGamePadID() { return activeGamepadID.data(); }
 
+		static const float GetTrigger(FlightStickAxisCode _flightStickCode, WindowContext _context = mtgb::WindowContext::Both);
+		static const float GetTrigger(PadAxisCode _padCode, WindowContext _context = mtgb::WindowContext::Both);
 		static const float GetAxis(Axis axis,WindowContext _context = mtgb::WindowContext::Both);
 		static const Vector2F GetAxis(WindowContext _context = mtgb::WindowContext::Both);
 

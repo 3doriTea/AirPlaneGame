@@ -65,7 +65,7 @@ void mtgb::Trail::Draw(const yz::TrailEmitter& _trailEmitter)
 			ribbon.data(),
 			sizeof(yz::Vtx) * indexCount);
 
-		LOGF("indexCount_%d\n");
+		//LOGF("indexCount_%d\n");
 
 		DirectX11Draw::pContext_->Unmap(pVertexBuffer_.Get(), 0);
 

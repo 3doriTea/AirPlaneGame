@@ -36,8 +36,7 @@ mtgb::ImGuiRenderer::ImGuiRenderer()
 	,pDepthStencil_{nullptr}
 	,pDepthStencilView_{nullptr}
 	,gameViewRectValid_{false}
-	,winWidth_{900}
-	,winHeight_{700}
+	
 {
 	
 }
@@ -47,6 +46,10 @@ mtgb::ImGuiRenderer::~ImGuiRenderer()
 
 void mtgb::ImGuiRenderer::Initialize()
 {
+	Vector2Int size = Game::System<Screen>().GetSize();
+	winWidth_ = static_cast<UINT>(size.x);
+	winHeight_ = static_cast<UINT>(size.y);
+
 	IMGUI_CHECKVERSION();
 
 	ImGui::CreateContext();
@@ -88,16 +91,11 @@ void mtgb::ImGuiRenderer::Initialize()
 	manipulator_ = new ImGuizmoManipulator();
 
 	CreateD3DResources();
-
-	
-
 }
 
 void mtgb::ImGuiRenderer::Update()
 {
-	//EndFrame();
-	//BeginFrame();
-	//ImGui::ShowDemoWindow();
+
 }
 void mtgb::ImGuiRenderer::UpdateCamera(const char* _name)
 {
@@ -116,14 +114,24 @@ void mtgb::ImGuiRenderer::BeginImGuizmoFrame()
 	ImGuizmo::BeginFrame();
 }
 
-void mtgb::ImGuiRenderer::Begin(const char* _str)
-{
-	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
+//void mtgb::ImGuiRenderer::Begin(const char* _str)
+//{
+//	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
+//}
 
-	ImGui::Begin(_str);
-}
+//void mtgb::ImGuiRenderer::Begin(const char* _str, bool* _isOpen)
+//{
+//	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
+//
+//	ImGui::Begin(_str, _isOpen);
+//}
 
-void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
+//void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
+//{
+//	
+//}
+
+void mtgb::ImGuiRenderer::Begin(const char* _str, bool* _isOpen, WindowFlag _flag)
 {
 	ImGuiWindowFlags flags = 0;
 	if (_flag == WindowFlag::NoMoveWhenHovered)
@@ -133,9 +141,7 @@ void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
 			flags |= ImGuiWindowFlags_NoMove;
 		}
 	}
-	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
-	
-	ImGui::Begin(_str,0,flags);
+	ImGui::Begin(_str, _isOpen, flags);
 }
 
 
@@ -145,11 +151,9 @@ void mtgb::ImGuiRenderer::SetImGuizmoRenderTargetView()
 	//// 全スロットのSRVをクリア
 	//DirectX11Draw::pContext_->PSSetShaderResources(0, 16, nullSRV);
 
-	DirectX11Draw::pContext_->PSSetShaderResources(0, 0, pSRV_.GetAddressOf());
-	Game::System<DirectX11Manager>().ChangeViewport(viewport_);
+	//DirectX11Draw::pContext_->PSSetShaderResources(0, 0, pSRV_.GetAddressOf());
+	//Game::System<DirectX11Manager>().ChangeViewport(viewport_);
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
-
-
 }
 void mtgb::ImGuiRenderer::SetGameViewCamera()
 {
@@ -342,21 +346,27 @@ void mtgb::ImGuiRenderer::CreateD3DResources()
 		.Format = DXGI_FORMAT_R8G8B8A8_UNORM,
 		.SampleDesc = { .Count = 1 },
 		.Usage = D3D11_USAGE_DEFAULT,
-		.BindFlags = D3D11_BIND_RENDER_TARGET
+		.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE
 	};
 	
 	HRESULT hResult = device->CreateTexture2D(&desc, nullptr, pTexture_.ReleaseAndGetAddressOf());
+	massert(SUCCEEDED(hResult) && "CreateTexture2Dに失敗 @ImGuiRenderer::CreateD3DResources");
+
 	hResult = device->CreateRenderTargetView(pTexture_.Get(), nullptr, pRenderTargetView_.ReleaseAndGetAddressOf());
+	massert(SUCCEEDED(hResult) && "CreateRenderTargetViewに失敗 @ImGuiRenderer::CreateD3DResources");
 
 	// SRV用テクスチャ作成
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	hResult = device->CreateTexture2D(&desc, nullptr, pSRVTexture_.GetAddressOf());
-	hResult = device->CreateShaderResourceView(pSRVTexture_.Get(), nullptr, pSRV_.ReleaseAndGetAddressOf());
+	//desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	//hResult = device->CreateTexture2D(&desc, nullptr, pTexture_.GetAddressOf());
+	//massert(SUCCEEDED(hResult) && "CreateTexture2Dに失敗 @ImGuiRenderer::CreateD3DResources");
+
+	hResult = device->CreateShaderResourceView(pTexture_.Get(), nullptr, pSRV_.ReleaseAndGetAddressOf());
+	massert(SUCCEEDED(hResult) && "CreateShaderResourceViewに失敗 @ImGuiRenderer::CreateD3DResources");
 
 	// 深度ステンシルと深度ステンシルビューを作成
 	Game::System<DirectX11Manager>().CreateDepthStencilAndDepthStencilView(
 		Vector2Int(static_cast<int>(winWidth_), static_cast<int>(winHeight_)),
-		pDepthStencil_.ReleaseAndGetAddressOf(), pDepthStencilView_.ReleaseAndGetAddressOf());
+		pTexture_.GetAddressOf(), pDepthStencilView_.ReleaseAndGetAddressOf());
 
 	//ImGui_ImplDX11_CreateDeviceObjects();
 }

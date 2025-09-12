@@ -10,6 +10,12 @@
 #include "MTImGui.h"
 #include "RenderSystem.h"
 #include "InputData.h"
+#include "WindowManager.h"
+#include "CameraResource.h"
+#include "InputResource.h"
+#include "DXGIResource.h"
+#include "Direct3DResource.h"
+#include "WindowResource.h"
 
 mtgb::SceneSystem::SceneSystem() :
 	pNextScene_{ nullptr },
@@ -42,21 +48,17 @@ void mtgb::SceneSystem::Update()
 		return;  // シーンがないなら回帰
 	}
 
-	if (InputUtil::GetKeyDown(KeyCode::J))
+	// 更新、描画前にコールバック実行
+	ExecutePendingCallbacks();
+
+
+	if (InputUtil::GetKeyDown(KeyCode::F11))
 	{
-		WinCtxRes::SetFullscreen(true, WindowContext::First);
+		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::First);
 	}
-	if (InputUtil::GetKeyDown(KeyCode::K))
+	if (InputUtil::GetKeyDown(KeyCode::F10))
 	{
-		WinCtxRes::SetFullscreen(false, WindowContext::First);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::N))
-	{
-		WinCtxRes::SetFullscreen(true, WindowContext::Second);
-	}
-	if (InputUtil::GetKeyDown(KeyCode::M))
-	{
-		WinCtxRes::SetFullscreen(false, WindowContext::Second);
+		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::Second);
 	}
 
 	WinCtxRes::ChangeResource(WindowContext::First);
@@ -153,6 +155,20 @@ void mtgb::SceneSystem::Update()
 		{
 			itr++;
 		}
+	}
+}
+
+void mtgb::SceneSystem::RegisterPendingCallback(std::function<void()> _callback)
+{
+	pendingCallbacks_.push(_callback);
+}
+
+void mtgb::SceneSystem::ExecutePendingCallbacks()
+{
+	while (!pendingCallbacks_.empty())
+	{
+		pendingCallbacks_.front()();
+		pendingCallbacks_.pop();
 	}
 }
 

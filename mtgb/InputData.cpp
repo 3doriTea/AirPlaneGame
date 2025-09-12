@@ -6,7 +6,14 @@
 #include "Game.h"
 #include "ISystem.h"
 #include "JoystickProxy.h"
+#include <limits>
 
+
+namespace
+{
+
+	constexpr LONG JOY_AXIS_MAX = 65535;
+}
 
 const bool mtgb::InputUtil::GetKey(const KeyCode _keyCode, WindowContext _context)
 {
@@ -156,6 +163,29 @@ bool mtgb::InputUtil::GetGamePadDownImpl(size_t _index, WindowContext _context)
 
 
 
+
+const float mtgb::InputUtil::GetTrigger(FlightStickAxisCode _flightStickCode, WindowContext _context)
+{
+	const InputData& input = GetInput(_context);
+	switch (_flightStickCode)
+	{
+	case FlightStickAxisCode::Slider: return static_cast<float>(input.joyStateCurrent_.rglSlider[0]) / JOY_AXIS_MAX;
+	default: return 0.0f;
+	}
+}
+
+const float mtgb::InputUtil::GetTrigger(PadAxisCode _padCode, WindowContext _context)
+{
+	const InputData& input = GetInput(_context);
+
+	switch (_padCode)
+	{
+	case PadAxisCode::LeftTrigger: return static_cast<float>(input.joyStateCurrent_.lRy) / JOY_AXIS_MAX;
+	case PadAxisCode::RightTrigger: return static_cast<float>(input.joyStateCurrent_.lRx) / JOY_AXIS_MAX;
+	default: return 0.0f;
+	}
+	
+}
 
 const float mtgb::InputUtil::GetAxis(Axis axis,WindowContext _context)
 {

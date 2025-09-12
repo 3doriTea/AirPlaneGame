@@ -12,9 +12,9 @@ ResultLogo::ResultLogo() : GameObject(GameObjectBuilder()
 	pTransform_->position.y = 3.5f;
 }
 
-ResultLogo::ResultLogo(mtgb::WindowContext context) : ResultLogo()
+ResultLogo::ResultLogo(mtgb::WindowContext _context) : ResultLogo()
 {
-	context_ = context;
+	context_ = _context;
 }
 
 ResultLogo::~ResultLogo()

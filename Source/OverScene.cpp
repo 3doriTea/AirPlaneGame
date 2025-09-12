@@ -4,8 +4,6 @@
 
 namespace
 {
-	constexpr int score = 300; // スコア(仮)
-	constexpr int quota = 100; // ノルマ(仮)
 	bool quotaAchieved = false; //ノルマ達成したか(仮)
 }
 OverScene::OverScene()
@@ -18,10 +16,7 @@ OverScene::~OverScene()
 
 void OverScene::Initialize()
 {
-	if (score >= quota)
-	{
-		quotaAchieved = true;
-	}
+	quotaAchieved = Game::System<ScoreManager>().AchievedQuota();
 }
 
 void OverScene::Update()

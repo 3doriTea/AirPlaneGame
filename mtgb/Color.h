@@ -19,6 +19,7 @@ namespace mtgb
 			GREEN = 0x00ff00,   // 緑色
 			BLUE  = 0x0000ff,   // 青色
 			WHITE  = 0xffffff,  // 白色
+			BLACK  = 0x000000,  // 黒色
 		};
 
 		/// <summary>

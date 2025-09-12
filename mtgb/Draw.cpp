@@ -262,9 +262,9 @@ void mtgb::Draw::OBJModel(const OBJModelHandle _hOBJModel, const Transform* _pTr
 	Game::System<mtgb::OBJ>().Draw((int)_hOBJModel, _pTransform);
 }
 
-void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame)
+void mtgb::Draw::FBXModel(const FBXModelHandle _hFBXModel, const Transform& _pTransform, const int _frame, ShaderType _shaderType)
 {
-	CheckSetShader(ShaderType::FbxParts);
+	CheckSetShader(_shaderType);
 
 	Game::System<mtgb::Fbx>().Draw(_hFBXModel, _pTransform, _frame);
 }

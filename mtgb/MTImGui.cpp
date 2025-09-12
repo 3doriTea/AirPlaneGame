@@ -7,6 +7,12 @@
 #include "SceneSystem.h"
 #include "RectContainsInfo.h"
 #include "RectDetector.h"
+#include <string>
+#include <format>
+#include "WindowContextUtil.h"
+#include "InputResource.h"
+#include "WindowResource.h"
+#include "Debug.h"
 void mtgb::MTImGui::Initialize()
 {
     SetupShowFunc();
@@ -21,7 +27,6 @@ void mtgb::MTImGui::Update()
     
     updatingImGuiShowable_ = true;
 
-    //ImGui::BeginChild("left")
     for (ImGuiShowable* obj : showableObjs_)
     {
         DirectShow([=]()
@@ -36,6 +41,151 @@ void mtgb::MTImGui::Update()
     }
 
     updatingImGuiShowable_ = false;
+
+    // Settingsウィンドウに表示
+    DirectShow([]()
+        {
+            if (ImGui::Button("SwapWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        WinCtxRes::SwapWindow();
+                        // CameraResourceは交換しない
+                        Game::System<WinCtxResManager>().SwapResource<InputResource>();
+                    });
+			}
+
+            if (ImGui::Button("ChangeFullscreenNearestMonitor : FirstWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WindowManager>().ChangeFullScreenStateNearestMonitor(WindowContext::First);
+                    });
+            }
+
+            if (ImGui::Button("ChangeFullscreenNearestMonitor : SecondWindow"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WindowManager>().ChangeFullScreenStateNearestMonitor(WindowContext::Second);
+                    });
+            }
+		}, "Window", ShowType::Settings);
+
+	DirectShow([]()
+		{
+            if (ImGui::Button("EnumJoystick"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<Input>().EnumJoystick();
+
+                    });
+            }
+            if (ImGui::Button("SwapInput"))
+            {
+                Game::System<SceneSystem>().RegisterPendingCallback([]()
+                    {
+                        Game::System<WinCtxResManager>().SwapResource<InputResource>();
+                    });
+
+            }
+			
+
+		}, "Input", ShowType::Settings);
+}
+void mtgb::MTImGui::SetWindowOpen(ShowType _showType, bool _flag)
+{
+    imguiWindowStates_[_showType].isOpen = _flag;
+}
+void mtgb::MTImGui::SetAllWindowOpen(ShowType _showType, bool _flag)
+{
+    for (auto& windowState : imguiWindowStates_)
+    {
+        windowState.second.isOpen = _flag;
+    }
+}
+void mtgb::MTImGui::ShowLog()
+{
+    using mtgb::Debug;
+    const std::list<mtgb::LogEntry>& logs = Game::System<Debug>().GetLog();
+
+    // フィルター用のカテゴリ一覧を作成
+    static std::set<std::string> availableCategories;
+    static std::string selectedCategory = "All";
+
+    // カテゴリを収集
+    availableCategories.clear();
+    availableCategories.insert("All");
+    for (const auto& log : logs)
+    {
+        if (!log.category.empty())
+        {
+            availableCategories.insert(log.category);
+        }
+    }
+
+    ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
+
+    imGui.Begin(Debug::GetName().data());
+
+    // カテゴリフィルター用のコンボボックス
+    if (ImGui::BeginCombo("Category Filter", selectedCategory.c_str()))
+    {
+        for (const auto& category : availableCategories)
+        {
+            bool isSelected = (selectedCategory == category);
+            if (ImGui::Selectable(category.c_str(), isSelected))
+            {
+                selectedCategory = category;
+            }
+            if (isSelected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    static int selectedLog = -1;
+    int idx = 0;
+    int displayIdx = 0;
+
+    for (const mtgb::LogEntry& log : logs)
+    {
+        // フィルター適用
+        if (selectedCategory != "All" && log.category != selectedCategory)
+        {
+            ++idx;
+            continue;
+        }
+
+        std::string text = "[" + log.category + "] " + log.msg + " (" + std::to_string(log.count) + ")";
+
+        if (ImGui::Selectable(text.c_str(), selectedLog == idx))
+        {
+            selectedLog = idx;
+        }
+        ++idx;
+        ++displayIdx;
+    }
+
+    // ログの詳細表示
+    if (selectedLog >= 0)
+    {
+        auto it = logs.begin();
+        std::advance(it, selectedLog);
+
+        ImGui::Begin("Log Details");
+        ImGui::Text("Category: %s", it->category.c_str());
+        ImGui::Text("File: %s", it->file.c_str());
+        ImGui::Text("Line: %d", it->line);
+        ImGui::Text("Function: %s", it->func.c_str());
+        ImGui::End();
+    }
+
+    imGui.End();
+
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
@@ -77,10 +227,11 @@ void mtgb::MTImGui::SetupShowFunc()
             // WCHARの配列を文字列に変換して表示
             char description[256];
             WideCharToMultiByte(CP_UTF8, 0, _target->Description, -1, description, sizeof(description), nullptr, nullptr);
-            ImGui::Text("Description: %s", description);
-
+            ImGui::LabelText("Description", "%s", description);
+            /*std::string highPart = std::to_string(_target->AdapterLuid.HighPart);
+            ImGui::InputText("Adapter LUID:", highPart.data(), highPart.size() + 1, ImGuiInputTextFlags_ReadOnly);
             ImGui::Text("Adapter LUID: %08X-%08X", _target->AdapterLuid.HighPart, _target->AdapterLuid.LowPart);
-            ImGui::Text("Flags: 0x%X", _target->Flags);
+            ImGui::Text("Flags: 0x%X", _target->Flags);*/
         });
 
     Set<DXGI_OUTPUT_DESC>([](DXGI_OUTPUT_DESC* _target, const char* _name)
@@ -88,19 +239,57 @@ void mtgb::MTImGui::SetupShowFunc()
 			// WCHARの配列を文字列に変換して表示
 			char deviceName[64];
 			WideCharToMultiByte(CP_UTF8, 0, _target->DeviceName, -1, deviceName, sizeof(deviceName), nullptr, nullptr);
-			ImGui::Text("Device Name: %s", deviceName);
+			ImGui::LabelText("Device Name","%s" ,deviceName);
 
-			ImGui::Text("Desktop Coordinates: (%d, %d) - (%d, %d)",
-				_target->DesktopCoordinates.left, _target->DesktopCoordinates.top,
-				_target->DesktopCoordinates.right, _target->DesktopCoordinates.bottom);
-
-			ImGui::Text("Attached to Desktop: %s", _target->AttachedToDesktop ? "Yes" : "No");
-
-            // PVOID
-			ImGui::Text("Monitor Handle: %p", _target->Monitor);
-
-
+            ImGui::LabelText("DesktopCoordinates", "(%ld,%ld) - (%ld,%ld)", _target->DesktopCoordinates.left, _target->DesktopCoordinates.top,
+                _target->DesktopCoordinates.right, _target->DesktopCoordinates.bottom);
 		});
+}
+void mtgb::MTImGui::ShowListView(ShowType _show)
+{
+    auto& selectedName = imguiWindowStates_[_show].selectedName;
+    auto& queue = showQueues_[_show];
+
+    bool isSelected = false;
+    std::function<void()> selectedFunc = nullptr;
+
+    ImGui::BeginChild("List", ImVec2(200, 0), true);
+
+    while (!queue.empty())
+    {
+        const std::string& name = queue.front().first;
+        auto& func = queue.front().second;
+
+        if (!isSelected)
+        {
+            isSelected = selectedName == name;
+
+            // コピーキャプチャの場合は値が更新されないので、
+            // 選択済みの名前と一致していたら関数を更新
+            selectedFunc = func;
+        }
+
+        // 選択された項目の名前、表示関数を記録
+        if (ImGui::Selectable(name.c_str(), selectedName == name))
+        {
+            isSelected = true;
+            imguiWindowStates_[_show].selectedName = name;
+            selectedFunc = func;
+        }
+
+        queue.pop();
+    }
+    ImGui::EndChild();
+
+    // Listの横に property表示
+    ImGui::SameLine();
+
+    ImGui::BeginChild("property", ImVec2(0, 0), true);
+    if (selectedFunc && isSelected)
+    {
+        selectedFunc();
+    }
+    ImGui::EndChild();
 }
 void mtgb::MTImGui::DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness)
 {
@@ -122,57 +311,40 @@ void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float
         ImGui::GetWindowDrawList()->AddLine(p1.value(), p2.value(), IM_COL32_WHITE, _thickness);
     }
 }
-void mtgb::MTImGui::ShowAll(ShowType show)
+void mtgb::MTImGui::ShowWindow(ShowType _showType)
 {
-    if (show == ShowType::Inspector)
+    ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
+
+    if (_showType == ShowType::SceneView)
     {
-
-        static std::string selectedName;
-        static std::function<void()> selectedFunc = nullptr;
-
-        bool isSelected = false;
-        ImGui::BeginChild("List", ImVec2(200, 0), true);
-        while (!inspectorShowList_.empty())
-        {
-            const std::string& name = inspectorShowList_.front().first;
-            auto& func = inspectorShowList_.front().second;
-
-            if (!isSelected)
-            {
-                isSelected = selectedName == name;
-
-                // 表示関数がコピーキャプチャのラムダ式の場合値が更新されないので、
-                // 選択済みの名前と表示リストの名前が一致していたら関数を更新
-                selectedFunc = func;
-            }
-
-            if (ImGui::Selectable(name.c_str(),selectedName == name))
-            {
-                isSelected = true;
-                selectedName = name;
-                selectedFunc = func;
-            }
-
-            inspectorShowList_.pop();
-        }
-        ImGui::EndChild();
-
-        ImGui::SameLine();
-
-        ImGui::BeginChild("property", ImVec2(0, 0), true);
-        if (selectedFunc && isSelected)
-        {
-            selectedFunc();
-        }
-        ImGui::EndChild();
+        imGui.Begin(GetName(ShowType::SceneView).data(),&imguiWindowStates_[_showType].isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+        
+        imGui.UpdateCamera(GetName(ShowType::SceneView).data());
+        imGui.RenderSceneView();
+        imGui.SetDrawList();
     }
-    else if (show == ShowType::SceneView)
+    else
+    {
+        imGui.Begin(GetName(_showType).data(), &imguiWindowStates_[_showType].isOpen);
+    }
+
+    ExecuteShowQueue(_showType);
+
+    imGui.End();
+}
+void mtgb::MTImGui::ExecuteShowQueue(ShowType show)
+{
+    if (show == ShowType::SceneView)
     {
         while (!sceneViewShowList_.empty())
         {
             sceneViewShowList_.front()();
             sceneViewShowList_.pop();
         }
+    }
+    else
+    {
+        ShowListView(show);
     }
 }
 
@@ -194,14 +366,17 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 
 void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
-    if (show == ShowType::Inspector)
+    if (show == ShowType::SceneView)
     {
-        inspectorShowList_.emplace(name,func);
-    }
-    else if (show == ShowType::SceneView)
-    {
+        // SceneViewは名前不要
         sceneViewShowList_.push(func);
     }
+    else
+    {
+        showQueues_[show].emplace(name, func);
+        //inspectorShowList_.emplace(name,func);
+    }
+    
 }
 
 

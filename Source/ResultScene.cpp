@@ -7,11 +7,12 @@
 #include <sys/stat.h>
 #include "TimeLimit.h"
 #include "TextBox.h"
-#include "ScoreManager.h"
+
 
 #include "../Source/TestScene/PlayerPlane.h"
 #include "../Source/TestScene/PlayerGunner.h"
 #include "../Source/TestScene/PlayerPilot.h"
+using namespace mtgb;
 
 namespace
 {
@@ -36,9 +37,6 @@ void ResultScene::Initialize()
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1_);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2_);
-
-    ScoreManager::ResetScore();
-    
 
 	Audio::Clear();
 

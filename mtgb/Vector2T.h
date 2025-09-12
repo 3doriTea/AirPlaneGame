@@ -34,7 +34,10 @@ namespace mtgb
 
 #pragma region Žl‘¥‰‰ŽZ
 		inline Vector2T& operator*=(T _scalar) { x *= _scalar; y *= _scalar; return *this; }
+		inline Vector2T& operator*=(const Vector2T& _other) { x *= _other.x; y *= _other.y; return *this; }
 		inline Vector2T& operator/=(T _scalar) { x /= _scalar; y /= _scalar; return *this; }
+		inline Vector2T& operator/=(const Vector2T& _other) { x /= _other.x; y /= _other.y; return *this; }
+
 		inline Vector2T& operator+=(const Vector2T& _other) { x += _other.x; y += _other.y; return *this; }
 		inline Vector2T& operator-=(const Vector2T& _other) { x -= _other.x; y -= _other.y; return *this; }
 #pragma endregion

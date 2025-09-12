@@ -29,6 +29,7 @@
 #include "AssetsManager.h"
 #include "MainWindow.h"
 #include "Screen.h"
+#include "ScoreManager.h"
 #include "DirectX11Manager.h"
 #include "Direct2D/Direct2D.h"
 #include "DirectWrite.h"

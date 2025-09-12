@@ -48,8 +48,10 @@ namespace mtgb
 		void UpdateCamera(const char* _name);
 		void BeginImGuizmoFrame();
 
-		void Begin(const char* _str);
-		void Begin(const char* _str,WindowFlag _flag);
+		
+		
+		
+		void Begin(const char* _str, bool* _isOpen = NULL ,WindowFlag _flag = WindowFlag::None);
 		
 		/// <summary>
 		/// ImGuizmoウィンドウを描画するためにRTVをセット

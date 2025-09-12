@@ -21,7 +21,7 @@ namespace mtgb
 	public:
 		DXGIResource();
 		~DXGIResource();
-		DXGIResource(const DXGIResource& other);
+		//DXGIResource(const DXGIResource& other);
 		void Initialize(WindowContext _windowContext) override;
 		void SetResource() override;
 		void Update() override;
@@ -33,7 +33,7 @@ namespace mtgb
 		/// フルスクリーンの切り替え
 		/// </summary>
 		/// <param name="_fullscreen">trueならフルスクリーンになり、falseならウィンドウモード</param>
-		void SetFullscreen(bool _fullscreen);
+		//void SetFullscreen(bool _fullscreen);
 
 		/// <summary>
 		/// 割り当てられたモニターの矩形を返す
@@ -44,10 +44,16 @@ namespace mtgb
 		ComPtr<IDXGIOutput> pOutput_;
 		ComPtr<IDXGISurface> pDXGISurface_;
 
-		MonitorInfo monitorInfo_;
+		/// <summary>
+		/// モニターの情報を交換する
+		/// </summary>
+		/// <param name="_other"></param>
+		void SwapMonitorInfo(DXGIResource& _other);
 
 		WindowContextResource* Clone() const override;
 	private:
+		
+		MonitorInfo monitorInfo_;
 		bool isMultiMonitor_ = true;
 		bool isBorderlessWindow = true;
 		std::vector<DXGI_MODE_DESC> modeList_;

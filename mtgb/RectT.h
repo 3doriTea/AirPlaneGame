@@ -34,7 +34,15 @@ namespace mtgb
 			width{ static_cast<T>(_width)},
 			height{static_cast<T>(_height)}
 		{ }
-		RectT(const Vector2T<T>& _point, const Vector2T<T>& _size):
+		template<typename U>
+		RectT(const RectT<U>& _other)
+			: x{static_cast<T>(_other.x)}
+			, y{static_cast<T>(_other.y)}
+			, width{static_cast<T>(_other.width)}
+			, height{static_cast<T>(_other.height)}
+		{
+		}
+		RectT(const Vector2T<T>& _point,const Vector2T<T>& _size):
 			point{ _point },
 			size{ _size }
 		{}
@@ -42,6 +50,10 @@ namespace mtgb
 			point{_other.point},
 			size{_other.size}
 		{}
+		RectT(Vector2T<T>&& _point, Vector2T<T>&& _size):
+			point{std::move(_point)},
+			size{std::move(_size)}
+		{ }
 		RectT(RectT&& _other) noexcept :
 			point{ std::move(_other.point) },
 			size{ std::move(_other.size) }
@@ -66,6 +78,8 @@ namespace mtgb
 			}
 			return *this;
 		}
+		
+
 		union
 		{
 			struct

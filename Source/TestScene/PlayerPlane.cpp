@@ -4,7 +4,9 @@ using namespace mtgb;
 
 namespace
 {
-	TextHandle testText_;
+	float defaultSpeed = 3.0f;
+	// 最大まで押し込んだ時の速度
+	float maxTriggerSpeed = 6.0f;
 }
 
 #define __X m128_f32[0]
@@ -17,9 +19,24 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() },
+	pCollider_{Component<Collider>(Collider::ColliderTag::GAME_OBJECT)},
 	vVPlayer_{}
 {
-	testText_ = Text::Load("あいうえお", 72);
+	pCollider_->type_ = Collider::TYPE_SPHERE;
+	pCollider_->SetCenter(Vector3::Zero());
+	pCollider_->SetRadius(1.0f);
+
+	pRB_->OnCollisionEnter([this](EntityId _targetId)
+		{
+			GameObject* pTarget{ FindGameObject(_targetId) };
+			if (pTarget == nullptr)
+			{
+				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId, entityId_, GetName().c_str());
+				return;
+			}
+			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+		});
 }
 
 PlayerPlane::~PlayerPlane()
@@ -97,8 +114,16 @@ void PlayerPlane::Update()
 	//pTransform_->Right()
 	//Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
 
+	// トリガーの押し込み具合
+	float triggerValue = InputUtil::GetTrigger(FlightStickAxisCode::Slider, WindowContext::First);
+	triggerValue = -(triggerValue - 1.0f);
+	
+	// 速度の倍率を計算
+	float speedRatio = defaultSpeed + (maxTriggerSpeed - defaultSpeed) * triggerValue;
+	
 
-	pRB_->velocity_ = pTransform_->Forward() * 3.0f;
+	// 速度を反映
+	pRB_->velocity_ = pTransform_->Forward() * speedRatio;
 
 	MTImGui::Instance().DirectShow([this]() {
 		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");

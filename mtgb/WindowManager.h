@@ -27,8 +27,8 @@ namespace mtgb
 		WindowManager();
 		~WindowManager();
 
-		static HWND CreateWindowContext(WindowContext context);
-		static Vector2Int GetWindowSize(WindowContext context);
+		HWND CreateWindowContext(WindowContext context);
+		Vector2Int GetWindowSize(WindowContext context);
 		
 
 		void Initialize() override;
@@ -50,9 +50,29 @@ namespace mtgb
 		/// <returns>ウィンドウ設定</returns>
 		static WindowConfig GetWindowConfig(WindowContext windowContext);
 		
+		
+		//void SwapWindowPos(WindowContext _ctx1 = WindowContext::First, WindowContext _ctx2 = WindowContext::Second);
 
 		static WindowResource& GetWindowResource(WindowContext windowContext);
 
+		/// <summary>
+		/// <para> フルスクリーン状態を切り替える </para>
+		/// <para> 指定したWindowContextに割り当てられているモニターのサイズに合わせる </para>
+		/// </summary>
+		/// <param name="_ctx">切り替えるウィンドウ</param>
+		static void ChangeFullScreenState(WindowContext _ctx);
+
+		/// <summary>
+		/// ウィンドウが一番近い場所にあるモニターでフルスクリーン状態を切り替える
+		/// </summary>
+		static void ChangeFullScreenStateNearestMonitor(WindowContext _ctx);
+
+		/// <summary>
+		/// <para> フルスクリーン状態を切り替える </para>
+		/// </summary>
+		/// <param name="_ctx">切り替えるウィンドウ</param>
+		/// <param name="_rect"></param>
+		static void ChangeFullScreenState(WindowContext _ctx, const RECT& _rect);
 
 		static void ResizeWindow(WindowContext _windowContext, UINT _width, UINT _height);
 	private:

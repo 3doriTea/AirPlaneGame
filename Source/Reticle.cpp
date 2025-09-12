@@ -18,6 +18,8 @@ namespace
 		0,0,
 		711, 712
 	};  // レティクルの切り取り矩形
+
+	
 }
 
 Reticle::Reticle() : GameObject(GameObjectBuilder()
@@ -29,7 +31,12 @@ Reticle::Reticle() : GameObject(GameObjectBuilder()
 	//pCamera_{ nullptr}
 {
 	hImage_ = Image::Load("Image/Reticle.png");
+
 	reticlePos_ = START_RETICLE_RECT;
+
+	
+
+
 }
 
 Reticle::Reticle(mtgb::WindowContext context) : Reticle()
@@ -59,4 +66,6 @@ void Reticle::Draw() const
 	const Vector2F DRAW_POSITION{ SCREEN_SIZE / 2.0f - DRAW_SIZE / 2.0f };
 	const UIParams UI_PARAM{ .layerFlag = layerFlag_ };
 	Draw::Image(hImage_, { DRAW_POSITION, DRAW_SIZE }, { Vector2F::Zero(), IMAGE_SIZE }, 0.0f);
+
+	
 }

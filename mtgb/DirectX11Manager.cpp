@@ -40,17 +40,20 @@ void mtgb::DirectX11Manager::Update()
 				ImGui::PushID(&desc);
 				TypeRegistry::Instance().CallFunc(&desc, "AdapterDesc");
 				ImGui::PopID();
+				ImGui::Separator();
 			}
-			ImGui::Separator();
+
+			// モニター(DXGIOutput)の情報
 			for (auto& monitorInfo : DirectX11Draw::monitorInfos_)
 			{
 				ImGui::PushID(&monitorInfo);
-				ImGui::Text("assignedIndex:%d",monitorInfo.adapterIndex);
-				ImGui::Text("outputIndex:%d",monitorInfo.outputIndex);
+				ImGui::LabelText("adapterIndex", "%d", monitorInfo.adapterIndex);
+				ImGui::LabelText("outputIndex","%d", monitorInfo.outputIndex);
 				TypeRegistry::Instance().CallFunc(&monitorInfo.desc, "OutputDesc");
 				ImGui::PopID();
+				ImGui::Separator();
 			}
-		}, "Adapter,OutputDesc", ShowType::Inspector);
+		}, "Adapter,OutputDesc", ShowType::Settings);
 }
 
 void mtgb::DirectX11Manager::InitializeCommonResources()
@@ -121,18 +124,18 @@ void mtgb::DirectX11Manager::InitializeCommonResources()
 	{
 		.DepthEnable = TRUE,	//深度テストを行うかどうか
 		.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL,
-		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL,
+		.DepthFunc = D3D11_COMPARISON_LESS_EQUAL, // 深度の比較方法 : LESS_EQUALは深度が元データ以下の場合に成功
 		.StencilEnable = TRUE,  //ステンシルテストを行うかどうか
 		.StencilReadMask = {},
 		.StencilWriteMask = {},
-		.FrontFace
+		.FrontFace // カメラを向いているピクセルの深度、ステンシルテストの結果に対する操作を指定
 		{
-			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
-			.StencilPassOp = D3D11_STENCIL_OP_KEEP,
-			.StencilFunc = D3D11_COMPARISON_ALWAYS,
+			.StencilFailOp = D3D11_STENCIL_OP_KEEP, // ステンシルテスト失敗時
+			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP, // ステンシルテスト成功、深度テスト失敗時
+			.StencilPassOp = D3D11_STENCIL_OP_KEEP, // 深度、ステンシルの両方のテストに成功時
+			.StencilFunc = D3D11_COMPARISON_ALWAYS, // ステンシルデータと既存のステンシルデータを比較する関数(公式のをコピペ)
 		},
-		.BackFace
+		.BackFace // カメラを向いていないピクセルの深度、ステンシルテストの結果に対する操作を指定
 		{
 			.StencilFailOp = D3D11_STENCIL_OP_KEEP,
 			.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP,
@@ -754,6 +757,30 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 		CompileShader(
 			L"Shader/Ground.hlsl",
 			ShaderType::Ground,
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc);
+	}
+
+	// Terrain
+	{
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし
+				.CullMode = D3D11_CULL_BACK,    // カリング: 隠面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Terrain.hlsl",
+			ShaderType::Terrain,
 			INPUT_ELEMENT_DESC_3D,
 			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);

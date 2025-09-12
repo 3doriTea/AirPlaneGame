@@ -42,6 +42,12 @@ public:
 	const bool TryGetNext(SPEECH_ELEMENT& _speechElement);
 
 	/// <summary>
+	/// 現在の読み上げ行数を取得
+	/// </summary>
+	/// <returns>現在の読み上げ行数</returns>
+	const int GetCurrentLine() const { return current_; }
+
+	/// <summary>
 	/// 読み上げが終わったか
 	/// </summary>
 	/// <returns>終わっている true / false</returns>

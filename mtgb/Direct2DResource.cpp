@@ -13,12 +13,12 @@ mtgb::Direct2DResource::~Direct2DResource()
 	Release();
 }
 
-mtgb::Direct2DResource::Direct2DResource(const Direct2DResource& other)
-	:WindowContextResource{ other }
-	,pRenderTarget_{nullptr}
-	,pD2DBrush_{nullptr}
-{
-}
+//mtgb::Direct2DResource::Direct2DResource(const Direct2DResource& other)
+//	:WindowContextResource{ other }
+//	,pRenderTarget_{other.pRenderTarget_}
+//	,pD2DBrush_{other.pD2DBrush_}
+//{
+//}
 
 void mtgb::Direct2DResource::Initialize(WindowContext _windowContext)
 {

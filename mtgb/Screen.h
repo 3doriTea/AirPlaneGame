@@ -2,7 +2,6 @@
 #include "ISystem.h"
 #include "Vector2Int.h"
 #include "Vector2F.h"
-
 namespace mtgb
 {
 	class Screen : public ISystem
@@ -15,7 +14,7 @@ namespace mtgb
 		void Update() override;
 
 		inline const Vector2Int GetSize() const { return size_; }
-		inline const Vector2F GetSizeF() const { return Vector2F{ static_cast<float>(initialSize_.x),static_cast<float>(initialSize_.y) }; }
+		inline const Vector2F GetSizeF() const { return Vector2F{ static_cast<float>(size_.x),static_cast<float>(size_.y) }; }
 		//inline const Vector2Int GetInitialSize() const { return Vector2Int{ initialWidth_,initialHeight_ }; }
 		/// <summary>
 		/// 初期値を1としたときのスクリーンサイズの比率を返す
@@ -24,6 +23,13 @@ namespace mtgb
 		const Vector2F GetSizeRatio() const;
 		const mtgb::Vector2Int GetInitialSize() const;
 
+		
+
+		/// <summary>
+		/// <para> スクリーンのサイズを保持する</para>
+		/// </summary>
+		/// <param name="_width"></param>
+		/// <param name="_height"></param>
 		void SetSize(int _width, int _height);
 
 	private:

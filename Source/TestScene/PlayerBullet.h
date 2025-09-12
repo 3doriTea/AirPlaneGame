@@ -1,25 +1,3 @@
-#pragma
-#include <mtgb.h>
-
-//#define TEMPLATE_GAMEOBJECT_H(NAME)\
-//\
-//class NAME : public mtgb::GameObject\
-//{\
-//public:\
-//	NAME();\
-//	~NAME();\
-//\
-//	void Update() override;\
-//	void Draw() const override;\
-//\
-//private:\
-//	Transform* pTransform_;\
-//	RigidBody* pRigidBody_;\
-//};\
-//
-//
-//TEMPLATE_GAMEOBJECT_H(PlayerBullet)
-
 #pragma once
 #include <mtgb.h>
 
