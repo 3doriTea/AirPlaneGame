@@ -1,12 +1,14 @@
  #include "PlayerPlane.h"
-
+#include <cmath>
 using namespace mtgb;
 
 namespace
 {
 	float defaultSpeed = 3.0f;
-	// Å‘å‚Ü‚Å‰Ÿ‚µž‚ñ‚¾Žž‚Ì‘¬“x
-	float maxTriggerSpeed = 6.0f;
+	float speed = 5.0f;
+	
+	// Å‚‘¬“x
+	float maxSpeed = 15.0f;
 }
 
 #define __X m128_f32[0]
@@ -119,19 +121,19 @@ void PlayerPlane::Update()
 	triggerValue = -(triggerValue - 1.0f);
 	
 	// ‘¬“x‚Ì”{—¦‚ðŒvŽZ
-	float speedRatio = defaultSpeed + (maxTriggerSpeed - defaultSpeed) * triggerValue;
+	float speedRatio = defaultSpeed + (maxSpeed - defaultSpeed) * triggerValue;
+	speed = std::lerp(speed, speedRatio, Time::DeltaTimeF());
 	
 
 	// ‘¬“x‚ð”½‰f
-	pRB_->velocity_ = pTransform_->Forward() * speedRatio;
+	pRB_->velocity_ = pTransform_->Forward() * speed;
 
 	MTImGui::Instance().DirectShow([this]() {
 		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
 		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "Rotation");
+		TypeRegistry::Instance().CallFunc(&pRB_->velocity_, "Velocity");
+		ImGui::InputFloat("Speed", &speed);
 		},"PlayerPlane", ShowType::Inspector);
-	//LOGF("AA:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
-	//LOGF("AXIS(%f, %f, %f) Ang:%f\n", axis.__X, axis.__Y, axis.__Z, localZAngle);
-	//LOGF("Euler(%f, %f, %f) \n", axis.__X, axis.__Y, axis.__Z, localZAngle);
 }
 
 void PlayerPlane::Draw() const

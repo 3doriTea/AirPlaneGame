@@ -6,7 +6,7 @@ int32_t mtgb::ScoreManager::quotaScore_{ 0 };
 
 mtgb::ScoreManager::ScoreManager()
 {
-	quotaScore_ = 200;
+	quotaScore_ = 600;
 }
 
 mtgb::ScoreManager::~ScoreManager()
