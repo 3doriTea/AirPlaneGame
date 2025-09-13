@@ -1,6 +1,6 @@
 #pragma once
 #include <mtgb.h>
-#include "../Bullet.h"
+#include "../ProjectTile.h"
 
 /// <summary>
 /// 銃器の管理システム
@@ -10,10 +10,11 @@ class Gun
 public:
 	struct Setting
 	{
-		float oneShotTimeSec;     // 1発撃ったあとの待機時間(秒)
-		float reloadTimeSec;      // リロード中の待機時間(秒)
-		int bulletCount;          // リロードまでに撃てる弾数
-		Bullet::Type bulletType;  // 弾の種類
+		float oneShotTimeSec;               // 1発撃ったあとの待機時間(秒)
+		float reloadTimeSec;                // リロード中の待機時間(秒)
+		int bulletCount;                    // リロードまでに撃てる弾数
+		ProjectTile::Shooter bulletType;    // 弾の種類（誰が撃つか）
+		ProjectTile::Type projectileType;   // 発射体の種類（BulletかMissile）
 	};
 public:
 	Gun(Setting&& _setting);
@@ -23,10 +24,16 @@ public:
 	/// 銃器の更新処理
 	/// </summary>
 	void Update();
+	
 	/// <summary>
 	/// 撃つ
 	/// </summary>
 	void Shot(const Vector3& _position, const Quaternion& _quaternion);
+	
+	/// <summary>
+	/// 発射（ミサイル用 - ターゲット指定）
+	/// </summary>
+	void Shot(const Vector3& _position, const Quaternion& _quaternion,Transform* _target);
 
 	/// <summary>
 	/// リロードする
@@ -47,6 +54,7 @@ public:
 	const bool IsNeedReload() const { return shotCountLeft_ <= 0; }
 
 private:
+	void ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Transform* _target);
 	Setting setting_;
 	float oneShotTimeLeft_;  // 1発撃ったあとの待機時間(秒)
 	float reloadTimeLeft_;   // リロード中の待機時間(秒)

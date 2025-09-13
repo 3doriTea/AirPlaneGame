@@ -20,7 +20,8 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pPlaneTransform_{ &Transform::Get(_plane) },
 	pTargetingSystem_{}
 {
-	pTransform_->SetParent(_plane);
+	// PlayerGunnerが乗る飛行機のTransformは親に設定しない
+	//pTransform_->SetParent(_plane);
 
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
@@ -31,15 +32,22 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
 	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
+
+	// Raderを初期化
+	pRadarUI_ = new Radar(entityId_, GameObjectLayer::B);
 }
 
 PlayerGunner::~PlayerGunner()
 {
 	delete pTargetingSystem_;
+	delete pRadarUI_;
 }
 
 void PlayerGunner::Update()
 {
+	// 位置を飛行機に同期させる
+	pTransform_->position = pPlaneTransform_->GetWorldPosition();
+
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
 
 #if 1
@@ -125,11 +133,6 @@ void PlayerGunner::Update()
 	pTransform_->rotate = curr;
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
-	Vector3 worldPos{ pTransform_->GetWorldPosition() };
-	Vector3 parentWorldPos{ pTransform_->GetParent()->GetWorldPosition() };
-	//LOGF("G:Pos(%f, %f, %f)\n", pTransform_->position.x, pTransform_->position.y, pTransform_->position.z);
-	//LOGF("G:Pos(%f, %f, %f)  pAA=(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z, parentWorldPos.x, parentWorldPos.y, parentWorldPos.z);
-	//LOGF("G:Pos(%f, %f, %f)\n", worldPos.x, worldPos.y, worldPos.z);
 
 	pTargetingSystem_->SearchTargets();
 	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
@@ -140,6 +143,7 @@ void PlayerGunner::Update()
 
 	if (pRadarUI_)
 	{
+		pRadarUI_->Update();
 		float angle{};
 		using namespace DirectX;
 
@@ -165,4 +169,5 @@ void PlayerGunner::Update()
 void PlayerGunner::Draw() const
 {
 	pTargetingSystem_->DrawUI();
+	pRadarUI_->Draw();
 }

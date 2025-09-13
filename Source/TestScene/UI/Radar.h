@@ -21,4 +21,5 @@ private:
 	ImageHandle hFrame_;  // レーダー補助線の画像
 	Transform* pPlayerTransform_;
 	std::vector<Vector2Int> enemyMarkPos_;
+	std::vector<Vector2Int> missileMarkPos_; // 敵のミサイルの位置
 };

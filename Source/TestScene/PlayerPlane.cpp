@@ -24,6 +24,9 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	pCollider_{Component<Collider>(Collider::ColliderTag::GAME_OBJECT)},
 	vVPlayer_{}
 {
+	// デバッグのためにImGuiのゲーム画面でモデルを表示する
+	layerFlag_ = GameObjectLayer::SceneView;
+	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
 	pCollider_->SetRadius(1.0f);
@@ -36,8 +39,13 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId, entityId_, GetName().c_str());
 				return;
 			}
+			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
+			{
+				LOGIMGUI("%sは%sをくらった!", GetName().c_str(), pTarget->GetName().c_str());
+				ScoreManager::SubtractScore(100);
+				return;
+			}
 			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 		});
 }
 
@@ -112,10 +120,6 @@ void PlayerPlane::Update()
 	}
 
 
-	//Vector3 forward = XMVector3Cross(pTransform_->Right(), Vector3::Down());
-	//pTransform_->Right()
-	//Vector3 angleForward{ XMVector3Cross(pTransform_->Right(), Vector3::Down()) };
-
 	// トリガーの押し込み具合
 	float triggerValue = InputUtil::GetTrigger(FlightStickAxisCode::Slider, WindowContext::First);
 	triggerValue = -(triggerValue - 1.0f);
@@ -138,6 +142,9 @@ void PlayerPlane::Update()
 
 void PlayerPlane::Draw() const
 {
+	// もし描画されない場合はlayerFlag_を確認
+
+	Draw::FBXModel(hModel_, *pTransform_,0);
 }
 
 Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const

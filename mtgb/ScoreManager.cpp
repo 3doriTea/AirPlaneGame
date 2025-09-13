@@ -20,7 +20,7 @@ void mtgb::ScoreManager::Update()
 			ImGui::LabelText("Score","%d", score_);
 		}, "CurrentScore", ShowType::Inspector);
 }
-void mtgb::ScoreManager::AddScore(int32_t _score)
+void mtgb::ScoreManager::AddScore(uint32_t _score)
 {
 	score_ += _score;
 }
@@ -28,6 +28,12 @@ void mtgb::ScoreManager::AddScore(int32_t _score)
 int32_t mtgb::ScoreManager::GetScore()
 {
 	return score_;
+}
+
+void mtgb::ScoreManager::SubtractScore(uint32_t _score)
+{
+	score_ -= _score;
+	score_ = (std::max)(0, score_);
 }
 
 int32_t mtgb::ScoreManager::GetQuotaScore()

@@ -13,15 +13,20 @@ namespace mtgb
 		void Update() override;
 
 		/// <summary>
-		/// スコアを増加する
+		/// スコアの加点を行う
 		/// </summary>
-		static void AddScore(int32_t _score);
+		static void AddScore(uint32_t _score);
 
 		/// <summary>
 		/// 現在のスコアを取得する
 		/// </summary>
 		static int32_t GetScore();
 
+		/// <summary>
+		/// スコアの減点を行う
+		/// </summary>
+		/// <param name="_score"></param>
+		static void SubtractScore(uint32_t _score);
 		/// <summary>
 		/// ノルマのスコアを取得する
 		/// </summary>

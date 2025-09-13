@@ -2,6 +2,7 @@
 
 //mtgb::Transform::Transform()
 //{
+//	Compute();
 //}
 
 mtgb::Transform::~Transform()

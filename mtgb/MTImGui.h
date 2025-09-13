@@ -97,7 +97,7 @@ namespace mtgb
 		/// <param name="_thickness"></param>
 		void DrawVec(const Vector3& _start, const Vector3 & _vec, float _thickness);
 
-		static constexpr std::string_view GetName(ShowType _showType)
+		static const char* GetName(ShowType _showType)
 		{
 			if (_showType == ShowType::Inspector)
 			{

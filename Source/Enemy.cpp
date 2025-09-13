@@ -37,7 +37,8 @@ Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObjec
 			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
-			.bulletType = Bullet::Type::Enemy,
+			.bulletType = ProjectTile::Shooter::Enemy,
+			.projectileType = ProjectTile::Type::Bullet,  // í èÌíeÇégóp
 		}
 	}
 {

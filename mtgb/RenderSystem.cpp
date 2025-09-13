@@ -73,7 +73,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 
 	DirectX11Draw::Begin();
 	imGui.SetGameViewCamera();
-	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B | GameObjectLayer::SceneView); });
 
 	MTImGui::Instance().ShowWindow(ShowType::SceneView);
 

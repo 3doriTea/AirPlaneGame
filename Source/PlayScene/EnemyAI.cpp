@@ -1,5 +1,5 @@
 #include "EnemyAI.h"
-
+#include "MTImGui.h"
 namespace
 {
 	// アクティブ範囲距離
@@ -97,7 +97,7 @@ EnemyAI::EnemyAI()
 				sFight_.Change(SF_AVOID);
 			}
 		})
-		.OnStart(SF_LOOK_AT_PLAYER, [this] { out_.isFire = false; })
+		.OnEnd(SF_LOOK_AT_PLAYER, [this] { out_.isFire = false; })
 
 		.OnUpdate(SF_AVOID, [this]
 		{
@@ -146,6 +146,49 @@ const float EnemyAI::GetToPlayerDistance() const
 	return (input_.playerPos - input_.pSelfTrans->GetWorldPosition()).Size();
 }
 
+void EnemyAI::Update()
+{
+	sMain_.Update(); 
+	MAIN_STATE mainState = sMain_.Current();
+	
+	std::string mainStateStr;
+	switch (sMain_.Current())
+	{
+	case MAIN_STATE::S_FIGHT:
+		mainStateStr = "S_FIGHT";
+		break;
+	case MAIN_STATE::S_SEARCH:
+		mainStateStr = "S_SEARCH";
+		break;
+	case MAIN_STATE::S_SLEEP:
+		mainStateStr = "S_SLEEP";
+		break;
+	default :
+		mainStateStr = "Unknown";
+		break;
+	}
+
+	std::string fightStateStr;
+	switch (sFight_.Current())
+	{
+	case FIGHT_STATE::SF_AVOID:
+		fightStateStr = "SF_AVOID";
+		break;
+	case FIGHT_STATE::SF_LOOK_AT_PLAYER:
+		fightStateStr = "SF_LOOK_AT_PLAYER";
+		break;
+	case FIGHT_STATE::SF_ROUND:
+		fightStateStr = "SF_ROUND";
+		break;
+	default:
+		fightStateStr = "Unknown";
+		break;
+	}
+	MTImGui::Instance().DirectShow([mainStateStr,fightStateStr]() {
+		ImGui::Text("MAIN_STATE : %s",mainStateStr.c_str());
+		ImGui::Text("FIGHT_STATE : %s",fightStateStr.c_str());
+		},"EnemyAI",ShowType::Inspector);
+}
 const bool EnemyAI::IsForwardToPlayerDir() const
 {
 	Vector3 vForward{ input_.pSelfTrans->Forward() };

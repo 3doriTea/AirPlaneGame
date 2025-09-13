@@ -70,14 +70,14 @@ void TargetingSystem::SearchTargets()
 
 		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		
-		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
 		reticleRect.x =  currentTarget->screenPos.x - reticleRadius * ratio.x;
-		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
 		reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
 		reticleRect.width = (reticleRadius * 2.0f);
+		reticleRect.height = (reticleRadius * 2.0f);
+		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
+		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
 		//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
 		//reticleRect.width = reticleRadius * 2.0f * ratio.x;
-		reticleRect.height = (reticleRadius * 2.0f);
 
 	}
 	else
@@ -88,12 +88,20 @@ void TargetingSystem::SearchTargets()
 
 void TargetingSystem::FireAtTarget()
 {
+	Vector3 targetDirection;
+	Quaternion fireDirection;
+
 	if (HasTarget())
 	{
-		Vector3 targetDirection = Vector3::Normalize(currentTarget->worldPos - ownerTransform->GetWorldPosition());
-		Quaternion fireDirection = Quaternion::LookRotation(targetDirection, Vector3::Up());
-		GameObject::Instantiate<Bullet>(ownerTransform->GetWorldPosition(), fireDirection, Bullet::Type::Player);
+		targetDirection = Vector3::Normalize(currentTarget->worldPos - ownerTransform->GetWorldPosition());
 	}
+	// ターゲットがいない場合は正面方向に射撃
+	else
+	{
+		targetDirection = ownerTransform->Forward();
+	}
+	fireDirection = Quaternion::LookRotation(targetDirection, Vector3::Up());
+	GameObject::Instantiate<Bullet>(ownerTransform->GetWorldPosition(), fireDirection, Bullet::Shooter::Player);
 }
 
 mtgb::Vector3 TargetingSystem::GetCurrentTargetPosition() const
