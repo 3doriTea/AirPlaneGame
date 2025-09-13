@@ -64,9 +64,9 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	MTImGui::Instance().ShowWindow(ShowType::Settings);
 
 	// ログ表示
-	MTImGui::Instance().ShowLog();
+	//MTImGui::Instance().ShowLog();
 
-	// SceneView表示f:
+	// SceneView表示
 
 	// RenderTargetViewをImGui用に切り替え
 	imGui.SetImGuizmoRenderTargetView();
