@@ -5,6 +5,7 @@
 #include "ResultLogo.h"
 #include <iostream>
 #include <sys/stat.h>
+#include <string>
 #include "TimeLimit.h"
 #include "TextBox.h"
 
@@ -77,10 +78,9 @@ void ResultScene::Initialize()
         rankingList_ = ranking_->GetRankingList();
     }
 
-    // 仮のスコア
-    ScoreManager::AddScore(1000);
-    int32_t testScore = ScoreManager::GetScore();
-    ranking_->UpdateRanking(rankingList_, testScore);
+    // ランキング更新
+    resultScore_ = ScoreManager::GetScore();
+    ranking_->UpdateRanking(rankingList_, resultScore_);
 
     // 保存
     ms.Seek(mtbin::MemoryStream::SeekDir::Head);
@@ -99,7 +99,8 @@ void ResultScene::Update()
 
 void ResultScene::Draw() const
 {
-	Draw::ImmediateText("あなたのスコア", { 0, 100 }, 48, TextAlignment::center);
+	Draw::ImmediateText("あなたのスコア：", { 150, 100 }, 48, TextAlignment::middleLeft);
+    Draw::ImmediateText(std::to_string(resultScore_), { 200, 100 }, 48, TextAlignment::center);
 	for (auto i = 0; i < rankingList_.size(); ++i)
 	{
 		Draw::ImmediateText(std::to_string(i + 1) + "位: " + std::to_string(rankingList_[i]),
