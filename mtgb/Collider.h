@@ -70,6 +70,7 @@ namespace mtgb
 		void SetCenter(const Vector3& _center);
 		void SetExtents(const Vector3& _extents);
 		void SetRadius(float _radius);
+		ColliderTag GetColliderTag() const { return colliderTag_; }
 	public:
 		ColliderType type_;  // “–‚½‚è”»’è‚ÌŒ`
 

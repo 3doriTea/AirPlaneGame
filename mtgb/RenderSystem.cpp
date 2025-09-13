@@ -64,16 +64,16 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	MTImGui::Instance().ShowWindow(ShowType::Settings);
 
 	// ログ表示
-	//MTImGui::Instance().ShowLog();
+	MTImGui::Instance().ShowLog();
 
-	// SceneView表示
+	// SceneView表示f:
 
 	// RenderTargetViewをImGui用に切り替え
 	imGui.SetImGuizmoRenderTargetView();
 
 	DirectX11Draw::Begin();
 	imGui.SetGameViewCamera();
-	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B); });
+	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A | GameObjectLayer::B | GameObjectLayer::SceneView); });
 
 	MTImGui::Instance().ShowWindow(ShowType::SceneView);
 

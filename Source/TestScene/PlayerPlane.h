@@ -18,6 +18,6 @@ private:
 	RigidBody* pRB_;
 	Collider* pCollider_;
 	Transform* pTransform_;
-
+	FBXModelHandle hModel_;
 	VVPlayer vVPlayer_;
 };

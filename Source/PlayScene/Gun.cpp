@@ -1,4 +1,6 @@
 #include "Gun.h"
+#include "../Bullet.h"
+#include "../Missile.h"
 
 Gun::Gun(Setting&& _setting) :
 	setting_{ std::move(_setting) },
@@ -12,24 +14,12 @@ Gun::Gun(Setting&& _setting) :
 
 void Gun::Shot(const Vector3& _position, const Quaternion& _quaternion)
 {
-	if (IsOneShotCooling())
-	{
-		return;
-	}
-	if (IsReloading())
-	{
-		return;
-	}
+	ShotImpl(_position, _quaternion, nullptr);
+}
 
-	if (IsNeedReload())
-	{
-		Reload();
-		return;
-	}
-
-	shotCountLeft_--;
-	GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.bulletType);
-	oneShotTimeLeft_ += setting_.oneShotTimeSec;
+void Gun::Shot(const Vector3& _position, const Quaternion& _quaternion,Transform* _target)
+{
+	ShotImpl(_position, _quaternion, _target);
 }
 
 void Gun::Update()
@@ -52,4 +42,46 @@ void Gun::Reload()
 	reloadTimeLeft_ = setting_.reloadTimeSec;
 	// åÇÇƒÇÈíeêîÇ‡ÉäÉZÉbÉg
 	shotCountLeft_ = setting_.bulletCount;
+}
+
+void Gun::ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Transform* _target)
+{
+	if (IsOneShotCooling())
+	{
+		return;
+	}
+	if (IsReloading())
+	{
+		return;
+	}
+
+	if (IsNeedReload())
+	{
+		Reload();
+		return;
+	}
+
+	shotCountLeft_--;
+
+	// î≠éÀëÃÇÃéÌóﬁÇ…âûÇ∂Çƒê∂ê¨
+	switch (setting_.projectileType)
+	{
+	case ProjectTile::Type::Bullet:
+		GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.bulletType);
+		break;
+	case ProjectTile::Type::Missile:
+
+		if (_target)
+		{
+			GameObject::Instantiate<Missile>(_position, _quaternion, setting_.bulletType, _target);
+		}
+		else
+		{
+			GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.bulletType);
+		}
+		break;
+
+	}
+
+	oneShotTimeLeft_ += setting_.oneShotTimeSec;
 }

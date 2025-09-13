@@ -6,6 +6,8 @@ namespace
 	const int ENEMY_POS_CAPACITY{ 20 };
 	const int ENEMY_MARK_SIZE_PX{ 10 };
 	const int MARGIN_PX{ 2 };
+	const Color ENEMY_BOX_COLOR = Color::RED;
+	const Color MISSILE_BOX_COLOR = Color::BLACK;
 }
 
 Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObject(GameObjectBuilder()
@@ -50,6 +52,22 @@ void Radar::Update()
 
 		enemyMarkPos_.emplace_back(static_cast<int>(diff.x), -static_cast<int>(diff.z));
 	}
+
+	std::vector<GameObject*> pMissiles{};
+	FindGameObjects("Missile", &pMissiles);
+
+	missileMarkPos_.clear();
+	for (auto& pGameObject : pMissiles)
+	{
+		Transform& missileTransform{ Transform::Get(pGameObject->GetEntityId()) };
+		Vector3 diff{ missileTransform.position };
+		Matrix4x4 mPlayerWorld{};
+		pPlayerTransform_->GenerateWorldMatrix(&mPlayerWorld);
+		mPlayerWorld = DirectX::XMMatrixInverse(nullptr, mPlayerWorld);
+		diff *= mPlayerWorld;
+
+		missileMarkPos_.emplace_back(static_cast<int>(diff.x), -static_cast<int>(diff.z));
+	}
 }
 
 void Radar::Draw() const
@@ -75,6 +93,11 @@ void Radar::Draw() const
 
 	for (auto& markPos : enemyMarkPos_)
 	{
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, 0xff0000, {.depth = 1});
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, {.depth = 1});
+	}
+
+	for (auto& markPos : missileMarkPos_)
+	{
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = 1 });
 	}
 }

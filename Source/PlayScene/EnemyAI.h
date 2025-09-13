@@ -54,7 +54,7 @@ public:
 	/// <summary>
 	/// AIの更新処理をする
 	/// </summary>
-	inline void Update() { sMain_.Update(); }
+	void Update();
 	/// <summary>
 	/// 入力データをセットする
 	/// </summary>

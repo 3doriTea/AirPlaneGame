@@ -13,11 +13,11 @@
 
 // 後方互換性のため、元のマクロも残す
 #define LOGIMGUI(format,...) \
-	//Game::System<Debug>().LogImGui("General",std::source_location::current(),format,__VA_ARGS__)
+	Game::System<Debug>().LogImGui("General",std::source_location::current(),format,__VA_ARGS__)
 
 // カテゴリ指定版の新しいマクロ
 #define LOGIMGUI_CAT(category, format, ...) \
-	//Game::System<Debug>().LogImGui(category, std::source_location::current(), format, __VA_ARGS__)
+	Game::System<Debug>().LogImGui(category, std::source_location::current(), format, __VA_ARGS__)
 
 #else
 
@@ -71,7 +71,7 @@ namespace mtgb
 		}
 	private:
 		static constexpr size_t BUFFER_SIZE{ 1024 };  // ログ出力時の文字列バッファサイズ
-		static constexpr UINT MAX_LOG_COUNT{ 30 };
+		static constexpr UINT MAX_LOG_COUNT{ 3 };
 
 		LogItr RemoveLog(LogItr itr);
 		

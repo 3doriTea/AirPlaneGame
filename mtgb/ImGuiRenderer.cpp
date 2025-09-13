@@ -269,13 +269,15 @@ void mtgb::ImGuizmoManipulator::SelectTransform()
 	EntityId entityId = Game::System<ColliderCP>().RaycastHitAll(origin, direction, distance);
 	if (entityId != INVALD_ENTITY)
 	{
-		pTargetTransform_ = &Game::System<TransformCP>().Get(entityId);
+		pTargetTransform_ = &Transform::Get(entityId);
 	}
 	else
 	{
 		pTargetTransform_ = nullptr;
 	}
 }
+
+
 
 
 void mtgb::ImGuiRenderer::UpdateGameViewRect()

@@ -25,7 +25,7 @@ namespace
 	const int DEFAULT_HP{ 100 };
 
 
-	const float ONE_SHOT_TIME_SEC{ 0.25f };     // 1発撃ったあとの待機時間(秒)
+	const float ONE_SHOT_TIME_SEC{ 1.0f };     // 1発撃ったあとの待機時間(秒)
 	const float RELOAD_TIME_SEC{ 1.0f };      // リロード中の待機時間(秒)
 	const int BULLET_COUNT{ 5 };          // リロードまでに撃てる弾数
 
@@ -57,7 +57,8 @@ EnemyPlane::EnemyPlane(
 			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
-			.bulletType = Bullet::Type::Enemy,
+			.bulletType = ProjectTile::Shooter::Enemy,
+			.projectileType = ProjectTile::Type::Missile,  // 通常弾を使用
 		}
 	},
 	ai_{}
@@ -67,8 +68,6 @@ EnemyPlane::EnemyPlane(
 	pCollider_->SetRadius(2.0f);
 	timeSinceLastshot_ = 0.0f;
 	
-	//hText = Text::Load("apple", 72);
-	//hModel_ = Fbx::Load("Model/Terrain.fbx");
 	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
 
@@ -84,16 +83,16 @@ EnemyPlane::EnemyPlane(
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 
 			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
-			if (pTarget->GetName() == "bullet")
+			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
 			{
-				Bullet* pBullet{ dynamic_cast<Bullet*>(pTarget) };
+				ProjectTile* pProjectile{ dynamic_cast<ProjectTile*>(pTarget) };
 
-				if (pBullet == nullptr)
+				if (pProjectile == nullptr)
 				{
 					return;
 				}
 
-				if (pBullet->GetType() != Bullet::Type::Player)
+				if (pProjectile->GetShooter() != ProjectTile::Shooter::Player)
 				{
 					return;
 				}
@@ -163,7 +162,8 @@ void EnemyPlane::Update()
 	gun_.Update();
 	if (outData.isFire)
 	{
-		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate);
+		//gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate);
+		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
 	}
 
 	Quaternion currentQua{ pTransform_->rotate };
@@ -175,16 +175,7 @@ void EnemyPlane::Update()
 
 	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
 
-	/*if (DirectX::XMVectorGetX(DirectX::XMVector3Dot(toPlayerDir, pTransform_->Right())) < 0)
-	{
-		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, 1) };
-		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
-	}
-	else
-	{
-		Quaternion rotate{ DirectX::XMQuaternionRotationRollPitchYaw(1, 0, -1) };
-		currentQua = Quaternion::SLerp(currentQua, rotate, Time::DeltaTimeF());
-	}*/
+	
 	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 1.0f);
 
 

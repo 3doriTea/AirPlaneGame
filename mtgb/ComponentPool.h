@@ -103,12 +103,14 @@ namespace mtgb
 				return pool_[i];
 			}
 		}
+
 		// プールに存在しないなら新たに追加
 		poolId_.push_back(_entityId);
 		// NOTE: emplace_backで実体をそのまま追加
 		pool_.emplace_back(_entityId, std::forward<Args>(_args)...); // 可変長引数でコンストラクタ呼び出し
 		// 追加したら初期化処理
 		pool_.back().Initialize();
+		assert(poolId_.size() < COMPONENT_CAPACITY);
 		return pool_.back(); // 追加&&初期化したコンポーネントを返す
 	}
 

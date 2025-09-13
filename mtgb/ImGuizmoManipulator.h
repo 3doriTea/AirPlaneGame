@@ -28,13 +28,15 @@ namespace mtgb
 		bool IsMouseInWindow(const char* _name);
 		void GetMouseRay(Vector3* _near, Vector3* _far);
 		void SelectTransform();
-
+		void FollowTarget();
 		std::optional<ImVec2> WorldToImGui(const Vector3& _vec);
 	private:
-		//void DrawLine(const Vector3& _from, const Vector3& _to);
+		
 		void DrawTransformGuizmo();
 		void Calculate();
-		void SpinCamera();
+
+		void SpinCamera(float _distance);
+		
 		void InitializeSpinAnglesFromCurrentPosition();
 		ImGuizmo::OPERATION operation_;
 		ImGuizmo::MODE mode_;
@@ -55,7 +57,9 @@ namespace mtgb
 		};
 		CameraOperation cameraOperation_;
 		bool updatingCameraTransform_;
-		float distance_;
+		bool followTarget_;
+		float spinDistance_;
+		float followDistance_;
 		float spinSpeed_;
 		float moveSpeed_;
 		float rotateSensitivity_;

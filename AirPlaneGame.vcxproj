@@ -159,10 +159,12 @@
     <ClCompile Include="Source\CheckTutorialScene\SkipChecker.cpp" />
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
+    <ClCompile Include="Source\Missile.cpp" />
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\Gun.cpp" />
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
+    <ClCompile Include="Source\ProjectTile.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
@@ -390,10 +392,12 @@
     <ClInclude Include="Source\CheckTutorialScene\SkipChecker.h" />
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
+    <ClInclude Include="Source\Missile.h" />
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\PlayScene\Gun.h" />
     <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
+    <ClInclude Include="Source\ProjectTile.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />

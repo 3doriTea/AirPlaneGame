@@ -317,15 +317,15 @@ void mtgb::MTImGui::ShowWindow(ShowType _showType)
 
     if (_showType == ShowType::SceneView)
     {
-        imGui.Begin(GetName(ShowType::SceneView).data(),&imguiWindowStates_[_showType].isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+        imGui.Begin(GetName(ShowType::SceneView),&imguiWindowStates_[_showType].isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
         
-        imGui.UpdateCamera(GetName(ShowType::SceneView).data());
+        imGui.UpdateCamera(GetName(ShowType::SceneView));
         imGui.RenderSceneView();
         imGui.SetDrawList();
     }
     else
     {
-        imGui.Begin(GetName(_showType).data(), &imguiWindowStates_[_showType].isOpen);
+        imGui.Begin(GetName(_showType), &imguiWindowStates_[_showType].isOpen);
     }
 
     ExecuteShowQueue(_showType);

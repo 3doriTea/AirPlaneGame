@@ -17,7 +17,7 @@ public:
 private:
 	TargetingSystem* pTargetingSystem_;
 	Transform* pTransform_;
-	Transform* pPlaneTransform_;
+	Transform* pPlaneTransform_; // PlayerGunner‚ªæ‚é”òs‹@
 	float angleX_;
 	float angleY_;
 	Radar* pRadarUI_;
