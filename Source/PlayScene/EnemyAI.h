@@ -66,6 +66,17 @@ public:
 	/// <returns>出力データの参照</returns>
 	inline const OutData& GetOutData() const { return out_; }
 
+	/// <summary>
+	/// MAIN_STATEの状態を返す
+	/// </summary>
+	/// <returns></returns>
+	inline const mtstat::MTStat<MAIN_STATE>& GetMainState() const { return sMain_; }
+
+	/// <summary>
+	/// FIGHT_STATEの状態を返す
+	/// </summary>
+	/// <returns></returns>
+	inline const mtstat::MTStat<FIGHT_STATE>& GetFightState() const { return sFight_; }
 private:  // 内部で使う便利系メンバ関数
 	/// <summary>
 	/// プレイヤーまでの距離を取得

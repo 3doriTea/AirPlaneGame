@@ -16,6 +16,7 @@ public:
 	void Draw() const override;
 	void Search();
 	bool LockOnTarget() const;
+	const EnemyAI& GetAI() const { return ai_; }
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
