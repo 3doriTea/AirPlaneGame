@@ -2,6 +2,7 @@
 #include <algorithm>
 #include "Bullet.h"
 #include "DrawScreenUtility.h"
+
 void TargetingSystem::Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize)
 {
 	// Transformê›íË

@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include "MTAssert.h"
+#include "Vector3.h"
 
 namespace mtgb::Mathf
 {
@@ -54,5 +55,92 @@ namespace mtgb::Mathf
 			&& "最小値、最大値を同じ値にできません。ゼロ除算が発生します。 @Mathf::Normalize");
 
 		return (_current - _min) / (_max - _min);
+	}
+
+	/// <summary>
+	/// 正数の中で最小値を求める
+	/// </summary>
+	/// <param name="_a">値a</param>
+	/// <param name="_b">値b</param>
+	/// <returns>正数の中での最小値 / 0</returns>
+	static float PlusMin(float _a, float _b)
+	{
+		if (_a < 0 && _b < 0)
+		{
+			return 0;
+		}
+		if (_a < 0)
+		{
+			return _b;
+		}
+		if (_a < _b)
+		{
+			return _a;
+		}
+		else
+		{
+			return _b;
+		}
+	}
+
+	/// <summary>
+	/// 射撃予測
+	/// </summary>
+	/// <param name="_shotPosition">撃つ座標</param>
+	/// <param name="_targetPosition">ターゲットの座標</param>
+	/// <param name="_targetMove">ターゲットの移動(/s)</param>
+	/// <param name="_bulletSpeed">弾の速度</param>
+	/// <returns>撃って当たる座標</returns>
+	static Vector3 TargetingPosition(Vector3 _shotPosition, Vector3 _targetPosition, Vector3 _targetMove, float _bulletSpeed)
+	{
+		Vector3 toTargetDiff{ _targetPosition - _shotPosition };
+
+		const float A
+		{
+			_targetMove.x * _targetMove.x + _targetMove.y * _targetMove.y + _targetMove.z * _targetMove.z
+			- _bulletSpeed * _bulletSpeed
+		};
+		const float B
+		{
+			2.0f * (toTargetDiff.x * _targetMove.x + toTargetDiff.y * _targetMove.y + toTargetDiff.z + _targetMove.z)
+		};
+		const float C
+		{
+			_targetPosition.x * _targetPosition.x + _targetPosition.y * _targetPosition.y + _targetPosition.z * _targetPosition.z
+		};
+
+		// 0除算防止
+		if (A <= FLT_EPSILON)
+		{
+			if (B <= FLT_EPSILON)
+			{
+				return _targetPosition;
+			}
+			else
+			{
+				return _targetPosition + _targetMove * (-C / B);
+			}
+		}
+
+		// 当たる秒数
+		float sec{};
+		// 解
+		float s1{}, s2{};
+
+		// 2次方程式の解の公式 判別式D
+		const float D{ B * B - 4.0f * A * C };
+		if (D > FLT_EPSILON)
+		{
+			const float E = std::sqrtf(D);
+			s1 = (-B - E) / (2.0f * A);
+			s2 = (-B + E) / (2.0f * A);
+			sec = PlusMin(s1, s2);
+		}
+		else  // 虚数解 == 当たらない
+		{
+			sec = 0;
+		}
+
+		return _targetPosition + _targetMove * sec;
 	}
 }
