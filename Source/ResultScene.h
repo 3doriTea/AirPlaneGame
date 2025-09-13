@@ -22,4 +22,5 @@ private:
 	CameraHandleInScene hCamera2_;
 	Ranking* ranking_;
 	std::vector<int> rankingList_;
+	int32_t resultScore_;
 };
