@@ -10,10 +10,10 @@ namespace mtgb
 	struct RectContainsInfo
 	{
 		Vector3 worldPos{};//ワールド座標での座標
-		Vector2F screenPos{};//スクリーン座標系での座標
+		Vector3 screenPos{};//スクリーン座標系での座標
 		EntityId entityId;
 		RectContainsInfo() = default;
-		RectContainsInfo(Vector3 _worldPos, Vector2F _screenPos,EntityId _entityId)
+		RectContainsInfo(Vector3 _worldPos, Vector3 _screenPos,EntityId _entityId)
 			:worldPos{ _worldPos }
 			,screenPos{ _screenPos}
 			,entityId{_entityId}

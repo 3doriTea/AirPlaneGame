@@ -75,32 +75,26 @@ void TestScene::Initialize()
 	pEnemiesController->Spawan({ 300, 0, 500 });*/
 
 	//Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
-	/*Instantiate<EnemyPlane>(Vector3{ 5, -1, 30 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 0, 5, -10 }, eIdPlayer);
-	Instantiate<EnemyPlane>(Vector3{ 10, 0, 30 }, eIdPlayer);
+	
+	
+	//Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
 
-	Instantiate<OrderText>(eIdPlayer, GameObjectLayer::A);
+	//Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
 
-	Instantiate<Radar>(eIdPlayer, GameObjectLayer::A);
-
-	Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
-	pGunner->SetRadarUI(pGunnerRader);
+	/*Radar* pGunnerRader{ Instantiate<Radar>(eIdPlayer, GameObjectLayer::B) };
+	pGunner->SetRadarUI(pGunnerRader);*/
 
 	Instantiate<HighlightEnemy>();
 
 	ControlTower* pControlTower{ Instantiate<ControlTower>() };
-	pControlTower->SetGunner(pGunner->GetEntityId(), hCamera1);
-	pControlTower->SetPilot(pPilot->GetEntityId(), hCamera2);
-
-	/*reader16 = new TerrainReader16();
-	reader16->ReadTerrain("terrain16.raw");*/
-
+	pControlTower->SetGunner(pGunner->GetEntityId(), WindowContext::First);
+	pControlTower->SetPilot(pPilot->GetEntityId(), WindowContext::Second);
+	
 	reader8 = new TerrainReader8();
 	reader8->Initialize();
 
 	Instantiate<QuotaGauge>();
 	
-
 	timeLimit_ = Instantiate<TimeLimit>(180.0f);
 	timeLimit_->StartTimer();
 	timeLimit_->RegisterOnEndTimerCallback([]()

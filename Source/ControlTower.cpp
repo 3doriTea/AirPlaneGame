@@ -20,15 +20,24 @@ ControlTower::~ControlTower()
 
 void ControlTower::Update()
 {
-	std::string gunnerText = "Gunner : "+ DetectionEnemy(pGunner_.first, pGunner_.second);
-	std::string pilotText = "Pilot : " + DetectionEnemy(pPilot_.first,pPilot_.second);
-
-	MTImGui::Instance().DirectShow([gunnerText,pilotText]()
+	Vector3 enemyPosGunner = Vector3::Zero();
+	if (std::optional<Vector3> pos = DetectionEnemy(pGunner_.first, pGunner_.second); pos != std::nullopt )
+	{
+		enemyPosGunner = *pos;
+	}
+	Vector3 enemyPosPilot = Vector3::Zero();
+	if (std::optional<Vector3> pos = DetectionEnemy(pPilot_.first, pPilot_.second); pos != std::nullopt)
+	{
+		enemyPosPilot = *pos;
+	}
+	
+	MTImGui::Instance().DirectShow([enemyPosGunner,enemyPosPilot]()
 		{
-			ImGui::Text(MultiToUTF8(gunnerText).c_str());
-			ImGui::Text(MultiToUTF8(pilotText).c_str());
+			ImGui::LabelText("enemyPosGunner", "(x,y):(%.3f,%.3f)",enemyPosGunner.x, enemyPosGunner.y);
+			ImGui::LabelText("enemyPosPilot", "(x,y):(%.3f,%.3f)", enemyPosPilot.x, enemyPosPilot.y);
 		}
 	,"ControlTower",ShowType::Inspector);
+
 }
 
 void ControlTower::Draw() const
@@ -47,10 +56,8 @@ void ControlTower::SetPilot(EntityId _id, WindowContext _context)
 	pPilot_.second = _context;
 }
 
-std::string ControlTower::DetectionEnemy(Transform* _transform, WindowContext _context)
+std::optional<Vector3> ControlTower::DetectionEnemy(Transform* _transform, WindowContext _context)
 {
-	std::string ret="";
-
 	// Enemyを取得
 	std::vector<EnemyPlane*> enemies;
 	FindGameObjects<EnemyPlane>(&enemies);
@@ -62,8 +69,9 @@ std::string ControlTower::DetectionEnemy(Transform* _transform, WindowContext _c
 			{
 				auto& mainState = _enemy->GetAI().GetMainState();
 				auto& fightState = _enemy->GetAI().GetFightState();
+				EnemyAI::MAIN_STATE currState = mainState.Current();
 				// 戦闘状態でないならば trueにして破棄
-				if (mainState.Current() != EnemyAI::MAIN_STATE::S_FIGHT)
+				if (currState != EnemyAI::MAIN_STATE::S_FIGHT)
 				{
 					return true;
 				}
@@ -79,26 +87,42 @@ std::string ControlTower::DetectionEnemy(Transform* _transform, WindowContext _c
 		enemies.end()
 		);
 
-	// 一番近くの敵を取得
-	auto itr = std::min_element(
-		enemies.begin(),
-		enemies.end(),
-		[this,_transform](EnemyPlane* a, EnemyPlane* b)
-		{
-			float distanceA = (_transform->position - Transform::Get(a->GetEntityId()).position).Size();
-			float distanceB = (_transform->position - Transform::Get(b->GetEntityId()).position).Size();
-			return distanceA < distanceB;
-		}
-	);
+	// 敵がいないなら
+	if (enemies.empty())
+	{
+		return std::nullopt;
+	}
+
+	// 先頭の敵のEntityIdを取得
+	EntityId enemyId = enemies.front()->GetEntityId();
+
+	// 敵が二体以上いるなら一番近くのを選ぶ
+	if (enemies.size() >= 2)
+	{
+		// 一番近くの敵を取得
+		auto itr =std::min_element(
+			enemies.begin(),
+			enemies.end(),
+			[this,_transform](EnemyPlane* a, EnemyPlane* b)
+			{
+				float distanceA = (_transform->position - Transform::Get(a->GetEntityId()).position).Size();
+				float distanceB = (_transform->position - Transform::Get(b->GetEntityId()).position).Size();
+				return distanceA < distanceB;
+			}
+		);
+		enemyId = (*itr)->GetEntityId();
+	}
 
 	// 方角を計算
 	// プレイヤーの上ベクトル、右ベクトル
 	Vector3 up = _transform->Up();
 	Vector3 right = _transform->Right();
 	Vector3 forward = _transform->Forward();
-	return "";
-	//Transform camera = Game::System<CameraSystem>().GetTransform(_hCamera);
-
+	
+	Transform& enemy = Transform::Get(enemyId);
+	Vector3 enemyScreenPos = Game::System<CameraSystem>().WorldToScreen(enemy.position, _context);
+	
+	return enemyScreenPos;
 	// 敵のスクリーン座標を取得
 	//Game::System<CameraSystem>().Get
 	//for (const auto& enemy : enemies)

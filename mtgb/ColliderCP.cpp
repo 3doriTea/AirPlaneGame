@@ -167,14 +167,14 @@ void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name
 	for (auto& object : pFoundGameObjects)
 	{
 		Vector3 worldPos = object->Component<Transform>()->position;
-		Vector2F screenPos = camSys.WorldToScreen(worldPos, data);
-		if (screenPos.x < 0 || screenPos.y < 0)
+		Vector3 screenPos = camSys.WorldToScreen(worldPos, data);
+		if (screenPos.z < 0)
 			continue;
 		/*if (RectF::Contains(screenPos, RectF(_rect.x ,_rect.y , _rect.width , _rect.height )))
 		{
 			_info->emplace_back(worldPos,screenPos,object->GetEntityId());
 		}*/
-		if (RectF::Contains(screenPos, RectF(_rect.x * ratio.x, _rect.y * ratio.y, _rect.width * ratio.x, _rect.height * ratio.y)))
+		if (RectF::Contains(Vector2F{screenPos.x,screenPos.y}, RectF(_rect.x * ratio.x, _rect.y * ratio.y, _rect.width * ratio.x, _rect.height * ratio.y)))
 		{
 			_info->emplace_back(worldPos, screenPos, object->GetEntityId());
 		}

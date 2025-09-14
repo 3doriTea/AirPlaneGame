@@ -2,6 +2,8 @@
 #include <mtgb.h>
 #include <vector>
 #include <tuple>
+#include <optional>
+
 class ControlTower : public mtgb::GameObject
 {
 public:
@@ -17,6 +19,6 @@ private:
 	std::pair<Transform*, WindowContext> pPilot_;
 	Transform* pPlayerPlaneTransform_;
 	float detectionRadius_;// プレイヤーを原点にして検出をする球の半径
-	std::string DetectionEnemy(Transform* _transform, WindowContext _context);
+	std::optional<Vector3> DetectionEnemy(Transform* _transform, WindowContext _context);
 	std::vector<EntityId> detectedEnemies_;// 検出した敵のID
 };

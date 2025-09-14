@@ -269,7 +269,8 @@ void mtgb::ImGuizmoManipulator::SelectTransform()
 	EntityId entityId = Game::System<ColliderCP>().RaycastHitAll(origin, direction, distance);
 	if (entityId != INVALD_ENTITY)
 	{
-		pTargetTransform_ = &Transform::Get(entityId);
+		// EntityがTransformコンポーネントを持っていない可能性があるのでTryGet
+		Game::System<TransformCP>().TryGet(pTargetTransform_, entityId);
 	}
 	else
 	{

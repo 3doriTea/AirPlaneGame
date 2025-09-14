@@ -89,9 +89,10 @@ void mtgb::CameraSystem::UnregisterDrawCamera(const Transform* pCameraTransform_
 }
 
 
-mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScreenData& _data) const
+mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScreenData& _data) const
 {
-	Vector3 screenPos = DirectX::XMVector3Project(
+	//Vector3 screenPos = DirectX::XMVector3Project(
+	return DirectX::XMVector3Project(
 		_pos,
 		_data.viewport.TopLeftX,
 		_data.viewport.TopLeftY,
@@ -103,13 +104,13 @@ mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScre
 		_data.viewMat,
 		DirectX::XMMatrixIdentity());
 	
-	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
+	/*if (screenPos.z < 0.0f || screenPos.z > 1.0f)
 		return Vector2F(-1, -1);
-	return Vector2F(screenPos.x, screenPos.y);
+	return Vector2F(screenPos.x, screenPos.y);*/
 
 }
 
-mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _context)
+mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _context)
 {
 	const D3D11_VIEWPORT& viewport = WinCtxRes::Get<Direct3DResource>(_context).GetViewport();
 	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_context).GetHCamera();
@@ -118,7 +119,7 @@ mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _co
 	GetProjMatrix(&projMat);
 	GetViewMatrix(&viewMat,hCamera);
 
-	Vector3 screenPos = DirectX::XMVector3Project(
+	return DirectX::XMVector3Project(
 		_pos,
 		viewport.TopLeftX,
 		viewport.TopLeftY,
@@ -130,9 +131,8 @@ mtgb::Vector2F mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _co
 		projMat,
 		DirectX::XMMatrixIdentity());
 	
-	if (screenPos.z < 0.0f || screenPos.z > 1.0f)
-		return Vector2F(-1, -1);
-	return Vector2F(screenPos.x, screenPos.y) * Game::System<Screen>().GetSizeRatio();
+	
+	//return Vector2F(screenPos.x, screenPos.y) * Game::System<Screen>().GetSizeRatio();
 
 }
 

@@ -19,6 +19,7 @@
 #include "MTImGui.h"
 #include <cmath>
 #include <algorithm>
+#include "SceneSystem.h"
 namespace
 {
 	
@@ -324,6 +325,7 @@ void mtgb::ImGuizmoManipulator::FollowTarget()
 {
 	if (pTargetTransform_ && followTarget_)
 	{
+		GameObject* obj = mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(pTargetTransform_->GetEntityId());
 		SpinCamera(spinDistance_);
 	}
 }
