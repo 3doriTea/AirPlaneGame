@@ -72,7 +72,7 @@ void TargetingSystem::SearchTargets()
 		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		
 		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
-		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
+		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, rb.velocity_, Bullet::GetMoveSpeed()) };
 		//currentTarget->worldPos = targetPosition;
 		currentTarget->screenPos = Game::System<CameraSystem>().WorldToScreen(targetPosition, targetDetector.config.windowContext);
 
