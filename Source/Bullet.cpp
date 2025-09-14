@@ -37,3 +37,8 @@ void Bullet::Draw() const
 {
 	ProjectTile::Draw(); // Šî’êƒNƒ‰ƒX‚Ì•`‰æˆ—‚ğŒÄ‚Ño‚µ
 }
+
+const float Bullet::GetMoveSpeed()
+{
+	return BULLET_SPEED;
+}

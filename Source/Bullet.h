@@ -26,4 +26,6 @@ public:
 
 	void Update() override;
 	void Draw() const override;
+
+	static const float GetMoveSpeed();
 };

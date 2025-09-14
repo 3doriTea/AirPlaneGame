@@ -34,12 +34,13 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 
 	// Rader‚ğ‰Šú‰»
-	pRadarUI_ = new Radar(entityId_, GameObjectLayer::B);
+	pRadarUI_ = Instantiate<Radar>(entityId_, GameObjectLayer::B);
 }
 
 PlayerGunner::~PlayerGunner()
 {
 	delete pTargetingSystem_;
+	pRadarUI_->DestroyMe();
 	delete pRadarUI_;
 }
 
