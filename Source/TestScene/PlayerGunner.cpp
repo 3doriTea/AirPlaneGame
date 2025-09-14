@@ -40,8 +40,6 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 PlayerGunner::~PlayerGunner()
 {
 	delete pTargetingSystem_;
-	pRadarUI_->DestroyMe();
-	delete pRadarUI_;
 }
 
 void PlayerGunner::Update()
