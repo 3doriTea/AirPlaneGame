@@ -2,19 +2,20 @@
 #include <algorithm>
 #include "Bullet.h"
 #include "DrawScreenUtility.h"
+#include "CameraSystem.h"
 
 void TargetingSystem::Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize)
 {
 	// Transform設定
 	ownerTransform = owner;
-	
+
 	// ターゲット検出設定
 	targetDetector.config.detectionRect = 
 	{
-			screenCenter.x - detectionSize / 2.0f,
-			screenCenter.y - detectionSize / 2.0f,
-			detectionSize,
-			detectionSize
+		screenCenter.x - detectionSize / 2.0f,
+		screenCenter.y - detectionSize / 2.0f,
+		detectionSize,
+		detectionSize
 	};
 }
 
@@ -70,7 +71,12 @@ void TargetingSystem::SearchTargets()
 
 		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 		
-		reticleRect.x =  currentTarget->screenPos.x - reticleRadius * ratio.x;
+		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
+		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
+		//currentTarget->worldPos = targetPosition;
+		currentTarget->screenPos = Game::System<CameraSystem>().WorldToScreen(targetPosition, targetDetector.config.windowContext);
+
+		reticleRect.x = currentTarget->screenPos.x - reticleRadius * ratio.x;
 		reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
 		reticleRect.width = (reticleRadius * 2.0f);
 		reticleRect.height = (reticleRadius * 2.0f);
@@ -95,7 +101,6 @@ void TargetingSystem::FireAtTarget()
 	{
 		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
 		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
-		currentTarget->worldPos = targetPosition;
 		targetDirection = Vector3::Normalize(targetPosition - ownerTransform->GetWorldPosition());
 	}
 	// ターゲットがいない場合は正面方向に射撃
