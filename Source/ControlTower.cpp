@@ -9,8 +9,9 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	,detectionRadius_{30.0f}
 	
 {
-	pGunner_ = { nullptr,INVALID_HANDLE };
-	pPilot_ = { nullptr,INVALID_HANDLE };
+	// 初期化 : nullptr
+	pGunner_ = { nullptr,WindowContext::First };
+	pPilot_ = { nullptr,WindowContext::Second };
 }
 
 ControlTower::~ControlTower()
@@ -34,19 +35,19 @@ void ControlTower::Draw() const
 {
 }
 
-void ControlTower::SetGunner(EntityId _id, CameraHandleInScene _hCamera)
+void ControlTower::SetGunner(EntityId _id, WindowContext _context)
 {
 	pGunner_.first = &Transform::Get(_id);
-	pGunner_.second = _hCamera;
+	pGunner_.second = _context;
 }
 
-void ControlTower::SetPilot(EntityId _id, CameraHandleInScene _hCamera)
+void ControlTower::SetPilot(EntityId _id, WindowContext _context)
 {
 	pPilot_.first = &Transform::Get(_id);
-	pPilot_.second = _hCamera;
+	pPilot_.second = _context;
 }
 
-std::string ControlTower::DetectionEnemy(Transform* _transform, CameraHandleInScene _hCamera)
+std::string ControlTower::DetectionEnemy(Transform* _transform, WindowContext _context)
 {
 	std::string ret="";
 
@@ -61,9 +62,14 @@ std::string ControlTower::DetectionEnemy(Transform* _transform, CameraHandleInSc
 			{
 				auto& mainState = _enemy->GetAI().GetMainState();
 				auto& fightState = _enemy->GetAI().GetFightState();
-				if (mainState.Current() == EnemyAI::MAIN_STATE::S_FIGHT)
+				// 戦闘状態でないならば trueにして破棄
+				if (mainState.Current() != EnemyAI::MAIN_STATE::S_FIGHT)
 				{
-					
+					return true;
+				}
+				else
+				{
+					return false;
 				}
 				/*if (fightState.Current() == EnemyAI::FIGHT_STATE::SF_LOOK_AT_PLAYER)
 				{
@@ -77,10 +83,10 @@ std::string ControlTower::DetectionEnemy(Transform* _transform, CameraHandleInSc
 	auto itr = std::min_element(
 		enemies.begin(),
 		enemies.end(),
-		[this,_transform](const EnemyPlane& a, const EnemyPlane& b)
+		[this,_transform](EnemyPlane* a, EnemyPlane* b)
 		{
-			float distanceA = (_transform->position - Transform::Get(a.GetEntityId()).position).Size();
-			float distanceB = (_transform->position - Transform::Get(b.GetEntityId()).position).Size();
+			float distanceA = (_transform->position - Transform::Get(a->GetEntityId()).position).Size();
+			float distanceB = (_transform->position - Transform::Get(b->GetEntityId()).position).Size();
 			return distanceA < distanceB;
 		}
 	);
@@ -90,9 +96,11 @@ std::string ControlTower::DetectionEnemy(Transform* _transform, CameraHandleInSc
 	Vector3 up = _transform->Up();
 	Vector3 right = _transform->Right();
 	Vector3 forward = _transform->Forward();
-	Transform camera = Game::System<CameraSystem>().GetTransform(_hCamera);
+	return "";
+	//Transform camera = Game::System<CameraSystem>().GetTransform(_hCamera);
 
-	//Game::System<CameraSystem>().GetWorldToScreenData
+	// 敵のスクリーン座標を取得
+	//Game::System<CameraSystem>().Get
 	//for (const auto& enemy : enemies)
 	//{
 	//	Transform& enemyTransform = Transform::Get(enemy->GetEntityId());
