@@ -185,6 +185,8 @@ void EnemyPlane::Update()
 
 	pTransform_->rotate = currentQua;
 
+	EntityId eId{ GetEntityId() };
+
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 	if (lockOnTarget_)

@@ -2,6 +2,7 @@
 #include <cmath>
 #include "MTAssert.h"
 #include "Vector3.h"
+#include "GameTime.h"
 
 namespace mtgb::Mathf
 {
@@ -93,32 +94,37 @@ namespace mtgb::Mathf
 	/// <returns>åÇÇ¡ÇƒìñÇΩÇÈç¿ïW</returns>
 	static Vector3 TargetingPosition(Vector3 _shotPosition, Vector3 _targetPosition, Vector3 _targetMove, float _bulletSpeed)
 	{
+		const float BULLET_SPEED{ _bulletSpeed * Time::DeltaTimeF() };
+		
+		const Vector3 MOVE{ _targetMove * Time::DeltaTimeF() };
+
 		Vector3 toTargetDiff{ _targetPosition - _shotPosition };
 
 		const float A
 		{
-			_targetMove.x * _targetMove.x + _targetMove.y * _targetMove.y + _targetMove.z * _targetMove.z
-			- _bulletSpeed * _bulletSpeed
+			(MOVE.x * MOVE.x) + (MOVE.y * MOVE.y) + (MOVE.z * MOVE.z)
+			- (BULLET_SPEED * BULLET_SPEED)
 		};
 		const float B
 		{
-			2.0f * (toTargetDiff.x * _targetMove.x + toTargetDiff.y * _targetMove.y + toTargetDiff.z + _targetMove.z)
+			2.0f *
+			((toTargetDiff.x * MOVE.x) + (toTargetDiff.y * MOVE.y) + (toTargetDiff.z * MOVE.z))
 		};
 		const float C
 		{
-			_targetPosition.x * _targetPosition.x + _targetPosition.y * _targetPosition.y + _targetPosition.z * _targetPosition.z
+			toTargetDiff.x * toTargetDiff.x + toTargetDiff.y * toTargetDiff.y + toTargetDiff.z * toTargetDiff.z
 		};
 
 		// 0èúéZñhé~
-		if (A <= FLT_EPSILON)
+		if (std::fabsf(A) <= FLT_EPSILON)
 		{
-			if (B <= FLT_EPSILON)
+			if (std::fabsf(B) <= FLT_EPSILON)
 			{
 				return _targetPosition;
 			}
 			else
 			{
-				return _targetPosition + _targetMove * (-C / B);
+				return _targetPosition + MOVE * (-C / B);
 			}
 		}
 
@@ -141,6 +147,6 @@ namespace mtgb::Mathf
 			sec = 0;
 		}
 
-		return _targetPosition + _targetMove * sec;
+		return _targetPosition + MOVE * (sec);
 	}
 }

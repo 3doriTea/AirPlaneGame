@@ -88,13 +88,14 @@ void TargetingSystem::SearchTargets()
 
 void TargetingSystem::FireAtTarget()
 {
-	RigidBody& rb{ RigidBody::Get(ownerTransform->GetEntityId()) };
-	Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, rb.velocity_, Bullet::GetMoveSpeed()) };
 	Vector3 targetDirection;
 	Quaternion fireDirection;
 
 	if (HasTarget())
 	{
+		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
+		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
+		currentTarget->worldPos = targetPosition;
 		targetDirection = Vector3::Normalize(targetPosition - ownerTransform->GetWorldPosition());
 	}
 	// ターゲットがいない場合は正面方向に射撃
