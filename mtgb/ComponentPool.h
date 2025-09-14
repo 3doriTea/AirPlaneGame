@@ -6,7 +6,7 @@
 
 namespace mtgb
 {
-	static constexpr size_t COMPONENT_CAPACITY{ 1024 };
+	static constexpr size_t COMPONENT_CAPACITY{ 2048 };
 
 	//class GameObject;
 	class Entity;

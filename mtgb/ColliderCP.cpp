@@ -105,7 +105,7 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vec
 			Game::System<ColliderCP>().TryGet(&colliders, poolId_[i]);*/
 
 			float nearest = dist;
-			Transform* pTransform;
+			Transform* pTransform{ nullptr };
 			float distance = 0.0f;
 			//pool_[i]
 			//for (auto& collider : colliders)
