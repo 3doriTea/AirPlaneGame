@@ -67,24 +67,26 @@ void TargetingSystem::SearchTargets()
 
 	if (it != targetDetector.detectedTargets.end())
 	{
-		currentTarget = &(*it); // Å‚à‹ß‚¢“G‚ðƒ^[ƒQƒbƒg‚ÉÝ’è
+		if ((*it).screenPos.z > 0.0f && (*it).screenPos.z < 1.0f)
+		{
+			currentTarget = &(*it); // Å‚à‹ß‚¢“G‚ðƒ^[ƒQƒbƒg‚ÉÝ’è
 
-		Vector2F ratio = Game::System<Screen>().GetSizeRatio();
-		
-		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
-		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, rb.velocity_, Bullet::GetMoveSpeed()) };
-		//currentTarget->worldPos = targetPosition;
-		currentTarget->screenPos = Game::System<CameraSystem>().WorldToScreen(targetPosition, targetDetector.config.windowContext);
+			Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-		reticleRect.x = currentTarget->screenPos.x - reticleRadius * ratio.x;
-		reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
-		reticleRect.width = (reticleRadius * 2.0f);
-		reticleRect.height = (reticleRadius * 2.0f);
-		//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
-		//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
-		//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
-		//reticleRect.width = reticleRadius * 2.0f * ratio.x;
+			RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
+			Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, rb.velocity_, Bullet::GetMoveSpeed()) };
+			//currentTarget->worldPos = targetPosition;
+			currentTarget->screenPos = Game::System<CameraSystem>().WorldToScreen(targetPosition, targetDetector.config.windowContext);
 
+			reticleRect.x = currentTarget->screenPos.x - reticleRadius * ratio.x;
+			reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
+			reticleRect.width = (reticleRadius * 2.0f);
+			reticleRect.height = (reticleRadius * 2.0f);
+			//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
+			//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
+			//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
+			//reticleRect.width = reticleRadius * 2.0f * ratio.x;
+		}
 	}
 	else
 	{

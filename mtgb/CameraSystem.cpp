@@ -127,8 +127,8 @@ mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _con
 		viewport.Height,
 		viewport.MinDepth,
 		viewport.MaxDepth,
-		viewMat,
 		projMat,
+		viewMat,
 		DirectX::XMMatrixIdentity());
 	
 	
