@@ -36,8 +36,6 @@ EnemyAI::EnemyAI()
 
 		.OnUpdate(S_SEARCH, [this]
 		{
-			LOGF("S_SEARCH\n");
-
 			{ /* TODO:索敵行動 */
 				Vector3 pPos{ input_.playerPos };
 				Vector3 sPos{ input_.pSelfTrans->GetWorldPosition() };
@@ -74,8 +72,6 @@ EnemyAI::EnemyAI()
 		{
 			// 最初のStartを呼び出すために変更
 			sFight_.Change(SF_LOOK_AT_PLAYER);
-
-			LOGF("S_FIGHT\n");
 		})
 		.OnUpdate(S_FIGHT,  [this]
 		{
@@ -87,8 +83,6 @@ EnemyAI::EnemyAI()
 		.OnStart(SF_LOOK_AT_PLAYER, [this] { out_.isFire = true; })
 		.OnUpdate(SF_LOOK_AT_PLAYER, [this]
 		{
-			LOGF("SF_LOOK_AT_PLAYER\n");
-
 			out_.lookPosition = input_.playerPos;
 
 			// 衝突回避範囲内なら、回避行動に遷移
@@ -101,8 +95,6 @@ EnemyAI::EnemyAI()
 
 		.OnUpdate(SF_AVOID, [this]
 		{
-			LOGF("SF_AVOID\n");
-
 			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーより座標が上なら上方向に回避
 			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)
@@ -121,8 +113,6 @@ EnemyAI::EnemyAI()
 		.OnStart(SF_ROUND, [this]{ out_.isRound = true; })
 		.OnUpdate(SF_ROUND, [this]
 		{
-			LOGF("SF_ROUND\n");
-
 			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーの前にいるなら回避行動に遷移
 			if (IsForwardToPlayerDir())
