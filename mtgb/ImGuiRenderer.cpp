@@ -266,7 +266,7 @@ void mtgb::ImGuizmoManipulator::SelectTransform()
 	const CameraSystem& camera = Game::System<CameraSystem>();
 	float distance = camera.GetFar() - camera.GetNear();          // 元の長さを計算
 
-	EntityId entityId = Game::System<ColliderCP>().RaycastHitAll(origin, direction, distance);
+	EntityId entityId = Game::System<ColliderCP>().RayCastHitAll(origin, direction, distance);
 	if (entityId != INVALD_ENTITY)
 	{
 		// EntityがTransformコンポーネントを持っていない可能性があるのでTryGet
