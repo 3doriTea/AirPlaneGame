@@ -66,4 +66,7 @@ private:
 
 	// コントローラーアニメーションヒントの画像ハンドルB
 	std::vector<ImageHandle> hControllerImagesB_;
+
+	ImageHandle hSideImageA_;
+	ImageHandle hSideImageB_;
 };

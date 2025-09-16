@@ -97,6 +97,8 @@ void TutorialScene::Initialize()
 		// hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_B[i]);
 	}
 
+	hSideImageA_ = Image::Load(SIDE_IMAGE_FILE_A);
+	hSideImageB_ = Image::Load(SIDE_IMAGE_FILE_B);
 
 	// 一定時間経ったら必ずプレイシーンに遷移
 	hToPlaySceneTimer_ = Timer::AddAram(TO_PLAY_SCENE_WAIT_SEC, []()
@@ -144,7 +146,7 @@ void TutorialScene::Initialize()
 					{
 						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
-						.elements_ = hControllerImagesB_,
+						.elements_ = { { hSideImageB_ } },
 						.uIParams_ = { 10 }
 					},
 					GameObjectLayer::B);
@@ -162,7 +164,7 @@ void TutorialScene::Initialize()
 					{
 						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
-						.elements_ = ImageAnimator::Elements{ SIDE_IMAGE_FILE_A },
+						.elements_ = { { hSideImageA_ } },
 						.uIParams_ = { 10 }
 					},
 					GameObjectLayer::A);
