@@ -50,11 +50,11 @@ void mtgb::RectDetector::UpdateDetection(RectDetectorConfig& _config)
 					return true;
 				}
 
-				// ƒJƒƒ‰‚©‚ç‹ü‚ª’Ê‚Á‚Ä‚¢‚È‚¢‚È‚çœ‚­
-				if (!IsLineOfSight(cameraTransform.position, info))
-				{
-					return true;
-				}
+				//// ƒJƒƒ‰‚©‚ç‹ü‚ª’Ê‚Á‚Ä‚¢‚È‚¢‚È‚çœ‚­
+				//if (!IsLineOfSight(cameraTransform.position, info))
+				//{
+				//	return true;
+				//}
 
 				return false;
 				
@@ -113,7 +113,7 @@ bool mtgb::RectDetector::IsLineOfSight(const Vector3& _cameraPos, const RectCont
 		if (_targetInfo.entityId == other.entityId) continue;
 
 		// Õ‚ç‚ê‚Ä‚¢‚½‚ç false
-		if (colliderCP.RaycastHit(_targetInfo.worldPos, toTarget, &dist, other.entityId))
+		if (colliderCP.RayCastHit(_targetInfo.worldPos, toTarget, &dist, other.entityId))
 		{
 			return false;
 		}

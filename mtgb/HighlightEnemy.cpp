@@ -80,14 +80,17 @@ void HighlightEnemy::Draw() const
 
 	firstWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
 		{
-			RectF targetRect
+			if (_info.screenPos.z > 0.0f && _info.screenPos.z < 1.0f)
 			{
-				(_info.screenPos.x - highlightFrameSize.x * ratio.x / 2.0f),
-				(_info.screenPos.y - highlightFrameSize.y * ratio.y / 2.0f),
-				highlightFrameSize.x * ratio.x,
-				highlightFrameSize.y * ratio.y
-			};
-			Draw::Image(highlightFrameImage_, targetRect, { .depth = 0,.layerFlag = GameObjectLayer::A });
+				RectF targetRect
+				{
+					(_info.screenPos.x - highlightFrameSize.x * ratio.x / 2.0f),
+					(_info.screenPos.y - highlightFrameSize.y * ratio.y / 2.0f),
+					highlightFrameSize.x * ratio.x,
+					highlightFrameSize.y * ratio.y
+				};
+				Draw::Image(highlightFrameImage_, targetRect, { .depth = 0,.layerFlag = GameObjectLayer::A });
+			}
 		});
 
 	// 二つ目のウィンドウ
@@ -95,14 +98,17 @@ void HighlightEnemy::Draw() const
 
 	secondWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
 		{
-			RectF targetRect
+			if (_info.screenPos.z > 0.0f && _info.screenPos.z < 1.0f)
 			{
-				(_info.screenPos.x - highlightFrameSize.x * ratio.x / 2.0f),
-				(_info.screenPos.y - highlightFrameSize.y * ratio.y / 2.0f),
-				highlightFrameSize.x* ratio.x,
-				highlightFrameSize.y* ratio.y
-			};
-			Draw::Image(highlightFrameImage_, targetRect, { .depth = 0,.layerFlag = GameObjectLayer::B });
+				RectF targetRect
+				{
+					(_info.screenPos.x - highlightFrameSize.x * ratio.x / 2.0f),
+					(_info.screenPos.y - highlightFrameSize.y * ratio.y / 2.0f),
+					highlightFrameSize.x * ratio.x,
+					highlightFrameSize.y * ratio.y
+				};
+				Draw::Image(highlightFrameImage_, targetRect, { .depth = 0,.layerFlag = GameObjectLayer::B });
+			}
 		});
 }
 

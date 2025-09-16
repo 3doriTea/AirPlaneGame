@@ -14,7 +14,5 @@ private:
 	RectDetector firstWndRectDetector_;
 	RectDetector secondWndRectDetector_;
 	ImageHandle highlightFrameImage_;
-	//RectDetectorConfig firstWndDetectorConfig_;
-	//RectDetectorConfig secondWndDetectorConfig_;
 };
 

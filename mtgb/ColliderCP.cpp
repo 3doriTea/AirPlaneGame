@@ -93,7 +93,7 @@ void mtgb::ColliderCP::TestDraw() const
 	}
 	LOGF("ColliderCP END\n");
 }
-mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vector3& _dir, float dist)
+mtgb::EntityId mtgb::ColliderCP::RayCastHitAll(const Vector3& _origin, const Vector3& _dir, float dist)
 {
 	EntityId nearestEntity = INVALD_ENTITY;
 
@@ -112,7 +112,7 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vec
 			{
 				//if (collider->IsHit(_origin, _dir, &distance))
 				EntityId id = poolId_[i];
-				if(RaycastHit(_origin,_dir,&distance,id))
+				if(RayCastHit(_origin,_dir,&distance,id))
 				{
 					//Game::System<TransformCP>().TryGet(pTransform, id);
 					if(distance < nearest)
@@ -127,7 +127,7 @@ mtgb::EntityId mtgb::ColliderCP::RaycastHitAll(const Vector3& _origin, const Vec
 	return nearestEntity;
 }
 
-bool mtgb::ColliderCP::RaycastHit(const Vector3& _origin, const Vector3& _dir, float* dist, EntityId _entityId)
+bool mtgb::ColliderCP::RayCastHit(const Vector3& _origin, const Vector3& _dir, float* dist, EntityId _entityId)
 {
 	std::vector<Collider*> colliders{};
 	if (!TryGet(&colliders, _entityId))
@@ -153,6 +153,8 @@ void mtgb::ColliderCP::IsHitAll(const Vector3& _center, float _radius, std::vect
 	}
 }
 
+
+
 void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
 {
 	_info->clear();
@@ -168,8 +170,8 @@ void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name
 	{
 		Vector3 worldPos = object->Component<Transform>()->position;
 		Vector3 screenPos = camSys.WorldToScreen(worldPos, data);
-		if (screenPos.z < 0)
-			continue;
+		/*if (screenPos.z < 0)
+			continue;*/
 		/*if (RectF::Contains(screenPos, RectF(_rect.x ,_rect.y , _rect.width , _rect.height )))
 		{
 			_info->emplace_back(worldPos,screenPos,object->GetEntityId());

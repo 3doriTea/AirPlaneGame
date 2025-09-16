@@ -9,9 +9,20 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	,detectionRadius_{30.0f}
 	
 {
-	// 初期化 : nullptr
+	// 初期化
 	pGunner_ = { nullptr,WindowContext::First };
 	pPilot_ = { nullptr,WindowContext::Second };
+
+	Vector2F screenSize = Game::System<Screen>().GetSizeF();
+	// 画面上の敵を検出する距離
+	float detectDistance = Game::System<CameraSystem>().GetFar();
+
+	// ターゲットの強調表示の画像、画像サイズ
+	highlightFrameImage_ = Image::Load("Image/highlightEnemyFrame.png");
+	enemyArrowImage_ = Image::Load("Image/enemyArrow.png");
+	highlightFrameSize_ = { 60.0f,60.0f };
+
+	
 }
 
 ControlTower::~ControlTower()
@@ -20,6 +31,7 @@ ControlTower::~ControlTower()
 
 void ControlTower::Update()
 {
+	// 攻撃状態の敵のスクリーン座標上の位置を取得
 	Vector3 enemyPosGunner = Vector3::Zero();
 	if (std::optional<Vector3> pos = DetectionEnemy(pGunner_.first, pGunner_.second); pos != std::nullopt )
 	{
@@ -30,7 +42,7 @@ void ControlTower::Update()
 	{
 		enemyPosPilot = *pos;
 	}
-	
+	//WinCtxRes::Get<DXGIResource>(pGunner_.second).;
 	MTImGui::Instance().DirectShow([enemyPosGunner,enemyPosPilot]()
 		{
 			ImGui::LabelText("enemyPosGunner", "(x,y):(%.3f,%.3f)",enemyPosGunner.x, enemyPosGunner.y);
@@ -38,22 +50,71 @@ void ControlTower::Update()
 		}
 	,"ControlTower",ShowType::Inspector);
 
+	// 
 }
 
 void ControlTower::Draw() const
 {
+	if (auto itr = wndRectDetector_.find(CurrContext()); itr != wndRectDetector_.end())
+	{
+		const RectDetector& detector = itr->second;
+
+		std::vector<EntityId> outOfScreenTargets;
+		// 攻撃状態の敵
+		for (EntityId enemy : attackStateEnemies_)
+		{
+			// 画面上に攻撃状態の敵がいるか確認
+			auto& detectedTargets = detector.detectedTargets;
+			bool isOnScreen = std::any_of(detectedTargets.begin(), detectedTargets.end(),
+				[enemy](const RectContainsInfo& _info)
+				{
+					return _info.entityId == enemy;
+				});
+
+			// 画面外の敵のIDを保存
+			if (!isOnScreen)
+			{
+				outOfScreenTargets.push_back(enemy);
+			}
+		}
+		
+		// 画面外の敵の描画
+		for (EntityId outOfScreenTarget : outOfScreenTargets)
+		{
+			DrawEnemyArrow(outOfScreenTarget);
+		}
+	}
 }
 
-void ControlTower::SetGunner(EntityId _id, WindowContext _context)
-{
-	pGunner_.first = &Transform::Get(_id);
-	pGunner_.second = _context;
-}
 
-void ControlTower::SetPilot(EntityId _id, WindowContext _context)
+
+void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 {
-	pPilot_.first = &Transform::Get(_id);
-	pPilot_.second = _context;
+	if (controlTargetTransform_.contains(_context) == false)
+	{
+		controlTargetTransform_[_context] = &Transform::Get(_id);
+	}
+	if (wndRectDetector_.contains(_context) == false)
+	{
+		Vector2F screenSize = Game::System<Screen>().GetSizeF();
+		// 画面上の敵を検出する距離
+		float detectDistance = Game::System<CameraSystem>().GetFar();
+
+		RectDetectorConfig config =
+		{
+			.targetName = "Enemy",
+			.windowContext = _context,
+			.detectionRect =
+			{
+				0.0f,
+				0.0f,
+				static_cast<float>(screenSize.x),
+				static_cast<float>(screenSize.y),
+			},
+			.maxDistance = detectDistance,
+		};
+		wndRectDetector_.try_emplace(_context, config);
+	}
 }
 
 std::optional<Vector3> ControlTower::DetectionEnemy(Transform* _transform, WindowContext _context)
@@ -113,6 +174,8 @@ std::optional<Vector3> ControlTower::DetectionEnemy(Transform* _transform, Windo
 		enemyId = (*itr)->GetEntityId();
 	}
 
+	attackStateEnemies_.clear();
+	attackStateEnemies_.push_back(enemyId);
 	// 方角を計算
 	// プレイヤーの上ベクトル、右ベクトル
 	Vector3 up = _transform->Up();
@@ -183,4 +246,54 @@ std::optional<Vector3> ControlTower::DetectionEnemy(Transform* _transform, Windo
 	//	ret = std::format("{}:{},{},{}\n", enemy->GetEntityId(), str1, str2, str3);
 	//}
 	//return ret;
+}
+
+void ControlTower::DrawEnemyArrow(EntityId _entityId) const
+{
+	// 現在のカメラ(プレイヤー)の Transformを取得
+
+	WindowContext context = CurrContext();
+	if (controlTargetTransform_.contains(context) == false) return;
+	Transform* pCameraTransform = controlTargetTransform_.find(context)->second;
+	if (!pCameraTransform) return;
+
+	// 敵の Transformを取得
+	Transform& enemyTransform = Transform::Get(_entityId);
+
+	// カメラから敵への方向ベクトルを計算
+	Vector3 toEnemy = Vector3::Normalize(enemyTransform.GetWorldPosition() - pCameraTransform->GetWorldPosition());
+
+	// カメラ視点の敵の方向を2D座標系で計算
+	float x = DirectX::XMVectorGetX(DirectX::XMVector3Dot(toEnemy, pCameraTransform->Right()));
+	float y = DirectX::XMVectorGetX(DirectX::XMVector3Dot(toEnemy, pCameraTransform->Up()));
+
+	// ウィンドウの中心から円周上の位置を計算
+	Vector2F screenCenter = Game::System<Screen>().GetSizeF() * 0.5f;
+	float circleRadius = 100.0f; // 矢印を表示する円の半径(仮)
+
+	// 敵の方向の角度を計算
+	float angle = std::atan2f(y, x);
+	// 角度を元に円周上に配置
+	Vector2F arrowPos =
+	{
+		screenCenter.x + (std::cosf(angle) * circleRadius),
+		screenCenter.y + (std::sinf(angle) * circleRadius)
+	};
+
+	// 矢印を描画
+	DrawArrowAtPosition(arrowPos, angle);
+}
+
+void ControlTower::DrawArrowAtPosition(const Vector2F& _position, float _angle) const
+{
+	// 矢印の画像を回転させて描画
+	RectF drawRect =
+	{
+		_position.x - (highlightFrameSize_.x  * 0.5f),
+		_position.y - (highlightFrameSize_.y  * 0.5f),
+		highlightFrameSize_.x,
+		highlightFrameSize_.y
+	};
+
+	Draw::Image(highlightFrameImage_, drawRect, { Vector2F::Zero(),Image::GetSizeF(enemyArrowImage_) }, _angle);
 }
