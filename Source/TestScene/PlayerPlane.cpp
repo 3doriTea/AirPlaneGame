@@ -1,4 +1,6 @@
  #include "PlayerPlane.h"
+#include "UI/Radar.h"
+
 #include <cmath>
 using namespace mtgb;
 
@@ -47,6 +49,9 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 			}
 			LOGF("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 		});
+
+	// Rader‚ğ‰Šú‰»
+	Instantiate<Radar>(entityId_, GameObjectLayer::A);
 }
 
 PlayerPlane::~PlayerPlane()

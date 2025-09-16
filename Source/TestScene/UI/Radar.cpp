@@ -6,12 +6,18 @@ namespace
 	const int ENEMY_POS_CAPACITY{ 20 };
 	const int ENEMY_MARK_SIZE_PX{ 10 };
 	const int MARGIN_PX{ 2 };
+	// ìGÉ}Å[ÉNÇè¡Ç∑îÕàÕ
+	const int HIDE_DISTANCE{ 140 };
+	const int HIDE_DISTANCE_DOUBLE{ HIDE_DISTANCE * HIDE_DISTANCE };
 	const Color ENEMY_BOX_COLOR = Color::RED;
 	const Color MISSILE_BOX_COLOR = Color::BLACK;
 }
 
 Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObject(GameObjectBuilder()
-	.SetLayerFlag(_layer)
+	.SetLayerFlag(GameObjectLayerFlag::New()
+		.BeginEdit()
+		.On(_layer)
+		.EndEdit())
 	.Build()),
 	pPlayerTransform_{ &Transform::Get(_playerId) },
 	viewAngle_{ 0.0f }
@@ -74,6 +80,7 @@ void Radar::Draw() const
 {
 	const Vector2F SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	const Vector2F RADAR_OFFSET{ SCREEN_SIZE.x - IMAGE_SIZE_PX / 2, IMAGE_SIZE_PX / 2 };
+	const int DEPTH_OFFSET{ GetLayerFlag().Has(GameObjectLayer::A) ? 10 : 0 };
 
 	auto drawImage
 	{
@@ -83,21 +90,29 @@ void Radar::Draw() const
 				_hImage,
 				{ SCREEN_SIZE.x - IMAGE_SIZE_PX, 0, IMAGE_SIZE_PX, IMAGE_SIZE_PX },
 				{ MARGIN_PX, MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX },
-				_angle, { _layer });
+				_angle, { DEPTH_OFFSET + _layer });
 		}
 	};
 
 	drawImage(hBack_, 0);
-	drawImage(hInView_, viewAngle_, 0);
+	drawImage(hInView_, 0, viewAngle_);
 	drawImage(hFrame_, 1);
 
 	for (auto& markPos : enemyMarkPos_)
 	{
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, {.depth = 1});
+		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
+		{
+			continue;
+		}
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1 });
 	}
 
 	for (auto& markPos : missileMarkPos_)
 	{
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = 1 });
+		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
+		{
+			continue;
+		}
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1 });
 	}
 }

@@ -2,6 +2,7 @@
 #include "PlayerBullet.h"
 #include "UI/Radar.h"
 #include "../TargetingSystem.h"
+
 using namespace mtgb;
 
 namespace
@@ -48,8 +49,43 @@ void PlayerGunner::Update()
 	pTransform_->position = pPlaneTransform_->GetWorldPosition();
 
 	constexpr float ANGLE_SPEED{ DirectX::XMConvertToRadians(100.f) };
-
 #if 1
+	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
+	// ã
+	if (axis.y > 0)
+	{
+		angleX_ += axis.y * ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleX_ > ANGLE_X_MAX)
+		{
+			angleX_ = ANGLE_X_MAX;
+		}
+	}
+	else if (axis.y < 0)
+	{
+		angleX_ += axis.y * ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleX_ < ANGLE_X_MIN)
+		{
+			angleX_ = ANGLE_X_MIN;
+		}
+	}
+	// ‰E
+	if (axis.x > 0)
+	{
+		angleY_ += axis.x * ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleY_ < 0.0f)
+		{
+			angleY_ += DirectX::XM_2PI;
+		}
+	}
+	else if (axis.x < 0)
+	{
+		angleY_ += axis.x * ANGLE_SPEED * Time::DeltaTimeF();
+		if (angleY_ >= DirectX::XM_2PI)
+		{
+			angleY_ -= DirectX::XM_2PI;
+		}
+	}
+#elif 1
 	Vector2F axis = InputUtil::GetAxis(WindowContext::Second);
 	// ã
 	if (axis.y > 0)
@@ -146,10 +182,11 @@ void PlayerGunner::Update()
 		float angle{};
 		using namespace DirectX;
 
-		Vector3 forward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
+		//Vector3 forward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
 
-		angle = DirectX::XMVector3Dot(forward, pPlaneTransform_->Forward()).m128_f32[0];
+		angle = DirectX::XMVector3Dot(pTransform_->Forward(), pPlaneTransform_->Forward()).m128_f32[0];
 
+		LOGF("angle=%f\n", XMConvertToDegrees(angle));
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}
@@ -162,11 +199,13 @@ void PlayerGunner::Update()
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}
 		},"GunnerContains",ShowType::Inspector);
-	
 }
 
 void PlayerGunner::Draw() const
 {
 	pTargetingSystem_->DrawUI();
-	pRadarUI_->Draw();
+	/*if (pRadarUI_)
+	{
+		pRadarUI_->Draw();
+	}*/
 }

@@ -2,6 +2,8 @@
 #include <mtgb.h>
 #include "../VVPlayer.h"
 
+class Radar;
+
 class PlayerPlane : public mtgb::GameObject
 {
 public:
