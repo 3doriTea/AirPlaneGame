@@ -132,8 +132,19 @@ void TargetingSystem::DrawUI() const
 {
 	// ターゲット検出範囲を描画
 	Vector2F ratio =  Game::System<Screen>().GetSizeRatio();
+	// x,yの比率のうち小さい方を選ぶ
+	float scale = (std::min)(ratio.x, ratio.y);
+	float scaledSize = targetDetector.config.detectionRect.size.x * scale;
+	RectF detectionRect = targetDetector.config.detectionRect;
+
+	// 比率変換した矩形の中央
+	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;;
+	Vector2F newPoint = center - Vector2F{scaledSize, scaledSize} * 0.5f;
+	RectF drawRect = { newPoint,{scaledSize,scaledSize} };
+
+	Draw::Image(detectionFrameImage, drawRect, uiParams);
+	//Draw::Image(detectionFrameImage, { targetDetector.config.detectionRect.point * scale,targetDetector.config.detectionRect.size * scale }, uiParams);
 	//RectF detectionRect{ targetDetector.config.detectionRect.point / ratio,targetDetector.config.detectionRect.size / ratio };
-	Draw::Image(detectionFrameImage, { targetDetector.config.detectionRect.point * ratio,targetDetector.config.detectionRect.size * ratio}, uiParams);
 
 	// ターゲットがロックオンされている場合、レティクルを描画
 	if (HasTarget())
