@@ -90,7 +90,7 @@ void Radar::Draw() const
 				_hImage,
 				{ SCREEN_SIZE.x - IMAGE_SIZE_PX, 0, IMAGE_SIZE_PX, IMAGE_SIZE_PX },
 				{ MARGIN_PX, MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX },
-				_angle, { DEPTH_OFFSET + _layer });
+				_angle, {.layerFlag = layerFlag_ });
 		}
 	};
 
@@ -104,7 +104,7 @@ void Radar::Draw() const
 		{
 			continue;
 		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1 });
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
 	}
 
 	for (auto& markPos : missileMarkPos_)
@@ -113,6 +113,6 @@ void Radar::Draw() const
 		{
 			continue;
 		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1 });
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
 	}
 }
