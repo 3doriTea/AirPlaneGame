@@ -26,8 +26,9 @@ private:
 	ImageHandle highlightFrameImage_; // ターゲット強調表示の画像
 	ImageHandle enemyArrowImage_; // 画面外のターゲットの方角を示す画像
 	Vector2F highlightFrameSize_; // ターゲット強調表示の画像のサイズ
+	Vector2F enemyArrowImageSize_; // 画面外のターゲットの方角を表す画像のサイズ
+	void DetectionEnemy(Transform* _transform);
 
-	std::optional<Vector3> DetectionEnemy(Transform* _transform, WindowContext _context);
 
 	// 画面外の敵の方角を矢印で表示する
 	void DrawEnemyArrow(EntityId _entityId) const;
