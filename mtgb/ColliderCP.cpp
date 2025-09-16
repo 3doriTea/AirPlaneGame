@@ -168,7 +168,7 @@ void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name
 	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 	for (auto& object : pFoundGameObjects)
 	{
-		Vector3 worldPos = object->Component<Transform>()->position;
+		Vector3 worldPos = object->Component<Transform>()->GetWorldPosition();
 		Vector3 screenPos = camSys.WorldToScreen(worldPos, data);
 		/*if (screenPos.z < 0)
 			continue;*/

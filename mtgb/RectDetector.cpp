@@ -40,7 +40,7 @@ void mtgb::RectDetector::UpdateDetection(RectDetectorConfig& _config)
 		std::remove_if(detectedTargets.begin(), detectedTargets.end(),
 			[&](const RectContainsInfo& info)
 			{
-				Vector3 toTarget = info.worldPos - cameraTransform.position;
+				Vector3 toTarget = info.worldPos - cameraTransform.GetWorldPosition();
 				Vector3 normal = cameraTransform.Forward();
 				float distance = DirectX::XMVector3Dot(toTarget, normal).m128_f32[0];
 

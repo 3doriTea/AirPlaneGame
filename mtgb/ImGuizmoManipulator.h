@@ -58,6 +58,7 @@ namespace mtgb
 		CameraOperation cameraOperation_;
 		bool updatingCameraTransform_;
 		bool followTarget_;
+		bool adjustTargetDirection_; // カメラがターゲットに追従する際、カメラの向きをターゲットの向きに合わせるか
 		float spinDistance_;
 		float followDistance_;
 		float spinSpeed_;

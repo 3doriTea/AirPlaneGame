@@ -6,8 +6,8 @@ using namespace mtgb;
 namespace
 {
 	const float MISSILE_CHASE_SPEED{ 30.0f };
-	const float MAX_TRACKING_ANGLE{ 60.0f }; // ’Ç”ö‰Â”\‚ÈÅ‘åŠp“x(degree)
-	const float TURN_RATE{ 2.0f }; // ù‰ñ‘¬“x (1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x‚Ì”{—¦)
+	const float MAX_TRACKING_ANGLE{ 45.0f }; // ’Ç”ö‰Â”\‚ÈÅ‘åŠp“x(degree)
+	const float TURN_RATE{ 1.0f }; // ù‰ñ‘¬“x (1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x‚Ì”{—¦)
 	const float DESTROY_TIME{ 10.0f }; // ”jŠü‚³‚ê‚é‚Ü‚Å‚ÌŠÔ
 }
 

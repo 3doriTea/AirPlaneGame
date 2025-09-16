@@ -238,6 +238,7 @@ mtgb::ImGuizmoManipulator::ImGuizmoManipulator()
 	, updatingCameraTransform_{ false }
 	, cameraOperation_{ CameraOperation::None }
 	, followTarget_{true}
+	, followDistance_{10.0f}
 {
 	pCamera_ = new GameObject(
 		GameObjectBuilder()
@@ -283,7 +284,10 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 
 	DrawTransformGuizmo();
 
+	if (ImGui::Checkbox("AdjustTargetDirection_", &adjustTargetDirection_))
+	{
 
+	}
 	if (ImGui::RadioButton("Translate", operation_ == ImGuizmo::TRANSLATE))
 	{
 		operation_ = ImGuizmo::TRANSLATE;
@@ -323,11 +327,21 @@ void mtgb::ImGuizmoManipulator::ShowImGui()
 
 void mtgb::ImGuizmoManipulator::FollowTarget()
 {
-	if (pTargetTransform_ && followTarget_)
+	if (pTargetTransform_)
 	{
-		GameObject* obj = mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(pTargetTransform_->GetEntityId());
-		SpinCamera(spinDistance_);
+		if (!followTarget_) return;
+		
+		if (adjustTargetDirection_)
+		{
+			pCameraTransform_->rotate = pTargetTransform_->rotate;
+			pCameraTransform_->position = pTargetTransform_->position + (pTargetTransform_->Back() * followDistance_);
+		}
+		else
+		{
+			SpinCamera(followDistance_);
+		}
 	}
+
 }
 
 void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)
