@@ -13,6 +13,9 @@ Bullet::Bullet(const Vector3& _position, const Quaternion& _quaternion, const Sh
 	SetName("Bullet");
 	hModel_ = Fbx::Load("Model/NewBullet.fbx");
 	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
+
+	// 3•bŒo‚Á‚½‚çÁ‚·
+	Timer::AddAram(3.0f, [this] { DestroyMe(); });
 }
 
 Bullet::Bullet(const Transform& _shooterTransform, Shooter _shooter)
@@ -22,6 +25,8 @@ Bullet::Bullet(const Transform& _shooterTransform, Shooter _shooter)
 	hModel_ = Fbx::Load("Model/NewBullet.fbx");
 	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
 
+	// 3•bŒo‚Á‚½‚çÁ‚·
+	Timer::AddAram(3.0f, [this] { DestroyMe(); });
 }
 
 Bullet::~Bullet()

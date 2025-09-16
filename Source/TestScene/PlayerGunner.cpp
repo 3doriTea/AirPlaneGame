@@ -35,7 +35,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 
 	// Rader‚ğ‰Šú‰»
-	pRadarUI_ = Instantiate<Radar>(entityId_, GameObjectLayer::B);
+	pRadarUI_ = Instantiate<Radar>(_plane, GameObjectLayer::B);
 }
 
 PlayerGunner::~PlayerGunner()
@@ -178,15 +178,40 @@ void PlayerGunner::Update()
 
 	if (pRadarUI_)
 	{
-		pRadarUI_->Update();
-		float angle{};
 		using namespace DirectX;
+		
+		pRadarUI_->Update();
+		Matrix4x4 mRotSelf{};
+		pTransform_->GenerateWorldRotationMatrix(&mRotSelf);
+		Matrix4x4 mRotPlane{};
+		pPlaneTransform_->GenerateWorldRotationMatrix(&mRotPlane);
 
-		//Vector3 forward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
+		//mRot = mRot * XMMatrixRotationY(angleY_);
 
-		angle = DirectX::XMVector3Dot(pTransform_->Forward(), pPlaneTransform_->Forward()).m128_f32[0];
+		//XMMatrixRotationY(angleY_);
 
-		LOGF("angle=%f\n", XMConvertToDegrees(angle));
+		/*XMVector3Dot(pPlaneTransform_->Forward(), pTransform_->Forward())*/
+
+		//XMVector3AngleBetweenVectors
+		
+		Vector3 angles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Forward()) };
+
+		Vector3 rightAngles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Right()) };
+		//angleQua *= mRotPlane * mRotSelf;
+
+		float angle{ angles.y };
+		
+		if (rightAngles.y > XM_PIDIV2)
+		{
+			angle = XM_2PI - angle;
+		}
+
+		// Vector3 gunForward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
+		// Vector3 planeForward{ XMVector3Cross(pPlaneTransform_->Right(), Vector3::Up()) };
+
+		//angle = DirectX::XMVector3Dot(gunForward, planeForward).m128_f32[0];
+
+		LOGF("angle=%2.0f, rightAngle=%2.0f\n", XMConvertToDegrees(angles.y), XMConvertToDegrees(rightAngles.y));
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}
