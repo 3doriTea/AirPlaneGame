@@ -85,9 +85,9 @@ void TestScene::Initialize()
 	pGunner->SetRadarUI(pGunnerRader);*/
 
 
-	//ControlTower* pControlTower{ Instantiate<ControlTower>() };
-	//pControlTower->SetGunner(pGunner->GetEntityId(), WindowContext::First);
-	//pControlTower->SetControlTarget(pPilot->GetEntityId(), WindowContext::Second);
+	ControlTower* pControlTower{ Instantiate<ControlTower>() };
+	pControlTower->SetControlTarget(pGunner->GetEntityId(), WindowContext::Second);
+	pControlTower->SetControlTarget(pPilot->GetEntityId(), WindowContext::First);
 	
 	reader8 = new TerrainReader8();
 	reader8->Initialize();
