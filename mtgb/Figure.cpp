@@ -40,8 +40,8 @@ void mtgb::Figure::Draw(const RectF& _rect, const Color& _color)
 			_pCB->g_color = _color.ToVector4Norm();
 			_pCB->g_worldMatrix = XMMatrixIdentity();
 #pragma region TODO: 計算見直し必要
-			// スクリーンサイズを一度だけ取得
-			static const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
+			// スクリーンサイズを取得
+			const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 
 			// 数学座標と描画座標のy軸差異解消
 			RectF cartesianBox{ _rect };

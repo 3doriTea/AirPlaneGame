@@ -47,7 +47,9 @@ void QuotaGauge::Draw() const
 	Vector2F screenSize{ Game::System<Screen>().GetSizeF() };
 	Vector2F ratio = { screenSize.x / CANVAS_SIZE.x, screenSize.y / CANVAS_SIZE.y };
 	
-	RectF drawRect = GenDrawScreenFrom(QUOTA_GAUGE_RECT);
+	
+	RectF screenAdjustRect = GenDrawScreenFrom(QUOTA_GAUGE_RECT);
+	RectF drawRect = screenAdjustRect;
 	/*{
 		{ QUOTA_GAUGE_RECT.point.x, QUOTA_GAUGE_RECT.point.y },
 		{ QUOTA_GAUGE_RECT.size.x, QUOTA_GAUGE_RECT.size.y }
@@ -60,12 +62,12 @@ void QuotaGauge::Draw() const
 	//Draw::Box((drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
 	Draw::Box(drawRect, AFTER_QUOTA_BAR_COLOR, { 0 });
 
-	drawRect.width = QUOTA_GAUGE_RECT.width * quotaRatio;
+	drawRect.width = screenAdjustRect.width * quotaRatio;
 
 	//Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
 	Draw::Box((drawRect), Color::RED,{ 1 });
 	
-	drawRect.width = QUOTA_GAUGE_RECT.width * progressRatio;
+	drawRect.width = screenAdjustRect.width * progressRatio;
 
 	//Draw::Box(GenDrawScreenFrom(drawRect), Color::GREEN,{2});
 	Draw::Box((drawRect), Color::GREEN,{2});
