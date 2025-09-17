@@ -24,9 +24,15 @@ Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObjec
 {
 	hBack_ = Image::Load("Image/RadarBack.png");
 	massert(hBack_ >= 0 && "レーダー盤画像読み込みに失敗 @Radar::Radar");
-	hInView_ = Image::Load("Image/RadarInView.png");
+	hInView_ = Image::Load(
+		_layer == GameObjectLayer::A
+		? "Image/RadarInViewA.png"
+		: "Image/RadarInViewB.png");
 	massert(hInView_ >= 0 && "レーダー視野画像読み込みに失敗 @Radar::Radar");
-	hFrame_ = Image::Load("Image/RadarFrame.png");
+	hFrame_ = Image::Load(
+		_layer == GameObjectLayer::A
+		? "Image/RadarFrameA.png"
+		: "Image/RadarFrameB.png");
 	massert(hFrame_ >= 0 && "レーダーフレーム画像読み込みに失敗 @Radar::Radar");
 
 	//hBack_ = Image::Load("Image/RadarBase.png");
