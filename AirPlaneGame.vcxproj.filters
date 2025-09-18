@@ -829,9 +829,6 @@
     <ClCompile Include="mtgb\ScoreManager.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PlayScene\Gun.cpp">
       <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
@@ -840,6 +837,9 @@
     </ClCompile>
     <ClCompile Include="Source\ProjectTile.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
+      <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
