@@ -65,6 +65,19 @@ void mtgb::GameScene::GetGameObjects(const std::string& _name, std::vector<GameO
 	}
 }
 
+void mtgb::GameScene::GetGameObjects(GameObjectTag _tag, std::vector<GameObject*>* _pFoundGameObjects) const
+{
+	_pFoundGameObjects->clear();
+	for (auto& object : pGameObjects_)
+	{
+		if (object->GetTag() != _tag)
+		{
+			continue;
+		}
+		_pFoundGameObjects->push_back(object);
+	}
+}
+
 mtgb::GameObject* mtgb::GameScene::GetGameObject(const EntityId _entityId) const
 {
 	for (auto& object : pGameObjects_)

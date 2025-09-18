@@ -6,6 +6,7 @@
 #include <cmtgb.h>
 #include <vector>
 #include <type_traits>
+#include "GameObjectTag.h"
 namespace mtgb
 {
 	class GameObject;
@@ -35,6 +36,7 @@ namespace mtgb
 		
 		GameObject* GetGameObject(std::string _name) const;
 		void GetGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects) const;
+		void GetGameObjects(GameObjectTag _tag, std::vector<GameObject*>* _pFoundGameObjects) const;
 
 		/// <summary>
 		/// テンプレートパラメータでオブジェクトを取得

@@ -23,6 +23,7 @@ HighlightEnemy::HighlightEnemy() : GameObject(GameObjectBuilder()
 	firstWndRectDetector_.config  =
 	{
 		.targetName = "Enemy",
+		.targetTag = GameObjectTag::Enemy,
 		.windowContext = WindowContext::First,
 		.detectionRect =
 		{
@@ -37,6 +38,7 @@ HighlightEnemy::HighlightEnemy() : GameObject(GameObjectBuilder()
 	secondWndRectDetector_.config =
 	{
 		.targetName = "Enemy",
+		.targetTag = GameObjectTag::Enemy,
 		.windowContext = WindowContext::Second,
 		.detectionRect =
 		{

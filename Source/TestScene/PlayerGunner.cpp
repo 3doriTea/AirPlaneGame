@@ -13,6 +13,7 @@ namespace
 
 PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
+	.SetTag(GameObjectTag::Player)
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	angleX_{ 0.0f },

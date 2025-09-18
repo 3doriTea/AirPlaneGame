@@ -60,6 +60,7 @@ namespace mtgb
 		GameObject* FindGameObject(const std::string& _name);
 		void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
 		GameObject* FindGameObject(const EntityId _entityId);
+		void FindGameObjects(GameObjectTag _tag,std::vector<GameObject*>* _pFoundGameObjects);
 
 		/// <summary>
 		/// このオブジェクトを削除する
@@ -77,6 +78,11 @@ namespace mtgb
 		/// <returns>レイヤーフラグを取得する</returns>
 		GameObjectLayerFlag GetLayerFlag() const { return layerFlag_; }
 
+		/// <summary>
+		/// タグを取得
+		/// </summary>
+		/// <returns></returns>
+		GameObjectTag GetTag() const { return tag_; }
 	protected:
 
 		std::string name_;
@@ -90,7 +96,7 @@ namespace mtgb
 		} status_;
 
 		GameObjectLayerFlag layerFlag_;  // レイヤーのフラグ
-
+		GameObjectTag tag_; // ゲームオブジェクトのタグ
 
 		std::bitset<COMPONENT_CAPACITY> componentsFlag_;  // コンポーネントのフラグ
 	};

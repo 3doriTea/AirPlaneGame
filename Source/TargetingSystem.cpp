@@ -38,10 +38,10 @@ TargetingSystem::TargetingSystem()
 	// レティクル矩形のサイズを設定
 	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };
 
-
 	// 検出距離、検出対象名設定
 	targetDetector.config.maxDistance = 100.0f;
-	targetDetector.config.targetName = "Enemy";
+	//targetDetector.config.targetName = "Enemy";
+	targetDetector.config.targetTag = GameObjectTag::Enemy;
 
 }
 
@@ -138,7 +138,7 @@ void TargetingSystem::DrawUI() const
 	RectF detectionRect = targetDetector.config.detectionRect;
 
 	// 比率変換した矩形の中央
-	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;;
+	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
 	Vector2F newPoint = center - Vector2F{scaledSize, scaledSize} * 0.5f;
 	RectF drawRect = { newPoint,{scaledSize,scaledSize} };
 

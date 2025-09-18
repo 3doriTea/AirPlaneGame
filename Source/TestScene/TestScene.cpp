@@ -20,7 +20,7 @@
 #include "TerrainReader.h"
 #include "TimeLimit.h"
 #include "../PlayScene/EnemiesController.h"
-
+#include "../ResultScene.h"
 using namespace mtgb;
 
 namespace mtgb
@@ -106,7 +106,7 @@ void TestScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<PlayScene>();
+		Game::System<SceneSystem>().Move<ResultScene>();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Y))
 	{

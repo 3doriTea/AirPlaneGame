@@ -27,10 +27,16 @@ void mtgb::RectDetector::UpdateDetection(RectDetectorConfig& _config)
 {
 	Game::System<ColliderCP>().RectContains(
 		_config.detectionRect,
-		_config.targetName,
+		_config.targetTag,
 		&detectedTargets,
 		_config.windowContext
 	);
+	/*Game::System<ColliderCP>().RectContains(
+		_config.detectionRect,
+		_config.targetName,
+		&detectedTargets,
+		_config.windowContext
+	);*/
 
 	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_config.windowContext).GetHCamera();
 	const Transform& cameraTransform = Game::System<CameraSystem>().GetTransform(hCamera);
