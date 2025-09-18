@@ -20,6 +20,7 @@ namespace
 PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
 	.SetName("PlayerPlane")
+	.SetTag(GameObjectTag::Player)
 	.Build()),
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() },

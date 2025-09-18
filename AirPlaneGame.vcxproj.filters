@@ -1473,6 +1473,9 @@
     <ClInclude Include="Source\ProjectTile.h">
       <Filter>01Game</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\GameObjectTag.h">
+      <Filter>03mtgb\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />

@@ -13,7 +13,8 @@ mtgb::GameObject::GameObject(const GAME_OBJECT_DESC& _desc) :
 		.callDraw_ = _desc.callDraw,
 		.toDestroy_ = FALSE,  // ç≈èâÇÕçÌèúÇµÇ»Ç¢
 	},
-	layerFlag_{ _desc.layerFlag }
+	layerFlag_{ _desc.layerFlag },
+	tag_{ _desc.tag }
 {
 	Transform* pTransform_{ Component<Transform>() };
 	pTransform_->position = _desc.position;
@@ -47,4 +48,9 @@ void mtgb::GameObject::FindGameObjects(const std::string& _name, std::vector<Gam
 mtgb::GameObject* mtgb::GameObject::FindGameObject(const EntityId _entityId)
 {
 	return mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObject(_entityId);
+}
+
+void mtgb::GameObject::FindGameObjects(GameObjectTag _tag, std::vector<GameObject*>* _pFoundGameObjects)
+{
+
 }
