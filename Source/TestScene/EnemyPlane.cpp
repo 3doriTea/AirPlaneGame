@@ -37,6 +37,7 @@ EnemyPlane::EnemyPlane(
 	const EntityId _playerPlane,
 	const EntityId _controllerId) : GameObject(GameObjectBuilder()
 	.SetName("Enemy")
+	.SetTag(GameObjectTag::Enemy)
 	.SetPosition(_worldPosition)
 	.SetScale({ ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE })
 	.Build()),

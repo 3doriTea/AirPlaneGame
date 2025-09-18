@@ -6,6 +6,7 @@
 #include "WindowContext.h"
 #include "RectF.h"
 #include "RectContainsInfo.h"
+#include "GameObjectTag.h"
 namespace mtgb
 {
 	/// <summary>
@@ -14,6 +15,7 @@ namespace mtgb
 	struct RectDetectorConfig
 	{
 		std::string targetName; // 検出対象の名前
+		GameObjectTag targetTag; // 検出対象のタグ
 		WindowContext windowContext;	// 対象のウィンドウ
 		RectF detectionRect;	// 検出範囲
 		

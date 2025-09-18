@@ -153,30 +153,42 @@ void mtgb::ColliderCP::IsHitAll(const Vector3& _center, float _radius, std::vect
 	}
 }
 
-
-
 void mtgb::ColliderCP::RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context)
 {
 	_info->clear();
 
-	std::vector<GameObject*> pFoundGameObjects;
-	Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, &pFoundGameObjects);
-	if (pFoundGameObjects.empty()) return;
+	std::vector<GameObject*> foundGameObjects;
+	Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_name, &foundGameObjects);
+	if (foundGameObjects.empty()) return;
+	RectContainsImpl(_rect, foundGameObjects, _info, _context);
+}
 
+void mtgb::ColliderCP::RectContains(const RectF& _rect, GameObjectTag _tag, std::vector<RectContainsInfo>* _info, WindowContext _context)
+{
+	_info->clear();
+
+	std::vector<GameObject*> foundGameObjects;
+	Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_tag, &foundGameObjects);
+	if (foundGameObjects.empty()) return;
+	RectContainsImpl(_rect, foundGameObjects, _info, _context);
+}
+
+void mtgb::ColliderCP::RectContainsImpl(const RectF& _rect,const std::vector<GameObject*>& _objs, std::vector<RectContainsInfo>* _info, WindowContext _context)
+{
 	CameraSystem& camSys = Game::System<CameraSystem>();
 	const WorldToScreenData& data = camSys.GetWorldToScreenData(_context);
 	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
-	for (auto& object : pFoundGameObjects)
+	for (auto& object : _objs)
 	{
 		Vector3 worldPos = object->Component<Transform>()->GetWorldPosition();
 		Vector3 screenPos = camSys.WorldToScreen(worldPos, data);
 		/*if (screenPos.z < 0)
 			continue;*/
-		/*if (RectF::Contains(screenPos, RectF(_rect.x ,_rect.y , _rect.width , _rect.height )))
-		{
-			_info->emplace_back(worldPos,screenPos,object->GetEntityId());
-		}*/
-		if (RectF::Contains(Vector2F{screenPos.x,screenPos.y}, RectF(_rect.x * ratio.x, _rect.y * ratio.y, _rect.width * ratio.x, _rect.height * ratio.y)))
+			/*if (RectF::Contains(screenPos, RectF(_rect.x ,_rect.y , _rect.width , _rect.height )))
+			{
+				_info->emplace_back(worldPos,screenPos,object->GetEntityId());
+			}*/
+		if (RectF::Contains(Vector2F{ screenPos.x,screenPos.y }, RectF(_rect.x * ratio.x, _rect.y * ratio.y, _rect.width * ratio.x, _rect.height * ratio.y)))
 		{
 			_info->emplace_back(worldPos, screenPos, object->GetEntityId());
 		}

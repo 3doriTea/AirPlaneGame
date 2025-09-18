@@ -8,6 +8,7 @@ using namespace mtgb;
 
 PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
+	.SetTag(GameObjectTag::Player)
 	.Build()),
 	pTransform{ Component<Transform>() }
 {
@@ -37,7 +38,7 @@ void PlayerPilot::Update()
 	{
 		pTargetingSystem_->FireAtTarget();
 	}
-	
+		
 	MTImGui::Instance().DirectShow([]() 
 		{
 			float xAxis	 = InputUtil::GetAxis(Axis::X, WindowContext::First);

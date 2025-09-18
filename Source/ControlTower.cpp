@@ -116,7 +116,7 @@ void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 
 		RectDetectorConfig config =
 		{
-			.targetName = "Enemy",
+			.targetTag = GameObjectTag::Enemy,
 			.windowContext = _context,
 			.detectionRect =
 			{
