@@ -52,15 +52,15 @@ namespace mtgb
 		GameSceneT& GetScene();
 
 		template<typename T>
-		T* FindGameObject() const;
+		static T* FindGameObject();
 
 		template<typename T>
-		void FindGameObjects(std::vector<T*>* _pFoundGameObjects);
+		static void FindGameObjects(std::vector<T*>* _pFoundGameObjects);
 
-		GameObject* FindGameObject(const std::string& _name);
-		void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
-		GameObject* FindGameObject(const EntityId _entityId);
-		void FindGameObjects(GameObjectTag _tag,std::vector<GameObject*>* _pFoundGameObjects);
+		static GameObject* FindGameObject(const std::string& _name);
+		static void FindGameObjects(const std::string& _name, std::vector<GameObject*>* _pFoundGameObjects);
+		static GameObject* FindGameObject(const EntityId _entityId);
+		static void FindGameObjects(GameObjectTag _tag,std::vector<GameObject*>* _pFoundGameObjects);
 
 		/// <summary>
 		/// このオブジェクトを削除する
@@ -123,7 +123,7 @@ namespace mtgb
 		return *pActiveScene;
 	}
 	template<typename T>
-	inline T* GameObject::FindGameObject() const
+	inline T* GameObject::FindGameObject()
 	{
 		// templateキーワードを付けないと<T>の<が小なりと区別がつかない?
 		return mtgb::Game::System<SceneSystem>().GetActiveScene()->template GetGameObject<T>();

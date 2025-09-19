@@ -89,7 +89,7 @@ void mtgb::CameraSystem::UnregisterDrawCamera(const Transform* pCameraTransform_
 }
 
 
-mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScreenData& _data) const
+mtgb::Vector3 mtgb::CameraSystem::GetWorldToScreenPos(Vector3 _pos, const WorldToScreenData& _data) const
 {
 	//Vector3 screenPos = DirectX::XMVector3Project(
 	return DirectX::XMVector3Project(
@@ -110,7 +110,7 @@ mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, const WorldToScree
 
 }
 
-mtgb::Vector3 mtgb::CameraSystem::WorldToScreen(Vector3 _pos, WindowContext _context)
+mtgb::Vector3 mtgb::CameraSystem::GetWorldToScreenPos(Vector3 _pos, WindowContext _context)
 {
 	const D3D11_VIEWPORT& viewport = WinCtxRes::Get<Direct3DResource>(_context).GetViewport();
 	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_context).GetHCamera();
@@ -161,6 +161,11 @@ const mtgb::Transform& mtgb::CameraSystem::GetTransform(CameraHandleInScene _hCa
 	&& "ä˘Ç…ñ≥å¯âªÇ≥ÇÍÇΩÉJÉÅÉâÇ™éQè∆Ç≥ÇÍÇ‹ÇµÇΩÅB");
 
 	return *pTransform;
+}
+
+const mtgb::Transform& mtgb::CameraSystem::GetTransform(WindowContext _context) const
+{
+	return GetTransform(WinCtxRes::Get<CameraResource>(_context).GetHCamera());
 }
 
 void mtgb::CameraSystem::GetViewMatrix(Matrix4x4* _pView) const

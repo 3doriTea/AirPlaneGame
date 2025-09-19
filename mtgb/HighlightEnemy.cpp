@@ -80,7 +80,7 @@ void HighlightEnemy::Draw() const
 
 	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 
-	firstWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
+	firstWndRectDetector_.ForEach([this,ratio](const ScreenCoordContainsInfo& _info)
 		{
 			if (_info.screenPos.z > 0.0f && _info.screenPos.z < 1.0f)
 			{
@@ -98,7 +98,7 @@ void HighlightEnemy::Draw() const
 	// 二つ目のウィンドウ
 	const RectDetectorConfig& secondConfig = secondWndRectDetector_.config;
 
-	secondWndRectDetector_.ForEach([this,ratio](const RectContainsInfo& _info)
+	secondWndRectDetector_.ForEach([this,ratio](const ScreenCoordContainsInfo& _info)
 		{
 			if (_info.screenPos.z > 0.0f && _info.screenPos.z < 1.0f)
 			{

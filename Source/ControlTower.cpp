@@ -55,7 +55,7 @@ void ControlTower::Draw() const
 			// ‰æ–Êã‚ÉUŒ‚ó‘Ô‚Ì“G‚ª‚¢‚é‚©Šm”F
 			auto& detectedTargets = detector.detectedTargets;
 			bool isOnScreen = std::any_of(detectedTargets.begin(), detectedTargets.end(),
-				[enemy](const RectContainsInfo& _info)
+				[enemy](const ScreenCoordContainsInfo& _info)
 				{
 					return _info.entityId == enemy;
 				});

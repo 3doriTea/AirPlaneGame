@@ -219,8 +219,8 @@ void PlayerGunner::Update()
 
 	MTImGui::Instance().DirectShow([this]()
 		{
-			auto& targets =pTargetingSystem_->targetDetector.detectedTargets;
-			for (RectContainsInfo& info : targets)
+			auto& targets =pTargetingSystem_->detector->GetDetectedTargets();
+			for (const ScreenCoordContainsInfo& info : targets)
 			{
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}

@@ -21,7 +21,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	// TargetingSystem‚ð‰Šú‰»
 	pTargetingSystem_ = new TargetingSystem();
 	pTargetingSystem_->Initialize(pTransform, rectCenter, lockOnSide);
-	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::First;
+	pTargetingSystem_->detector.config.windowContext = WindowContext::First;
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::A;
 }
 
@@ -49,8 +49,8 @@ void PlayerPilot::Update()
 
 	MTImGui::Instance().DirectShow([this]()
 		{
-			auto& targets = pTargetingSystem_->targetDetector.detectedTargets;
-			for (RectContainsInfo& info : targets)
+			auto& targets = pTargetingSystem_->detector->GetDetectedTargets();
+			for (const ScreenCoordContainsInfo& info : targets)
 			{
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}
