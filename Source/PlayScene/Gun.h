@@ -10,11 +10,12 @@ class Gun
 public:
 	struct Setting
 	{
+		float preShotWaitTimeSec;			// 発射前の待機時間(秒)
 		float oneShotTimeSec;               // 1発撃ったあとの待機時間(秒)
 		float reloadTimeSec;                // リロード中の待機時間(秒)
 		int bulletCount;                    // リロードまでに撃てる弾数
 		ProjectTile::Shooter bulletType;    // 弾の種類（誰が撃つか）
-		ProjectTile::Type projectileType;   // 発射体の種類（BulletかMissile）
+		ProjectTile::Type projectileType;   // 発射体の種類
 	};
 public:
 	Gun(Setting&& _setting);
@@ -51,8 +52,13 @@ public:
 	/// <returns>クールタイムである true / false</returns>
 	const bool IsOneShotCooling() const { return oneShotTimeLeft_ >= 0.0f; }
 
+	/// <summary>
+	/// リロードが必要か
+	/// </summary>
+	/// <returns></returns>
 	const bool IsNeedReload() const { return shotCountLeft_ <= 0; }
 
+	
 private:
 	void ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Transform* _target);
 	Setting setting_;

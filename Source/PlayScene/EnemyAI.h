@@ -28,6 +28,8 @@ public:
 		Vector3 lookPosition;
 	};
 
+	
+
 	/// <summary>
 	/// メインステート
 	/// </summary>
@@ -60,6 +62,7 @@ public:
 	/// </summary>
 	/// <param name="_data">AIの更新時に参照されるデータ</param>
 	inline void SetInputData(InputData&& _data) { input_ = std::move(_data); }
+
 	/// <summary>
 	/// 出力データをゲットする
 	/// </summary>

@@ -34,6 +34,7 @@ void Gun::Update()
 	{
 		reloadTimeLeft_ -= DT;
 	}
+	
 }
 
 void Gun::Reload()
@@ -42,6 +43,7 @@ void Gun::Reload()
 	reloadTimeLeft_ = setting_.reloadTimeSec;
 	// Œ‚‚Ä‚é’e”‚àƒŠƒZƒbƒg
 	shotCountLeft_ = setting_.bulletCount;
+	
 }
 
 void Gun::ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Transform* _target)
@@ -54,6 +56,7 @@ void Gun::ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Tran
 	{
 		return;
 	}
+	
 
 	if (IsNeedReload())
 	{

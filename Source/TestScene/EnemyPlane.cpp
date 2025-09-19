@@ -27,7 +27,7 @@ namespace
 
 	const float ONE_SHOT_TIME_SEC{ 1.0f };     // 1発撃ったあとの待機時間(秒)
 	const float RELOAD_TIME_SEC{ 1.0f };      // リロード中の待機時間(秒)
-	const int BULLET_COUNT{ 5 };          // リロードまでに撃てる弾数
+	const int BULLET_COUNT{ 1 };          // リロードまでに撃てる弾数
 
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
 }
@@ -59,7 +59,7 @@ EnemyPlane::EnemyPlane(
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
 			.bulletType = ProjectTile::Shooter::Enemy,
-			.projectileType = ProjectTile::Type::Missile,  // 通常弾を使用
+			.projectileType = ProjectTile::Type::Missile,  // ミサイルを使用
 		}
 	},
 	ai_{}
@@ -114,8 +114,6 @@ EnemyPlane::EnemyPlane(
 		massert(false && "pEnemiesControllerが見つかりませんでした。 @Enemy::Update");
 		return;
 	}
-
-	//Game::System<TrailEmitterSystem>().
 }
 
 EnemyPlane::~EnemyPlane()
@@ -161,9 +159,9 @@ void EnemyPlane::Update()
 	}
 
 	gun_.Update();
-	if (outData.isFire)
+	if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
 	{
-		//gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate);
+		
 		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
 	}
 
@@ -179,7 +177,6 @@ void EnemyPlane::Update()
 	
 	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 1.0f);
 
-
 	// 前方向、頭は上方向に
 	Vector3 forward{ pTransform_->Forward() };
 	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
@@ -190,16 +187,7 @@ void EnemyPlane::Update()
 
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
-	if (lockOnTarget_)
-	{
-		/*Vector3 diffDir{ pTarget_->position - pTransform_->position };
-		Quaternion lookQuaternion{ Quaternion::LookRotation(diffDir, pTransform_->Up()) };
-		pTransform_->rotate = Quaternion::SLerp(pTransform_->rotate, lookQuaternion, Time::DeltaTimeF());
-		pRB_->velocity_ = pTransform_->Forward() * CHASE_SPEED;*/
-	}
-	//Vector3 diffDir{ pTarget_->position - pTransform_->position };
-	//DirectX::XMQuaternionBaryCentric
-
+	
 	Search();
 
 	// もしターゲットしているなら、弾を打つ
