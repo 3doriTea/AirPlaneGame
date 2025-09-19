@@ -7,7 +7,7 @@
 #include "RayDetector.h"
 #include <memory>
 #include "DetectorConfigs.h"
-
+#include <type_traits>
 /// <summary>
 /// 検出方式の種類
 /// </summary>
@@ -27,7 +27,8 @@ struct TargetingSystem
 	~TargetingSystem();
 
 	// ターゲット検出関連
-	std::unique_ptr<IDetector> detector;
+	//std::unique_ptr<IDetector> detector;
+	IDetector* detector;
 	DetectionType detectionType;
 	ScreenCoordContainsInfo* currentTarget;
 
@@ -84,7 +85,7 @@ struct TargetingSystem
 	/// <summary>
 	/// 下位互換性のための初期化メソッド
 	/// </summary>
-	void Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize);
+	//void Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize);
 	template<typename DetectorConfigType>
 	void Initialize(Transform* _owner, const DetectorConfigType& _config);
 
@@ -98,5 +99,20 @@ struct TargetingSystem
 template<typename DetectorConfigType>
 inline void TargetingSystem::Initialize(Transform* _owner, const DetectorConfigType& _config)
 {
-
+	if constexpr (std::is_same_v<DetectorConfigType, RectDetectorConfig>)
+	{
+		detector = new RectDetector(_config);
+	}
+	else if constexpr (std::is_same_v<DetectorConfigType, CircleDetectorConfig>)
+	{
+		detector = new CircleDetector(_config);
+	}
+	else if constexpr (std::is_same_v<DetectorConfigType, RayDetectorConfig>)
+	{
+		detector = new RayDetector(_config);
+	}
+	else
+	{
+		static_assert(false, "有効でない型でした");
+	}
 }

@@ -31,7 +31,21 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 	// TargetingSystem‚ð‰Šú‰»
 	pTargetingSystem_ = new TargetingSystem();
-	pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
+	
+	RectDetectorConfig config =
+	{
+		.detectionRect =
+		{
+			rectCenter.x - lockOnSide / 2.0f,
+			rectCenter.y - lockOnSide / 2.0f,
+			lockOnSide,
+			lockOnSide
+		},
+		.maxDistance = 100.0f,
+		.minDistance = 0.0f,
+		.windowContext = WindowContext::Second
+	};
+	//pTargetingSystem_->Initialize(pTransform_,)
 	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 

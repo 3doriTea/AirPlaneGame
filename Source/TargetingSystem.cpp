@@ -35,7 +35,7 @@ TargetingSystem::~TargetingSystem()
 
 void TargetingSystem::SetDetectionType(DetectionType type)
 {
-	detectionType = type;
+	/*detectionType = type;
 	
 	switch (type)
 	{
@@ -48,7 +48,7 @@ void TargetingSystem::SetDetectionType(DetectionType type)
 	case DetectionType::Ray:
 		detector = std::make_unique<RayDetector>(rayDetector);
 		break;
-	}
+	}*/
 }
 
 void TargetingSystem::InitializeAsRect(Transform* owner, const Vector2F& screenCenter, float detectionSize)
