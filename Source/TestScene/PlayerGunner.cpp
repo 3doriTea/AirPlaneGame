@@ -27,26 +27,20 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
-	float lockOnSide = 200.0f;
+	float lockOnSide = 100.0f;
 
-	// TargetingSystem‚ð‰Šú‰»
-	pTargetingSystem_ = new TargetingSystem();
-	
-	RectDetectorConfig config =
+	// TargetingSystem‚ð‰Šú‰»	
+	CircleDetectorConfig config =
 	{
-		.detectionRect =
-		{
-			rectCenter.x - lockOnSide / 2.0f,
-			rectCenter.y - lockOnSide / 2.0f,
-			lockOnSide,
-			lockOnSide
-		},
-		.maxDistance = 100.0f,
-		.minDistance = 0.0f,
-		.windowContext = WindowContext::Second
+		.center = rectCenter,
+		.radius = lockOnSide,
 	};
-	//pTargetingSystem_->Initialize(pTransform_,)
-	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
+	config.maxDistance = 200.0f;
+	config.minDistance = 0.0f;
+	config.targetTag = GameObjectTag::Enemy;
+	config.windowContext = WindowContext::Second;
+	config.uiParams.layerFlag = GameObjectLayer::B;
+	pTargetingSystem_ = new TargetingSystem(pTransform_, config);
 	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 
 	// Rader‚ð‰Šú‰»
@@ -201,14 +195,6 @@ void PlayerGunner::Update()
 		Matrix4x4 mRotPlane{};
 		pPlaneTransform_->GenerateWorldRotationMatrix(&mRotPlane);
 
-		//mRot = mRot * XMMatrixRotationY(angleY_);
-
-		//XMMatrixRotationY(angleY_);
-
-		/*XMVector3Dot(pPlaneTransform_->Forward(), pTransform_->Forward())*/
-
-		//XMVector3AngleBetweenVectors
-		
 		Vector3 angles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Forward()) };
 
 		Vector3 rightAngles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Right()) };
@@ -221,10 +207,6 @@ void PlayerGunner::Update()
 			angle = XM_2PI - angle;
 		}
 
-		// Vector3 gunForward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
-		// Vector3 planeForward{ XMVector3Cross(pPlaneTransform_->Right(), Vector3::Up()) };
-
-		//angle = DirectX::XMVector3Dot(gunForward, planeForward).m128_f32[0];
 
 		LOGF("angle=%2.0f, rightAngle=%2.0f\n", XMConvertToDegrees(angles.y), XMConvertToDegrees(rightAngles.y));
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());

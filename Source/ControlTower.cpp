@@ -53,7 +53,7 @@ void ControlTower::Draw() const
 		for (EntityId enemy : attackStateEnemies_)
 		{
 			// âÊñ è„Ç…çUåÇèÛë‘ÇÃìGÇ™Ç¢ÇÈÇ©ämîF
-			auto& detectedTargets = detector.detectedTargets;
+			auto& detectedTargets = detector.GetDetectedTargets();
 			bool isOnScreen = std::any_of(detectedTargets.begin(), detectedTargets.end(),
 				[enemy](const ScreenCoordContainsInfo& _info)
 				{
@@ -91,8 +91,6 @@ void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 
 		RectDetectorConfig config =
 		{
-			.targetTag = GameObjectTag::Enemy,
-			.windowContext = _context,
 			.detectionRect =
 			{
 				0.0f,
@@ -100,8 +98,10 @@ void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 				static_cast<float>(screenSize.x),
 				static_cast<float>(screenSize.y),
 			},
-			.maxDistance = detectDistance,
 		};
+		config.targetTag = GameObjectTag::Enemy;
+		config.windowContext = _context;
+		config.maxDistance = detectDistance;
 		wndRectDetector_.try_emplace(_context, config);
 	}
 }

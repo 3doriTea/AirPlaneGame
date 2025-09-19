@@ -5,8 +5,8 @@
 #include "Vector2F.h"
 #include "Vector3.h"
 #include "GameObjectTag.h"
-#include <string>
-
+#include "Transform.h"
+#include "UIDrawCommand.h"
 namespace mtgb
 {
     /// <summary>
@@ -19,6 +19,7 @@ namespace mtgb
         WindowContext windowContext;    // 対象のウィンドウ
         float maxDistance;              // 判定する最大距離
         float minDistance = 0.0f;       // 判定する最小距離
+        UIParams uiParams;
     };
 
     /// <summary>
@@ -43,8 +44,9 @@ namespace mtgb
     /// </summary>
     struct RayDetectorConfig : DetectorConfigBase
     {
-        Vector3 rayOrigin;              // レイの起点（ワールド座標）
-        Vector3 rayDirection;           // レイの方向
-        float maxAngleDegrees;          // 検出可能な最大角度（度）
+        //Vector3 rayOrigin;              // レイの起点（ワールド座標）
+        //Vector3 rayDirection;           // レイの方向
+        Transform rayTransform;           // レイの起点、方向
+        float maxAngleDegrees;            // 検出可能な最大角度（度）
     };
 }

@@ -7,7 +7,8 @@
 #include "CameraResource.h"
 #include "CameraSystem.h"
 #include "Entity.h"
-
+#include "Screen.h"
+#include "Draw.h"
 using namespace mtgb;
 
 mtgb::RectDetector::RectDetector(const RectDetectorConfig& _config)
@@ -77,6 +78,19 @@ void mtgb::RectDetector::UpdateAndSetDetection(RectDetectorConfig&& _config)
 bool mtgb::RectDetector::HasDetectedTargets() const
 {
 	return !detectedTargets_.empty();
+}
+
+void mtgb::RectDetector::DrawDetectionArea() const
+{
+	// åüèoîÕàÕÇÃï`âÊ
+	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+	float scale = (std::min)(ratio.x, ratio.y);
+
+	float scaledSize = config.detectionRect.size.x * scale;
+	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
+	Vector2F newPoint = center - Vector2F{ scaledSize, scaledSize } *0.5f;
+	RectF drawRect = { newPoint,{scaledSize,scaledSize} };
+	Draw::Image(detectionFrameImage, drawRect, config.uiParams);
 }
 
 const std::vector<ScreenCoordContainsInfo>& mtgb::RectDetector::GetDetectedTargets() const

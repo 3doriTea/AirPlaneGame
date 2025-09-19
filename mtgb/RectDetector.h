@@ -9,7 +9,7 @@
 #include "GameObjectTag.h"
 #include "IDetector.h"
 #include "DetectorConfigs.h"
-
+#include "UIDrawCommand.h"
 namespace mtgb
 {
 	/// <summary>
@@ -53,6 +53,7 @@ namespace mtgb
 		/// <returns>対象が一つでもあるなら true</returns>
 		bool HasDetectedTargets() const override;
 
+		void DrawDetectionArea() const override;
 		/// <summary>
 		/// 検出結果を取得
 		/// </summary>
@@ -69,9 +70,8 @@ namespace mtgb
 		/// <param name="_targetInfo">ターゲット</param>
 		/// <returns></returns>
 		bool IsLineOfSight(const Vector3& _cameraPos, const ScreenCoordContainsInfo& _targetInfo);
-
-		// 下位互換性のため既存のメンバも保持
-		//std::vector<ScreenCoordContainsInfo> detectedTargets; // deprecated: GetDetectedTargets()を使用
+		
 		RectDetectorConfig config;
+		ImageHandle detectionFrameImage;
 	};
 }

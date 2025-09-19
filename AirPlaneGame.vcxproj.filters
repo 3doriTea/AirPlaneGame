@@ -841,6 +841,12 @@
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
       <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\CircleDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RayDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1475,6 +1481,18 @@
     </ClInclude>
     <ClInclude Include="mtgb\GameObjectTag.h">
       <Filter>03mtgb\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CircleDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DetectorConfigs.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RayDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

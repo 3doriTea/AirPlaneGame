@@ -18,37 +18,29 @@ HighlightEnemy::HighlightEnemy() : GameObject(GameObjectBuilder()
 	highlightFrameImage_ = Image::Load("Image/highlightEnemyFrame.png");
 	highlightFrameSize = {60.0f,60.0f};
 
-	
-
-	firstWndRectDetector_.config  =
+	// 一つ目のウィンドウ
+	RectDetectorConfig firstConfig =
 	{
-		.targetName = "Enemy",
-		.targetTag = GameObjectTag::Enemy,
-		.windowContext = WindowContext::First,
 		.detectionRect =
 		{
 			0.0f,
 			0.0f,
 			static_cast<float>(firstWndRect.right),
 			static_cast<float>(firstWndRect.bottom),
-		},
-		.maxDistance = distance,
+		}
 	};
-
-	secondWndRectDetector_.config =
-	{
-		.targetName = "Enemy",
-		.targetTag = GameObjectTag::Enemy,
-		.windowContext = WindowContext::Second,
-		.detectionRect =
-		{
-			0.0f,
-			0.0f,
-			static_cast<float>(secondWndRect.right),
-			static_cast<float>(secondWndRect.bottom),
-		},
-		.maxDistance = distance,
-	};
+	firstConfig.targetTag = GameObjectTag::Enemy;
+	firstConfig.maxDistance = distance;
+	firstConfig.minDistance = 0.0f;
+	firstConfig.windowContext = WindowContext::First;
+	
+	// 二つ目のウィンドウ
+	RectDetectorConfig secondConfig = firstConfig;
+	
+	secondConfig.detectionRect.width = static_cast<float>(secondWndRect.right);
+	secondConfig.detectionRect.height = static_cast<float>(secondWndRect.bottom);
+	secondConfig.windowContext = WindowContext::Second;
+	
 }
 
 HighlightEnemy::~HighlightEnemy()

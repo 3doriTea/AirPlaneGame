@@ -37,9 +37,11 @@ namespace mtgb
             // Transform取得
             Transform* pTransform = &Transform::Get(obj->GetEntityId());
             Vector3 worldPos = pTransform->GetWorldPosition();
+            Vector3 rayOrigin = _config.rayTransform.GetWorldPosition();
+            Vector3 rayDirection = _config.rayTransform.Forward();
 
             // 距離チェック
-            float distance = (worldPos - _config.rayOrigin).Size();
+            float distance = (worldPos - rayOrigin).Size();
             
             if (distance < _config.minDistance || distance > _config.maxDistance)
             {
@@ -47,7 +49,7 @@ namespace mtgb
             }
 
             // レイの角度範囲内かチェック
-            if (IsTargetInRayAngle(worldPos, _config.rayOrigin, _config.rayDirection, _config.maxAngleDegrees))
+            if (IsTargetInRayAngle(worldPos, rayOrigin, rayDirection, _config.maxAngleDegrees))
             {
                 // ワールド座標をスクリーン座標に変換
                 Vector3 screenPos = Game::System<CameraSystem>().GetWorldToScreenPos(worldPos, _config.windowContext);

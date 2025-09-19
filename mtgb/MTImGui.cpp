@@ -216,7 +216,7 @@ void mtgb::MTImGui::SetupShowFunc()
 
     Set<RectDetector>([](RectDetector* _target, const char* _name)
         {
-            for (auto& target : _target->detectedTargets)
+            for (auto& target : _target->GetDetectedTargets())
             {
                 TypeRegistry::Instance().CallFunc(&target, "RectContains:" + target.entityId);
             }

@@ -9,7 +9,7 @@
 namespace mtgb
 {
     /// <summary>
-    /// 検出器の基底インターフェース
+    /// 検出システムのインターフェース
     /// </summary>
     class IDetector
     {
@@ -32,6 +32,11 @@ namespace mtgb
         /// </summary>
         /// <returns>検出された対象のリスト</returns>
         virtual const std::vector<ScreenCoordContainsInfo>& GetDetectedTargets() const = 0;
+
+        /// <summary>
+        /// <para> 検出範囲をUIで描画 <para>
+        /// </summary>
+        virtual void DrawDetectionArea() const{}
 
         /// <summary>
         /// 検出結果を操作

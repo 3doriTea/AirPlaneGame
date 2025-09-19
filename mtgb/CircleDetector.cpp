@@ -3,17 +3,25 @@
 #include "Game.h"
 #include "GameObject.h"
 #include <cmath>
-
+#include "Screen.h"
+#include "Draw.h"
+#include "Image.h"
 namespace mtgb
 {
-    CircleDetector::CircleDetector(const CircleDetectorConfig& _config)
-        : config(_config)
+    CircleDetector::CircleDetector()
     {
+        detectionCircleImage = Image::Load("Image/lockOnCircleGreen.png");
+    }
+    CircleDetector::CircleDetector(const CircleDetectorConfig& _config)
+        : CircleDetector{}
+    {
+        config = _config;
     }
 
     CircleDetector::CircleDetector(CircleDetectorConfig&& _config)
-        : config(std::move(_config))
+        : CircleDetector{}
     {
+        config = std::move(_config);
     }
 
     void CircleDetector::UpdateDetection()
@@ -31,7 +39,6 @@ namespace mtgb
 
         for (const auto& obj : findObjs)
         {
-            
             // TransforméÊìæ
             Transform* pTransform = &Transform::Get(obj->GetEntityId());
             Vector3 worldPos = pTransform->GetWorldPosition();
@@ -78,6 +85,19 @@ namespace mtgb
     const std::vector<ScreenCoordContainsInfo>& CircleDetector::GetDetectedTargets() const
     {
         return detectedTargets_;
+    }
+
+    void CircleDetector::DrawDetectionArea() const
+    {
+        // åüèoîÕàÕÇÃï`âÊ
+        Vector2F ratio = Game::System<Screen>().GetSizeRatio();
+        float scale = (std::min)(ratio.x, ratio.y);
+
+        float scaledSize = config.radius * 2.0f * scale;
+        Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
+        Vector2F newPoint = center - Vector2F{ scaledSize, scaledSize } *0.5f;
+        RectF drawRect = { newPoint,{scaledSize,scaledSize} };
+        Draw::Image(detectionCircleImage, drawRect, config.uiParams);
     }
 
     void CircleDetector::ForEach(std::function<void(ScreenCoordContainsInfo&)> _func)

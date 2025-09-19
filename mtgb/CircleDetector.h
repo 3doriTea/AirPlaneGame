@@ -3,7 +3,7 @@
 #include "IDetector.h"
 #include "DetectorConfigs.h"
 #include <functional>
-
+#include "UIDrawCommand.h"
 namespace mtgb
 {
     /// <summary>
@@ -12,7 +12,7 @@ namespace mtgb
     class CircleDetector : public IDetector
     {
     public:
-        CircleDetector() = default;
+        CircleDetector();
         CircleDetector(const CircleDetectorConfig& _config);
         CircleDetector(CircleDetectorConfig&& _config);
         ~CircleDetector() = default;
@@ -42,6 +42,7 @@ namespace mtgb
         /// </summary>
         const std::vector<ScreenCoordContainsInfo>& GetDetectedTargets() const override;
 
+        void DrawDetectionArea() const override;
         void ForEach(std::function<void(ScreenCoordContainsInfo&)> _func) override;
         void ForEach(std::function<void(const ScreenCoordContainsInfo&)> _func) const override;
 
@@ -51,5 +52,6 @@ namespace mtgb
         bool IsPointInCircle(const Vector2F& point, const Vector2F& center, float radius) const;
 
         CircleDetectorConfig config;
+        ImageHandle detectionCircleImage;
     };
 }

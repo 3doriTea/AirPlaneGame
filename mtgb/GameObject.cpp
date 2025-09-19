@@ -52,5 +52,5 @@ mtgb::GameObject* mtgb::GameObject::FindGameObject(const EntityId _entityId)
 
 void mtgb::GameObject::FindGameObjects(GameObjectTag _tag, std::vector<GameObject*>* _pFoundGameObjects)
 {
-
+	mtgb::Game::System<SceneSystem>().GetActiveScene()->GetGameObjects(_tag, _pFoundGameObjects);
 }
