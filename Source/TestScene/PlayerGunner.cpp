@@ -2,6 +2,7 @@
 #include "PlayerBullet.h"
 #include "UI/Radar.h"
 #include "../TargetingSystem.h"
+#include "PlayerGun.h"
 
 using namespace mtgb;
 
@@ -19,8 +20,8 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	angleX_{ 0.0f },
 	angleY_{ 0.0f },
 	pRadarUI_{ nullptr },
-	pPlaneTransform_{ &Transform::Get(_plane) },
-	pTargetingSystem_{}
+	pPlaneTransform_{ &Transform::Get(_plane) }
+//	pTargetingSystem_{}
 {
 	// PlayerGunnerが乗る飛行機のTransformは親に設定しない
 	//pTransform_->SetParent(_plane);
@@ -30,10 +31,12 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	float lockOnSide = 200.0f;
 
 	// TargetingSystemを初期化
-	pTargetingSystem_ = new TargetingSystem();
-	pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
-	pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
-	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
+	//pTargetingSystem_ = new TargetingSystem();
+	//pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
+	//pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
+	//pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
+
+	pPlayerGun_ = new PlayerGun(WindowContext::First, GameObjectLayer::A, pTransform_, lockOnSide);
 
 	// Raderを初期化
 	pRadarUI_ = Instantiate<Radar>(_plane, GameObjectLayer::B);
@@ -41,11 +44,14 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 PlayerGunner::~PlayerGunner()
 {
-	delete pTargetingSystem_;
+//	delete pTargetingSystem_;
+	delete pPlayerGun_;
 }
 
 void PlayerGunner::Update()
 {
+	pPlayerGun_->Update();
+
 	// 位置を飛行機に同期させる
 	pTransform_->position = pPlaneTransform_->GetWorldPosition();
 
@@ -170,11 +176,13 @@ void PlayerGunner::Update()
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
 
-	pTargetingSystem_->SearchTargets();
+//	pTargetingSystem_->SearchTargets();
+	pPlayerGun_->Update();
 	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
 	{
 		//Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
-		pTargetingSystem_->FireAtTarget();
+	//	pTargetingSystem_->FireAtTarget();
+		pPlayerGun_->Fire();
 	}
 
 	if (pRadarUI_)
@@ -216,19 +224,20 @@ void PlayerGunner::Update()
 		pRadarUI_->SetViewAngle(angle);
 	}
 
-	MTImGui::Instance().DirectShow([this]()
+	/*MTImGui::Instance().DirectShow([this]()
 		{
 			auto& targets =pTargetingSystem_->targetDetector.detectedTargets;
 			for (RectContainsInfo& info : targets)
 			{
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}
-		},"GunnerContains",ShowType::Inspector);
+		},"GunnerContains",ShowType::Inspector);*/
 }
 
 void PlayerGunner::Draw() const
 {
-	pTargetingSystem_->DrawUI();
+//	pTargetingSystem_->DrawUI();
+	pPlayerGun_->Draw();
 	/*if (pRadarUI_)
 	{
 		pRadarUI_->Draw();
