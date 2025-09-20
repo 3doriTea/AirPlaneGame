@@ -183,6 +183,7 @@
     <ClCompile Include="Source\TestScene\EnemyBullet.cpp" />
     <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
     <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGun.cpp" />
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
@@ -421,6 +422,7 @@
     <ClInclude Include="Source\TestScene\EnemyBullet.h" />
     <ClInclude Include="Source\TestScene\EnemyPlane.h" />
     <ClInclude Include="Source\TestScene\PlayerBullet.h" />
+    <ClInclude Include="Source\TestScene\PlayerGun.h" />
     <ClInclude Include="Source\TestScene\PlayerGunner.h" />
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
