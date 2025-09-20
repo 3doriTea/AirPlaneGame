@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float COOLTIME_MAX{ 1.0f };
+	const float COOL_TIME_SEC{ 1.0f };
 }
 
 PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside) : coolTime_(0.0f)
@@ -36,7 +36,7 @@ void PlayerGun::Fire()
 	if (coolTime_ <= 0.0f)
 	{
 		pTargetingSystem_->FireAtTarget();
-		coolTime_ = COOLTIME_MAX;
+		coolTime_ = COOL_TIME_SEC;
 	}
 }
 
