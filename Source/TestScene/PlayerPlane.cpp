@@ -39,7 +39,7 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 			GameObject* pTarget{ FindGameObject(_targetId) };
 			if (pTarget == nullptr)
 			{
-				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId, entityId_, GetName().c_str());
+				//LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId, entityId_, GetName().c_str());
 				return;
 			}
 			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
@@ -48,7 +48,7 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 				ScoreManager::SubtractScore(100);
 				return;
 			}
-			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			//LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 		});
 
 	// Raderを初期化

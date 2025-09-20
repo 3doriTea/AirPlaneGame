@@ -15,8 +15,8 @@ namespace
 	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
 	const float ENEMY_SCALE{ 0.5f }; // スケール
-	const float SHOOT_COOLDOWN{ 1.0f }; // 弾を撃つクールダウン時間
-	const int MAX_BULLETS{ 5 }; // 同時に存在できる弾の最大数
+	const float SHOOT_COOLDOWN{ 5.0f }; // 弾を撃つクールダウン時間
+	const int MAX_BULLETS{ 3 }; // 同時に存在できる弾の最大数
 	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
 
 	// デフォルトの敵スピード
@@ -77,10 +77,10 @@ EnemyPlane::EnemyPlane(
 			GameObject* pTarget{ FindGameObject(_targetId) };
 			if (pTarget == nullptr)
 			{
-				LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
+				//LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
 				return;
 			}
-			LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
+			//LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 
 			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
@@ -214,10 +214,14 @@ void EnemyPlane::Update()
 
 void EnemyPlane::Draw() const
 {
+	const EnemyAI::OutData& outData{ ai_.GetOutData() };
+	if (outData.isActive == false)
+	{
+		return;
+	}
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 	pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
-	
 }
 
 void EnemyPlane::Search()
@@ -247,4 +251,10 @@ void EnemyPlane::Search()
 bool EnemyPlane::LockOnTarget() const
 {
 	return lockOnTarget_;
+}
+
+bool EnemyPlane::IsActive() const
+{
+	const EnemyAI::OutData& outData{ ai_.GetOutData() };
+	return outData.isActive;
 }
