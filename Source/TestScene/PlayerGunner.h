@@ -3,7 +3,7 @@
 
 class Radar;
 //struct TargetingSystem;
-struct PlayerGun;
+class PlayerGun;
 
 class PlayerGunner : public mtgb::GameObject
 {

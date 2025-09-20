@@ -2,7 +2,7 @@
 #include <mtgb.h>
 
 
-struct PlayerGun;
+class PlayerGun;
 
 class PlayerPilot : public mtgb::GameObject
 {
