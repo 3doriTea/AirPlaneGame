@@ -29,6 +29,7 @@
     <ClCompile Include="mtgb\CircleDetector.cpp" />
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
+    <ClCompile Include="mtgb\EventManager.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\HighlightEnemy.cpp" />
@@ -206,6 +207,7 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\nishi\AppData\Local\Temp\COPILOTBASELINE\a0702f58\~EVENTMANAGER.H" />
     <ClInclude Include="mtgb\CircleDetector.h" />
     <ClInclude Include="mtgb\DetectorConfigs.h" />
     <ClInclude Include="mtgb\EventManager.h" />
@@ -449,6 +451,7 @@
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
     <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
     <None Include="mtgb\DefaultShow.inl" />

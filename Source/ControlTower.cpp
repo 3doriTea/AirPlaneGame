@@ -58,6 +58,7 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 
 ControlTower::~ControlTower()
 {
+	Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Unsubscribe(id_);
 }
 
 void ControlTower::Update()

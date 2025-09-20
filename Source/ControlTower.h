@@ -32,6 +32,7 @@ private:
 
 	TextBox* pTextBox_; // Žš–‹
 	TimerHandle hTimer_;
+	EventHandlerId id_;
 private:
 	void ProjectionEventHandler(const ProjectTile::EventData& _data);
 	void OnProjectionFired(const ProjectTile::EventData& _data);
