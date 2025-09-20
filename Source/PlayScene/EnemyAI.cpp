@@ -72,6 +72,14 @@ EnemyAI::EnemyAI()
 		{
 			// 最初のStartを呼び出すために変更
 			sFight_.Change(SF_LOOK_AT_PLAYER);
+
+			// 現在の状態、Idを通知
+			Game::System<EventManager>().GetEvent<EventData>().Invoke(
+				{
+					.mainState = sMain_.Current(),
+					.fightState = sFight_.Current(),
+					.id = input_.pSelfTrans->GetEntityId()
+				});
 		})
 		.OnUpdate(S_FIGHT,  [this]
 		{

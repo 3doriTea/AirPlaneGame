@@ -4,6 +4,17 @@
 #include "DrawScreenUtility.h"
 #include "CameraSystem.h"
 
+
+TargetingSystem::TargetingSystem()
+	: detector{ nullptr }
+	, currentTarget{ nullptr }
+	, reticleRadius{ 0.0f }
+	, reticleRect{}
+	, targetReticleImage{ -1 }
+	, uiParams{}
+	, ownerTransform{ nullptr }
+{
+}
 TargetingSystem::~TargetingSystem()
 {
 }
@@ -33,15 +44,17 @@ void TargetingSystem::SearchTargets()
 
 	if (it != detectedTargets.end())
 	{
-		if ((*it).screenPos.z > 0.0f && (*it).screenPos.z < 1.0f)
-		{
-			currentTarget = const_cast<ScreenCoordContainsInfo*>(&(*it)); // 最も近い敵をターゲットに設定
-		}
+		currentTarget = const_cast<ScreenCoordContainsInfo*>(&(*it)); // 最も近い敵をターゲットに設定
 	}
 	else
 	{
 		currentTarget = nullptr; // ターゲットが見つからない場合
 	}
+}
+
+void TargetingSystem::ClearTarget()
+{
+	currentTarget = nullptr;
 }
 
 void TargetingSystem::FireAtTarget()

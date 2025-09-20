@@ -208,6 +208,7 @@
   <ItemGroup>
     <ClInclude Include="mtgb\CircleDetector.h" />
     <ClInclude Include="mtgb\DetectorConfigs.h" />
+    <ClInclude Include="mtgb\EventManager.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\GameObjectTag.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />

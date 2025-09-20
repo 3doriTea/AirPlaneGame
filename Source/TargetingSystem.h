@@ -14,6 +14,8 @@
 /// </summary>
 struct TargetingSystem
 {
+	TargetingSystem();
+
 	template<typename DetectorConfigType>
 	TargetingSystem(Transform* _owner, const DetectorConfigType& _config);
 	~TargetingSystem();
@@ -32,7 +34,8 @@ struct TargetingSystem
 	Transform* ownerTransform;
 
 	void SearchTargets();
-	
+
+	void ClearTarget();
 	/// <summary>
 	/// <para> ターゲットに向かって射撃を行う </para>
 	/// <para> ターゲットがいない場合は正面方向に射撃</para>
@@ -86,3 +89,5 @@ inline TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigT
 	// レティクル矩形のサイズを設定
 	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };
 }
+
+

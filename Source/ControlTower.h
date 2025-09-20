@@ -4,6 +4,10 @@
 #include <tuple>
 #include <optional>
 #include <map>
+#include "ProjectTile.h"
+#include "../Source/TextBox.h"
+#include "TutorialScene/SpeechQueue.h"
+
 class ControlTower : public mtgb::GameObject
 {
 public:
@@ -14,8 +18,6 @@ public:
 	void Draw() const override;
 	void SetControlTarget(EntityId _id, WindowContext _context);
 private:
-	std::pair<Transform*, WindowContext> pGunner_;
-	std::pair<Transform*, WindowContext> pPilot_;
 	Transform* pPlayerPlaneTransform_;
 
 	float detectionRadius_;// プレイヤーを原点にして検出をする球の半径
@@ -27,9 +29,17 @@ private:
 	ImageHandle enemyArrowImage_; // 画面外のターゲットの方角を示す画像
 	Vector2F highlightFrameSize_; // ターゲット強調表示の画像のサイズ
 	Vector2F enemyArrowImageSize_; // 画面外のターゲットの方角を表す画像のサイズ
+
+	TextBox* pTextBox_; // 字幕
+	TimerHandle hTimer_;
+private:
+	void ProjectionEventHandler(const ProjectTile::EventData& _data);
+	void OnProjectionFired(const ProjectTile::EventData& _data);
+	void OnProjectionHit(const ProjectTile::EventData& _data);
+	void OnProjectionDestroyed(const ProjectTile::EventData& _data);
+
+	void Speech(const SPEECH_ELEMENT& _speechElement);
 	void DetectionEnemy(Transform* _transform);
-
-
 	// 画面外の敵の方角を矢印で表示する
 	void DrawEnemyArrow(EntityId _entityId) const;
 

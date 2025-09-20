@@ -37,8 +37,8 @@ namespace mtgb
             // Transform取得
             Transform* pTransform = &Transform::Get(obj->GetEntityId());
             Vector3 worldPos = pTransform->GetWorldPosition();
-            Vector3 rayOrigin = _config.rayTransform.GetWorldPosition();
-            Vector3 rayDirection = _config.rayTransform.Forward();
+            Vector3 rayOrigin = _config.rayTransform->GetWorldPosition();
+            Vector3 rayDirection = _config.rayTransform->Forward();
 
             // 距離チェック
             float distance = (worldPos - rayOrigin).Size();

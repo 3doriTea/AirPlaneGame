@@ -68,11 +68,11 @@ void TestScene::Initialize()
 
 	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
 	pEnemiesController->Spawan({ 0, 0, 10 });
-	pEnemiesController->Spawan({ 0, 0, 300 });
+	/*pEnemiesController->Spawan({ 0, 0, 300 });
 	pEnemiesController->Spawan({ 0, -100, 500 });
 	pEnemiesController->Spawan({ 100, 0, 500 });
 	pEnemiesController->Spawan({ 300, 0, 500 });
-	pEnemiesController->Spawan({ 300, 0, 500 });
+	pEnemiesController->Spawan({ 300, 0, 500 });*/
 
 	//Instantiate<EnemyPlane>(Vector3{ 0, 0, 0 }, eIdPlayer);
 	
