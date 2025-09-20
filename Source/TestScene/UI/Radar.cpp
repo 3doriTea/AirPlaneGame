@@ -114,6 +114,7 @@ void Radar::Draw() const
 
 	for (Vector2Int markPos : enemyMarkPos_)
 	{
+		// 距離がレーダー範囲外なら端っこに描画
 		int lengthDouble{ markPos.x * markPos.x + markPos.y * markPos.y };
 		if (lengthDouble >= HIDE_DISTANCE_DOUBLE)
 		{
@@ -128,6 +129,7 @@ void Radar::Draw() const
 
 	for (auto& markPos : missileMarkPos_)
 	{
+		// 距離がレーダー範囲外なら描画しない
 		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
 		{
 			continue;
