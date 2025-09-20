@@ -39,7 +39,7 @@ void PlayerPilot::Update()
 {
 	pPlayerGun->Update();
 	
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(FlightStickCode::Thumb,WindowContext::First))
+	if (InputUtil::GetKey(KeyCode::Space) || InputUtil::GetGamePad(FlightStickCode::Thumb,WindowContext::First))
 	{
 		//pTargetingSystem_->FireAtTarget();
 		pPlayerGun->Fire();
