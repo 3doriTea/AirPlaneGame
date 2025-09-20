@@ -178,7 +178,7 @@ void PlayerGunner::Update()
 
 //	pTargetingSystem_->SearchTargets();
 	pPlayerGun_->Update();
-	if (InputUtil::GetKeyDown(KeyCode::Space) || InputUtil::GetGamePadDown(PadCode::RB,WindowContext::Second))
+	if (InputUtil::GetKey(KeyCode::Space) || InputUtil::GetGamePad(PadCode::RB,WindowContext::Second))
 	{
 		//Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
 	//	pTargetingSystem_->FireAtTarget();
