@@ -1,6 +1,7 @@
 #pragma once
 #include "GameScene.h"
 #include "TextBox.h"
+#include "TerrainReader.h"
 
 namespace Network
 {
@@ -26,4 +27,6 @@ private:
 
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;
+
+	TerrainReader8* pReader8_;
 };

@@ -40,31 +40,6 @@ void ControlTower::Update()
 		// 現状二人のプレイヤーは同じ飛行機に乗っていて座標は同じなので先頭のTransformを渡す
 		DetectionEnemy(controlTargetTransform_.begin()->second);
 	}
-	Transform* pCameraTransform = controlTargetTransform_[WindowContext::First];
-
-	// 敵の Transformを取得
-	if (attackStateEnemies_.empty()) return;
-
-	Transform& enemyTransform = Transform::Get(attackStateEnemies_[0]);
-
-	// カメラから敵への方向ベクトルを計算
-	Vector3 toEnemy = Vector3::Normalize(enemyTransform.GetWorldPosition() - pCameraTransform->GetWorldPosition());
-
-	// カメラ視点の敵の方向を2D座標系で計算
-	float x = DirectX::XMVectorGetX(DirectX::XMVector3Dot(toEnemy, pCameraTransform->Right()));
-	float y = DirectX::XMVectorGetX(DirectX::XMVector3Dot(toEnemy, pCameraTransform->Up()));
-
-	// ウィンドウの中心から円周上の位置を計算
-	Vector2F screenCenter = Game::System<Screen>().GetSizeF() * 0.5f;
-	float circleRadius = 100.0f; // 矢印を表示する円の半径(仮)
-
-	// 敵の方向の角度を計算
-	float angle = DirectX::XMConvertToDegrees( std::atan2f(y, x));
-	MTImGui::Instance().DirectShow([angle,x,y]()
-		{
-			ImGui::Text("x,y:%.3f,%.3f", x,y);
-			ImGui::Text("angle:%.3f", angle);
-		},"angle",ShowType::Inspector);
 }
 
 void ControlTower::Draw() const

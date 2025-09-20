@@ -32,7 +32,7 @@ PlayScene::PlayScene()
 
 PlayScene::~PlayScene()
 {
-	
+	SAFE_DELETE(pReader8_);
 	//delete ppiio_;
 }
 
@@ -101,6 +101,9 @@ void PlayScene::Initialize()
 	//pEnemiesController->Spawan({ 0, 50, 300 });
 	//pEnemiesController->Spawan({ 0, -50, 500 });
 	//pEnemiesController->Spawan({ 0, 0, 1000 });
+
+	pReader8_ = new TerrainReader8{};
+	pReader8_->Initialize();
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
@@ -199,6 +202,7 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
+	pReader8_->TestDraw();
 }
 
 void PlayScene::End()
