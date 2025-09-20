@@ -367,3 +367,4 @@ FodyWeavers.xsd
 # Assets Directory exclusive
 !Assets/**/*.obj
 /Assets/imgui.ini
+/.github/copilot-instructions/copilot-comment.instructions.md
