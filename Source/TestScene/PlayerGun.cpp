@@ -3,7 +3,8 @@
 
 namespace
 {
-	const float COOL_TIME_SEC{ 1.0f };
+	const float GUNNER_COOL_TIME_SEC{ 0.1024f };
+	const float PILOT_COOL_TIME_SEC{ 0.22f };
 }
 
 PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside) : coolTime_(0.0f)
@@ -36,7 +37,14 @@ void PlayerGun::Fire()
 	if (coolTime_ <= 0.0f)
 	{
 		pTargetingSystem_->FireAtTarget();
-		coolTime_ = COOL_TIME_SEC;
+		if (pTargetingSystem_->targetDetector.config.windowContext == WindowContext::First)
+		{
+			coolTime_ = PILOT_COOL_TIME_SEC;
+		}
+		else if (pTargetingSystem_->targetDetector.config.windowContext == WindowContext::Second)
+		{
+			coolTime_ = GUNNER_COOL_TIME_SEC;
+		}
 	}
 }
 
