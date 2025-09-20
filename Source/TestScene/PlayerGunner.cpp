@@ -36,7 +36,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	//pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
 	//pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
 
-	pPlayerGun_ = new PlayerGun(WindowContext::First, GameObjectLayer::A, pTransform_, lockOnSide);
+	pPlayerGun_ = new PlayerGun(WindowContext::Second, GameObjectLayer::B, pTransform_, lockOnSide);
 
 	// Rader‚ğ‰Šú‰»
 	pRadarUI_ = Instantiate<Radar>(_plane, GameObjectLayer::B);
