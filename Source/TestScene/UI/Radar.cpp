@@ -23,7 +23,7 @@ Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObjec
 	pPlayerTransform_{ &Transform::Get(_playerId) },
 	viewAngle_{ 0.0f }
 {
-	hBack_ = Image::Load("Image/RadarBack.png");
+	hBack_ = Image::Load("Image/RadarBack2.png");
 	massert(hBack_ >= 0 && "ƒŒ[ƒ_[”Õ‰æ‘œ“Ç‚İ‚İ‚É¸”s @Radar::Radar");
 	hInView_ = Image::Load(
 		_layer == GameObjectLayer::A

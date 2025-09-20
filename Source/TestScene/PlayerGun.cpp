@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float COOL_TIME_SEC{ 1.0f };
+	const float COOL_TIME_SEC{ 0.22f };
 }
 
 PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside) : coolTime_(0.0f)
