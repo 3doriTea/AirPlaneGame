@@ -1,4 +1,5 @@
 #include "Radar.h"
+#include "../EnemyPlane.h"
 
 namespace
 {
@@ -22,7 +23,7 @@ Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObjec
 	pPlayerTransform_{ &Transform::Get(_playerId) },
 	viewAngle_{ 0.0f }
 {
-	hBack_ = Image::Load("Image/RadarBack.png");
+	hBack_ = Image::Load("Image/RadarBack2.png");
 	massert(hBack_ >= 0 && "レーダー盤画像読み込みに失敗 @Radar::Radar");
 	hInView_ = Image::Load(
 		_layer == GameObjectLayer::A
@@ -53,6 +54,13 @@ void Radar::Update()
 	enemyMarkPos_.clear();
 	for (auto& pGameObject : pEnemies)
 	{
+		EnemyPlane* pEnemy{ dynamic_cast<EnemyPlane*>(pGameObject) };
+
+		if (pEnemy->IsActive() == false)
+		{
+			continue;
+		}
+
 		Transform& enemyTransform{ Transform::Get(pGameObject->GetEntityId()) };
 		//Vector3 diff{ enemyTransform.position - pPlayerTransform_->GetWorldPosition() };
 		Vector3 diff{ enemyTransform.position };
@@ -104,17 +112,24 @@ void Radar::Draw() const
 	drawImage(hInView_, 0, viewAngle_);
 	drawImage(hFrame_, 1);
 
-	for (auto& markPos : enemyMarkPos_)
+	for (Vector2Int markPos : enemyMarkPos_)
 	{
-		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
+		// 距離がレーダー範囲外なら端っこに描画
+		int lengthDouble{ markPos.x * markPos.x + markPos.y * markPos.y };
+		if (lengthDouble >= HIDE_DISTANCE_DOUBLE)
 		{
-			continue;
+			float length{ std::sqrtf(static_cast<float>(lengthDouble)) };
+			float x = markPos.x / length;
+			float y = markPos.y / length;
+			markPos.x = x * HIDE_DISTANCE;
+			markPos.y = y * HIDE_DISTANCE;
 		}
 		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
 	}
 
 	for (auto& markPos : missileMarkPos_)
 	{
+		// 距離がレーダー範囲外なら描画しない
 		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
 		{
 			continue;

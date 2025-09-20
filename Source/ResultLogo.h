@@ -12,7 +12,8 @@ public:
 	void Draw() const override;
 
 private:
-	FBXModelHandle fModel_;
+	//FBXModelHandle fModel_;
+	ImageHandle hImage_;  // リザルト文字の画像ハンドル
 	Transform* pTransform_;
 	mtgb::WindowContext context_;
 

@@ -17,6 +17,7 @@ public:
 	void Search();
 	bool LockOnTarget() const;
 	const EnemyAI& GetAI() const { return ai_; }
+	bool IsActive() const;
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;

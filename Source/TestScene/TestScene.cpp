@@ -21,6 +21,7 @@
 #include "TimeLimit.h"
 #include "../PlayScene/EnemiesController.h"
 #include "../ResultScene.h"
+#include "../PlayScene/PlayerDamageEffect.h"
 using namespace mtgb;
 
 namespace mtgb
@@ -120,6 +121,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::Z))
+	{
+		Instantiate<PlayerDamageEffect>();
 	}
 }
 

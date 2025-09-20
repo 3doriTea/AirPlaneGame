@@ -163,6 +163,7 @@
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\Gun.cpp" />
+    <ClCompile Include="Source\PlayScene\PlayerDamageEffect.cpp" />
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\ProjectTile.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="Source\TestScene\EnemyBullet.cpp" />
     <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
     <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGun.cpp" />
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
@@ -397,6 +399,7 @@
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\PlayScene\Gun.h" />
+    <ClInclude Include="Source\PlayScene\PlayerDamageEffect.h" />
     <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
     <ClInclude Include="Source\ProjectTile.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
@@ -421,6 +424,7 @@
     <ClInclude Include="Source\TestScene\EnemyBullet.h" />
     <ClInclude Include="Source\TestScene\EnemyPlane.h" />
     <ClInclude Include="Source\TestScene\PlayerBullet.h" />
+    <ClInclude Include="Source\TestScene\PlayerGun.h" />
     <ClInclude Include="Source\TestScene\PlayerGunner.h" />
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
