@@ -220,7 +220,6 @@ void PlayerGunner::Update()
 
 		//angle = DirectX::XMVector3Dot(gunForward, planeForward).m128_f32[0];
 
-		LOGF("angle=%2.0f, rightAngle=%2.0f\n", XMConvertToDegrees(angles.y), XMConvertToDegrees(rightAngles.y));
 		//DirectX::XMQuaternionToAxisAngle(reinterpret_cast<DirectX::XMVECTOR*>(&pTransform_->rotate), &angle, Vector3::Up());
 		pRadarUI_->SetViewAngle(angle);
 	}

@@ -23,9 +23,11 @@ EnemyAI::EnemyAI()
 		})
 		.OnUpdate(S_SLEEP, [this]
 		{
+			float distance{ GetToPlayerDistance() };
 			// プレイヤーとの距離がアクティブ範囲内なら、索敵行動に遷移
-			if (GetToPlayerDistance() <= SLEEP_DISTANCE)
+			if (distance <= SLEEP_DISTANCE && distance > FLT_EPSILON)
 			{
+				LOGF("アクティブ化 距離%f", GetToPlayerDistance());
 				sMain_.Change(S_SEARCH);
 			}
 		})
@@ -57,8 +59,9 @@ EnemyAI::EnemyAI()
 			}
 
 			// アクティブ範囲外まで逃げたならプレイヤー方向に向く
-			if (GetToPlayerDistance() >= SLEEP_DISTANCE)
+			if (GetToPlayerDistance() > SLEEP_DISTANCE)
 			{
+				//sMain_.Change(S_SLEEP);
 				sFight_.Change(SF_LOOK_AT_PLAYER);
 			}
 			// プレイヤーが視野に入ったら攻撃行動
@@ -88,13 +91,18 @@ EnemyAI::EnemyAI()
 			// 衝突回避範囲内なら、回避行動に遷移
 			if (GetToPlayerDistance() < AVOID_DISTANCE)
 			{
+				out_.isAvoiding = true;
 				sFight_.Change(SF_AVOID);
 			}
 		})
 		.OnEnd(SF_LOOK_AT_PLAYER, [this] { out_.isFire = false; })
 
+		.OnStart(SF_AVOID, [this]
+		{
+		})
 		.OnUpdate(SF_AVOID, [this]
 		{
+			out_.isAvoiding = false;
 			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーより座標が上なら上方向に回避
 			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)
