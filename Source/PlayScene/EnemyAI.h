@@ -25,6 +25,7 @@ public:
 		bool isActive;
 		bool isFire;
 		bool isRound;
+		bool isAvoiding;
 		Vector3 lookPosition;
 	};
 

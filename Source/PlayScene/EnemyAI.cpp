@@ -91,13 +91,18 @@ EnemyAI::EnemyAI()
 			// 衝突回避範囲内なら、回避行動に遷移
 			if (GetToPlayerDistance() < AVOID_DISTANCE)
 			{
+				out_.isAvoiding = true;
 				sFight_.Change(SF_AVOID);
 			}
 		})
 		.OnEnd(SF_LOOK_AT_PLAYER, [this] { out_.isFire = false; })
 
+		.OnStart(SF_AVOID, [this]
+		{
+		})
 		.OnUpdate(SF_AVOID, [this]
 		{
+			out_.isAvoiding = false;
 			out_.lookPosition = input_.pSelfTrans->GetWorldPosition() + input_.pSelfTrans->Forward() * 10;
 			// プレイヤーより座標が上なら上方向に回避
 			if (input_.pSelfTrans->GetWorldPosition().y > input_.playerPos.y)

@@ -104,6 +104,7 @@ EnemyPlane::EnemyPlane(
 				{
 					broken_ = true;  // ‘Ì—Í“I‚É€‚ñ‚Å‚¢‚é‚È‚ç”òs‹@‚ğ‰ó‚·
 					SetName("EnemyBroken");
+					Audio::PlayOneShotFile("Sound/Effect/boom.wav");
 				}
 			}
 		});
@@ -156,6 +157,11 @@ void EnemyPlane::Update()
 	if (outData.isActive == false)
 	{
 		return;
+	}
+
+	if (outData.isAvoiding)
+	{
+		Audio::PlayOneShotFile("Sound/Effect/enemySwing.wav");
 	}
 
 	gun_.Update();
