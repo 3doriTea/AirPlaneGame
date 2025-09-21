@@ -24,11 +24,13 @@ namespace
 QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
 	.SetName("QuotaGauge")
 	.SetRotate(Quaternion::Identity())
-	.Build())
+	.Build()),
+	currentPoint_{ 0 }
 {
 	hImageBackNormal_ = Image::Load("Image/QuotaGaugeBackNormal.png");
 	hImageFill_ = Image::Load("Image/YellowScore 1.png");
 	hImageAir_ = Image::Load("Image/GrayScore 1.png");
+	hImageFillGood_ = Image::Load("Image/PurpleScore.png");
 }
 
 QuotaGauge::~QuotaGauge()
@@ -38,7 +40,6 @@ QuotaGauge::~QuotaGauge()
 void QuotaGauge::Update()
 {
 	//progress = Game::System<ScoreManager>().GetScore();
-	currentPoint_ = QUOTA_COUNT;
 }
 
 void QuotaGauge::Draw() const
@@ -51,17 +52,48 @@ void QuotaGauge::Draw() const
 	{
 		RectF draw{ DRAW_RECT_CELL_FIRST };
 		draw.x += DRAW_RECT_CELL_FIRST.width * i;
-		Draw::Image(
-			(i <= currentPoint_) ? hImageFill_ : hImageAir_,
-			GenDrawScreenFrom(draw),
-			UI_PARAMS_CELL);
+		int point{ i + 1 };
+		ImageHandle hImage{};
+
+		if (point <= currentPoint_)
+		{
+			if (point >= QUOTA_COUNT)
+			{
+				hImage = hImageFillGood_;
+			}
+			else
+			{
+				hImage = hImageFill_;
+			}
+		}
+		else
+		{
+			hImage = hImageAir_;
+		}
+		Draw::Image(hImage, GenDrawScreenFrom(draw), UI_PARAMS_CELL);
 	}
 
 	// テキストの描画
 	Draw::ImmediateText(
-		std::format("{}ポイント", currentPoint_),
+		std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
 		GenDrawScreenFrom(DRAW_RECT_TEXT),
 		GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
 		TextAlignment::center,
 		UI_PARAMS_TEXT);
+}
+
+void QuotaGauge::AddPoint(const int _point)
+{
+	currentPoint_ += _point;
+
+	// ゲージ限界値を超えているなら限界値に戻す
+	if (currentPoint_ > GAUGE_COUNT)
+	{
+		currentPoint_ = GAUGE_COUNT;
+	}
+	// 0未満になっているなら0に戻す
+	else if (currentPoint_ < 0)
+	{
+		currentPoint_ = 0;
+	}
 }
