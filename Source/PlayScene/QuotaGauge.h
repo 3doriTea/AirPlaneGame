@@ -10,15 +10,10 @@ public:
 	void Update() override;
 	void Draw() const override;
 private:
-	// ノルマゲージの矩形
-	RectF quotaGaugeRect_;
+	ImageHandle hImageBackNormal_;  // 裏ノルマ未達成
+	ImageHandle hImageBackClear_;  // 裏ノルマ達成
+	ImageHandle hImageFill_;  // 埋まったセル
+	ImageHandle hImageAir_;  // 空っぽのセル
 
-	// ゲージの左端から現在のスコアまでのバー
-	RectF currentScoreBarRect_;
-
-	// 現在のスコアからノルマまでのバー
-	RectF toQuotaBarRect_;
-
-	// ノルマからゲージの右端までのバー
-	RectF afterQuotaBarRect_;
+	int currentPoint_;  // 現在のポイント
 };
