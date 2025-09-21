@@ -52,6 +52,9 @@ namespace
 	const std::string SIDE_IMAGE_FILE_A{ "Image/LeftSide.png" };
 	const std::string SIDE_IMAGE_FILE_B{ "Image/RightSide.png" };
 
+	// 左右サイドの説明
+	const RectF DRAW_RECT_SIDE_DIST{ 0, 0, 1920, 1080 };
+
 	// コントローラーアニメーションヒントの描画範囲
 	const RectF DRAW_RECT_CON_ANIM_HINT{ 760.0f, 120.0f, 400.0f, 520.0f };
 	// 字幕の描画座標
@@ -138,31 +141,31 @@ void TutorialScene::Initialize()
 				pImageAnimatorA_ = nullptr;
 				pImageAnimatorB_ = nullptr;
 			})
-		.OnStart(S_RIGHT_SIDE, [this]
+		.OnStart(S_LEFT_SIDE, [this]
 			{
 				massert(pImageAnimatorB_ == nullptr && "AnimatorBが消されていない");
 				pImageAnimatorB_ = Instantiate<ImageAnimator>(
 					ImageAnimator::Setting
 					{
-						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.drawRect_ = DRAW_RECT_SIDE_DIST,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = { { hSideImageB_ } },
 						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::B }
 					},
 					GameObjectLayer::B);
 			})
-		.OnEnd(S_RIGHT_SIDE, [this]
+		.OnEnd(S_LEFT_SIDE, [this]
 			{
 				pImageAnimatorB_->DestroyMe();
 				pImageAnimatorB_ = nullptr;
 			})
-		.OnStart(S_LEFT_SIDE, [this]
+		.OnStart(S_RIGHT_SIDE, [this]
 			{
 				massert(pImageAnimatorA_ == nullptr && "AnimatorAが消されていない");
 				pImageAnimatorA_ = Instantiate<ImageAnimator>(
 					ImageAnimator::Setting
 					{
-						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.drawRect_ = DRAW_RECT_SIDE_DIST,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = { { hSideImageA_ } },
 						.uIParams_ = { .depth = 10, .layerFlag = GameObjectLayer::A }
@@ -170,7 +173,7 @@ void TutorialScene::Initialize()
 					GameObjectLayer::A);
 
 			})
-		.OnEnd(S_LEFT_SIDE, [this]
+		.OnEnd(S_RIGHT_SIDE, [this]
 			{
 				pImageAnimatorA_->DestroyMe();
 				pImageAnimatorA_ = nullptr;
