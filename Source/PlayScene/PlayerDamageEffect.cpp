@@ -5,7 +5,7 @@ namespace
 	const RectF DRAW_RECT_FIT{ 0.0f, 0.0f, 1920.0f, 1080.0f };
 	const RectF DRAW_RECT_BEGIN{ -810.0f, -455.0f, 3539.33, 1990.88 };
 	const UIParams UI_PARAMS{ .depth = 40 };
-	const float SHOW_TIME_SEC{ 3.0f };
+	const float SHOW_TIME_SEC{ 2.0f };
 }
 
 PlayerDamageEffect::PlayerDamageEffect() : GameObject(GameObjectBuilder()
