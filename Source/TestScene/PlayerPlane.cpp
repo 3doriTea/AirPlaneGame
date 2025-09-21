@@ -1,6 +1,7 @@
  #include "PlayerPlane.h"
 #include "UI/Radar.h"
 #include "../PlayScene/PlayerDamageEffect.h"
+#include "../ProjectTile.h"
 
 #include <cmath>
 using namespace mtgb;
@@ -45,6 +46,18 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 			}
 			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
 			{
+				ProjectTile* pProjectile{ dynamic_cast<ProjectTile*>(pTarget) };
+
+				if (pProjectile == nullptr)
+				{
+					return;
+				}
+
+				if (pProjectile->GetShooter() != ProjectTile::Shooter::Enemy)
+				{
+					return;
+				}
+
 				LOGIMGUI("%s‚Í%s‚ð‚­‚ç‚Á‚½!", GetName().c_str(), pTarget->GetName().c_str());
 				ScoreManager::SubtractScore(100);
 				Instantiate<PlayerDamageEffect>();

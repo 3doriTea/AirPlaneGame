@@ -3,7 +3,7 @@
 namespace
 {
 	// アクティブ範囲距離
-	const float SLEEP_DISTANCE{ 300 };
+	const float SLEEP_DISTANCE{ 200 };
 	// 回避行動をとる距離
 	const float AVOID_DISTANCE{ 50 };
 	// 回避行動として注目する座標 プラス方向
