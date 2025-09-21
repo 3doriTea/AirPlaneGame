@@ -8,6 +8,7 @@ namespace Network
 	class PIIO;
 }
 class TimeLimit;
+class IAutoPilot;
 
 class PlayScene : public mtgb::GameScene
 {
@@ -29,4 +30,5 @@ private:
 	CameraHandleInScene hCamera2_;
 
 	TerrainReader8* pReader8_;
+	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 };

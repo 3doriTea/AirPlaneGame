@@ -7,6 +7,7 @@
 class TextBoxTimeBar;
 class TextBoxBackground;
 class ImageAnimator;
+class IAutoPilot;
 
 class TutorialScene : public mtgb::GameScene
 {
@@ -69,4 +70,5 @@ private:
 
 	ImageHandle hSideImageA_;
 	ImageHandle hSideImageB_;
+	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 };

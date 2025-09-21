@@ -2,6 +2,7 @@
 #include "UI/Radar.h"
 #include "../PlayScene/PlayerDamageEffect.h"
 #include "../ProjectTile.h"
+#include "../IAutoPilot.h"
 
 #include <cmath>
 using namespace mtgb;
@@ -19,7 +20,7 @@ namespace
 #define __Y m128_f32[1]
 #define __Z m128_f32[2]
 
-PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
+PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilder()
 	.SetPosition({ 0, 0, 0 })
 	.SetName("PlayerPlane")
 	.SetTag(GameObjectTag::PlayerPlane)
@@ -27,7 +28,8 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 	pTransform_{ Component<Transform>() },
 	pRB_{ Component<RigidBody>() },
 	pCollider_{Component<Collider>(Collider::ColliderTag::GAME_OBJECT)},
-	vVPlayer_{}
+	vVPlayer_{},
+	pIAutoPilot_{ _pIAutoPilot }
 {
 	// デバッグのためにImGuiのゲーム画面でモデルを表示する
 	layerFlag_ = GameObjectLayer::SceneView;
@@ -83,10 +85,14 @@ void PlayerPlane::Update()
 	Quaternion curr{ pTransform_->rotate };
 
 #if 1
-	// WindowContextを直接指定しない方いい
-	Vector2F axis = InputUtil::GetAxis(WindowContext::First);
-	//if (axis.x != 0.0f || axis.y != 0.0f)
+	if (pIAutoPilot_->TryUpdate())
 	{
+
+	}
+	else  // オートパイロットではない
+	{
+		// WindowContextを直接指定しない方いい
+		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 
 		// 上
 		if (axis.y > 0)
@@ -134,7 +140,6 @@ void PlayerPlane::Update()
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 	pTransform_->rotate = curr;
 #endif
-
 	if (InputUtil::GetKeyDown(KeyCode::F))
 	{
 		vVPlayer_.Play(u8"正面に敵が102体います");

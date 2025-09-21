@@ -16,6 +16,7 @@
 #include "ImageAnimator.h"
 #include "ToPlayTimer.h"
 #include "Runway.h"
+#include "AutoPilotTutorial.h"
 
 namespace
 {
@@ -71,12 +72,14 @@ TutorialScene::TutorialScene() :
 	textBoxToChangeTimeLeft_{ TEXT_BOX_START_WAIT_TIME },
 	pImageAnimatorA_{ nullptr },
 	pImageAnimatorB_{ nullptr },
-	hControllerImagesA_{}
+	hControllerImagesA_{},
+	pAutoPilot_{ new AutoPilotTutorial{} }
 {
 }
 
 TutorialScene::~TutorialScene()
 {
+	SAFE_DELETE(pAutoPilot_);
 }
 
 void TutorialScene::Initialize()
@@ -169,7 +172,7 @@ void TutorialScene::Initialize()
 						.drawRect_ = DRAW_RECT_SIDE_DIST,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = { { hSideImageA_ } },
-						.uIParams_ = { .depth = 10, .layerFlag = GameObjectLayer::A }
+						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::A }
 					},
 					GameObjectLayer::A);
 
@@ -188,8 +191,9 @@ void TutorialScene::Initialize()
 	Instantiate<Reticle>();
 	Instantiate<Runway>();
 
-	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>(pAutoPilot_) };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
+	pAutoPilot_->SetTransform(&Transform::Get(eIdPlayer));
 
 	PlayerPilot* pPilot{ Instantiate<PlayerPilot>(eIdPlayer) };
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
