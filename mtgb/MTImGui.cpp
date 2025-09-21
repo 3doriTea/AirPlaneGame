@@ -206,7 +206,7 @@ void mtgb::MTImGui::SetupShowFunc()
             ImGui::InputFloat4(_name, _target->m128_f32);
         });
 
-    Set<RectContainsInfo>([](RectContainsInfo* _target, const char* _name)
+    Set<ScreenCoordContainsInfo>([](ScreenCoordContainsInfo* _target, const char* _name)
         {
             TypeRegistry::Instance().CallFunc(&_target->worldPos, "WorldPos");
             ImGui::Text("ScreenPos (%.3f,%.3f)", _target->screenPos.x, _target->screenPos.y);
@@ -216,7 +216,7 @@ void mtgb::MTImGui::SetupShowFunc()
 
     Set<RectDetector>([](RectDetector* _target, const char* _name)
         {
-            for (auto& target : _target->detectedTargets)
+            for (auto& target : _target->GetDetectedTargets())
             {
                 TypeRegistry::Instance().CallFunc(&target, "RectContains:" + target.entityId);
             }

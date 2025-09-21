@@ -28,13 +28,21 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
-	float lockOnSide = 200.0f;
+	float lockOnSide = 100.0f;
 
-	// TargetingSystem‚ð‰Šú‰»
-	//pTargetingSystem_ = new TargetingSystem();
-	//pTargetingSystem_->Initialize(pTransform_, rectCenter, lockOnSide);
-	//pTargetingSystem_->targetDetector.config.windowContext = WindowContext::Second;
-	//pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
+	// TargetingSystem‚ð‰Šú‰»	
+	/*CircleDetectorConfig config =
+	{
+		.center = rectCenter,
+		.radius = lockOnSide,
+	};
+	config.maxDistance = 200.0f;
+	config.minDistance = 0.0f;
+	config.targetTag = GameObjectTag::Enemy;
+	config.windowContext = WindowContext::Second;
+	config.uiParams.layerFlag = GameObjectLayer::B;
+	pTargetingSystem_ = new TargetingSystem(pTransform_, config);
+	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;*/
 
 	pPlayerGun_ = new PlayerGun(WindowContext::Second, GameObjectLayer::B, pTransform_, lockOnSide);
 
@@ -195,14 +203,6 @@ void PlayerGunner::Update()
 		Matrix4x4 mRotPlane{};
 		pPlaneTransform_->GenerateWorldRotationMatrix(&mRotPlane);
 
-		//mRot = mRot * XMMatrixRotationY(angleY_);
-
-		//XMMatrixRotationY(angleY_);
-
-		/*XMVector3Dot(pPlaneTransform_->Forward(), pTransform_->Forward())*/
-
-		//XMVector3AngleBetweenVectors
-		
 		Vector3 angles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Forward()) };
 
 		Vector3 rightAngles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Right()) };
@@ -215,8 +215,6 @@ void PlayerGunner::Update()
 			angle = XM_2PI - angle;
 		}
 
-		// Vector3 gunForward{ XMVector3Cross(pTransform_->Right(), Vector3::Up()) };
-		// Vector3 planeForward{ XMVector3Cross(pPlaneTransform_->Right(), Vector3::Up()) };
 
 		//angle = DirectX::XMVector3Dot(gunForward, planeForward).m128_f32[0];
 
@@ -226,8 +224,8 @@ void PlayerGunner::Update()
 
 	/*MTImGui::Instance().DirectShow([this]()
 		{
-			auto& targets =pTargetingSystem_->targetDetector.detectedTargets;
-			for (RectContainsInfo& info : targets)
+			auto& targets =pTargetingSystem_->detector->GetDetectedTargets();
+			for (const ScreenCoordContainsInfo& info : targets)
 			{
 				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
 			}

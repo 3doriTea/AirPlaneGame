@@ -4,94 +4,57 @@
 #include "DrawScreenUtility.h"
 #include "CameraSystem.h"
 
-void TargetingSystem::Initialize(Transform* owner, const Vector2F& screenCenter, float detectionSize)
-{
-	// Transform設定
-	ownerTransform = owner;
-
-	// ターゲット検出設定
-	targetDetector.config.detectionRect = 
-	{
-		screenCenter.x - detectionSize / 2.0f,
-		screenCenter.y - detectionSize / 2.0f,
-		detectionSize,
-		detectionSize
-	};
-}
 
 TargetingSystem::TargetingSystem()
-	: ownerTransform{ nullptr }
+	: detector{ nullptr }
+	, currentTarget{ nullptr }
 	, reticleRadius{ 0.0f }
 	, reticleRect{}
-	, detectionFrameImage{ -1 }
 	, targetReticleImage{ -1 }
+	, uiParams{}
+	, ownerTransform{ nullptr }
 {
-	currentTarget = nullptr;
-
-	// レティクルサイズを設定
-	reticleRadius = 30.0f;
-
-	// 画像を読み込む
-	detectionFrameImage = Image::Load("Image/lockOnFrame.png");
-	targetReticleImage = Image::Load("Image/lockOnReticle.png");
-
-	// レティクル矩形のサイズを設定
-	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };
-
-	// 検出距離、検出対象名設定
-	targetDetector.config.maxDistance = 100.0f;
-	//targetDetector.config.targetName = "Enemy";
-	targetDetector.config.targetTag = GameObjectTag::Enemy;
-
 }
-
 TargetingSystem::~TargetingSystem()
 {
 }
 
 void TargetingSystem::SearchTargets()
 {
-	targetDetector.UpdateDetection();
+	if (!detector)
+	{
+		return;
+	}
+
+	detector->UpdateDetection();
+
+	const auto& detectedTargets = detector->GetDetectedTargets();
 
 	// ワールド座標系で一番近い敵を狙う
 	auto it = std::min_element(
-		targetDetector.detectedTargets.begin(),
-		targetDetector.detectedTargets.end(),
-		[this](const RectContainsInfo& a, const RectContainsInfo& b)
+		detectedTargets.begin(),
+		detectedTargets.end(),
+		[this](const ScreenCoordContainsInfo& a, const ScreenCoordContainsInfo& b)
 		{
-			float distanceA = (ownerTransform->position - a.worldPos).Size();
-			float distanceB = (ownerTransform->position - b.worldPos).Size();
+			float distanceA = (ownerTransform->GetWorldPosition() - a.worldPos).Size();
+			float distanceB = (ownerTransform->GetWorldPosition() - b.worldPos).Size();
 			return distanceA < distanceB;
 		}
 	);
 
-	if (it != targetDetector.detectedTargets.end())
+	if (it != detectedTargets.end())
 	{
-		if ((*it).screenPos.z > 0.0f && (*it).screenPos.z < 1.0f)
-		{
-			currentTarget = &(*it); // 最も近い敵をターゲットに設定
-
-			Vector2F ratio = Game::System<Screen>().GetSizeRatio();
-
-			RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
-			Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
-			//currentTarget->worldPos = targetPosition;
-			currentTarget->screenPos = Game::System<CameraSystem>().WorldToScreen(targetPosition, targetDetector.config.windowContext);
-
-			reticleRect.x = currentTarget->screenPos.x - reticleRadius * ratio.x;
-			reticleRect.y = currentTarget->screenPos.y - reticleRadius * ratio.y;
-			reticleRect.width = (reticleRadius * 2.0f);
-			reticleRect.height = (reticleRadius * 2.0f);
-			//reticleRect.x = (currentTarget->screenPos.x - reticleRadius) / ratio.x;
-			//reticleRect.y = (currentTarget->screenPos.y - reticleRadius) / ratio.y;
-			//reticleRect.width = (reticleRadius * 2.0f) / ratio.x;
-			//reticleRect.width = reticleRadius * 2.0f * ratio.x;
-		}
+		currentTarget = const_cast<ScreenCoordContainsInfo*>(&(*it)); // 最も近い敵をターゲットに設定
 	}
 	else
 	{
 		currentTarget = nullptr; // ターゲットが見つからない場合
 	}
+}
+
+void TargetingSystem::ClearTarget()
+{
+	currentTarget = nullptr;
 }
 
 void TargetingSystem::FireAtTarget()
@@ -125,30 +88,23 @@ mtgb::Vector3 TargetingSystem::GetCurrentTargetPosition() const
 
 bool TargetingSystem::HasTarget() const
 {
-	return currentTarget != nullptr && targetDetector.HasDetectedTargets();
+	return currentTarget != nullptr && detector && detector->HasDetectedTargets();
 }
 
 void TargetingSystem::DrawUI() const
 {
+	
 	// ターゲット検出範囲を描画
-	Vector2F ratio =  Game::System<Screen>().GetSizeRatio();
-	// x,yの比率のうち小さい方を選ぶ
-	float scale = (std::min)(ratio.x, ratio.y);
-	float scaledSize = targetDetector.config.detectionRect.size.x * scale;
-	RectF detectionRect = targetDetector.config.detectionRect;
-
-	// 比率変換した矩形の中央
-	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
-	Vector2F newPoint = center - Vector2F{scaledSize, scaledSize} * 0.5f;
-	RectF drawRect = { newPoint,{scaledSize,scaledSize} };
-
-	Draw::Image(detectionFrameImage, drawRect, uiParams);
-	//Draw::Image(detectionFrameImage, { targetDetector.config.detectionRect.point * scale,targetDetector.config.detectionRect.size * scale }, uiParams);
-	//RectF detectionRect{ targetDetector.config.detectionRect.point / ratio,targetDetector.config.detectionRect.size / ratio };
+	detector->DrawDetectionArea();
 
 	// ターゲットがロックオンされている場合、レティクルを描画
 	if (HasTarget())
 	{
-		Draw::Image(targetReticleImage, { reticleRect.point,reticleRect.size * ratio }, uiParams);
+		Vector2F reticlePos = { currentTarget->screenPos.x, currentTarget->screenPos.y };
+		RectF reticleDrawRect = { 
+			reticlePos.x - reticleRadius, reticlePos.y - reticleRadius,
+			reticleRadius * 2.0f, reticleRadius * 2.0f 
+		};
+		Draw::Image(targetReticleImage, reticleDrawRect, uiParams);
 	}
 }

@@ -5,15 +5,15 @@
 namespace mtgb
 {
 	/// <summary>
-	/// 矩形に含まれている対象の情報
+	/// スクリーン座標系の含まれている対象の情報
 	/// </summary>
-	struct RectContainsInfo
+	struct ScreenCoordContainsInfo
 	{
 		Vector3 worldPos{};//ワールド座標での座標
 		Vector3 screenPos{};//スクリーン座標系での座標
 		EntityId entityId;
-		RectContainsInfo() = default;
-		RectContainsInfo(Vector3 _worldPos, Vector3 _screenPos,EntityId _entityId)
+		ScreenCoordContainsInfo() = default;
+		ScreenCoordContainsInfo(Vector3 _worldPos, Vector3 _screenPos,EntityId _entityId)
 			:worldPos{ _worldPos }
 			,screenPos{ _screenPos}
 			,entityId{_entityId}

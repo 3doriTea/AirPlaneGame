@@ -37,7 +37,7 @@ namespace mtgb
 		/// <param name="_name">判定されるゲームオブジェクトの名前</param>
 		/// <param name="_info">判定されたゲームオブジェクトの情報を格納するコレクションのポインタ</param>
 		/// <param name="_context">スクリーン座標系への変換に利用するウィンドウ</param>
-		void RectContains(const RectF& _rect, const std::string& _name, std::vector<RectContainsInfo>* _info, WindowContext _context);
+		void RectContains(const RectF& _rect, const std::string& _name, std::vector<ScreenCoordContainsInfo>* _info, WindowContext _context);
 		
 		/// <summary>
 		/// <para> ゲームオブジェクトをウィンドウのスクリーン座標系へ変換、引数で渡された矩形に含まれているか判定 </para>
@@ -48,9 +48,9 @@ namespace mtgb
 		/// <param name="_tag">判定されるゲームオブジェクトのタグ</param>
 		/// <param name="_info">判定されたゲームオブジェクトの情報を格納するコレクションのポインタ</param>
 		/// <param name="_context">スクリーン座標系への変換に利用するウィンドウ</param>
-		void RectContains(const RectF& _rect, GameObjectTag _tag, std::vector<RectContainsInfo>* _info, WindowContext _context);
+		void RectContains(const RectF& _rect, GameObjectTag _tag, std::vector<ScreenCoordContainsInfo>* _info, WindowContext _context);
 
 	private:
-		void RectContainsImpl(const RectF& _rect,const std::vector<GameObject*>& _objs, std::vector<RectContainsInfo>* _info, WindowContext _context);
+		void RectContainsImpl(const RectF& _rect,const std::vector<GameObject*>& _objs, std::vector<ScreenCoordContainsInfo>* _info, WindowContext _context);
 	};
 }

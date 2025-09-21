@@ -2,6 +2,32 @@
 #include "TestScene/EnemyPlane.h"
 #include "MTStringUtility.h"
 #include <format>
+#include "Debug.h"
+
+namespace
+{
+	// ミサイル発射された時、その1
+	SPEECH_ELEMENT speechOnFiredMissile1 =
+	{
+		.text_ = u8"ミサイル接近!逃げて!",
+		.audioFile_ = "Sound/Voice/012_ずんだもん（ノーマル）_ミサイル接近!逃げ….wav",
+		.time_ = 3.0f
+	};
+	//SPEECH_ELEMENT speechOnFiredMissile2;
+
+	// 被弾時、その1
+	SPEECH_ELEMENT speechOnHit1 =
+	{
+		.text_ = u8"被弾した!",
+		.audioFile_  = "Sound/Voice/013_ずんだもん（ノーマル）_被弾した!.wav",
+		.time_ = 2.0f
+	};
+
+	// 字幕の表示位置
+	const Vector2F SPEECH_TEXT_POS{ 620, 820 };
+	// 字幕のフォントサイズ
+	const int SPEECH_TEXT_SIZE{ 48 };
+}
 ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	.SetPosition({ 0,0,0 })
 	.SetName("ControlTower")
@@ -9,10 +35,6 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	,detectionRadius_{30.0f}
 	
 {
-	// 初期化
-	pGunner_ = { nullptr,WindowContext::First };
-	pPilot_ = { nullptr,WindowContext::Second };
-
 	Vector2F screenSize = Game::System<Screen>().GetSizeF();
 	// 画面上の敵を検出する距離
 	float detectDistance = Game::System<CameraSystem>().GetFar();
@@ -23,10 +45,20 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	highlightFrameSize_ = { 60.0f,60.0f };
 	enemyArrowImageSize_ = { 30.0f,30.0f };
 	
+	// 敵の射撃時に呼ばれるコールバック
+	Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Subscribe(
+		[this](const ProjectTile::EventData& data) 
+		{
+			this->ProjectionEventHandler(data);
+		});
+
+	// 字幕
+	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(SPEECH_TEXT_POS), GenDrawScreenFontSize(SPEECH_TEXT_SIZE));
 }
 
 ControlTower::~ControlTower()
 {
+	Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Unsubscribe(id_);
 }
 
 void ControlTower::Update()
@@ -53,9 +85,9 @@ void ControlTower::Draw() const
 		for (EntityId enemy : attackStateEnemies_)
 		{
 			// 画面上に攻撃状態の敵がいるか確認
-			auto& detectedTargets = detector.detectedTargets;
+			auto& detectedTargets = detector.GetDetectedTargets();
 			bool isOnScreen = std::any_of(detectedTargets.begin(), detectedTargets.end(),
-				[enemy](const RectContainsInfo& _info)
+				[enemy](const ScreenCoordContainsInfo& _info)
 				{
 					return _info.entityId == enemy;
 				});
@@ -91,8 +123,6 @@ void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 
 		RectDetectorConfig config =
 		{
-			.targetTag = GameObjectTag::Enemy,
-			.windowContext = _context,
 			.detectionRect =
 			{
 				0.0f,
@@ -100,10 +130,58 @@ void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 				static_cast<float>(screenSize.x),
 				static_cast<float>(screenSize.y),
 			},
-			.maxDistance = detectDistance,
 		};
+		config.targetTag = GameObjectTag::Enemy;
+		config.windowContext = _context;
+		config.maxDistance = detectDistance;
 		wndRectDetector_.try_emplace(_context, config);
 	}
+}
+
+void ControlTower::ProjectionEventHandler(const ProjectTile::EventData& _data)
+{
+	switch (_data.eventType)
+	{
+	case ProjectTile::EventType::Fired:
+		OnProjectionFired(_data);
+		break;
+	case ProjectTile::EventType::Hit:
+		OnProjectionHit(_data);
+		break;
+	case ProjectTile::EventType::Destroyed:
+		OnProjectionDestroyed(_data);
+		break;
+	}
+}
+
+void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
+{
+	if (_data.type == ProjectTile::Type::Missile && _data.shooter == ProjectTile::Shooter::Enemy)
+	{
+		Speech(speechOnFiredMissile1);
+	}
+}
+
+void ControlTower::OnProjectionHit(const ProjectTile::EventData& _data)
+{
+}
+
+void ControlTower::OnProjectionDestroyed(const ProjectTile::EventData& _data)
+{
+
+}
+
+void ControlTower::Speech(const SPEECH_ELEMENT& _speechElement)
+{
+	pTextBox_->Show(speechOnFiredMissile1.text_.data());
+	Game::System<Audio>().PlayOneShotFile(speechOnFiredMissile1.audioFile_.data());
+
+	Timer& timer = Game::System<Timer>();
+	timer.Remove(hTimer_);
+	hTimer_ = timer.AddAram(speechOnFiredMissile1.time_, [this]()
+		{
+			pTextBox_->Hide();
+		});
 }
 
 void ControlTower::DetectionEnemy(Transform* _transform)

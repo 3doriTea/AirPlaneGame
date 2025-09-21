@@ -26,8 +26,10 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
+    <ClCompile Include="mtgb\CircleDetector.cpp" />
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
+    <ClCompile Include="mtgb\EventManager.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\HighlightEnemy.cpp" />
@@ -40,6 +42,7 @@
     <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
+    <ClCompile Include="mtgb\RayDetector.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
     <ClCompile Include="mtgb\ScoreManager.cpp" />
@@ -206,9 +209,14 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C:\Users\nishi\AppData\Local\Temp\COPILOTBASELINE\a0702f58\~EVENTMANAGER.H" />
+    <ClInclude Include="mtgb\CircleDetector.h" />
+    <ClInclude Include="mtgb\DetectorConfigs.h" />
+    <ClInclude Include="mtgb\EventManager.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
     <ClInclude Include="mtgb\GameObjectTag.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
+    <ClInclude Include="mtgb\IDetector.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="ImGui\GraphEditor.h" />
@@ -241,6 +249,7 @@
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
+    <ClInclude Include="mtgb\RayDetector.h" />
     <ClInclude Include="mtgb\RectDetector.h" />
     <ClInclude Include="mtgb\RectF.h" />
     <ClInclude Include="mtgb\RectT.h" />
@@ -446,6 +455,7 @@
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
     <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
     <None Include="mtgb\DefaultShow.inl" />

@@ -15,7 +15,8 @@ TextBox::TextBox(const float _popTimeSec, const Vector2F _drawPosition, const in
 	finished_{ false },
 	hTimer_{ nullptr },
 	fontSize_{ _fontSize },
-	uIParams_{}
+	uIParams_{},
+	autoHideOnFinish_{false}
 {
 }
 
@@ -62,6 +63,11 @@ void TextBox::Show(const std::u8string& _text)
 				{
 					mtgb::Timer::Remove(hTimer_);
 					hTimer_ = nullptr;
+				}
+			
+				if (autoHideOnFinish_)
+				{
+					Hide();
 				}
 			}
 		});

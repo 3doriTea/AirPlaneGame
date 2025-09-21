@@ -4,6 +4,14 @@
 class ProjectTile : public mtgb::GameObject
 {
 public:
+
+	enum struct EventType
+	{
+		Fired,
+		Hit,
+		Destroyed,
+	};
+
 	enum struct Shooter 
 	{
 		Enemy,
@@ -16,6 +24,13 @@ public:
 		Missile,
 	};
 
+	struct EventData
+	{
+		EntityId id;
+		Shooter shooter;
+		Type type;
+		EventType eventType;
+	};
 protected:
 	ProjectTile(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter, const Type _projectileType);
 	ProjectTile(const Transform& _shooterTransform, Shooter _shooter, const Type _projectileType);

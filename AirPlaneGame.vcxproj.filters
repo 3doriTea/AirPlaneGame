@@ -841,6 +841,15 @@
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
       <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
+    <ClCompile Include="mtgb\CircleDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RayDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\EventManager.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
     <ClCompile Include="Source\TestScene\PlayerGun.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
@@ -1479,6 +1488,24 @@
     <ClInclude Include="mtgb\GameObjectTag.h">
       <Filter>03mtgb\Core</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\CircleDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DetectorConfigs.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RayDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\EventManager.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\nishi\AppData\Local\Temp\COPILOTBASELINE\a0702f58\~EVENTMANAGER.H">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
     <ClInclude Include="Source\TestScene\PlayerGun.h">
       <Filter>01Game\05TestScene</Filter>
     </ClInclude>
@@ -1498,6 +1525,7 @@
     <None Include="mtgb\DefaultShow.inl">
       <Filter>03mtgb\System\Debug\MTImGui</Filter>
     </None>
+    <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">

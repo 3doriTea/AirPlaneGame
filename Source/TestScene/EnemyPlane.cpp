@@ -24,11 +24,10 @@ namespace
 	// デフォルトの耐久値
 	const int DEFAULT_HP{ 100 };
 
-
 	const float ONE_SHOT_TIME_SEC{ 1.0f };     // 1発撃ったあとの待機時間(秒)
-	const float RELOAD_TIME_SEC{ 1.0f };      // リロード中の待機時間(秒)
+	const float RELOAD_TIME_SEC{ 5.0f };      // リロード中の待機時間(秒)
 	const int BULLET_COUNT{ 1 };          // リロードまでに撃てる弾数
-
+	const float LOCK_ON_TIME_SEC{ 3.0f };		// ロックオンにかかる時間
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
 }
 
@@ -36,25 +35,26 @@ EnemyPlane::EnemyPlane(
 	const Vector3& _worldPosition,
 	const EntityId _playerPlane,
 	const EntityId _controllerId) : GameObject(GameObjectBuilder()
-	.SetName("Enemy")
-	.SetTag(GameObjectTag::Enemy)
-	.SetPosition(_worldPosition)
-	.SetScale({ ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE })
-	.Build()),
+		.SetName("Enemy")
+		.SetTag(GameObjectTag::Enemy)
+		.SetPosition(_worldPosition)
+		.SetScale({ ENEMY_SCALE, ENEMY_SCALE, ENEMY_SCALE })
+		.Build()),
 	pRB_{ Component<RigidBody>() },
 	pTransform_{ Component<Transform>() },
-	pCollider_{ Component<Collider>()},
+	pCollider_{ Component<Collider>() },
 	//pCollider_{ Component<Collider>()},
 	pTarget_{ &Transform::Get(_playerPlane) },
 	controllerId_{ _controllerId },
 	speed_{ 10.0f },
 	health_{},
-	lockOnAngle_{ 45.0f },
-	lockOnDistance_{ 30.0f },
+	lockOnAngle_{ 360.0f },
+	lockOnDistance_{ 200.0f },
 	gun_
 	{
 		Gun::Setting  // 銃器の設定
 		{
+			.lockOnTimeSec = LOCK_ON_TIME_SEC,
 			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
@@ -64,6 +64,16 @@ EnemyPlane::EnemyPlane(
 	},
 	ai_{}
 {
+	RayDetectorConfig config =
+	{
+		.rayTransform = pTransform_,
+		.maxAngleDegrees = lockOnAngle_,
+	};
+	config.maxDistance = lockOnDistance_;
+	config.minDistance = 0.0f;
+	config.targetTag = GameObjectTag::PlayerPlane;
+	targetingSystem_ = TargetingSystem{ pTransform_,config };
+
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
 	pCollider_->SetRadius(2.0f);
@@ -123,27 +133,8 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	if (broken_)  // 破壊中の処理
-	{
-		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
-		{
-			// スコア加算
-			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
-			DestroyMe();
-			return;
-		}
 
-		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
-		Quaternion curr{ pTransform_->rotate };
-
-		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
-
-		Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down())};
-		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
-		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
-
-		return;
-	}
+	HandleCrash();
 
 	ai_.SetInputData(
 		{
@@ -164,12 +155,14 @@ void EnemyPlane::Update()
 		Audio::PlayOneShotFile("Sound/Effect/enemySwing.wav");
 	}
 
-	gun_.Update();
-	if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
+	//gun_.Update();
+	/*if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
 	{
 		
 		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
-	}
+	}*/
+	Fight(outData);
+	
 
 	Quaternion currentQua{ pTransform_->rotate };
 
@@ -180,7 +173,6 @@ void EnemyPlane::Update()
 
 	Vector3 toPlayerDir{ outData.lookPosition - pTransform_->GetWorldPosition() };
 
-	
 	currentQua = Quaternion::SLerp(currentQua, Quaternion::LookRotation(toPlayerDir, Vector3::Up()), Time::DeltaTimeF() * 1.0f);
 
 	// 前方向、頭は上方向に
@@ -193,29 +185,15 @@ void EnemyPlane::Update()
 
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
-	
-	Search();
-
-	// もしターゲットしているなら、弾を打つ
-	timeSinceLastshot_ += Time::DeltaTimeF();
-
-	//std::vector<EnemyBullet*> bullets;
-	//FindGameObjects<EnemyBullet>(&bullets);
-
-	//if (lockOnTarget_ && timeSinceLastshot_ >= SHOOT_COOLDOWN)
-	//{
-	//	// 弾の数を制限して、弾の数が5以上の場合は撃たないようにする
-	//	if (bullets.size() >= MAX_BULLETS)
-	//	{
-	//		return;
-	//	}
-	//	
-	//	GameObject::Instantiate<EnemyBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
-	//	timeSinceLastshot_ = 0.0f;
-	//}
-
+		
 	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
-	MTImGui::Instance().DrawVec(pTransform_->position, pTransform_->Forward() * speed_, 2.0f);
+	MTImGui::Instance().DirectShow([this]() 
+		{
+			ImGui::Text("LockOnProgress:%.3f" ,gun_.GetLockOnProgress());
+			std::string hasTarget = targetingSystem_.HasTarget() ? "Yes" : "No";
+			ImGui::Text("HasTarget:%s", hasTarget.c_str());
+			
+		}, "EnemyTargetingSystem:" + std::to_string(entityId_), ShowType::Inspector);
 }
 
 void EnemyPlane::Draw() const
@@ -230,33 +208,66 @@ void EnemyPlane::Draw() const
 	Vector2Int pos = InputUtil::GetMousePosition();
 }
 
-void EnemyPlane::Search()
+void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
 {
-	Vector3 forward = pTransform_->Forward();
-	Vector3 toTarget = pTarget_->position - pTransform_->position;
-	float distance = toTarget.Size();
-
-	// 内積
-	float cosTheta = DirectX::XMVector3Dot(forward, Vector3::Normalize(toTarget)).m128_f32[0];
-
-	// ロックオンする、視野に入っていると判定する角度のラジアン
-	float lockOnAngleRadian = DirectX::XMConvertToRadians(lockOnAngle_);
-
-	
-	if (cosTheta > lockOnAngleRadian && distance <= lockOnDistance_ )
+	// 銃器の更新
+	gun_.Update();
+	if (_outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
 	{
-		//LOGIMGUI("Enemy:%lld Lock On %.3f", entityId_,acosf(cosTheta));
-		lockOnTarget_ = true;
+		// ターゲットを探す
+		targetingSystem_.SearchTargets();
+		// ターゲットがいるかどうか
+		if (targetingSystem_.HasTarget())
+		{
+			// ロックオンを開始、更新
+			gun_.StartLockOnCountdown();
+			// ロックオンが完了したなら、射撃
+			if (gun_.IsLockOnComplete())
+			{
+				gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
+				Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Invoke(
+					{
+						.id = GetEntityId(),
+						.shooter = ProjectTile::Shooter::Enemy,
+						.type = ProjectTile::Type::Missile,
+						.eventType = ProjectTile::EventType::Fired,
+					});
+
+				gun_.ResetLockOnCountdown();
+
+			}
+		}	
 	}
+	// ターゲットがいないならロックオンを中止
 	else
 	{
-		lockOnTarget_ = false;
+		gun_.ResetLockOnCountdown();
 	}
 }
 
-bool EnemyPlane::LockOnTarget() const
+void EnemyPlane::HandleCrash()
 {
-	return lockOnTarget_;
+	if (broken_)  // 破壊中の処理
+	{
+		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
+		{
+			// スコア加算
+			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
+			DestroyMe();
+			return;
+		}
+
+		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
+		Quaternion curr{ pTransform_->rotate };
+
+		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
+
+		Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down()) };
+		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
+		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
+
+		return;
+	}
 }
 
 bool EnemyPlane::IsActive() const
