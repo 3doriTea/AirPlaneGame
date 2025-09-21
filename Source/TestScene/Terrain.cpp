@@ -18,5 +18,5 @@ void Terrain::Update()
 
 void Terrain::Draw() const
 {
-	Draw::GroundPlane();
+	//Draw::GroundPlane();
 }

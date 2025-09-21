@@ -124,7 +124,8 @@ void Radar::Draw() const
 			markPos.x = x * HIDE_DISTANCE;
 			markPos.y = y * HIDE_DISTANCE;
 		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, {.layerFlag = layerFlag_ });
+		//Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
 	}
 
 	for (auto& markPos : missileMarkPos_)
@@ -134,6 +135,7 @@ void Radar::Draw() const
 		{
 			continue;
 		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
+		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .layerFlag = layerFlag_ });
+		//Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
 	}
 }

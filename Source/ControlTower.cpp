@@ -186,6 +186,8 @@ void ControlTower::Speech(const SPEECH_ELEMENT& _speechElement)
 
 void ControlTower::DetectionEnemy(Transform* _transform)
 {
+	attackStateEnemies_.clear();
+
 	// Enemyを取得
 	std::vector<EnemyPlane*> enemies;
 	FindGameObjects<EnemyPlane>(&enemies);
@@ -199,7 +201,7 @@ void ControlTower::DetectionEnemy(Transform* _transform)
 				auto& fightState = _enemy->GetAI().GetFightState();
 				EnemyAI::MAIN_STATE currState = mainState.Current();
 				// 戦闘状態でないならば trueにして破棄
-				if (currState != EnemyAI::MAIN_STATE::S_FIGHT)
+				if (currState != EnemyAI::MAIN_STATE::S_FIGHT || _enemy->IsToDestroy())
 				{
 					return true;
 				}
@@ -241,7 +243,6 @@ void ControlTower::DetectionEnemy(Transform* _transform)
 		enemyId = (*itr)->GetEntityId();
 	}
 
-	attackStateEnemies_.clear();
 	attackStateEnemies_.push_back(enemyId);
 	// 方角を計算
 	// プレイヤーの上ベクトル、右ベクトル

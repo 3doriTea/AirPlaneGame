@@ -50,7 +50,7 @@ EnemyPlane::EnemyPlane(
 	controllerId_{ _controllerId },
 	speed_{ 10.0f },
 	health_{},
-	lockOnAngle_{ 360.0f },
+	lockOnAngle_{ 60.0f },
 	lockOnDistance_{ 200.0f },
 	gun_
 	{

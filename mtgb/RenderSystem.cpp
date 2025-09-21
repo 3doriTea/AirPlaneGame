@@ -29,7 +29,6 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	//一つ目のウィンドウ
 	WinCtxRes::ChangeResource(WindowContext::First);
 	DirectX11Draw::Begin();
-	
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A); });
 	Draw::FlushUIDrawCommands(GameObjectLayer::A);
 	DirectX11Draw::End();
@@ -64,7 +63,7 @@ void mtgb::RenderSystem::RenderImGuiWindows(GameScene& _scene)
 	MTImGui::Instance().ShowWindow(ShowType::Settings);
 
 	// ログ表示
-	MTImGui::Instance().ShowLog();
+	//MTImGui::Instance().ShowLog();
 
 	// SceneView表示
 

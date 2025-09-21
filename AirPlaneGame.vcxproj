@@ -210,7 +210,6 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\nishi\AppData\Local\Temp\COPILOTBASELINE\a0702f58\~EVENTMANAGER.H" />
     <ClInclude Include="mtgb\CircleDetector.h" />
     <ClInclude Include="mtgb\DetectorConfigs.h" />
     <ClInclude Include="mtgb\EventManager.h" />
