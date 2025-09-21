@@ -1,5 +1,6 @@
  #include "PlayerPlane.h"
 #include "UI/Radar.h"
+#include "../PlayScene/PlayerDamageEffect.h"
 
 #include <cmath>
 using namespace mtgb;
@@ -46,6 +47,7 @@ PlayerPlane::PlayerPlane() : GameObject(GameObjectBuilder()
 			{
 				LOGIMGUI("%s‚Í%s‚ð‚­‚ç‚Á‚½!", GetName().c_str(), pTarget->GetName().c_str());
 				ScoreManager::SubtractScore(100);
+				Instantiate<PlayerDamageEffect>();
 				return;
 			}
 			//LOGF("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());

@@ -12,7 +12,7 @@ PlayerDamageEffect::PlayerDamageEffect() : GameObject(GameObjectBuilder()
 	.Build()),
 	timeLeft_{ SHOW_TIME_SEC }
 {
-	hImage_ = Image::Load("Image/DamageEffect.png");
+	hImage_ = Image::Load("Image/DamageEffect2.png");
 }
 
 PlayerDamageEffect::~PlayerDamageEffect()
