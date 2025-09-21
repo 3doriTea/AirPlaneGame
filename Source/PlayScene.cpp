@@ -15,6 +15,7 @@
 #include "TestScene/PlayerPlane.h"
 #include "TestScene/PlayerPilot.h"
 #include "TestScene/PlayerGunner.h"
+#include "PlayScene/QuotaGauge.h"
 
 using namespace mtgb;
 using Network::PIIO;
@@ -114,12 +115,15 @@ void PlayScene::Initialize()
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
 	//Instantiate<Player>(WindowContext::First);
-	timeLimit_ = Instantiate<TimeLimit>();
+	timeLimit_ = Instantiate<TimeLimit>(180.0f);
+	timeLimit_->StartTimer();
 	timeLimit_->RegisterOnEndTimerCallback([]() 
 		{
 			Game::System<SceneSystem>().Move<OverScene>();
 		});
 	// 表示したいテキストを開始
+
+	Instantiate<QuotaGauge>();
 
 	// ラズパイと通信を開始
 	ppiio_->Start(SERVER_IPEP);

@@ -3,6 +3,7 @@
 #include "EnemyBullet.h"
 #include "../PlayScene/EnemiesController.h"
 #include "../Bullet.h"
+#include "../PlayScene/QuotaGauge.h"
 
 using namespace mtgb;
 
@@ -29,6 +30,7 @@ namespace
 	const int BULLET_COUNT{ 1 };          // リロードまでに撃てる弾数
 	const float LOCK_ON_TIME_SEC{ 3.0f };		// ロックオンにかかる時間
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
+	const int ADD_QUOTA_POINT{ 2 };  // 撃破時に加算するポイント
 }
 
 EnemyPlane::EnemyPlane(
@@ -84,6 +86,10 @@ EnemyPlane::EnemyPlane(
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
+			if (broken_)
+			{
+				return;  // すでに壊れているなら当たっても処理することはない
+			}
 			GameObject* pTarget{ FindGameObject(_targetId) };
 			if (pTarget == nullptr)
 			{
@@ -115,6 +121,12 @@ EnemyPlane::EnemyPlane(
 					broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
 					SetName("EnemyBroken");
 					Audio::PlayOneShotFile("Sound/Effect/boom.wav");
+
+					QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
+					if (pQuotaGauge != nullptr)
+					{
+						pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
+					}
 				}
 			}
 		});
@@ -133,8 +145,10 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-
-	HandleCrash();
+	if (HandleCrash())
+	{
+		return;
+	}
 
 	ai_.SetInputData(
 		{
@@ -245,7 +259,7 @@ void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
 	}
 }
 
-void EnemyPlane::HandleCrash()
+bool EnemyPlane::HandleCrash()
 {
 	if (broken_)  // 破壊中の処理
 	{
@@ -254,7 +268,7 @@ void EnemyPlane::HandleCrash()
 			// スコア加算
 			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
 			DestroyMe();
-			return;
+			return true;
 		}
 
 		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
@@ -266,8 +280,9 @@ void EnemyPlane::HandleCrash()
 		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
 		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
 
-		return;
+		return true;
 	}
+	return false;
 }
 
 bool EnemyPlane::IsActive() const
