@@ -853,6 +853,9 @@
     <ClCompile Include="Source\TestScene\PlayerGun.cpp">
       <Filter>01Game\05TestScene</Filter>
     </ClCompile>
+    <ClCompile Include="Source\PlayScene\PlayerDamageEffect.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1503,11 +1506,11 @@
     <ClInclude Include="mtgb\EventManager.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="C:\Users\nishi\AppData\Local\Temp\COPILOTBASELINE\a0702f58\~EVENTMANAGER.H">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\TestScene\PlayerGun.h">
       <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\PlayerDamageEffect.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
