@@ -25,7 +25,7 @@ namespace
 	const int DEFAULT_HP{ 100 };
 
 	const float ONE_SHOT_TIME_SEC{ 1.0f };     // 1発撃ったあとの待機時間(秒)
-	const float RELOAD_TIME_SEC{ 3.0f };      // リロード中の待機時間(秒)
+	const float RELOAD_TIME_SEC{ 5.0f };      // リロード中の待機時間(秒)
 	const int BULLET_COUNT{ 1 };          // リロードまでに撃てる弾数
 	const float LOCK_ON_TIME_SEC{ 3.0f };		// ロックオンにかかる時間
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
@@ -155,12 +155,12 @@ void EnemyPlane::Update()
 		Audio::PlayOneShotFile("Sound/Effect/enemySwing.wav");
 	}
 
-	gun_.Update();
-	if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
+	//gun_.Update();
+	/*if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
 	{
 		
 		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
-	}
+	}*/
 	Fight(outData);
 	
 
@@ -221,7 +221,6 @@ void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
 		{
 			// ロックオンを開始、更新
 			gun_.StartLockOnCountdown();
-			gun_.Update();
 			// ロックオンが完了したなら、射撃
 			if (gun_.IsLockOnComplete())
 			{

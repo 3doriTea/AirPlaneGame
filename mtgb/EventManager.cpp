@@ -3,7 +3,7 @@
 #include "SceneSystem.h"
 void mtgb::EventManager::Initialize()
 {
-	Game::System<SceneSystem>().RegisterPendingCallback([this]()
+	Game::System<SceneSystem>().OnMove([this]()
 		{
 			for (auto& event : events_)
 			{

@@ -36,8 +36,6 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 
 	// PlayerGun‚ð‰Šú‰»
 	pPlayerGun = new PlayerGun(WindowContext::First, GameObjectLayer::A,pTransform, lockOnSide);
-	pTargetingSystem_ = new TargetingSystem(pTransform, config);
-	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::A;
 }
 
 PlayerPilot::~PlayerPilot()

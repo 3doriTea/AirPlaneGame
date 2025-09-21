@@ -12,6 +12,7 @@ public:
 	void Fire(); // 撃つボタンが押されているときの処理（内部で打てない間は無視する処理）
 	void Draw();
 private:
-	float coolTime_; // 撃てない間の時間カウント用
+	float cooldownTimer_; // 撃てない間の時間カウント用
+	float cooldownCount_;
 	TargetingSystem* pTargetingSystem_;
 };

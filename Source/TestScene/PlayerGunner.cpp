@@ -31,7 +31,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	float lockOnSide = 100.0f;
 
 	// TargetingSystem‚ð‰Šú‰»	
-	CircleDetectorConfig config =
+	/*CircleDetectorConfig config =
 	{
 		.center = rectCenter,
 		.radius = lockOnSide,
@@ -42,7 +42,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	config.windowContext = WindowContext::Second;
 	config.uiParams.layerFlag = GameObjectLayer::B;
 	pTargetingSystem_ = new TargetingSystem(pTransform_, config);
-	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;
+	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;*/
 
 	pPlayerGun_ = new PlayerGun(WindowContext::Second, GameObjectLayer::B, pTransform_, lockOnSide);
 
