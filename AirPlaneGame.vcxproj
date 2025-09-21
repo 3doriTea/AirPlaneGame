@@ -201,6 +201,7 @@
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
     <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp" />
+    <ClCompile Include="Source\TutorialScene\Runway.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="mtgb\Vector2F.h" />
     <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
+    <ClInclude Include="Source\AutoPilot.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -446,6 +448,7 @@
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
     <ClInclude Include="Source\TutorialScene\ImageAnimator.h" />
+    <ClInclude Include="Source\TutorialScene\Runway.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />

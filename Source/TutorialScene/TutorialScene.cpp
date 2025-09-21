@@ -15,6 +15,7 @@
 #include "SpeechQueue.h"
 #include "ImageAnimator.h"
 #include "ToPlayTimer.h"
+#include "Runway.h"
 
 namespace
 {
@@ -185,6 +186,7 @@ void TutorialScene::Initialize()
 	Instantiate<SkySphere>();
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
+	Instantiate<Runway>();
 
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
