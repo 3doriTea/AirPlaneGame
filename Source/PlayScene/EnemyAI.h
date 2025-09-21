@@ -50,6 +50,15 @@ public:
 		SF_ROUND,           // Z軸でぐるぐる回る
 	};
 
+	/// <summary>
+	/// 購読者に通知をする際に添付するデータ
+	/// </summary>
+	struct EventData
+	{
+		MAIN_STATE mainState;
+		FIGHT_STATE fightState;
+		EntityId id; // 敵のID
+	};
 public:
 	EnemyAI();
 	~EnemyAI() {};

@@ -79,7 +79,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 
 	_register.Set<Draw>(SystemUpdateType::DontCallMe);
-
+	_register.Set<EventManager>(SystemUpdateType::DontCallMe);
 
 	// 開始時のシーン
 	//Game::System<SceneSystem>().Move<PlayScene>();

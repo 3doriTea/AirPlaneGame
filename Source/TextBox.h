@@ -16,6 +16,7 @@ public:
 	void SetUIParams(const UIParams& _uIParams) { uIParams_ = _uIParams; }
 	// 1文字あたりの表示秒数
 	void SetPopTimeSec(const float _timeSec);
+	
 	/// <summary>
 	/// テキストをいざ表示する
 	/// </summary>
@@ -25,6 +26,12 @@ public:
 	/// テキストを非表示にする
 	/// </summary>
 	void Hide();
+
+	/// <summary>
+	/// 字幕再生終了後、自動で非表示にするか否か設定
+	/// </summary>
+	/// <param name="_flag">非表示にする true / false</param>
+	void SetAutoHideOnFinish(bool _flag) { autoHideOnFinish_ = _flag; };
 	/// <summary>
 	/// 字幕再生が終了しているか
 	/// </summary>
@@ -41,4 +48,5 @@ private:
 	Vector2F drawPosition_;   // 描画座標
 	int fontSize_;            // 文字のフォントサイズ
 	UIParams uIParams_;       // UIパラメータ
+	bool autoHideOnFinish_;   // 字幕再生終了後、自動で非表示にするか
 };
