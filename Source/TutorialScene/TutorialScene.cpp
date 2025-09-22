@@ -51,8 +51,19 @@ namespace
 		"Image/Hint-YawLeft.png",
 	};
 
-	const std::string SIDE_IMAGE_FILE_A{ "Image/LeftSide.png" };
-	const std::string SIDE_IMAGE_FILE_B{ "Image/RightSide.png" };
+	const std::string SIDE_IMAGE_FILE_B{ "Image/LeftSide.png" };
+	const std::string SIDE_IMAGE_FILE_A{ "Image/RightSide.png" };
+
+	const std::string TRIGGER_ANIM_IMAGE_FILE_A[TutorialScene::TA_MAX]
+	{
+		"Image/Hint-TriggerOff.png",
+		"Image/Hint-TriggerOn.png",
+	};
+	const std::string TRIGGER_ANIM_IMAGE_FILE_B[TutorialScene::TA_MAX]
+	{
+		"Image/Hint-TriggerOff.png",
+		"Image/Hint-TriggerOn.png",
+	};
 
 	// 左右サイドの説明
 	const RectF DRAW_RECT_SIDE_DIST{ 0, 0, 1920, 1080 };
@@ -107,6 +118,17 @@ void TutorialScene::Initialize()
 	hSideImageA_ = Image::Load(SIDE_IMAGE_FILE_A);
 	hSideImageB_ = Image::Load(SIDE_IMAGE_FILE_B);
 
+	// コントローラートリガーアニメーション画像読み込みA
+	for (int i = 0; i < TA_MAX; i++)
+	{
+		hTriggerImageA_[i] = Image::Load(TRIGGER_ANIM_IMAGE_FILE_A[i]);
+	}
+	// コントローラートリガーアニメーション画像読み込みB
+	for (int i = 0; i < TA_MAX; i++)
+	{
+		hTriggerImageB_[i] = Image::Load(TRIGGER_ANIM_IMAGE_FILE_B[i]);
+	}
+
 	// 一定時間経ったら必ずプレイシーンに遷移
 	hToPlaySceneTimer_ = Timer::AddAram(TO_PLAY_SCENE_WAIT_SEC, []()
 		{
@@ -145,7 +167,7 @@ void TutorialScene::Initialize()
 				pImageAnimatorA_ = nullptr;
 				pImageAnimatorB_ = nullptr;
 			})
-		.OnStart(S_LEFT_SIDE, [this]
+		.OnStart(S_RIGHT_SIDE, [this]
 			{
 				massert(pImageAnimatorB_ == nullptr && "AnimatorBが消されていない");
 				pImageAnimatorB_ = Instantiate<ImageAnimator>(
@@ -158,12 +180,12 @@ void TutorialScene::Initialize()
 					},
 					GameObjectLayer::B);
 			})
-		.OnEnd(S_LEFT_SIDE, [this]
+		.OnEnd(S_RIGHT_SIDE, [this]
 			{
 				pImageAnimatorB_->DestroyMe();
 				pImageAnimatorB_ = nullptr;
 			})
-		.OnStart(S_RIGHT_SIDE, [this]
+		.OnStart(S_LEFT_SIDE, [this]
 			{
 				massert(pImageAnimatorA_ == nullptr && "AnimatorAが消されていない");
 				pImageAnimatorA_ = Instantiate<ImageAnimator>(
@@ -177,8 +199,41 @@ void TutorialScene::Initialize()
 					GameObjectLayer::A);
 
 			})
-		.OnEnd(S_RIGHT_SIDE, [this]
+		.OnEnd(S_LEFT_SIDE, [this]
 			{
+				pImageAnimatorA_->DestroyMe();
+				pImageAnimatorA_ = nullptr;
+			})
+
+		.OnStart(S_TRIGGER, [this]
+			{
+				massert(pImageAnimatorB_ == nullptr && "AnimatorBが消されていない");
+				massert(pImageAnimatorA_ == nullptr && "AnimatorAが消されていない");
+
+				pImageAnimatorB_ = Instantiate<ImageAnimator>(
+					ImageAnimator::Setting
+					{
+						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
+						.elements_ = { { hTriggerImageB_[TA_OFF], hTriggerImageB_[TA_ON] }},
+						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::B }
+					},
+					GameObjectLayer::B);
+
+				pImageAnimatorA_ = Instantiate<ImageAnimator>(
+					ImageAnimator::Setting
+					{
+						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
+						.elements_ = { { hTriggerImageA_[TA_OFF], hTriggerImageA_[TA_ON] }},
+						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::A }
+					},
+					GameObjectLayer::A);
+			})
+		.OnEnd(S_TRIGGER, [this]
+			{
+				pImageAnimatorB_->DestroyMe();
+				pImageAnimatorB_ = nullptr;
 				pImageAnimatorA_->DestroyMe();
 				pImageAnimatorA_ = nullptr;
 			})

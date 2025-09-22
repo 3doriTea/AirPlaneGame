@@ -36,6 +36,13 @@ public:
 		CI_MAX,
 	};
 
+	enum TRIGGER_ANIM
+	{
+		TA_OFF,
+		TA_ON,
+		TA_MAX,  // トリガーアニメーション最大値
+	};
+
 public:
 	TutorialScene();
 	~TutorialScene();
@@ -70,5 +77,8 @@ private:
 
 	ImageHandle hSideImageA_;
 	ImageHandle hSideImageB_;
+
+	ImageHandle hTriggerImageA_[TA_MAX];
+	ImageHandle hTriggerImageB_[TA_MAX];
 	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 };
