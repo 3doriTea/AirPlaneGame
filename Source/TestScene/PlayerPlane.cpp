@@ -3,6 +3,7 @@
 #include "../PlayScene/PlayerDamageEffect.h"
 #include "../ProjectTile.h"
 #include "../IAutoPilot.h"
+#include "../PlayScene/AutoControlText.h"
 
 #include <cmath>
 using namespace mtgb;
@@ -37,6 +38,9 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
 	pCollider_->SetRadius(1.0f);
+
+	pAutoControlText_ = Instantiate<AutoControlText>();
+	pAutoControlText_->SetEnabled(false);
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
@@ -87,10 +91,11 @@ void PlayerPlane::Update()
 #if 1
 	if (pIAutoPilot_->TryUpdate())
 	{
-
+		pAutoControlText_->SetEnabled(true);
 	}
 	else  // オートパイロットではない
 	{
+		pAutoControlText_->SetEnabled(false);
 		// WindowContextを直接指定しない方いい
 		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 

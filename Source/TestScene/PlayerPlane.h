@@ -4,6 +4,7 @@
 
 class Radar;
 class IAutoPilot;
+class AutoControlText;
 
 class PlayerPlane : public mtgb::GameObject
 {
@@ -24,4 +25,5 @@ private:
 	FBXModelHandle hModel_;
 	VVPlayer vVPlayer_;
 	IAutoPilot* pIAutoPilot_;
+	AutoControlText* pAutoControlText_;
 };
