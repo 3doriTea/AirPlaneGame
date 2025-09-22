@@ -1,7 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
-struct TargetingSystem;
+#include "../Source/TargetingSystem.h"
 
 class PlayerGun
 {
@@ -14,5 +14,5 @@ public:
 private:
 	float cooldownTimer_; // 撃てない間の時間カウント用
 	float cooldownCount_;
-	TargetingSystem* pTargetingSystem_;
+	TargetingSystem targetingSystem_;
 };

@@ -10,7 +10,6 @@ namespace mtgb
 {
     CircleDetector::CircleDetector()
     {
-        detectionCircleImage = Image::Load("Image/lockOnCircleGreen.png");
     }
     CircleDetector::CircleDetector(const CircleDetectorConfig& _config)
         : CircleDetector{}
@@ -35,7 +34,7 @@ namespace mtgb
 
         // タグで取得
         std::vector<GameObject*> findObjs;
-        GameObject::FindGameObjects(_config.targetTag, &findObjs);
+        GameObject::FindGameObjects(_config.base.targetTag, &findObjs);
 
         for (const auto& obj : findObjs)
         {
@@ -45,16 +44,16 @@ namespace mtgb
 
             // 距離チェック
             // カメラ位置を取得
-            Vector3 cameraPos = Game::System<CameraSystem>().GetTransform(_config.windowContext).GetWorldPosition();
+            Vector3 cameraPos = Game::System<CameraSystem>().GetTransform(_config.base.windowContext).GetWorldPosition();
             float distance = (worldPos - cameraPos).Size();
             
-            if (distance < _config.minDistance || distance > _config.maxDistance)
+            if (distance < _config.base.minDistance || distance > _config.base.maxDistance)
             {
                 continue;
             }
 
             // ワールド座標をスクリーン座標に変換
-            Vector3 screenPos = Game::System<CameraSystem>().GetWorldToScreenPos(worldPos, _config.windowContext);
+            Vector3 screenPos = Game::System<CameraSystem>().GetWorldToScreenPos(worldPos, _config.base.windowContext);
             
             // スクリーン座標が有効範囲内かチェック
             if (screenPos.z < 0.0f || screenPos.z > 1.0f)
@@ -82,23 +81,23 @@ namespace mtgb
         return !detectedTargets_.empty();
     }
 
-    const std::vector<ScreenCoordContainsInfo>& CircleDetector::GetDetectedTargets() const
+    RectF CircleDetector::GetDetectionArea() const
     {
-        return detectedTargets_;
-    }
-
-    void CircleDetector::DrawDetectionArea() const
-    {
-        // 検出範囲の描画
         Vector2F ratio = Game::System<Screen>().GetSizeRatio();
         float scale = (std::min)(ratio.x, ratio.y);
 
         float scaledSize = config.radius * 2.0f * scale;
         Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
         Vector2F newPoint = center - Vector2F{ scaledSize, scaledSize } *0.5f;
-        RectF drawRect = { newPoint,{scaledSize,scaledSize} };
-        Draw::Image(detectionCircleImage, drawRect, config.uiParams);
+        return { newPoint,{scaledSize,scaledSize} };
     }
+
+    const std::vector<ScreenCoordContainsInfo>& CircleDetector::GetDetectedTargets() const
+    {
+        return detectedTargets_;
+    }
+
+  
 
     void CircleDetector::ForEach(std::function<void(ScreenCoordContainsInfo&)> _func)
     {

@@ -5,7 +5,7 @@
 #include "WindowContext.h"
 #include "RectContainsInfo.h"
 #include "GameObjectTag.h"
-
+#include "RectF.h"
 namespace mtgb
 {
     /// <summary>
@@ -33,11 +33,13 @@ namespace mtgb
         /// <returns>検出された対象のリスト</returns>
         virtual const std::vector<ScreenCoordContainsInfo>& GetDetectedTargets() const = 0;
 
-        /// <summary>
-        /// <para> 検出範囲をUIで描画 <para>
-        /// </summary>
-        virtual void DrawDetectionArea() const{}
+        
 
+        /// <summary>
+        /// 検出範囲を返す
+        /// </summary>
+        /// <returns></returns>
+        virtual RectF GetDetectionArea() const { return RectF{}; };
         /// <summary>
         /// 検出結果を操作
         /// </summary>

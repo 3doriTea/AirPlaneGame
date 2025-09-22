@@ -21,6 +21,13 @@ HighlightEnemy::HighlightEnemy() : GameObject(GameObjectBuilder()
 	// 一つ目のウィンドウ
 	RectDetectorConfig firstConfig =
 	{
+		.base = 
+		{
+			.targetTag = GameObjectTag::Enemy,
+			.windowContext = WindowContext::First,
+			.maxDistance = distance,
+			.minDistance = 0.0f,
+		},
 		.detectionRect =
 		{
 			0.0f,
@@ -29,18 +36,15 @@ HighlightEnemy::HighlightEnemy() : GameObject(GameObjectBuilder()
 			static_cast<float>(firstWndRect.bottom),
 		}
 	};
-	firstConfig.targetTag = GameObjectTag::Enemy;
-	firstConfig.maxDistance = distance;
-	firstConfig.minDistance = 0.0f;
-	firstConfig.windowContext = WindowContext::First;
-	
+	firstWndRectDetector_.config = firstConfig;
 	// 二つ目のウィンドウ
 	RectDetectorConfig secondConfig = firstConfig;
 	
 	secondConfig.detectionRect.width = static_cast<float>(secondWndRect.right);
 	secondConfig.detectionRect.height = static_cast<float>(secondWndRect.bottom);
-	secondConfig.windowContext = WindowContext::Second;
-	
+	secondConfig.base.windowContext = WindowContext::Second;
+
+	secondWndRectDetector_.config = secondConfig;
 }
 
 HighlightEnemy::~HighlightEnemy()

@@ -24,6 +24,10 @@ namespace mtstat
 		MTStat& OnUpdate(const StatEnumT _statEnum, const std::function<void()>& _callback);
 		MTStat& OnEnd(const StatEnumT _statEnum, const std::function<void()>& _callback);
 
+		// ‚Ç‚Ìó‘Ô‚Å‚àŒÄ‚Î‚ê‚é‹¤’ÊŠÖ”
+		MTStat& OnAnyStart(const std::function<void()>& _callback);
+		MTStat& OnAnyUpdate(const std::function<void()>& _callback);
+		MTStat& OnAnyEnd(const std::function<void()>& _callback);
 		void Update() const;
 		void Change(const StatEnumT _nextStat);
 
@@ -31,9 +35,14 @@ namespace mtstat
 
 	private:
 		StatEnumT stat_;  // Œ»İ‚ÌƒXƒe[ƒg
+		
 		std::map<StatEnumT, std::function<void()>> updateFuncs_;  // “o˜^‚³‚ê‚Ä‚¢‚éXVŠÖ”
 		std::map<StatEnumT, std::function<void()>> startFuncs_;   // “o˜^‚³‚ê‚Ä‚¢‚éŠJnŠÖ”
 		std::map<StatEnumT, std::function<void()>> endFuncs_;     // “o˜^‚³‚ê‚Ä‚¢‚éI—¹ŠÖ”
+
+		std::function<void()> anyUpdateFunc_;
+		std::function<void()> anyStartFunc_;
+		std::function<void()> anyEndFunc_;
 	};
 
 	template<EnumT StatEnumT>
@@ -58,8 +67,33 @@ namespace mtstat
 	}
 
 	template<EnumT StatEnumT>
+	inline MTStat<StatEnumT>& MTStat<StatEnumT>::OnAnyStart(const std::function<void()>& _callback)
+	{
+		anyStartFunc_ = _callback;
+		return *this;
+	}
+
+	template<EnumT StatEnumT>
+	inline MTStat<StatEnumT>& MTStat<StatEnumT>::OnAnyUpdate(const std::function<void()>& _callback)
+	{
+		anyUpdateFunc_ = _callback;
+		return *this;
+	}
+
+	template<EnumT StatEnumT>
+	inline MTStat<StatEnumT>& MTStat<StatEnumT>::OnAnyEnd(const std::function<void()>& _callback)
+	{
+		anyEndFunc_ = _callback;
+		return *this;
+	}
+
+	template<EnumT StatEnumT>
 	inline void MTStat<StatEnumT>::Update() const
 	{
+		if (anyUpdateFunc_)
+		{
+			anyUpdateFunc_();
+		}
 		if (updateFuncs_.count(stat_))
 		{
 			updateFuncs_.at(stat_)();
@@ -69,6 +103,10 @@ namespace mtstat
 	template<EnumT StatEnumT>
 	inline void MTStat<StatEnumT>::Change(const StatEnumT _nextStat)
 	{
+		if (anyEndFunc_)
+		{
+			anyEndFunc_();
+		}
 		if (endFuncs_.count(stat_))
 		{
 			endFuncs_[stat_]();
@@ -76,6 +114,10 @@ namespace mtstat
 
 		stat_ = _nextStat;
 
+		if (anyStartFunc_)
+		{
+			anyStartFunc_();
+		}
 		if (startFuncs_.count(_nextStat))
 		{
 			startFuncs_[_nextStat]();

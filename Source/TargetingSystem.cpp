@@ -5,18 +5,24 @@
 #include "CameraSystem.h"
 
 
-TargetingSystem::TargetingSystem()
-	: detector{ nullptr }
-	, currentTarget{ nullptr }
-	, reticleRadius{ 0.0f }
-	, reticleRect{}
-	, targetReticleImage{ -1 }
-	, uiParams{}
-	, ownerTransform{ nullptr }
-{
-}
+
 TargetingSystem::~TargetingSystem()
 {
+	Game::System<EventManager>().GetEvent<ThreatEventData>().Unsubscribe(threatEventHandlerId_);
+	SAFE_DELETE(detector);
+}
+
+ImageHandle TargetingSystem::GetDetectionFrameImage() const
+{
+	switch (currentThreatLevel_)
+	{
+	case ThreatLevel::Normal:
+		return normalDetectionFrameImage_;
+	case ThreatLevel::Danger:
+		return alertDetectionFrameImage_;
+	default:
+		return normalDetectionFrameImage_;
+	}
 }
 
 void TargetingSystem::SearchTargets()
@@ -86,6 +92,11 @@ mtgb::Vector3 TargetingSystem::GetCurrentTargetPosition() const
 	return Vector3::Zero();
 }
 
+void TargetingSystem::OnThreatLevelChanged(const ThreatEventData& _data)
+{
+	currentThreatLevel_ = _data.level;
+}
+
 bool TargetingSystem::HasTarget() const
 {
 	return currentTarget != nullptr && detector && detector->HasDetectedTargets();
@@ -93,9 +104,8 @@ bool TargetingSystem::HasTarget() const
 
 void TargetingSystem::DrawUI() const
 {
-	
 	// ターゲット検出範囲を描画
-	detector->DrawDetectionArea();
+	Draw::Image(GetDetectionFrameImage(), detector->GetDetectionArea(), uiParams);
 
 	// ターゲットがロックオンされている場合、レティクルを描画
 	if (HasTarget())

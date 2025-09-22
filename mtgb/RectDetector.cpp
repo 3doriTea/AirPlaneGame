@@ -33,13 +33,13 @@ void mtgb::RectDetector::UpdateDetection(RectDetectorConfig& _config)
 	
 	Game::System<ColliderCP>().RectContains(
 		_config.detectionRect,
-		_config.targetTag,
+		_config.base.targetTag,
 		&detectedTargets_, // 基底クラスのメンバを使用
-		_config.windowContext
+		_config.base.windowContext
 	);
 
 
-	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_config.windowContext).GetHCamera();
+	CameraHandleInScene hCamera = WinCtxRes::Get<CameraResource>(_config.base.windowContext).GetHCamera();
 	const Transform& cameraTransform = Game::System<CameraSystem>().GetTransform(hCamera);
 	
 	// 設定に合致しない要素を取り除く
@@ -52,7 +52,7 @@ void mtgb::RectDetector::UpdateDetection(RectDetectorConfig& _config)
 				float distance = DirectX::XMVector3Dot(toTarget, normal).m128_f32[0];
 
 				// 設定した距離より遠いなら除く
-				if (std::abs(distance) > _config.maxDistance)
+				if (std::abs(distance) > _config.base.maxDistance)
 				{
 					return true;
 				}
@@ -80,17 +80,15 @@ bool mtgb::RectDetector::HasDetectedTargets() const
 	return !detectedTargets_.empty();
 }
 
-void mtgb::RectDetector::DrawDetectionArea() const
+RectF mtgb::RectDetector::GetDetectionArea() const
 {
-	// 検出範囲の描画
 	Vector2F ratio = Game::System<Screen>().GetSizeRatio();
 	float scale = (std::min)(ratio.x, ratio.y);
 
 	float scaledSize = config.detectionRect.size.x * scale;
 	Vector2F center = Game::System<Screen>().GetSizeF() * 0.5f;
 	Vector2F newPoint = center - Vector2F{ scaledSize, scaledSize } *0.5f;
-	RectF drawRect = { newPoint,{scaledSize,scaledSize} };
-	Draw::Image(detectionFrameImage, drawRect, config.uiParams);
+	return { newPoint,{scaledSize,scaledSize} };
 }
 
 const std::vector<ScreenCoordContainsInfo>& mtgb::RectDetector::GetDetectedTargets() const

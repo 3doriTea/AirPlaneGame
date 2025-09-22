@@ -37,12 +37,13 @@ namespace mtgb
         /// </summary>
         bool HasDetectedTargets() const override;
 
+        RectF GetDetectionArea() const override;
         /// <summary>
         /// ŒŸoŒ‹‰Ê‚ğæ“¾
         /// </summary>
         const std::vector<ScreenCoordContainsInfo>& GetDetectedTargets() const override;
 
-        void DrawDetectionArea() const override;
+        
         void ForEach(std::function<void(ScreenCoordContainsInfo&)> _func) override;
         void ForEach(std::function<void(const ScreenCoordContainsInfo&)> _func) const override;
 
@@ -52,6 +53,5 @@ namespace mtgb
         bool IsPointInCircle(const Vector2F& point, const Vector2F& center, float radius) const;
 
         CircleDetectorConfig config;
-        ImageHandle detectionCircleImage;
     };
 }

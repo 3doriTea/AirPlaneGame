@@ -71,7 +71,7 @@ namespace mtgb
 		}
 	private:
 		static constexpr size_t BUFFER_SIZE{ 1024 };  // ログ出力時の文字列バッファサイズ
-		static constexpr UINT MAX_LOG_COUNT{ 3 };
+		static constexpr UINT MAX_LOG_COUNT{ 30 };
 
 		LogItr RemoveLog(LogItr itr);
 		

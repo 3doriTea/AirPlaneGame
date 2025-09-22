@@ -16,6 +16,7 @@ public:
 	{
 		Vector3 playerPos;
 		Transform* pSelfTrans{ nullptr };
+		bool isBroken;
 	};
 	/// <summary>
 	/// AIからの出力データ
@@ -39,6 +40,7 @@ public:
 		S_SLEEP,   // 範囲外待機
 		S_SEARCH,  // 索敵行動
 		S_FIGHT,   // 戦闘行動
+		S_CRASH,   // 墜落行動
 	};
 	/// <summary>
 	/// 戦闘行動ステート

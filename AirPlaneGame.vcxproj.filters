@@ -856,6 +856,12 @@
     <ClCompile Include="Source\PlayScene\PlayerDamageEffect.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\ImageBlinker.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShuffleSpeechQueue.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1511,6 +1517,15 @@
     </ClInclude>
     <ClInclude Include="Source\PlayScene\PlayerDamageEffect.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ThreatData.h">
+      <Filter>01Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ImageBlinker.h">
+      <Filter>01Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShuffleSpeechQueue.h">
+      <Filter>01Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

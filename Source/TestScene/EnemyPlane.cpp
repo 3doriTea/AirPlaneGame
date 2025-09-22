@@ -29,6 +29,8 @@ namespace
 	const float RELOAD_TIME_SEC{ 5.0f };      // リロード中の待機時間(秒)
 	const int BULLET_COUNT{ 1 };          // リロードまでに撃てる弾数
 	const float LOCK_ON_TIME_SEC{ 3.0f };		// ロックオンにかかる時間
+	const float LOCK_ON_ANGLE{ 60 }; // ロックオン、プレイヤーを発見する角度(degree)
+	const float LOCK_ON_DISTANCE_{200};// ロックオン、プレイヤーを発見する距離
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
 	const int ADD_QUOTA_POINT{ 2 };  // 撃破時に加算するポイント
 }
@@ -50,8 +52,16 @@ EnemyPlane::EnemyPlane(
 	controllerId_{ _controllerId },
 	speed_{ 10.0f },
 	health_{},
-	lockOnAngle_{ 60.0f },
-	lockOnDistance_{ 200.0f },
+	targetingSystem_{ pTransform_, RayDetectorConfig{
+		.base = 
+		{
+			.targetTag = GameObjectTag::PlayerPlane,
+			.maxDistance = LOCK_ON_DISTANCE_,
+			.minDistance = 0.0f,
+		},
+		.rayTransform = pTransform_,
+		.maxAngleDegrees = LOCK_ON_ANGLE,
+	} },
 	gun_
 	{
 		Gun::Setting  // 銃器の設定
@@ -66,16 +76,6 @@ EnemyPlane::EnemyPlane(
 	},
 	ai_{}
 {
-	RayDetectorConfig config =
-	{
-		.rayTransform = pTransform_,
-		.maxAngleDegrees = lockOnAngle_,
-	};
-	config.maxDistance = lockOnDistance_;
-	config.minDistance = 0.0f;
-	config.targetTag = GameObjectTag::PlayerPlane;
-	targetingSystem_ = TargetingSystem{ pTransform_,config };
-
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
 	pCollider_->SetRadius(2.0f);
@@ -145,20 +145,21 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	if (HandleCrash())
-	{
-		return;
-	}
-
+	
 	ai_.SetInputData(
 		{
 			.playerPos = pEnemiesController_->GetPlayerPosition(),
 			.pSelfTrans = pTransform_,
+			.isBroken = broken_
 		});
 
 	ai_.Update();
 	const EnemyAI::OutData& outData{ ai_.GetOutData() };
 
+	if (HandleCrash())
+	{
+		return;
+	}
 	if (outData.isActive == false)
 	{
 		return;
@@ -239,14 +240,6 @@ void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
 			if (gun_.IsLockOnComplete())
 			{
 				gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
-				Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Invoke(
-					{
-						.id = GetEntityId(),
-						.shooter = ProjectTile::Shooter::Enemy,
-						.type = ProjectTile::Type::Missile,
-						.eventType = ProjectTile::EventType::Fired,
-					});
-
 				gun_.ResetLockOnCountdown();
 
 			}

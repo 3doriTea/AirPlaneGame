@@ -8,21 +8,27 @@
 #include <memory>
 #include "DetectorConfigs.h"
 #include <type_traits>
+#include "ThreatData.h"
 
 /// <summary>
 /// 敵を自動でロックオンし、射撃をする
 /// </summary>
 struct TargetingSystem
 {
-	TargetingSystem();
-
 	template<typename DetectorConfigType>
 	TargetingSystem(Transform* _owner, const DetectorConfigType& _config);
 	~TargetingSystem();
 
+	ThreatLevel currentThreatLevel_;
+	EventHandlerId threatEventHandlerId_;
 	// ターゲット検出関連
 	IDetector* detector;
 	ScreenCoordContainsInfo* currentTarget;
+
+	// 検出範囲描画関連
+	ImageHandle alertDetectionFrameImage_;
+	ImageHandle normalDetectionFrameImage_;
+
 
 	// レティクル描画関連
 	float reticleRadius;
@@ -33,6 +39,11 @@ struct TargetingSystem
 	// TargetingSystemを所有するオブジェクトのTransform
 	Transform* ownerTransform;
 
+	/// <summary>
+	/// 脅威度に応じた画像を返す
+	/// </summary>
+	/// <returns></returns>
+	ImageHandle GetDetectionFrameImage() const;
 	void SearchTargets();
 
 	void ClearTarget();
@@ -42,8 +53,10 @@ struct TargetingSystem
 	/// </summary>
 	void FireAtTarget();
 	
+
 	Vector3 GetCurrentTargetPosition() const;
 
+	void OnThreatLevelChanged(const ThreatEventData& _data);
 	/// <summary>
 	/// UI描画
 	/// </summary>
@@ -56,15 +69,21 @@ struct TargetingSystem
 	bool HasTarget() const;
 };
 
+template <typename T>
+constexpr bool false_v = false;
+
 template<typename DetectorConfigType>
-inline TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigType& _config)
+TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigType& _config)
 	: ownerTransform{ _owner }
 	, reticleRadius{ 30.0f }
 	, reticleRect{}
 	, targetReticleImage{ -1 }
 	, detector{ nullptr }
-	,currentTarget{ nullptr }
+	, currentTarget{ nullptr }
+	, currentThreatLevel_{ThreatLevel::Normal}
 {
+	
+
 	if constexpr (std::is_same_v<DetectorConfigType, RectDetectorConfig>)
 	{
 		detector = new RectDetector(_config);
@@ -79,12 +98,23 @@ inline TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigT
 	}
 	else
 	{
-		static_assert(false, "有効でない型でした");
+		static_assert(false_v<DetectorConfigBase>, "有効でない型でした");
 	}
 
+	uiParams.layerFlag = _config.base.uiParams.layerFlag;
+
+	// 脅威度の変更時に呼ばれるコールバック
+	threatEventHandlerId_ = Game::System<EventManager>().GetEvent<ThreatEventData>().Subscribe(
+		[this](const ThreatEventData& _data)
+		{
+			OnThreatLevelChanged(_data);
+	});
+	
 	
 	// 画像を読み込む
 	targetReticleImage = Image::Load("Image/lockOnReticle.png");
+	normalDetectionFrameImage_ = Image::Load("Image/lockOnCircleGreen.png");
+	alertDetectionFrameImage_ = Image::Load("Image/lockOnCircleRed.png");
 
 	// レティクル矩形のサイズを設定
 	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };

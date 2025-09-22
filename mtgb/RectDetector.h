@@ -53,7 +53,7 @@ namespace mtgb
 		/// <returns>‘ÎÛ‚ªˆê‚Â‚Å‚à‚ ‚é‚È‚ç true</returns>
 		bool HasDetectedTargets() const override;
 
-		void DrawDetectionArea() const override;
+		RectF GetDetectionArea() const override;
 		/// <summary>
 		/// ŒŸoŒ‹‰Ê‚ğæ“¾
 		/// </summary>
@@ -72,6 +72,5 @@ namespace mtgb
 		bool IsLineOfSight(const Vector3& _cameraPos, const ScreenCoordContainsInfo& _targetInfo);
 		
 		RectDetectorConfig config;
-		ImageHandle detectionFrameImage;
 	};
 }

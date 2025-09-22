@@ -22,7 +22,7 @@ Missile::Missile(const Vector3& _position, const Quaternion& _quaternion, const 
 
 	// Õ“Ëˆ—
 	pCollider_->SetRadius(3.0f);
-	pRb_->OnCollisionEnter([this](EntityId _id)
+	pRb_->OnCollisionEnter([this,_shooter](EntityId _id)
 		{
 			GameObject* pTarget{ FindGameObject(_id) };
 			if (pTarget == nullptr)
@@ -30,17 +30,19 @@ Missile::Missile(const Vector3& _position, const Quaternion& _quaternion, const 
 				return;
 			}
 			
-			if (pTarget->GetName() == "PlayerPlane")
+			if (pTarget->GetName() == "PlayerPlane" || pTarget->GetName() == "Bullet")
 			{
+				
 				DestroyMe();
-				LOGIMGUI("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)", _id, FindGameObject(_id)->GetName().c_str(), entityId_, GetName().c_str());
 			}
-			if (pTarget->GetName() == "Bullet")
-			{
-				DestroyMe();
-				LOGIMGUI("Id:%d(%s)‚ÉŒ‚‚¿—Ž‚³‚ê‚½I by %d(%s)", _id, FindGameObject(_id)->GetName().c_str(), entityId_, GetName().c_str());
-			}
+		});
 
+	Game::System<EventManager>().GetEvent<EventData>().Invoke(
+		{
+			.id = GetEntityId(),
+			.shooter = _shooter,
+			.type = Type::Missile,
+			.eventType = EventType::Fired,
 		});
 
 	Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
@@ -51,6 +53,17 @@ Missile::Missile(const Transform& _shooterTransform, Transform* _target, const S
 	: Missile{_shooterTransform.position,_shooterTransform.rotate,_shooter,_target}
 {
 	pTransform_->scale = _shooterTransform.scale;
+}
+
+Missile::~Missile()
+{
+	Game::System<EventManager>().GetEvent<EventData>().Invoke(
+		{
+			.id = entityId_,
+			.shooter = shooter_,
+			.type = Type::Missile,
+			.eventType = EventType::Destroyed,
+		});
 }
 
 void Missile::Update()

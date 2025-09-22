@@ -16,7 +16,7 @@
 #include "TestScene/PlayerPilot.h"
 #include "TestScene/PlayerGunner.h"
 #include "PlayScene/QuotaGauge.h"
-
+#include "../Source/ControlTower.h"
 using namespace mtgb;
 using Network::PIIO;
 
@@ -55,6 +55,10 @@ void PlayScene::Initialize()
 
 	PlayerGunner* pGunner{ Instantiate<PlayerGunner>(eIdPlayer) };
 	CameraHandleInScene hCamera2 = RegisterCameraGameObject(pGunner);
+
+	ControlTower* pControlTower{ Instantiate<ControlTower>() };
+	pControlTower->SetControlTarget(pGunner->GetEntityId(), WindowContext::Second);
+	pControlTower->SetControlTarget(pPilot->GetEntityId(), WindowContext::First);
 
 	// 0を原点として、xとzを-540~540の間に配置する
 	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
@@ -109,12 +113,10 @@ void PlayScene::Initialize()
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
 
-	//Instantiate<Player>(WindowContext::Second);
 	Instantiate<SkySphere>();
-	//Instantiate<Reticle>();
 	Instantiate<Reticle>(WindowContext::First);
 	Instantiate<Reticle>(WindowContext::Second);
-	//Instantiate<Player>(WindowContext::First);
+
 	timeLimit_ = Instantiate<TimeLimit>(180.0f);
 	timeLimit_->StartTimer();
 	timeLimit_->RegisterOnEndTimerCallback([]() 

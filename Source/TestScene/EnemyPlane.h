@@ -37,7 +37,5 @@ private:
 	Health health_;   // 体力
 	float speed_;  // 移動速度 m/s
 	bool broken_;  // 壊れているか
-	float lockOnAngle_;// ロックオン、プレイヤーを発見する角度(degree)
-	float lockOnDistance_;// ロックオン、プレイヤーを発見する距離
 	float timeSinceLastshot_;
 };

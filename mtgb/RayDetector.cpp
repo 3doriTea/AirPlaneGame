@@ -30,7 +30,7 @@ namespace mtgb
         
         // タグで取得
         std::vector<GameObject*> findObjs;
-        GameObject::FindGameObjects(_config.targetTag,&findObjs);
+        GameObject::FindGameObjects(_config.base.targetTag,&findObjs);
 
         for (const auto& obj : findObjs)
         {
@@ -43,7 +43,7 @@ namespace mtgb
             // 距離チェック
             float distance = (worldPos - rayOrigin).Size();
             
-            if (distance < _config.minDistance || distance > _config.maxDistance)
+            if (distance < _config.base.minDistance || distance > _config.base.maxDistance)
             {
                 continue;
             }
@@ -52,7 +52,7 @@ namespace mtgb
             if (IsTargetInRayAngle(worldPos, rayOrigin, rayDirection, _config.maxAngleDegrees))
             {
                 // ワールド座標をスクリーン座標に変換
-                Vector3 screenPos = Game::System<CameraSystem>().GetWorldToScreenPos(worldPos, _config.windowContext);
+                Vector3 screenPos = Game::System<CameraSystem>().GetWorldToScreenPos(worldPos, _config.base.windowContext);
                 detectedTargets_.emplace_back(worldPos, screenPos, obj->GetEntityId());
             }
         }

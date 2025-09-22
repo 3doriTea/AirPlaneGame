@@ -26,16 +26,18 @@ namespace mtgb
     /// <summary>
     /// 矩形検出器の設定
     /// </summary>
-    struct RectDetectorConfig : DetectorConfigBase
+    struct RectDetectorConfig
     {
+        DetectorConfigBase base;
         RectF detectionRect;            // 検出範囲の矩形
     };
 
     /// <summary>
     /// 円検出器の設定
     /// </summary>
-    struct CircleDetectorConfig : DetectorConfigBase
+    struct CircleDetectorConfig
     {
+        DetectorConfigBase base;
         Vector2F center;                // 円の中心座標（スクリーン座標）
         float radius;                   // 円の半径
     };
@@ -43,10 +45,9 @@ namespace mtgb
     /// <summary>
     /// レイ検出器の設定
     /// </summary>
-    struct RayDetectorConfig : DetectorConfigBase
+    struct RayDetectorConfig
     {
-        //Vector3 rayOrigin;              // レイの起点（ワールド座標）
-        //Vector3 rayDirection;           // レイの方向
+        DetectorConfigBase base;
         Transform* rayTransform;           // レイの起点、方向
         float maxAngleDegrees;            // 検出可能な最大角度（度）
     };

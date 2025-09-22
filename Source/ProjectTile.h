@@ -34,7 +34,7 @@ public:
 protected:
 	ProjectTile(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter, const Type _projectileType);
 	ProjectTile(const Transform& _shooterTransform, Shooter _shooter, const Type _projectileType);
-
+	
 public:
 	virtual ~ProjectTile();
 

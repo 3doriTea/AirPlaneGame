@@ -82,66 +82,7 @@ void mtgb::SceneSystem::Update()
 
 	// 描画処理
 	Game::System<RenderSystem>().Render(currentScene);
-#if 0
-	//一つ目のウィンドウ
-	WinCtxRes::ChangeResource(WindowContext::First);
 
-	MTImGui& imGui = Game::System<MTImGui>();
-
-	//ImGui描画開始
-	imGui.BeginFrame();
-	imGui.BeginImGuizmoFrame();
-
-	imGui.Begin("Window");
-
-	//DirectX描画開始
-	DirectX11Draw::Begin();
-
-	//ImGuiウィジェット表示
-	ImGuiShowSystem::Instance().ShowAll();
-
-	currentScene.Draw();
-	for (auto&& gameObject : currentScene.pGameObjects_)
-	{
-		gameObject->Draw();
-	}
-	imGui.End();
-	DirectX11Draw::End();
-
-
-	imGui.SetImGuizmoRenderTargetView();
-	imGui.Begin("ImGuizmoWindow");
-	DirectX11Draw::Begin();
-
-	currentScene.Draw();
-	for (auto&& gameObject : currentScene.pGameObjects_)
-	{
-		gameObject->Draw();
-	}
-	imGui.End();
-	imGui.RenderGameView();
-
-	imGui.EndFrame();
-
-	DirectX11Draw::End();
-
-
-	WinCtxRes::ChangeResource(WindowContext::Second);
-
-
-	DirectX11Draw::Begin();
-	
-	currentScene.Draw();
-	for (auto&& gameObject : currentScene.pGameObjects_)
-	{
-		if (gameObject->GetLayerFlag().Has(GameObjectLayer::B))
-		{
-			gameObject->Draw();
-		}
-	}
-	
-	DirectX11Draw::End();
-#endif
 	// 削除処理
 	for (auto&& itr = currentScene.pGameObjects_.begin();
 		itr != currentScene.pGameObjects_.end();)
@@ -149,6 +90,7 @@ void mtgb::SceneSystem::Update()
 		if ((*itr)->IsToDestroy())
 		{
 			Game::RemoveEntityComponent((*itr)->GetEntityId());
+			SAFE_DELETE(*itr);
 			itr = currentScene.pGameObjects_.erase(itr);
 		}
 		else
