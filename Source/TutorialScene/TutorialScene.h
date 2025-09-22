@@ -3,6 +3,7 @@
 #include <array>
 #include "MTStat/MTStat.h"
 #include "../TextBox.h"
+#include "SpeechQueue.h"
 
 class TextBoxTimeBar;
 class TextBoxBackground;
@@ -43,6 +44,14 @@ public:
 		TA_MAX,  // トリガーアニメーション最大値
 	};
 
+	enum SLIDER_ANIM
+	{
+		SA_ANIM_MAX,
+		SA_ANIM_MID,
+		SA_ANIM_MIN,
+		SA_MAX,  // スライダーアニメーション最大値
+	};
+
 public:
 	TutorialScene();
 	~TutorialScene();
@@ -80,5 +89,8 @@ private:
 
 	ImageHandle hTriggerImageA_[TA_MAX];
 	ImageHandle hTriggerImageB_[TA_MAX];
+	ImageHandle hSliderImage_[SA_MAX];
 	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
+
+	SpeechQueue speechQueue_;
 };

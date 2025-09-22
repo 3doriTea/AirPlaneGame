@@ -12,7 +12,6 @@
 
 #include "TextBoxBackground.h"
 #include "TextBoxTimeBar.h"
-#include "SpeechQueue.h"
 #include "ImageAnimator.h"
 #include "ToPlayTimer.h"
 #include "Runway.h"
@@ -24,23 +23,6 @@ namespace
 	const float TO_PLAY_SCENE_WAIT_SEC{ 60 };
 
 	const float TEXT_BOX_START_WAIT_TIME{ 3 };
-
-	// 台本
-	SpeechQueue speechQueue
-	{ {
-		// MEMO: Visual Studio の場合、tab文字で幅統一できる
-		{ u8"こんにちは。オペレーターだよ。",								"Sound/Voice/001_ずんだもん（ノーマル）_こんにちは。オペレ….wav",	4.0 },  // 0
-		{ u8"まもなく、敵がいる地点に到着するよ。",							"Sound/Voice/002_ずんだもん（ノーマル）_まもなく、敵がいる….wav",	4.0 },  // 1
-		{ u8"その前に、操作に慣れておこう。",								"Sound/Voice/003_ずんだもん（ノーマル）_その前に、操作に慣….wav",	4.0 },  // 2
-		{ u8"君たちの任務は、協力して敵を撃破することだよ。",					"Sound/Voice/004_ずんだもん（ノーマル）_諸君の任務は、協力….wav",	5.0 },  // 3
-		{ u8"時間内にノルマを達成するんだよ。",								"Sound/Voice/005_ずんだもん（ノーマル）_時間内にノルマを達….wav",	4.0 },  // 4
-		{ u8"←側は、射撃手、敵をバンバン撃ってね。",							"Sound/Voice/006_ずんだもん（ノーマル）_左の君は、射撃手、….wav",	6.0 },  // 5
-		{ u8"→側は、運転手、飛行機を操縦して、好きなところに向かってね。",		"Sound/Voice/007_ずんだもん（ノーマル）_右の君は、運転手、….wav",	7.0 },  // 6
-		{ u8"2人とも、スティックを倒して、方向を変えられるよ。",				"Sound/Voice/008_ずんだもん（ノーマル）_2人とも、スティッ….wav",	5.0 },  // 7
-		{ u8"トリガーを押すと、弾を発射できるよ。",							"Sound/Voice/009_ずんだもん（ノーマル）_トリガーを押すと、….wav",	5.0 },  // 8
-		{ u8"←側の運転手は、スライダーを動かして飛行機の速度を変えられるよ。",	"Sound/Voice/010_ずんだもん（ノーマル）_右の、運転手は、ス….wav",	7.0 },  // 9
-		{ u8"そろそろ到着するよ！幸運を祈るよ！",							"Sound/Voice/011_ずんだもん（ノーマル）_そろそろ到着するよ….wav", 4.0 },
-	} };
 
 	// フライトスティックコントローラーの画像ファイル名
 	const std::string CONTROLLER_ANIM_IMAGE_FILE_A[TutorialScene::CI_MAX]
@@ -65,6 +47,14 @@ namespace
 		"Image/Hint-TriggerOn.png",
 	};
 
+	// スライダーの画像A
+	const std::string SLIDER_ANIM_IMAGE_FILE[TutorialScene::SA_MAX]
+	{
+		"Image/Hint-SliderMin.png",
+		"Image/Hint-SliderMid.png",
+		"Image/Hint-SliderMax.png",
+	};
+
 	// 左右サイドの説明
 	const RectF DRAW_RECT_SIDE_DIST{ 0, 0, 1920, 1080 };
 
@@ -84,7 +74,22 @@ TutorialScene::TutorialScene() :
 	pImageAnimatorA_{ nullptr },
 	pImageAnimatorB_{ nullptr },
 	hControllerImagesA_{},
-	pAutoPilot_{ new AutoPilotTutorial{} }
+	pAutoPilot_{ new AutoPilotTutorial{} },
+	speechQueue_  // 台本
+	{ {
+		// MEMO: Visual Studio の場合、tab文字で幅統一できる
+		{ u8"こんにちは。オペレーターだよ。",								"Sound/Voice/001_ずんだもん（ノーマル）_こんにちは。オペレ….wav",	4.0 },  // 0
+		{ u8"まもなく、敵がいる地点に到着するよ。",							"Sound/Voice/002_ずんだもん（ノーマル）_まもなく、敵がいる….wav",	4.0 },  // 1
+		{ u8"その前に、操作に慣れておこう。",								"Sound/Voice/003_ずんだもん（ノーマル）_その前に、操作に慣….wav",	4.0 },  // 2
+		{ u8"君たちの任務は、協力して敵を撃破することだよ。",					"Sound/Voice/004_ずんだもん（ノーマル）_諸君の任務は、協力….wav",	5.0 },  // 3
+		{ u8"時間内にノルマを達成するんだよ。",								"Sound/Voice/005_ずんだもん（ノーマル）_時間内にノルマを達….wav",	4.0 },  // 4
+		{ u8"←側は、射撃手、敵をバンバン撃ってね。",							"Sound/Voice/006_ずんだもん（ノーマル）_左の君は、射撃手、….wav",	6.0 },  // 5
+		{ u8"→側は、運転手、飛行機を操縦して、好きなところに向かってね。",		"Sound/Voice/007_ずんだもん（ノーマル）_右の君は、運転手、….wav",	7.0 },  // 6
+		{ u8"2人とも、スティックを倒して、方向を変えられるよ。",				"Sound/Voice/008_ずんだもん（ノーマル）_2人とも、スティッ….wav",	5.0 },  // 7
+		{ u8"トリガーを押すと、弾を発射できるよ。",							"Sound/Voice/009_ずんだもん（ノーマル）_トリガーを押すと、….wav",	5.0 },  // 8
+		{ u8"←側の運転手は、スライダーを動かして飛行機の速度を変えられるよ。",	"Sound/Voice/010_ずんだもん（ノーマル）_右の、運転手は、ス….wav",	7.0 },  // 9
+		{ u8"そろそろ到着するよ！幸運を祈るよ！",							"Sound/Voice/011_ずんだもん（ノーマル）_そろそろ到着するよ….wav", 4.0 },
+	} }
 {
 }
 
@@ -127,6 +132,11 @@ void TutorialScene::Initialize()
 	for (int i = 0; i < TA_MAX; i++)
 	{
 		hTriggerImageB_[i] = Image::Load(TRIGGER_ANIM_IMAGE_FILE_B[i]);
+	}
+
+	for (int i = 0; i < SA_MAX; i++)
+	{
+		hSliderImage_[i] = Image::Load(SLIDER_ANIM_IMAGE_FILE[i]);
 	}
 
 	// 一定時間経ったら必ずプレイシーンに遷移
@@ -231,12 +241,40 @@ void TutorialScene::Initialize()
 					GameObjectLayer::A);
 			})
 		.OnEnd(S_TRIGGER, [this]
-			{
-				pImageAnimatorB_->DestroyMe();
-				pImageAnimatorB_ = nullptr;
-				pImageAnimatorA_->DestroyMe();
-				pImageAnimatorA_ = nullptr;
-			})
+		{
+			pImageAnimatorB_->DestroyMe();
+			pImageAnimatorB_ = nullptr;
+			pImageAnimatorA_->DestroyMe();
+			pImageAnimatorA_ = nullptr;
+		})
+
+		.OnStart(S_SLIDER, [this]
+		{
+			massert(pImageAnimatorA_ == nullptr && "AnimatorAが消されていない");
+			pImageAnimatorA_ = Instantiate<ImageAnimator>(
+				ImageAnimator::Setting
+				{
+					.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+					.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
+					.elements_ =
+					{{
+						hSliderImage_[SA_ANIM_MIN],
+						hSliderImage_[SA_ANIM_MID],
+						hSliderImage_[SA_ANIM_MAX],
+						hSliderImage_[SA_ANIM_MAX],
+						hSliderImage_[SA_ANIM_MID],
+						hSliderImage_[SA_ANIM_MIN],
+					}},
+					.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::A }
+				},
+				GameObjectLayer::A);
+
+		})
+		.OnEnd(S_SLIDER, [this]
+		{
+			pImageAnimatorA_->DestroyMe();
+			pImageAnimatorA_ = nullptr;
+		})
 		;
 
 	Audio::Clear();
@@ -279,7 +317,7 @@ void TutorialScene::Update()
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
 
-	if (speechQueue.IsFinished())
+	if (speechQueue_.IsFinished())
 	{
 		return;  // 台本読み終わっているなら回帰
 	}
@@ -290,7 +328,7 @@ void TutorialScene::Update()
 	if (textBoxToChangeTimeLeft_ <= 0.0f)
 	{
 		SPEECH_ELEMENT element{};
-		if (speechQueue.TryGetNext(element))
+		if (speechQueue_.TryGetNext(element))
 		{
 			textBoxToChangeTimeLeft_ += element.time_;
 			// 字幕タイマーセット！
@@ -300,7 +338,7 @@ void TutorialScene::Update()
 			// テキスト読み上げる！
 			Game::System<Audio>().PlayOneShotFile(element.audioFile_.data());
 			// 次のステータスに変更
-			STATE nextState{ static_cast<STATE>(speechQueue.GetCurrentLine()) };
+			STATE nextState{ static_cast<STATE>(speechQueue_.GetCurrentLine()) };
 			state_.Change(nextState);
 		}
 	}
