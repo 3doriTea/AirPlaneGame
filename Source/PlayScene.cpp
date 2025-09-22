@@ -121,9 +121,9 @@ void PlayScene::Initialize()
 	//Instantiate<Player>(WindowContext::First);
 	timeLimit_ = Instantiate<TimeLimit>(180.0f);
 	timeLimit_->StartTimer();
-	timeLimit_->RegisterOnEndTimerCallback([]() 
+	timeLimit_->RegisterOnEndTimerCallback([]()
 		{
-			Game::System<SceneSystem>().Move<OverScene>();
+			Game::System<SceneSystem>().Move<ResultScene>();
 		});
 	// 表示したいテキストを開始
 
