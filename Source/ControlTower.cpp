@@ -16,7 +16,7 @@ namespace
 		{
 			.text_ = u8"ミサイル接近!撃ち落として!",
 			.audioFile_ = "Sound/Voice/016_ずんだもん（ノーマル）_ミサイル接近!撃ち….wav",
-			.time_ = 3.5f
+			.time_ = 4.0f
 		},
 	};
 	SpeechLines speechLinesOnHit;
@@ -179,10 +179,12 @@ void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
 	if (_data.type == ProjectTile::Type::Missile && _data.shooter == ProjectTile::Shooter::Enemy)
 	{
 		auto itr = std::find(detectedMissileIds_.begin(), detectedMissileIds_.end(), _data.id);
-		// IDが重複していないなら追加
+		// IDが重複しているなら回帰
 		if (itr != detectedMissileIds_.end()) return;
 		detectedMissileIds_.push_back(_data.id);
 
+		// 脅威度が既にDangerなら回帰
+		if (currentThreatLevel_ == ThreatLevel::Danger) return;
 		// 警告のテキスト、音声
 		SPEECH_ELEMENT speechElement;
 		auto speechItr = speechQueueMap_.find(SpeechType::FireMissle);
@@ -290,10 +292,6 @@ void ControlTower::DetectionEnemy(Transform* _transform)
 				{
 					return false;
 				}
-				/*if (fightState.Current() == EnemyAI::FIGHT_STATE::SF_LOOK_AT_PLAYER)
-				{
-
-				}*/
 			}),
 		enemies.end()
 		);
@@ -325,75 +323,6 @@ void ControlTower::DetectionEnemy(Transform* _transform)
 	}
 
 	detectedEnemyIds_.push_back(enemyId);
-	// 方角を計算
-	// プレイヤーの上ベクトル、右ベクトル
-	Vector3 up = _transform->Up();
-	Vector3 right = _transform->Right();
-	Vector3 forward = _transform->Forward();
-	
-	Transform& enemy = Transform::Get(enemyId);
-	
-	
-	// 敵のスクリーン座標を取得
-	//Game::System<CameraSystem>().Get
-	//for (const auto& enemy : enemies)
-	//{
-	//	Transform& enemyTransform = Transform::Get(enemy->GetEntityId());
-	//	Vector3 toEnemy = Vector3::Normalize(enemyTransform.position - _transform->position);
-
-	//	std::string str1= "", str2 = "",str3 = "";
-	//	float horizontal = DirectX::XMVector3Dot((toEnemy), right).m128_f32[0];
-	//	// 右
-	//	if (horizontal == 0)
-	//	{
-	//		//str1 = "正面";
-	//	}
-	//	else if (horizontal > 0)
-	//	{
-	//		str1 = "右";
-	//	}
-	//	// 左
-	//	else
-	//	{
-	//		str2 = "左";
-	//	}
-	//	
-	//	float vertical = DirectX::XMVector3Dot(toEnemy, up).m128_f32[0];
-	//	// 上
-	//	if (vertical == 0)
-	//	{
-	//		//str2 = "正面";
-	//	}
-	//	else if (vertical > 0)
-	//	{
-	//		str2 = "上";
-	//	}
-	//	else
-	//	{
-	//		str2 = "下";
-	//	}
-
-	//	float upOrBack = DirectX::XMVector3Dot(toEnemy,forward ).m128_f32[0];
-	//	// 正面
-	//	if (upOrBack > 0)
-	//	{
-	//		str3 = "前方";
-	//	}
-	//	else if(upOrBack < 0)
-	//	{
-	//		str3 = "後ろ";
-	//	}
-	//	else if (upOrBack == 0)
-	//	{
-	//		str3 = "真横";
-	//	}
-	//	std::string str4 = "";
-	//	
-	//	LOGIMGUI("Camera%d,Enemy%lld:%s,%s,%s",_hCamera, enemy->GetEntityId(),str1.c_str(), str2.c_str(), str3.c_str());
-	//	
-	//	ret = std::format("{}:{},{},{}\n", enemy->GetEntityId(), str1, str2, str3);
-	//}
-	//return ret;
 }
 
 void ControlTower::DrawEnemies(const std::vector<EntityId>& _ids) const
