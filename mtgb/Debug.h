@@ -13,11 +13,11 @@
 
 // 後方互換性のため、元のマクロも残す
 #define LOGIMGUI(format,...) \
-	//Game::System<Debug>().LogImGui("General",std::source_location::current(),format,__VA_ARGS__)
+	Game::System<Debug>().LogImGui("General",std::source_location::current(),format,__VA_ARGS__)
 
 // カテゴリ指定版の新しいマクロ
 #define LOGIMGUI_CAT(category, format, ...) \
-	//Game::System<Debug>().LogImGui(category, std::source_location::current(), format, __VA_ARGS__)
+	Game::System<Debug>().LogImGui(category, std::source_location::current(), format, __VA_ARGS__)
 
 #else
 

@@ -3,10 +3,12 @@
 #include <array>
 #include "MTStat/MTStat.h"
 #include "../TextBox.h"
+#include "SpeechQueue.h"
 
 class TextBoxTimeBar;
 class TextBoxBackground;
 class ImageAnimator;
+class IAutoPilot;
 
 class TutorialScene : public mtgb::GameScene
 {
@@ -33,6 +35,21 @@ public:
 		CI_YAW_RIGHT,
 		CI_YAW_LEFT,
 		CI_MAX,
+	};
+
+	enum TRIGGER_ANIM
+	{
+		TA_OFF,
+		TA_ON,
+		TA_MAX,  // トリガーアニメーション最大値
+	};
+
+	enum SLIDER_ANIM
+	{
+		SA_ANIM_MAX,
+		SA_ANIM_MID,
+		SA_ANIM_MIN,
+		SA_MAX,  // スライダーアニメーション最大値
 	};
 
 public:
@@ -69,4 +86,11 @@ private:
 
 	ImageHandle hSideImageA_;
 	ImageHandle hSideImageB_;
+
+	ImageHandle hTriggerImageA_[TA_MAX];
+	ImageHandle hTriggerImageB_[TA_MAX];
+	ImageHandle hSliderImage_[SA_MAX];
+	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
+
+	SpeechQueue speechQueue_;
 };

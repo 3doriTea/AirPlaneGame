@@ -134,7 +134,7 @@ namespace mtgb
 		: width{513}
 		, height{513}
 		, heightScale{50.0f}
-		, widthScale{10.0f}
+		, widthScale{300.0f}
 		, divisions{3}
 		, highestHeight{0.0f}
 		, ceilingOffset{100.0f}
@@ -309,7 +309,8 @@ namespace mtgb
 	inline void TerrainReader<StageDataBit>::TestDraw()
 	{
 		DirectX11Draw::SetIsWriteToDepthBuffer(true);
-		DirectX11Draw::SetShader(ShaderType::Terrain);
+		DirectX11Draw::SetBlendMode(BlendMode::Default);
+		Draw::CheckSetShader(ShaderType::Terrain);
 		
 		ID3D11ShaderResourceView* pSRV = pTexture_.GetShaderResourceView();
 		ID3D11SamplerState* pSampler = pTexture_.GetSamplerState();

@@ -6,22 +6,18 @@
 #include "WindowContext.h"
 #include "RectF.h"
 #include "RectContainsInfo.h"
+#include "GameObjectTag.h"
+#include "IDetector.h"
+#include "DetectorConfigs.h"
+#include "UIDrawCommand.h"
 namespace mtgb
 {
 	/// <summary>
-	/// 矩形内の対象検出システムの設定
+	/// 矩形内の対象検出システム
 	/// </summary>
-	struct RectDetectorConfig
+	class RectDetector : public IDetector
 	{
-		std::string targetName; // 検出対象の名前
-		WindowContext windowContext;	// 対象のウィンドウ
-		RectF detectionRect;	// 検出範囲
-		
-		float maxDistance;		// 判定する最大距離 (farだけじゃなくて nearも設定すべき?)
-	};
-
-	struct RectDetector
-	{
+	public:
 		RectDetector() = default;
 		RectDetector(const RectDetectorConfig& _config);
 		RectDetector(RectDetectorConfig&& _config);
@@ -31,7 +27,7 @@ namespace mtgb
 		/// <para> 検出を実行、結果を取得</para>
 		/// <para> 事前に割り当てられた設定を使用</para>
 		/// </summary>
-		void UpdateDetection();
+		void UpdateDetection() override;
 
 		/// <summary>
 		/// <para> 検出を実行、結果を取得</para>
@@ -55,10 +51,16 @@ namespace mtgb
 		/// 検出された対象があるかどうか
 		/// </summary>
 		/// <returns>対象が一つでもあるなら true</returns>
-		bool HasDetectedTargets() const;
+		bool HasDetectedTargets() const override;
 
-		void ForEach(std::function<void(RectContainsInfo&)> _func);
-		void ForEach(std::function<void(const RectContainsInfo&)> _func) const;
+		void DrawDetectionArea() const override;
+		/// <summary>
+		/// 検出結果を取得
+		/// </summary>
+		const std::vector<ScreenCoordContainsInfo>& GetDetectedTargets() const override;
+
+		void ForEach(std::function<void(ScreenCoordContainsInfo&)> _func) override;
+		void ForEach(std::function<void(const ScreenCoordContainsInfo&)> _func) const override;
 		
 		/// <summary>
 		/// <para> カメラからターゲットに視線が通っているか</para>
@@ -67,9 +69,9 @@ namespace mtgb
 		/// <param name="_cameraPos">カメラ</param>
 		/// <param name="_targetInfo">ターゲット</param>
 		/// <returns></returns>
-		bool IsLineOfSight(const Vector3&  _cameraPos, const RectContainsInfo & _targetInfo);
-
-		std::vector<RectContainsInfo> detectedTargets;
+		bool IsLineOfSight(const Vector3& _cameraPos, const ScreenCoordContainsInfo& _targetInfo);
+		
 		RectDetectorConfig config;
+		ImageHandle detectionFrameImage;
 	};
 }

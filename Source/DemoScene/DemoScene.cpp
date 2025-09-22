@@ -1,5 +1,6 @@
 #include "DemoScene.h"
-#include "../TutorialScene/TutorialScene.h"
+#include "../CheckTutorialScene/CheckTutorialScene.h"
+#include "../TestScene/TestScene.h"
 
 using namespace mtgb;
 
@@ -19,7 +20,7 @@ void DemoScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<TutorialScene>();
+		Game::System<SceneSystem>().Move<TestScene>();
 	}
 }
 

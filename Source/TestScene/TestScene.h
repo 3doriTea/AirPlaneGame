@@ -1,6 +1,7 @@
 #pragma once
 #include <mtgb.h>
 
+class IAutoPilot;
 
 class TestScene : public mtgb::GameScene
 {
@@ -13,5 +14,5 @@ public:
 	void Draw() const override;
 	void End() override;
 private:
-
+	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 };

@@ -829,9 +829,6 @@
     <ClCompile Include="mtgb\ScoreManager.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\PlayScene\Gun.cpp">
       <Filter>01Game\03PlayScene</Filter>
     </ClCompile>
@@ -839,6 +836,24 @@
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\ProjectTile.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\EnemiesController.cpp">
+      <Filter>01Game\03PlayScene</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\CircleDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RayDetector.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\EventManager.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TestScene\PlayerGun.cpp">
+      <Filter>01Game\05TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\PlayScene\PlayerDamageEffect.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1473,6 +1488,30 @@
     <ClInclude Include="Source\ProjectTile.h">
       <Filter>01Game</Filter>
     </ClInclude>
+    <ClInclude Include="mtgb\GameObjectTag.h">
+      <Filter>03mtgb\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\CircleDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\DetectorConfigs.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\IDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RayDetector.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\EventManager.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TestScene\PlayerGun.h">
+      <Filter>01Game\05TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\PlayScene\PlayerDamageEffect.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -1489,6 +1528,7 @@
     <None Include="mtgb\DefaultShow.inl">
       <Filter>03mtgb\System\Debug\MTImGui</Filter>
     </None>
+    <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\FbxParts.hlsl">

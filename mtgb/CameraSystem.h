@@ -50,10 +50,11 @@ namespace mtgb
 		/// <returns>ÉJÉÅÉâÇÃÉnÉìÉhÉã</returns>
 		const CameraHandleInScene GetDrawCamera() const { return hCurrentCamera_; }
 
-		mtgb::Vector3 WorldToScreen(Vector3 _pos,const WorldToScreenData& _data) const;
-		mtgb::Vector3 WorldToScreen(Vector3 _pos,WindowContext _context);
+		mtgb::Vector3 GetWorldToScreenPos(Vector3 _pos,const WorldToScreenData& _data) const;
+		mtgb::Vector3 GetWorldToScreenPos(Vector3 _pos,WindowContext _context);
 		const Transform& GetTransform() const;
 		const Transform& GetTransform(CameraHandleInScene _hCamera) const;
+		const Transform& GetTransform(WindowContext _context) const;
 		void GetViewMatrix(Matrix4x4* _pView) const;
 		void GetViewMatrix(Matrix4x4* _pView, CameraHandleInScene _hCamera) const;
 		void GetProjMatrix(Matrix4x4* _pProj) const;

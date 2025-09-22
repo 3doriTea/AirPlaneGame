@@ -9,18 +9,18 @@ public:
 
 	void Update() override;
 	void Draw() const override;
+
+	/// <summary>
+	/// ポイントを加算する
+	/// </summary>
+	/// <param name="_point">加算するポイント</param>
+	void AddPoint(const int _point);
 private:
-	//// ノルマゲージの矩形
-	//RectF quotaGaugeRect_;
+	ImageHandle hImageBackNormal_;  // 裏ノルマ未達成
+	ImageHandle hImageBackClear_;  // 裏ノルマ達成
+	ImageHandle hImageFill_;  // 埋まったセル
+	ImageHandle hImageFillGood_;  // 埋まったセル(ノルマ越し)
+	ImageHandle hImageAir_;  // 空っぽのセル
 
-	//// ゲージの左端から現在のスコアまでのバー
-	//RectF currentScoreBarRect_;
-
-	//// 現在のスコアからノルマまでのバー
-	//RectF toQuotaBarRect_;
-
-	//// ノルマからゲージの右端までのバー
-	//RectF afterQuotaBarRect_;
-
-	const float SCORE_MAX;
+	int currentPoint_;  // 現在のポイント
 };

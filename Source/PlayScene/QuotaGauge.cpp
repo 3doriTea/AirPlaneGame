@@ -1,4 +1,5 @@
 #include "QuotaGauge.h"
+#include <format>
 
 using namespace mtgb;
 namespace
@@ -6,32 +7,30 @@ namespace
 	// UI設計時のキャンバスのサイズ
 	/*Vector2F CANVAS_SIZE{ 1920.0f,1080.0f };*/
 
-	//const RectF QUOTA_GAUGE_RECT{ 450.0f,50.0f,1020.0f,40.0f };
-	const RectF QUOTA_GAUGE_RECT{ 400.0f, 120.0f, 1120.0f, 80.0f };
-	// 紫色
-	const Color AFTER_QUOTA_BAR_COLOR = 0x800080;
+	const UIParams UI_PARAMS_BACK{ .depth = 5 };
+	const UIParams UI_PARAMS_CELL{ .depth = 6 };
+	const UIParams UI_PARAMS_TEXT{ .depth = 7 };
 
-	// ゲージが満タンになる値
-	const uint32_t MAX_GAUGE_SCORE = 1000;
+	const RectF DRAW_RECT_CELL_FIRST{ 450, 90, 20, 40 };  // 一番左端のセル描画範囲
+	const RectF DRAW_RECT_BACK{ 440, 40, 1040, 100 };  // ノルマバーの背景描画範囲
+	const RectF DRAW_RECT_TEXT{ 1220, 48, 168, 22 };  // 表示テキストの描画範囲
 
-	// ノルマ
-	float QUOTA = 700;
+	const int DRAW_TEXT_FONT_SIZE{ 18 };  // 表示テキストのフォントサイズ
 
-	// 進捗割合
-	float progress = 0;
+	int QUOTA_COUNT{ 30 };  // ノルマ数
+	int GAUGE_COUNT{ 50 };  // ゲージ数
 }
 
 QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
 	.SetName("QuotaGauge")
 	.SetRotate(Quaternion::Identity())
 	.Build()),
-	SCORE_MAX{ Game::System<ScoreManager>().GetQuotaScore() }
+	currentPoint_{ 0 }
 {
-	/*currentScoreBarRect_.point = QUOTA_GAUGE_RECT.point;
-	toQuotaBarRect_.point = QUOTA_GAUGE_RECT.point;
-	afterQuotaBarRect_.point = QUOTA_GAUGE_RECT.point;*/
-
-	QUOTA = Game::System<ScoreManager>().GetQuotaScore();
+	hImageBackNormal_ = Image::Load("Image/QuotaGaugeBackNormal.png");
+	hImageFill_ = Image::Load("Image/YellowScore 1.png");
+	hImageAir_ = Image::Load("Image/GrayScore 1.png");
+	hImageFillGood_ = Image::Load("Image/PurpleScore.png");
 }
 
 QuotaGauge::~QuotaGauge()
@@ -40,45 +39,61 @@ QuotaGauge::~QuotaGauge()
 
 void QuotaGauge::Update()
 {
-	progress = Game::System<ScoreManager>().GetScore();
+	//progress = Game::System<ScoreManager>().GetScore();
 }
 
 void QuotaGauge::Draw() const
 {
-	//Vector2F screenSize{ Game::System<Screen>().GetSizeF() };
-	//Vector2F ratio = { screenSize.x / CANVAS_SIZE.x, screenSize.y / CANVAS_SIZE.y };
-	//
-	//
-	//RectF screenAdjustRect = GenDrawScreenFrom(QUOTA_GAUGE_RECT);
-	//RectF drawRect = screenAdjustRect;
-	///*{
-	//	{ QUOTA_GAUGE_RECT.point.x, QUOTA_GAUGE_RECT.point.y },
-	//	{ QUOTA_GAUGE_RECT.size.x, QUOTA_GAUGE_RECT.size.y }
-	//};*/
-	//// 仮の進捗状況、ノルマを割合で
-	//
-	//float quotaRatio = QUOTA / MAX_GAUGE_SCORE;
-	//float progressRatio = progress / MAX_GAUGE_SCORE;
+	// 背景描画
+	Draw::Image(hImageBackNormal_, GenDrawScreenFrom(DRAW_RECT_BACK), UI_PARAMS_BACK);
 
-	//Draw::Box((drawRect), AFTER_QUOTA_BAR_COLOR, { 0 });
-
-	auto drawFunc
+	// セルを描画
+	for (int i = 0; i < GAUGE_COUNT; i++)
 	{
-		[&](const RectF& _rect, const Color _color, const UIParams& _uIParams)
+		RectF draw{ DRAW_RECT_CELL_FIRST };
+		draw.x += DRAW_RECT_CELL_FIRST.width * i;
+		int point{ i + 1 };
+		ImageHandle hImage{};
+
+		if (point <= currentPoint_)
 		{
-			Draw::Box(GenDrawScreenFrom(_rect), _color, _uIParams);
+			if (point >= QUOTA_COUNT)
+			{
+				hImage = hImageFillGood_;
+			}
+			else
+			{
+				hImage = hImageFill_;
+			}
 		}
-	};
+		else
+		{
+			hImage = hImageAir_;
+		}
+		Draw::Image(hImage, GenDrawScreenFrom(draw), UI_PARAMS_CELL);
+	}
 
-	drawFunc(QUOTA_GAUGE_RECT, Color::WHITE, { 0 });
-	//drawRect.width = screenAdjustRect.width * quotaRatio;
+	// テキストの描画
+	Draw::ImmediateText(
+		std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
+		GenDrawScreenFrom(DRAW_RECT_TEXT),
+		GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+		TextAlignment::center,
+		UI_PARAMS_TEXT);
+}
 
-	//Draw::Box(GenDrawScreenFrom(drawRect), Color::RED,{ 1 });
-	drawFunc(, Color::RED, { 1 });
-	
-	//drawRect.width = screenAdjustRect.width * progressRatio;
+void QuotaGauge::AddPoint(const int _point)
+{
+	currentPoint_ += _point;
 
-	//Draw::Box(GenDrawScreenFrom(drawRect), Color::GREEN,{2});
-	drawFunc(, Color::GREEN, { 2 });
-
+	// ゲージ限界値を超えているなら限界値に戻す
+	if (currentPoint_ > GAUGE_COUNT)
+	{
+		currentPoint_ = GAUGE_COUNT;
+	}
+	// 0未満になっているなら0に戻す
+	else if (currentPoint_ < 0)
+	{
+		currentPoint_ = 0;
+	}
 }

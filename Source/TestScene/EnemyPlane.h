@@ -3,8 +3,9 @@
 #include "../Health.h"
 #include "../PlayScene/EnemyAI.h"
 #include "../PlayScene/Gun.h"
-
+#include "../TargetingSystem.h"
 class EnemiesController;
+
 
 class EnemyPlane : public GameObject
 {
@@ -15,8 +16,10 @@ public:
 	void Update() override;
 	void Draw() const override;
 	void Search();
-	bool LockOnTarget() const;
+	void Fight(const EnemyAI::OutData& _outData); // 戦闘行動
+	bool HandleCrash(); // 撃墜された際の処理
 	const EnemyAI& GetAI() const { return ai_; }
+	bool IsActive() const;
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
@@ -29,12 +32,12 @@ private:
 
 	EnemiesController* pEnemiesController_;
 	EntityId controllerId_;
+	TargetingSystem targetingSystem_;
 
 	Health health_;   // 体力
 	float speed_;  // 移動速度 m/s
 	bool broken_;  // 壊れているか
 	float lockOnAngle_;// ロックオン、プレイヤーを発見する角度(degree)
 	float lockOnDistance_;// ロックオン、プレイヤーを発見する距離
-	bool lockOnTarget_; //ターゲットをロックオンしているかどうか
 	float timeSinceLastshot_;
 };

@@ -25,8 +25,11 @@ public:
 		bool isActive;
 		bool isFire;
 		bool isRound;
+		bool isAvoiding;
 		Vector3 lookPosition;
 	};
+
+	
 
 	/// <summary>
 	/// メインステート
@@ -47,6 +50,15 @@ public:
 		SF_ROUND,           // Z軸でぐるぐる回る
 	};
 
+	/// <summary>
+	/// 購読者に通知をする際に添付するデータ
+	/// </summary>
+	struct EventData
+	{
+		MAIN_STATE mainState;
+		FIGHT_STATE fightState;
+		EntityId id; // 敵のID
+	};
 public:
 	EnemyAI();
 	~EnemyAI() {};
@@ -60,6 +72,7 @@ public:
 	/// </summary>
 	/// <param name="_data">AIの更新時に参照されるデータ</param>
 	inline void SetInputData(InputData&& _data) { input_ = std::move(_data); }
+
 	/// <summary>
 	/// 出力データをゲットする
 	/// </summary>

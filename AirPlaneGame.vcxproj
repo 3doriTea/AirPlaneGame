@@ -26,8 +26,10 @@
     <ClCompile Include="ImGui\imgui_ja_gryph_ranges.cpp" />
     <ClCompile Include="ImGui\ImSequencer.cpp" />
     <ClCompile Include="mtgb\CameraSystem.cpp" />
+    <ClCompile Include="mtgb\CircleDetector.cpp" />
     <ClCompile Include="mtgb\Collider.cpp" />
     <ClCompile Include="mtgb\ColliderCP.cpp" />
+    <ClCompile Include="mtgb\EventManager.cpp" />
     <ClCompile Include="mtgb\FbxModel.cpp" />
     <ClCompile Include="mtgb\Ground.cpp" />
     <ClCompile Include="mtgb\HighlightEnemy.cpp" />
@@ -40,6 +42,7 @@
     <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
+    <ClCompile Include="mtgb\RayDetector.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
     <ClCompile Include="mtgb\ScoreManager.cpp" />
@@ -49,6 +52,7 @@
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="mtgb\UIDrawCommand.cpp" />
+    <ClCompile Include="Source\IAutoPilot.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -160,9 +164,11 @@
     <ClCompile Include="Source\ControlTower.cpp" />
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\Missile.cpp" />
+    <ClCompile Include="Source\PlayScene\AutoPilotPlay.cpp" />
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\Gun.cpp" />
+    <ClCompile Include="Source\PlayScene\PlayerDamageEffect.cpp" />
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\ProjectTile.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
@@ -183,6 +189,7 @@
     <ClCompile Include="Source\TestScene\EnemyBullet.cpp" />
     <ClCompile Include="Source\TestScene\EnemyPlane.cpp" />
     <ClCompile Include="Source\TestScene\PlayerBullet.cpp" />
+    <ClCompile Include="Source\TestScene\PlayerGun.cpp" />
     <ClCompile Include="Source\TestScene\PlayerGunner.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPilot.cpp" />
     <ClCompile Include="Source\TestScene\PlayerPlane.cpp" />
@@ -195,7 +202,9 @@
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
+    <ClCompile Include="Source\TutorialScene\AutoPilotTutorial.cpp" />
     <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp" />
+    <ClCompile Include="Source\TutorialScene\Runway.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
@@ -204,8 +213,13 @@
     <ClCompile Include="Source\VVPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="mtgb\CircleDetector.h" />
+    <ClInclude Include="mtgb\DetectorConfigs.h" />
+    <ClInclude Include="mtgb\EventManager.h" />
     <ClInclude Include="mtgb\FlightStickCode.h" />
+    <ClInclude Include="mtgb\GameObjectTag.h" />
     <ClInclude Include="mtgb\HighlightEnemy.h" />
+    <ClInclude Include="mtgb\IDetector.h" />
     <ClInclude Include="mtgb\InputPadCode.h" />
     <ClInclude Include="mtgb\CameraSystem.h" />
     <ClInclude Include="ImGui\GraphEditor.h" />
@@ -238,6 +252,7 @@
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
+    <ClInclude Include="mtgb\RayDetector.h" />
     <ClInclude Include="mtgb\RectDetector.h" />
     <ClInclude Include="mtgb\RectF.h" />
     <ClInclude Include="mtgb\RectT.h" />
@@ -263,6 +278,7 @@
     <ClInclude Include="mtgb\Vector2F.h" />
     <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
+    <ClInclude Include="Source\IAutoPilot.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -393,9 +409,11 @@
     <ClInclude Include="Source\ControlTower.h" />
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\Missile.h" />
+    <ClInclude Include="Source\PlayScene\AutoPilotPlay.h" />
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\PlayScene\Gun.h" />
+    <ClInclude Include="Source\PlayScene\PlayerDamageEffect.h" />
     <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
     <ClInclude Include="Source\ProjectTile.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
@@ -420,6 +438,7 @@
     <ClInclude Include="Source\TestScene\EnemyBullet.h" />
     <ClInclude Include="Source\TestScene\EnemyPlane.h" />
     <ClInclude Include="Source\TestScene\PlayerBullet.h" />
+    <ClInclude Include="Source\TestScene\PlayerGun.h" />
     <ClInclude Include="Source\TestScene\PlayerGunner.h" />
     <ClInclude Include="Source\TestScene\PlayerPilot.h" />
     <ClInclude Include="Source\TestScene\PlayerPlane.h" />
@@ -431,7 +450,9 @@
     <ClInclude Include="Source\TextBox.h" />
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
+    <ClInclude Include="Source\TutorialScene\AutoPilotTutorial.h" />
     <ClInclude Include="Source\TutorialScene\ImageAnimator.h" />
+    <ClInclude Include="Source\TutorialScene\Runway.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />
@@ -441,6 +462,7 @@
     <ClInclude Include="Source\WingEffect.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
     <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
     <None Include="mtgb\DefaultShow.inl" />

@@ -2,7 +2,7 @@
 #include <mtgb.h>
 
 
-struct TargetingSystem;
+class PlayerGun;
 
 class PlayerPilot : public mtgb::GameObject
 {
@@ -14,6 +14,6 @@ public:
 	void Draw() const override;
 
 private:
-	TargetingSystem* pTargetingSystem_;
+	PlayerGun* pPlayerGun;
 	Transform* pTransform;
 };

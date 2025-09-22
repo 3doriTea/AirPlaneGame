@@ -20,6 +20,9 @@
 #include "TerrainReader.h"
 #include "TimeLimit.h"
 #include "../PlayScene/EnemiesController.h"
+#include "../ResultScene.h"
+#include "../PlayScene/PlayerDamageEffect.h"
+#include "../PlayScene/AutoPilotPlay.h"
 
 using namespace mtgb;
 
@@ -31,14 +34,15 @@ namespace mtgb
 
 }
 
-TestScene::TestScene()
+TestScene::TestScene() :
+	pAutoPilot_{ new AutoPilotPlay{} }
 {
 }
 
 TestScene::~TestScene()
 {
-	//delete reader16;
-	delete reader8;
+	SAFE_DELETE(reader8);
+	SAFE_DELETE(pAutoPilot_);
 }
 
 void TestScene::Initialize()
@@ -54,8 +58,9 @@ void TestScene::Initialize()
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
 
-	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>(pAutoPilot_) };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
+	pAutoPilot_->SetTransform(&Transform::Get(eIdPlayer));
 
 	PlayerPilot* pPilot{Instantiate<PlayerPilot>(eIdPlayer)};
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
@@ -106,7 +111,7 @@ void TestScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<PlayScene>();
+		Game::System<SceneSystem>().Move<ResultScene>();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::Y))
 	{
@@ -120,6 +125,10 @@ void TestScene::Update()
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
 		Game::System<WinCtxResManager>().SwapResource<InputResource>();
+	}
+	if (InputUtil::GetKeyDown(KeyCode::Z))
+	{
+		Instantiate<PlayerDamageEffect>();
 	}
 }
 

@@ -3,11 +3,12 @@
 #include "../VVPlayer.h"
 
 class Radar;
+class IAutoPilot;
 
 class PlayerPlane : public mtgb::GameObject
 {
 public:
-	PlayerPlane();
+	PlayerPlane(IAutoPilot* _pIAutoPilot);
 	~PlayerPlane();
 
 	void Update() override;
@@ -22,4 +23,5 @@ private:
 	Transform* pTransform_;
 	FBXModelHandle hModel_;
 	VVPlayer vVPlayer_;
+	IAutoPilot* pIAutoPilot_;
 };

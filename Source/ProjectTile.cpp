@@ -23,6 +23,14 @@ ProjectTile::ProjectTile(const Vector3& _position, const Quaternion& _quaternion
 	projectileType_{ _projectileType },
 	hModel_{ INVALID_HANDLE }
 {
+	if (_shooter == Shooter::Enemy)
+	{
+		tag_ = GameObjectTag::Enemy;
+	}
+	else if (_shooter == Shooter::Player)
+	{
+		tag_ = GameObjectTag::PlayerPlane;
+	}
 	// ‹¤’Ê‚ÌColliderÝ’è
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());

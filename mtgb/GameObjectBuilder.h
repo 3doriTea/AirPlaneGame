@@ -3,7 +3,7 @@
 #include "Vector3.h"
 #include "Quaternion.h"
 #include "GameObjectLayer.h"
-
+#include "GameObjectTag.h"
 
 namespace mtgb
 {
@@ -18,6 +18,7 @@ namespace mtgb
 		Vector3 scale{ Vector3::One() };
 		Quaternion rotate{ Quaternion::Identity() };
 		GameObjectLayerFlag layerFlag{ GameObjectLayerFlag::New().BeginEdit().OnAll().EndEdit() };
+		GameObjectTag tag{ GameObjectTag::Untagged };
 		bool isActive{ true };
 		bool callUpdate{ true };
 		bool callDraw{ true };
@@ -51,6 +52,7 @@ namespace mtgb
 		GameObjectBuilder& SetCallUpdate(const bool _callUpdate)          { desc_.callUpdate = _callUpdate; return *this; }
 		GameObjectBuilder& SetCallDraw(const bool _callDraw)              { desc_.callDraw = _callDraw;     return *this; }
 		GameObjectBuilder& SetLayerFlag(const GameObjectLayerFlag& _flag) { desc_.layerFlag = _flag;        return *this; }
+		GameObjectBuilder& SetTag(const GameObjectTag& _tag) { desc_.tag = _tag; return *this; }
 
 		/// <summary>
 		/// ê›íËÇÉrÉãÉhÇ∑ÇÈ

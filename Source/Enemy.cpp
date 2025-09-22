@@ -40,7 +40,8 @@ Enemy::Enemy(const Vector3& _position, const EntityId _controllerId) : GameObjec
 			.bulletType = ProjectTile::Shooter::Enemy,
 			.projectileType = ProjectTile::Type::Bullet,  // 通常弾を使用
 		}
-	}
+	},
+	ai_{}
 {
 	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	massert(hModel_ >= 0 && "敵飛行機モデル読み込みに失敗");
@@ -73,6 +74,7 @@ void Enemy::Update()
 
 	if (outData.isActive == false)
 	{
+		LOGF("非アクティブ");
 		return;
 	}
 
@@ -115,5 +117,12 @@ void Enemy::Update()
 
 void Enemy::Draw() const
 {
+	const EnemyAI::OutData& outData{ ai_.GetOutData() };
+
+	if (outData.isActive == false)
+	{
+		return;
+	}
+
 	Draw::FBXModel(hModel_, *pTransform_, 0);
 }
