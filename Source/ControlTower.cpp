@@ -16,7 +16,7 @@ namespace
 		{
 			.text_ = u8"ミサイル接近!撃ち落として!",
 			.audioFile_ = "Sound/Voice/016_ずんだもん（ノーマル）_ミサイル接近!撃ち….wav",
-			.time_ = 3.0f
+			.time_ = 3.5f
 		},
 	};
 	SpeechLines speechLinesOnHit;

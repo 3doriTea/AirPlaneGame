@@ -33,6 +33,11 @@ namespace mtgb
 		/// <returns></returns>
 		static int32_t GetQuotaScore();
 		/// <summary>
+		/// スコアの最大値を取得する
+		/// </summary>
+		/// <returns>スコア値</returns>
+		static int32_t GetQuotaScoreMax();
+		/// <summary>
 		/// スコアをリセットする
 		/// </summary>
 		static void ResetScore();

@@ -1,6 +1,11 @@
 #include "ScoreManager.h"
 #include "MTImGui.h"
 
+namespace
+{
+	const int32_t QUATA_SCORE_MAX{ 35 };
+}
+
 int32_t mtgb::ScoreManager::score_{ 0 };
 int32_t mtgb::ScoreManager::quotaScore_{ 0 };
 
@@ -39,6 +44,11 @@ void mtgb::ScoreManager::SubtractScore(uint32_t _score)
 int32_t mtgb::ScoreManager::GetQuotaScore()
 {
 	return quotaScore_;
+}
+
+int32_t mtgb::ScoreManager::GetQuotaScoreMax()
+{
+	return QUATA_SCORE_MAX;
 }
 
 void mtgb::ScoreManager::ResetScore()

@@ -1,7 +1,6 @@
 #pragma once
 #include <mtgb.h>
 
-
 class PlayerGun;
 
 class PlayerPilot : public mtgb::GameObject

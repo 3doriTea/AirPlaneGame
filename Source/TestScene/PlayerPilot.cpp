@@ -5,6 +5,7 @@
 //#include "../TargetingSystem.h"
 #include "PlayerGun.h"
 
+
 using namespace mtgb;
 
 PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()

@@ -52,6 +52,7 @@
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="mtgb\UIDrawCommand.cpp" />
+    <ClCompile Include="Source\IAutoPilot.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
@@ -164,6 +165,8 @@
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\ImageBlinker.cpp" />
     <ClCompile Include="Source\Missile.cpp" />
+    <ClCompile Include="Source\PlayScene\AutoControlText.cpp" />
+    <ClCompile Include="Source\PlayScene\AutoPilotPlay.cpp" />
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
     <ClCompile Include="Source\PlayScene\EnemyAI.cpp" />
     <ClCompile Include="Source\PlayScene\Gun.cpp" />
@@ -202,7 +205,9 @@
     <ClCompile Include="Source\TheMain.cpp" />
     <ClCompile Include="Source\TestScene\TestScene.cpp" />
     <ClCompile Include="Source\TrailEmitterSystem.cpp" />
+    <ClCompile Include="Source\TutorialScene\AutoPilotTutorial.cpp" />
     <ClCompile Include="Source\TutorialScene\ImageAnimator.cpp" />
+    <ClCompile Include="Source\TutorialScene\Runway.cpp" />
     <ClCompile Include="Source\TutorialScene\SpeechQueue.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxBackground.cpp" />
     <ClCompile Include="Source\TutorialScene\TextBoxTimeBar.cpp" />
@@ -276,6 +281,7 @@
     <ClInclude Include="mtgb\Vector2F.h" />
     <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
+    <ClInclude Include="Source\IAutoPilot.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
     <ClInclude Include="ImGui\imconfig.h" />
@@ -407,6 +413,8 @@
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\ImageBlinker.h" />
     <ClInclude Include="Source\Missile.h" />
+    <ClInclude Include="Source\PlayScene\AutoControlText.h" />
+    <ClInclude Include="Source\PlayScene\AutoPilotPlay.h" />
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />
     <ClInclude Include="Source\PlayScene\EnemyAI.h" />
     <ClInclude Include="Source\PlayScene\Gun.h" />
@@ -449,7 +457,9 @@
     <ClInclude Include="Source\TestScene\TestScene.h" />
     <ClInclude Include="Source\ThreatData.h" />
     <ClInclude Include="Source\TrailEmitterSystem.h" />
+    <ClInclude Include="Source\TutorialScene\AutoPilotTutorial.h" />
     <ClInclude Include="Source\TutorialScene\ImageAnimator.h" />
+    <ClInclude Include="Source\TutorialScene\Runway.h" />
     <ClInclude Include="Source\TutorialScene\SpeechQueue.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxBackground.h" />
     <ClInclude Include="Source\TutorialScene\TextBoxTimeBar.h" />

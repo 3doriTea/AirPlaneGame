@@ -16,6 +16,8 @@
 #include "TestScene/PlayerPilot.h"
 #include "TestScene/PlayerGunner.h"
 #include "PlayScene/QuotaGauge.h"
+#include "PlayScene/AutoPilotPlay.h"
+
 #include "../Source/ControlTower.h"
 using namespace mtgb;
 using Network::PIIO;
@@ -26,7 +28,8 @@ namespace
 	static const mtnet::IPEndPoint SERVER_IPEP{ "192.168.42.62", 60349 };
 }
 
-PlayScene::PlayScene()
+PlayScene::PlayScene() :
+	pAutoPilot_{ new AutoPilotPlay{} }
 {
 	ppiio_ = new PIIO{ LOCAL_IPEP };
 }
@@ -34,6 +37,7 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 {
 	SAFE_DELETE(pReader8_);
+	SAFE_DELETE(pAutoPilot_);
 	//delete ppiio_;
 }
 
@@ -47,8 +51,9 @@ void PlayScene::Initialize()
 
 	Instantiate<Background>();
 
-	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>(pAutoPilot_) };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
+	pAutoPilot_->SetTransform(&Transform::Get(eIdPlayer));
 
 	PlayerPilot* pPilot{ Instantiate<PlayerPilot>(eIdPlayer) };
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);
@@ -119,9 +124,9 @@ void PlayScene::Initialize()
 
 	timeLimit_ = Instantiate<TimeLimit>(180.0f);
 	timeLimit_->StartTimer();
-	timeLimit_->RegisterOnEndTimerCallback([]() 
+	timeLimit_->RegisterOnEndTimerCallback([]()
 		{
-			Game::System<SceneSystem>().Move<OverScene>();
+			Game::System<SceneSystem>().Move<ResultScene>();
 		});
 	// 表示したいテキストを開始
 

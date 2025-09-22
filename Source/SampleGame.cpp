@@ -6,8 +6,11 @@
 #include "TestScene/TestScene.h"
 #include "TrailEmitterSystem.h"
 #include "CheckTutorialScene/CheckTutorialScene.h"
+#include "DemoScene/DemoScene.h"
 
 #pragma endregion
+
+#define TO_TEST_SCENE 1
 
 using namespace mtgb;
 
@@ -84,7 +87,11 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 	// 開始時のシーン
 	//Game::System<SceneSystem>().Move<PlayScene>();
 	//Game::System<SceneSystem>().Move<CheckTutorialScene>();
+#if TO_TEST_SCENE
 	Game::System<SceneSystem>().Move<TestScene>();
+#else
+	Game::System<SceneSystem>().Move<DemoScene>();
+#endif
 
 	//_register<MainWindow>(SystemUpdateType::Cycle);
 }

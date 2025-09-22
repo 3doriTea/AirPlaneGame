@@ -22,6 +22,8 @@
 #include "../PlayScene/EnemiesController.h"
 #include "../ResultScene.h"
 #include "../PlayScene/PlayerDamageEffect.h"
+#include "../PlayScene/AutoPilotPlay.h"
+
 using namespace mtgb;
 
 namespace mtgb
@@ -32,14 +34,15 @@ namespace mtgb
 
 }
 
-TestScene::TestScene()
+TestScene::TestScene() :
+	pAutoPilot_{ new AutoPilotPlay{} }
 {
 }
 
 TestScene::~TestScene()
 {
-	//delete reader16;
-	delete reader8;
+	SAFE_DELETE(reader8);
+	SAFE_DELETE(pAutoPilot_);
 }
 
 void TestScene::Initialize()
@@ -55,8 +58,9 @@ void TestScene::Initialize()
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
 
-	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>() };
+	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>(pAutoPilot_) };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
+	pAutoPilot_->SetTransform(&Transform::Get(eIdPlayer));
 
 	PlayerPilot* pPilot{Instantiate<PlayerPilot>(eIdPlayer)};
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pPilot);

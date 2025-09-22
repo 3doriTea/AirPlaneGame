@@ -266,7 +266,7 @@ void mtgb::Sprite::Draw(const Transform* _pTransform, const Transform* _pCameraT
 
 			_pTransform->GenerateWorldRotationMatrix(&_pCB->g_matrixWorldRotation);
 			_pCB->g_matrixWorldRotation = XMMatrixTranspose(_pCB->g_matrixWorldRotation);
-#pragma endregionu
+#pragma endregion
 
 #pragma region UVŒvŽZ
 			_pCB->g_matrixTexture = XMMatrixIdentity();
