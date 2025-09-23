@@ -88,7 +88,6 @@ void PlayerPlane::Update()
 
 	const float ROT_ANGLE{ Time::DeltaTimeF() };
 
-	Quaternion curr{ pTransform_->rotate };
 
 #if 1
 	if (pIAutoPilot_->TryUpdate())
@@ -98,6 +97,7 @@ void PlayerPlane::Update()
 	else  // オートパイロットではない
 	{
 		pAutoControlText_->SetEnabled(false);
+		Quaternion curr{ pTransform_->rotate };
 		// WindowContextを直接指定しない方いい
 		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 
