@@ -55,7 +55,7 @@ void DemoScene::Update()
 		Game::System<SceneSystem>().Move<TestScene>();
 	}
 
-	if (pHangerUIA_->IsOpennd() && pHangerUIB_->IsOpennd())
+	if (pHangerUIA_->IsOpened() && pHangerUIB_->IsOpened())
 	{
 		toMoveTimeLeft_ -= Time::DeltaTimeF();
 		if (toMoveTimeLeft_ <= 0.0f)

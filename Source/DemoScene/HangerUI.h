@@ -10,7 +10,7 @@ public:
 	void Update() override;
 	void Draw() const override;
 
-	bool IsOpennd() const { return moveTimeLeft_ <= 0.0f; }
+	bool IsOpened() const { return moveTimeLeft_ <= 0.0f; }
 
 private:
 	float moveTimeLeft_;  // スティックを倒している時間
