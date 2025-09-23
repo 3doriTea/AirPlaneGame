@@ -32,7 +32,7 @@ namespace
 	const float LOCK_ON_ANGLE{ 60 }; // ロックオン、プレイヤーを発見する角度(degree)
 	const float LOCK_ON_DISTANCE_{200};// ロックオン、プレイヤーを発見する距離
 	const float ROUND_SPEED{ 1.0f };  // 回転飛行中の1秒間あたりの回転角度
-	const int ADD_QUOTA_POINT{ 3 };  // 撃破時に加算するポイント
+	const int ADD_QUOTA_POINT{ 10 };  // 撃破時に加算するポイント
 }
 
 EnemyPlane::EnemyPlane(

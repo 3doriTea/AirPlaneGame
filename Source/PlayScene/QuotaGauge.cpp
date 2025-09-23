@@ -85,17 +85,33 @@ void QuotaGauge::Draw() const
 	// テキストの描画
 	if (IsQuotaClear())
 	{
-
-	Draw::ImmediateText(
-		std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
-		GenDrawScreenFrom(DRAW_RECT_TEXT),
-		GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
-		TextAlignment::center,
-		UI_PARAMS_TEXT);
+		if (currentPoint_ == GAUGE_COUNT)
+		{
+			Draw::ImmediateText(
+				"ゲージ超過中！",
+				GenDrawScreenFrom(DRAW_RECT_TEXT),
+				GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+				TextAlignment::center,
+				UI_PARAMS_TEXT);
+		}
+		else
+		{
+			Draw::ImmediateText(
+				std::format("+{}ポイント", currentPoint_ - QUOTA_COUNT),
+				GenDrawScreenFrom(DRAW_RECT_TEXT),
+				GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+				TextAlignment::center,
+				UI_PARAMS_TEXT);
+		}
 	}
 	else
 	{
-
+		Draw::ImmediateText(
+			std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
+			GenDrawScreenFrom(DRAW_RECT_TEXT),
+			GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+			TextAlignment::center,
+			UI_PARAMS_TEXT);
 	}
 }
 
@@ -113,4 +129,9 @@ void QuotaGauge::AddPoint(const int _point)
 	{
 		currentPoint_ = 0;
 	}
+}
+
+const int QuotaGauge::GetQuotaCount() const
+{
+	return QUOTA_COUNT;
 }
