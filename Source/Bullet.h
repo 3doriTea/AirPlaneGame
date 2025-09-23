@@ -28,4 +28,6 @@ public:
 	void Draw() const override;
 
 	static const float GetMoveSpeed();
+private:
+	void InitCommon();
 };

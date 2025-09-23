@@ -14,7 +14,7 @@ public:
 		float oneShotTimeSec;               // 1発撃ったあとの待機時間(秒)
 		float reloadTimeSec;                // リロード中の待機時間(秒)
 		int bulletCount;                    // リロードまでに撃てる弾数
-		ProjectTile::Shooter bulletType;    // 弾の種類（誰が撃つか）
+		ProjectTile::Shooter shooterType;    // 弾の種類（誰が撃つか）
 		ProjectTile::Type projectileType;   // 発射体の種類
 	};
 public:

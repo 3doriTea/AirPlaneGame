@@ -11,46 +11,40 @@ namespace
 		{
 			.text_ = u8"ミサイル接近!逃げて!",
 			.audioFile_ = "Sound/Voice/012_ずんだもん（ノーマル）_ミサイル接近!逃げ….wav",
-			.time_ = 3.0f
+			.time_ = 3.5f
 		},
 		{
 			.text_ = u8"ミサイル接近!撃ち落として!",
 			.audioFile_ = "Sound/Voice/016_ずんだもん（ノーマル）_ミサイル接近!撃ち….wav",
-			.time_ = 4.0f
+			.time_ = 4.5f
 		},
 	};
-	SpeechLines speechLinesOnHit;
-
-
-	// ミサイル発射された時、その1
-	/*SPEECH_ELEMENT speechOnFiredMissile1 =
+	SpeechLines speechLinesOnHit =
 	{
-		.text_ = u8"ミサイル接近!逃げて!",
-		.audioFile_ = "Sound/Voice/012_ずんだもん（ノーマル）_ミサイル接近!逃げ….wav",
-		.time_ = 3.0f
+		{
+			.text_ = u8"被弾したよ!",
+			.audioFile_ = "Sound/Voice/013_ずんだもん（ノーマル）_被弾したよ!.wav",
+			.time_ = 2.5f
+		},
+		{
+			.text_ = u8"ぬわーーーーーっ!",
+			.audioFile_ = "Sound/Voice/014_ずんだもん（ノーマル）_ぬわわわわわわわ.wav",
+			.time_ = 3.0f
+		},
 	};
-	SPEECH_ELEMENT speechOnFiredMissile2 =
-	{
-		.text_ = u8"ミサイル接近!撃ち落として!",
-		.audioFile_ = "Sound/Voice/016_ずんだもん（ノーマル）_ミサイル接近!撃ち….wav",
-		.time_ = 3.0f
-	};*/
+
+
 	
 
-	// 被弾時、その1
-	SPEECH_ELEMENT speechOnHit1 =
-	{
-		.text_ = u8"被弾した!",
-		.audioFile_  = "Sound/Voice/013_ずんだもん（ノーマル）_被弾した!.wav",
-		.time_ = 2.0f
-	};
+
+
 
 	// 字幕の表示位置
 	const Vector2F SPEECH_TEXT_POS{ 620, 820 };
 	// 字幕のフォントサイズ
 	const int SPEECH_TEXT_SIZE{ 48 };
 
-	const RectF WARNING_IMAGE_RECT{ 830,190,260,60 };
+	const RectF WARNING_IMAGE_RECT{ 830,170,260,60 };
 	
 
 	const float BLINK_INTERVAL{ 0.5f };
@@ -71,9 +65,11 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 
 	// ターゲットの強調表示の画像、画像サイズ
 	highlightFrameImage_ = Image::Load("Image/highlightEnemyFrame.png");
-	enemyArrowImage_ = Image::Load("Image/enemyArrow.png");
+	enemyArrowImage_ = Image::Load("Image/RedArrow.png");
+	missileArrowImage_ = Image::Load("Image/BlackArrow.png");
+
 	highlightFrameSize_ = { 60.0f,60.0f };
-	enemyArrowImageSize_ = { 30.0f,30.0f };
+	targetArrowImageSize_ = { 30.0f,30.0f };
 	
 	// 敵の射撃時に呼ばれるコールバック
 	projectionEventHandlerId_ = Game::System<EventManager>().GetEvent<ProjectTile::EventData>().Subscribe(
@@ -92,6 +88,7 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(SPEECH_TEXT_POS), GenDrawScreenFontSize(SPEECH_TEXT_SIZE));
 
 	speechQueueMap_.emplace(SpeechType::FireMissle, ShuffleSpeechQueue{ speechLinesOnFiredMissile });
+	speechQueueMap_.emplace(SpeechType::Hit, ShuffleSpeechQueue{ speechLinesOnHit });
 }
 
 ControlTower::~ControlTower()
@@ -114,16 +111,15 @@ void ControlTower::Update()
 
 void ControlTower::Draw() const
 {
-	DrawEnemies(detectedEnemyIds_);
-	DrawEnemies(detectedMissileIds_);
+	
+	DrawEnemies(detectedEnemyIds_, enemyArrowImage_);
+	DrawEnemies(detectedMissileIds_, missileArrowImage_);
 
 	if (currentThreatLevel_ == ThreatLevel::Danger)
 	{
 		pWarningBlinker_->Draw();
 	}
 }
-
-
 
 void ControlTower::SetControlTarget(EntityId _id, WindowContext _context)
 {
@@ -186,15 +182,7 @@ void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
 		// 脅威度が既にDangerなら回帰
 		if (currentThreatLevel_ == ThreatLevel::Danger) return;
 		// 警告のテキスト、音声
-		SPEECH_ELEMENT speechElement;
-		auto speechItr = speechQueueMap_.find(SpeechType::FireMissle);
-		if (speechItr != speechQueueMap_.end())
-		{
-			if (speechItr->second.TryGetNext(speechElement))
-			{
-				Speech(speechElement);
-			}
-		}
+		Speech(SpeechType::FireMissle);
 
 		// 警告の画像表示
 		pWarningBlinker_->StartBlink(BLINK_INTERVAL);
@@ -210,7 +198,7 @@ void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
 
 void ControlTower::OnProjectionHit(const ProjectTile::EventData& _data)
 {
-
+	Speech(SpeechType::Hit);
 }
 
 void ControlTower::OnProjectionDestroyed(const ProjectTile::EventData& _data)
@@ -253,15 +241,20 @@ void ControlTower::OnEnemyAIStateChanged(const EnemyAI::EventData& _data)
 	}
 }
 
-void ControlTower::Speech(const SPEECH_ELEMENT& _speechElement)
+void ControlTower::Speech(SpeechType _speechType)
 {
-	LOGIMGUI_CAT("ControlTower", "Speech");
-	pTextBox_->Show(_speechElement.text_.data());
-	Game::System<Audio>().PlayOneShotFile(_speechElement.audioFile_.data());
+	SPEECH_ELEMENT speechElement;
+	auto speechItr = speechQueueMap_.find(_speechType);
+	if (speechItr == speechQueueMap_.end()) return;
+	
+	if (speechItr->second.TryGetNext(speechElement) == false) return;
+		
+	pTextBox_->Show(speechElement.text_.data());
+	Game::System<Audio>().PlayOneShotFile(speechElement.audioFile_.data());
 
 	Timer& timer = Game::System<Timer>();
 	timer.Remove(hTimer_);
-	hTimer_ = timer.AddAram(_speechElement.time_, [this]()
+	hTimer_ = timer.AddAram(speechElement.time_, [this]()
 		{
 			pTextBox_->Hide();
 		});
@@ -325,7 +318,7 @@ void ControlTower::DetectionEnemy(Transform* _transform)
 	detectedEnemyIds_.push_back(enemyId);
 }
 
-void ControlTower::DrawEnemies(const std::vector<EntityId>& _ids) const
+void ControlTower::DrawEnemies(const std::vector<EntityId>& _ids, ImageHandle _image) const
 {
 	if (auto itr = wndRectDetector_.find(CurrContext()); itr != wndRectDetector_.end())
 	{
@@ -353,19 +346,25 @@ void ControlTower::DrawEnemies(const std::vector<EntityId>& _ids) const
 		// 画面外の敵の描画
 		for (EntityId outOfScreenTarget : outOfScreenTargets)
 		{
-			DrawEnemyArrow(outOfScreenTarget);
+			EnemyArrowInfo info = ComputeEnemyArrowInfo(outOfScreenTarget);
+
+			if (info.invalid) continue;
+			DrawArrowAtPosition(info.position, info.angle, _image);
 		}
 	}
 }
 
-void ControlTower::DrawEnemyArrow(EntityId _entityId) const
+ControlTower::EnemyArrowInfo ControlTower::ComputeEnemyArrowInfo(EntityId _entityId) const
 {
 	// 現在のカメラ(プレイヤー)の Transformを取得
+	EnemyArrowInfo info{};
+	info.invalid = true;
 
 	WindowContext context = CurrContext();
-	if (controlTargetTransform_.contains(context) == false) return;
+	if (controlTargetTransform_.contains(context) == false) return info;
+
 	Transform* pCameraTransform = controlTargetTransform_.find(context)->second;
-	if (!pCameraTransform) return;
+	if (!pCameraTransform) return info;
 
 	// 敵の Transformを取得
 	Transform& enemyTransform = Transform::Get(_entityId);
@@ -392,20 +391,22 @@ void ControlTower::DrawEnemyArrow(EntityId _entityId) const
 
 	// 矢印を描画
 	// 画像を回転させるときは逆向きに回転させる
-	DrawArrowAtPosition(arrowPos, -angle);
+	info.position = arrowPos;
+	info.angle = -angle;
+	info.invalid = false;
+	return info;
 }
 
-void ControlTower::DrawArrowAtPosition(const Vector2F& _position, float _angle) const
+void ControlTower::DrawArrowAtPosition(const Vector2F& _position, float _angle, ImageHandle _image) const
 {
 	// 矢印の画像を回転させて描画
 	RectF drawRect =
 	{
-		_position.x - (enemyArrowImageSize_.x  * 0.5f),
-		_position.y - (enemyArrowImageSize_.y  * 0.5f),
-		enemyArrowImageSize_.x,
-		enemyArrowImageSize_.y
+		_position.x - (targetArrowImageSize_.x * 0.5f),
+		_position.y - (targetArrowImageSize_.y * 0.5f),
+		targetArrowImageSize_.x,
+		targetArrowImageSize_.y
 	};
 
-	Draw::Image(enemyArrowImage_, drawRect, { Vector2F::Zero(),Image::GetSizeF(enemyArrowImage_) }, _angle);
-	//Draw::Image(enemyArrowImage_, drawRect);
+	Draw::Image(_image, drawRect, { Vector2F::Zero(),Image::GetSizeF(_image) }, _angle);
 }

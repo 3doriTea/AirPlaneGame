@@ -56,6 +56,6 @@ void ProjectTile::Draw() const
 	{
 		Draw::FBXModel(hModel_, *pTransform_, 0);
 	}
-	pCollider_->Draw();
+	//pCollider_->Draw();
 }
 

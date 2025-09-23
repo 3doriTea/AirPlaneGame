@@ -15,7 +15,6 @@ public:
 
 	void Update() override;
 	void Draw() const override;
-	void Search();
 	void Fight(const EnemyAI::OutData& _outData); // í“¬s“®
 	bool HandleCrash(); // Œ‚’Ä‚³‚ê‚½Û‚Ìˆ—
 	const EnemyAI& GetAI() const { return ai_; }

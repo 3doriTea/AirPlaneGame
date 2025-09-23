@@ -5,14 +5,46 @@ namespace
 {
 	const int IMAGE_SIZE_PX{ 280 };
 	const int ENEMY_POS_CAPACITY{ 20 };
-	const int ENEMY_MARK_SIZE_PX{ 10 };
+	const int ENEMY_MARK_SIZE_PX{ 20 };
 	const int MARGIN_PX{ 2 };
+	// 敵マークを端っこに表示する範囲
+	const int CLAMP_DISTANCE{ 140 };
+	const int CLAMP_DISTANCE_SQUARED{ CLAMP_DISTANCE * CLAMP_DISTANCE };
 	// 敵マークを消す範囲
-	const int HIDE_DISTANCE{ 140 };
-	const int HIDE_DISTANCE_DOUBLE{ HIDE_DISTANCE * HIDE_DISTANCE };
+	const int HIDE_DISTANCE{ 200 };
+	const int HIDE_DISTANCE_SQUARED{ HIDE_DISTANCE * HIDE_DISTANCE };
 	const Color ENEMY_BOX_COLOR = Color::RED;
 	const Color MISSILE_BOX_COLOR = Color::BLACK;
+
+	void ToMark2D(const Transform& _origin, const std::vector<GameObject*>& _pGameObjs, std::vector<Radar::Mark2D>* _mark2Ds)
+	{
+		Matrix4x4 mOriginWorld{};
+		_origin.GenerateWorldMatrix(&mOriginWorld);
+		Matrix4x4 mInvOrigin{ DirectX::XMMatrixInverse(nullptr,mOriginWorld) };
+
+		Matrix4x4 mOriginRot{};
+		_origin.GenerateWorldRotationMatrix(&mOriginRot);
+		Matrix4x4 mInvOriginRot{ DirectX::XMMatrixInverse(nullptr,mOriginRot) };
+
+		for (auto& obj : _pGameObjs)
+		{
+			Transform& transform{ Transform::Get(obj->GetEntityId()) };
+			Vector3 pos{ transform.position };
+
+			
+			pos *= mInvOrigin;
+
+			Vector2Int pos2d{ static_cast<int>(pos.x), -static_cast<int>(pos.z) };
+
+			Vector3 forward = transform.Forward() * mInvOriginRot;
+			float angle = std::atan2f(forward.z, forward.x);
+
+			_mark2Ds->push_back(Radar::Mark2D{ .pos = pos2d,.angle = angle });
+		}
+	}
 }
+
+
 
 Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObject(GameObjectBuilder()
 	.SetLayerFlag(GameObjectLayerFlag::New()
@@ -23,6 +55,9 @@ Radar::Radar(const EntityId _playerId, const GameObjectLayer _layer) : GameObjec
 	pPlayerTransform_{ &Transform::Get(_playerId) },
 	viewAngle_{ 0.0f }
 {
+	hEnemyArrow_ = Image::Load("Image/RedRadarArrow.png");
+	hMissileArrow_ = Image::Load("Image/BlackRadarArrow.png");
+
 	hBack_ = Image::Load("Image/RadarBack2.png");
 	massert(hBack_ >= 0 && "レーダー盤画像読み込みに失敗 @Radar::Radar");
 	hInView_ = Image::Load(
@@ -52,50 +87,21 @@ void Radar::Update()
 	FindGameObjects("Enemy", &pEnemies);
 
 	enemyMarkPos_.clear();
-	for (auto& pGameObject : pEnemies)
-	{
-		EnemyPlane* pEnemy{ dynamic_cast<EnemyPlane*>(pGameObject) };
-
-		if (pEnemy->IsActive() == false)
-		{
-			continue;
-		}
-
-		Transform& enemyTransform{ Transform::Get(pGameObject->GetEntityId()) };
-		//Vector3 diff{ enemyTransform.position - pPlayerTransform_->GetWorldPosition() };
-		Vector3 diff{ enemyTransform.position };
-		Matrix4x4 mPlayerWorld{};
-		pPlayerTransform_->GenerateWorldMatrix(&mPlayerWorld);
-		mPlayerWorld = DirectX::XMMatrixInverse(nullptr, mPlayerWorld);
-		diff *= mPlayerWorld;
-		//Vector3 diff{ enemyTransform.position * mPlayerWorld };
-
-		enemyMarkPos_.emplace_back(static_cast<int>(diff.x), -static_cast<int>(diff.z));
-	}
+	ToMark2D(*pPlayerTransform_, pEnemies, &enemyMarkPos_);
 
 	std::vector<GameObject*> pMissiles{};
 	FindGameObjects("Missile", &pMissiles);
 
 	missileMarkPos_.clear();
-	for (auto& pGameObject : pMissiles)
-	{
-		Transform& missileTransform{ Transform::Get(pGameObject->GetEntityId()) };
-		Vector3 diff{ missileTransform.position };
-		Matrix4x4 mPlayerWorld{};
-		pPlayerTransform_->GenerateWorldMatrix(&mPlayerWorld);
-		mPlayerWorld = DirectX::XMMatrixInverse(nullptr, mPlayerWorld);
-		diff *= mPlayerWorld;
+	ToMark2D(*pPlayerTransform_, pMissiles, &missileMarkPos_);
 
-		missileMarkPos_.emplace_back(static_cast<int>(diff.x), -static_cast<int>(diff.z));
-	}
 }
 
 void Radar::Draw() const
 {
 	const Vector2F SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 	const Vector2F RADAR_OFFSET{ SCREEN_SIZE.x - IMAGE_SIZE_PX / 2, IMAGE_SIZE_PX / 2 };
-	const int DEPTH_OFFSET{ GetLayerFlag().Has(GameObjectLayer::A) ? 10 : 0 };
-
+	
 	auto drawImage
 	{
 		[&, this](const ImageHandle _hImage, const int _layer, const float _angle = 0.0f)
@@ -104,7 +110,7 @@ void Radar::Draw() const
 				_hImage,
 				{ SCREEN_SIZE.x - IMAGE_SIZE_PX, 0, IMAGE_SIZE_PX, IMAGE_SIZE_PX },
 				{ MARGIN_PX, MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX, IMAGE_SIZE_PX - MARGIN_PX },
-				_angle, {.layerFlag = layerFlag_ });
+				-_angle, UIParams{.depth = _layer,.layerFlag = layerFlag_});
 		}
 	};
 
@@ -112,30 +118,45 @@ void Radar::Draw() const
 	drawImage(hInView_, 0, viewAngle_);
 	drawImage(hFrame_, 1);
 
-	for (Vector2Int markPos : enemyMarkPos_)
+	
+	auto drawMarks
 	{
-		// 距離がレーダー範囲外なら端っこに描画
-		int lengthDouble{ markPos.x * markPos.x + markPos.y * markPos.y };
-		if (lengthDouble >= HIDE_DISTANCE_DOUBLE)
+		[&,this](const std::vector<Mark2D>& _marks,ImageHandle _hArrow, int _layer)
 		{
-			float length{ std::sqrtf(static_cast<float>(lengthDouble)) };
-			float x = markPos.x / length;
-			float y = markPos.y / length;
-			markPos.x = x * HIDE_DISTANCE;
-			markPos.y = y * HIDE_DISTANCE;
-		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, {.layerFlag = layerFlag_ });
-		//Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, ENEMY_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
-	}
+			for (const auto& mark : _marks)
+			{
+				float x = static_cast<float>(mark.pos.x);
+				float y = static_cast<float>(mark.pos.y);
+				RectF rect =
+				{
+					x  - ENEMY_MARK_SIZE_PX * 0.5f,
+					y  - ENEMY_MARK_SIZE_PX * 0.5f,
+					ENEMY_MARK_SIZE_PX,
+					ENEMY_MARK_SIZE_PX
+				};
 
-	for (auto& markPos : missileMarkPos_)
-	{
-		// 距離がレーダー範囲外なら描画しない
-		if (markPos.x * markPos.x + markPos.y * markPos.y >= HIDE_DISTANCE_DOUBLE)
-		{
-			continue;
+				// 距離がレーダー範囲外なら端っこに描画
+				int distanceSquared{ mark.pos.x * mark.pos.x + mark.pos.y * mark.pos.y };
+				float distance{ std::sqrtf(static_cast<float>(distanceSquared)) };
+
+				if (distanceSquared >= HIDE_DISTANCE_SQUARED)
+					continue;
+
+				if (distanceSquared >= CLAMP_DISTANCE_SQUARED)
+				{
+					rect.x = (rect.x / distance) * CLAMP_DISTANCE;
+					rect.y = (rect.y / distance) * CLAMP_DISTANCE;
+				}
+				
+				rect.point += RADAR_OFFSET;
+
+				// 回転角度は反転させる
+				Draw::Image(_hArrow, rect, { Vector2F::Zero(),Image::GetSizeF(_hArrow) }, -(mark.angle),UIParams{.depth = _layer,.layerFlag = layerFlag_});
+			}
 		}
-		Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .layerFlag = layerFlag_ });
-		//Draw::Box({ markPos + RADAR_OFFSET - (Vector2Int::One() * ENEMY_MARK_SIZE_PX / 2), Vector2Int{ENEMY_MARK_SIZE_PX, ENEMY_MARK_SIZE_PX} }, MISSILE_BOX_COLOR, { .depth = DEPTH_OFFSET + 1,.layerFlag = layerFlag_ });
-	}
+	};
+
+	// 敵とミサイルの描画
+	drawMarks(enemyMarkPos_, hEnemyArrow_,2);
+	drawMarks(missileMarkPos_, hMissileArrow_,2);
 }

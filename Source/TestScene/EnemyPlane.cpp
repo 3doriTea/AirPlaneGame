@@ -70,7 +70,7 @@ EnemyPlane::EnemyPlane(
 			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
-			.bulletType = ProjectTile::Shooter::Enemy,
+			.shooterType = ProjectTile::Shooter::Enemy,
 			.projectileType = ProjectTile::Type::Missile,  // ミサイルを使用
 		}
 	},
@@ -96,10 +96,7 @@ EnemyPlane::EnemyPlane(
 				//LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
 				return;
 			}
-			//LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 
-			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
 			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
 			{
 				ProjectTile* pProjectile{ dynamic_cast<ProjectTile*>(pTarget) };
@@ -127,6 +124,10 @@ EnemyPlane::EnemyPlane(
 					{
 						pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
 					}
+				}
+				else
+				{
+					Audio::PlayOneShotFile("Sound/Effect/ricochet.wav");
 				}
 			}
 		});
@@ -170,12 +171,7 @@ void EnemyPlane::Update()
 		Audio::PlayOneShotFile("Sound/Effect/enemySwing.wav");
 	}
 
-	//gun_.Update();
-	/*if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
-	{
-		
-		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
-	}*/
+	
 	Fight(outData);
 	
 
@@ -214,12 +210,12 @@ void EnemyPlane::Update()
 void EnemyPlane::Draw() const
 {
 	const EnemyAI::OutData& outData{ ai_.GetOutData() };
-	if (outData.isActive == false)
+	if (status_.toDestroy_)
 	{
 		return;
 	}
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	pCollider_->Draw();
+	//pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
 }
 

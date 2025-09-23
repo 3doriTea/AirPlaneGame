@@ -10,5 +10,6 @@ public:
 	void Update() override;
 	void Draw() const override;
 private:
+	void InitCommon(Shooter _shooter);
 	Transform* pTarget_;
 };

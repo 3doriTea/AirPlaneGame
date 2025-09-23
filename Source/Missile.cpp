@@ -9,50 +9,26 @@ namespace
 	const float MAX_TRACKING_ANGLE{ 45.0f }; // ’Ç”ö‰Â”\‚ÈÅ‘åŠp“x(degree)
 	const float TURN_RATE{ 1.0f }; // ù‰ñ‘¬“x (1•bŠÔ‚ ‚½‚è‚Ì‰ñ“]Šp“x‚Ì”{—¦)
 	const float DESTROY_TIME{ 10.0f }; // ”jŠü‚³‚ê‚é‚Ü‚Å‚ÌŽžŠÔ
+	const Vector3 SCALE_MAGNIFICATION{ 1.5f,1.5f,1.5f };
 }
 
 Missile::Missile(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter, Transform* _target)
 	: ProjectTile(_position, _quaternion, _shooter, Type::Missile)
 	, pTarget_{_target}
 {
-	SetName("Missile");
-	hModel_ = Fbx::Load("Model/AIM120D.fbx");
-	
-	massert(hModel_ >= 0 && "ƒ~ƒTƒCƒ‹‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
+	pTransform_->scale *= SCALE_MAGNIFICATION;
 
-	// Õ“Ëˆ—
-	pCollider_->SetRadius(3.0f);
-	pRb_->OnCollisionEnter([this,_shooter](EntityId _id)
-		{
-			GameObject* pTarget{ FindGameObject(_id) };
-			if (pTarget == nullptr)
-			{
-				return;
-			}
-			
-			if (pTarget->GetName() == "PlayerPlane" || pTarget->GetName() == "Bullet")
-			{
-				
-				DestroyMe();
-			}
-		});
-
-	Game::System<EventManager>().GetEvent<EventData>().Invoke(
-		{
-			.id = GetEntityId(),
-			.shooter = _shooter,
-			.type = Type::Missile,
-			.eventType = EventType::Fired,
-		});
-
-	Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
-
+	// ‹¤’Ê‰Šú‰»
+	InitCommon(_shooter);
 }
 
 Missile::Missile(const Transform& _shooterTransform, Transform* _target, const Shooter _shooter)
 	: Missile{_shooterTransform.position,_shooterTransform.rotate,_shooter,_target}
 {
-	pTransform_->scale = _shooterTransform.scale;
+	pTransform_->scale = _shooterTransform.scale * SCALE_MAGNIFICATION;
+
+	// ‹¤’Ê‰Šú‰»
+	InitCommon(_shooter);
 }
 
 Missile::~Missile()
@@ -107,4 +83,50 @@ void Missile::Update()
 void Missile::Draw() const
 {
 	ProjectTile::Draw();
+}
+
+void Missile::InitCommon(Shooter _shooter)
+{
+	SetName("Missile");
+	hModel_ = Fbx::Load("Model/AIM120D.fbx");
+
+	massert(hModel_ >= 0 && "ƒ~ƒTƒCƒ‹‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
+
+	// Õ“Ëˆ—
+	pCollider_->SetRadius(1.0f);
+	pRb_->OnCollisionEnter([this, _shooter](EntityId _id)
+		{
+			GameObject* pTarget{ FindGameObject(_id) };
+			if (pTarget == nullptr)
+			{
+				return;
+			}
+			if (pTarget->GetName() == "PlayerPlane")
+			{
+				Game::System<EventManager>().GetEvent<EventData>().Invoke(
+					{
+						.id = GetEntityId(),
+						.shooter = _shooter,
+						.type = Type::Missile,
+						.eventType = EventType::Hit,
+					}
+					);
+				DestroyMe();
+			}
+			if (pTarget->GetName() == "Bullet")
+			{
+				DestroyMe();
+
+			}
+		});
+
+	Game::System<EventManager>().GetEvent<EventData>().Invoke(
+		{
+			.id = GetEntityId(),
+			.shooter = _shooter,
+			.type = Type::Missile,
+			.eventType = EventType::Fired,
+		});
+
+	Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
 }

@@ -98,11 +98,22 @@ void mtgb::MTImGui::SetWindowOpen(ShowType _showType, bool _flag)
 {
     imguiWindowStates_[_showType].isOpen = _flag;
 }
-void mtgb::MTImGui::SetAllWindowOpen(ShowType _showType, bool _flag)
+void mtgb::MTImGui::SetAllWindowOpen(bool _flag)
 {
     for (auto& windowState : imguiWindowStates_)
     {
         windowState.second.isOpen = _flag;
+    }
+}
+void mtgb::MTImGui::ChangeWindowOpen(ShowType _showType)
+{
+    imguiWindowStates_[_showType].isOpen = !(imguiWindowStates_[_showType].isOpen);
+}
+void mtgb::MTImGui::ChangeAllWindowOpen()
+{
+    for (auto& windowState : imguiWindowStates_)
+    {
+        windowState.second.isOpen = !(windowState.second.isOpen);
     }
 }
 void mtgb::MTImGui::ShowLog()
@@ -186,6 +197,9 @@ void mtgb::MTImGui::ShowLog()
 
     imGui.End();
 
+}
+mtgb::MTImGui::MTImGui()
+{
 }
 void mtgb::MTImGui::SetupShowFunc()
 {
@@ -314,10 +328,12 @@ void mtgb::MTImGui::DrawLineImpl(const Vector3& _from, const Vector3& _to, float
 void mtgb::MTImGui::ShowWindow(ShowType _showType)
 {
     ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
+    auto& state = imguiWindowStates_[_showType];
+    if (!state.isOpen) return; // •Â‚¶‚Ä‚¢‚é‚È‚ç‰½‚à‚µ‚È‚¢
 
     if (_showType == ShowType::SceneView)
     {
-        imGui.Begin(GetName(ShowType::SceneView),&imguiWindowStates_[_showType].isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
+        imGui.Begin(GetName(ShowType::SceneView),&state.isOpen, ImGuiRenderer::WindowFlag::NoMoveWhenHovered);
         
         imGui.UpdateCamera(GetName(ShowType::SceneView));
         imGui.RenderSceneView();
@@ -325,7 +341,7 @@ void mtgb::MTImGui::ShowWindow(ShowType _showType)
     }
     else
     {
-        imGui.Begin(GetName(_showType), &imguiWindowStates_[_showType].isOpen);
+        imGui.Begin(GetName(_showType), &state.isOpen);
     }
 
     ExecuteShowQueue(_showType);

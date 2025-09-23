@@ -60,6 +60,10 @@ void mtgb::SceneSystem::Update()
 	{
 		Game::System<WindowManager>().ChangeFullScreenState(WindowContext::Second);
 	}
+	if (InputUtil::GetKeyDown(KeyCode::F1))
+	{
+		MTImGui::Instance().ChangeAllWindowOpen();
+	}
 
 	WinCtxRes::ChangeResource(WindowContext::First);
 	Game::System<Input>().Update();

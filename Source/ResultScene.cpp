@@ -20,8 +20,14 @@ namespace
 {
 	static const size_t BUFFER_SIZE{ 1024 };
 	mtbin::Byte* buffer = new mtbin::Byte[BUFFER_SIZE];
-	int maxRankingCount{ 5 };
+	// ランキング分のカウント（1～5位）
+	const int MAXRANKING_COUNT{ 5 };
+	// 前回のペアのスコア含めたカウント
+	const int FULLSCORE_COUNT{ 6 };
+	// Draw用の前回のスコアの表示のための定数
+	const int PREVPAIRSCORE_INDEX{ 5 };
 	Vector2F textPos_{ 400.0f, 400.0f };
+	const UIParams UI_PARAMS{};
 }
 
 ResultScene::ResultScene()
@@ -58,19 +64,22 @@ void ResultScene::Initialize()
 
 	ranking_ = new Ranking();
 
+	resultScore_ = ScoreManager::GetScore();
+
 	struct _stat s;
 	int rc = _stat("ranking.dat", &s);
 	if (rc == -1)
 	{
 		// ファイルが存在しない場合、0で初期化
-		std::vector<int> initData(maxRankingCount, 0);
+		std::vector<int> initData(FULLSCORE_COUNT, 0);
 		for (const auto& score : initData)
 		{
 			ms.Write<int>(score);
 		}
-		ranking_->SaveMemoryStreamToFile("ranking.dat", ms, sizeof(int) * maxRankingCount);
+		ranking_->SaveMemoryStreamToFile("ranking.dat", ms, sizeof(int) * FULLSCORE_COUNT);
 		ms.Seek(mtbin::MemoryStream::SeekDir::Head);
 
+		prevPairScore_ = 0;
 		rankingList_ = initData; // ←ここで0埋めを反映
 	}
 	else
@@ -78,16 +87,36 @@ void ResultScene::Initialize()
 		// ファイルが存在する場合、読み込み
 		ranking_->LoadFileToMemoryStream("ranking.dat", ms);
 		rankingList_ = ranking_->GetRankingList();
+
+		// 6個分に満たないなら拡張
+		if (rankingList_.size() < FULLSCORE_COUNT)
+		{
+			rankingList_.resize(FULLSCORE_COUNT, 0);
+		}
+
+		prevPairScore_ = rankingList_[PREVPAIRSCORE_INDEX];
+		rankingList_[PREVPAIRSCORE_INDEX] = resultScore_;
 	}
+	
 
 	// ランキング更新
-	resultScore_ = ScoreManager::GetScore();
-	ranking_->UpdateRanking(rankingList_, resultScore_);
+	std::vector<int> rankSubset(rankingList_.begin(), rankingList_.begin() + MAXRANKING_COUNT);
+	ranking_->UpdateRanking(rankSubset, resultScore_);
+
+	// 更新後の上位5位をrankingList_に反映
+	for (int i = 0; i < MAXRANKING_COUNT; ++i)
+	{
+		rankingList_[i] = rankSubset[i];
+	}
 
 	// 保存
 	ms.Seek(mtbin::MemoryStream::SeekDir::Head);
 	ms.Write(rankingList_.data(), static_cast<int>(rankingList_.size()));
-	ranking_->SaveMemoryStreamToFile("ranking.dat", ms, sizeof(int) * rankingList_.size());
+
+	// 前回のペアのスコアを最後に挿入
+//	rankingList_.push_back(prevPairScore_);
+	
+	ranking_->SaveMemoryStreamToFile("ranking.dat", ms, sizeof(int) * FULLSCORE_COUNT);
 }
 
 void ResultScene::Update()
@@ -100,13 +129,17 @@ void ResultScene::Update()
 
 void ResultScene::Draw() const
 {
-	Draw::ImmediateText("あなたのスコア：", { 150, 100 }, 48, TextAlignment::middleLeft);
-	Draw::ImmediateText(std::to_string(resultScore_), { 200, 100 }, 48, TextAlignment::center);
-	for (auto i = 0; i < rankingList_.size(); ++i)
+	// 自分のスコアを表示
+	Draw::ImmediateText("あなたのスコア：", { 170, 390 }, 48, TextAlignment::topLeft, UI_PARAMS);
+	Draw::ImmediateText(std::to_string(resultScore_), { 800, 390 }, 48, TextAlignment::topLeft, UI_PARAMS);
+	for (auto i = 0; i < rankingList_.size() - 1; ++i)
 	{
 		Draw::ImmediateText(std::to_string(i + 1) + "位: " + std::to_string(rankingList_[i]),
-			{ 0, 160 + i * 40 }, 32, TextAlignment::center);
+			{ 0, 160 + i * 40 }, 32, TextAlignment::center, UI_PARAMS);
 	}
+
+	Draw::ImmediateText("前回のペアのスコア: ", {170, 300}, 48, TextAlignment::topLeft, UI_PARAMS);
+	Draw::ImmediateText(std::to_string(rankingList_[PREVPAIRSCORE_INDEX]), {800, 300}, 48, TextAlignment::topLeft, UI_PARAMS);
 
 	/*Draw::ImmediateText("Tキーを押したら10秒後にタイトルへ戻ります"
 		, { 0, 50 }, 16, TextAlignment::center);*/
