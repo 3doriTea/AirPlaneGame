@@ -114,22 +114,7 @@ void mtgb::ImGuiRenderer::BeginImGuizmoFrame()
 	ImGuizmo::BeginFrame();
 }
 
-//void mtgb::ImGuiRenderer::Begin(const char* _str)
-//{
-//	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
-//}
 
-//void mtgb::ImGuiRenderer::Begin(const char* _str, bool* _isOpen)
-//{
-//	//ImGui::SetNextWindowSize(ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)), ImGuiCond_Once);
-//
-//	ImGui::Begin(_str, _isOpen);
-//}
-
-//void mtgb::ImGuiRenderer::Begin(const char* _str, WindowFlag _flag)
-//{
-//	
-//}
 
 void mtgb::ImGuiRenderer::Begin(const char* _str, bool* _isOpen, WindowFlag _flag)
 {
