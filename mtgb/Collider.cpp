@@ -4,10 +4,16 @@
 #include "Matrix4x4.h"
 #include "Draw.h"
 #include "Debug.h"
-
+#include <cfloat>
 namespace
 {
 	mtgb::Matrix4x4 matrix{};
+	DirectX::XMVECTORF32 unitVectorEpsilon{ FLT_EPSILON ,FLT_EPSILON ,FLT_EPSILON ,FLT_EPSILON };
+	bool XMVECTORIsUnit(DirectX::FXMVECTOR _v)
+	{
+		DirectX::XMVECTOR difference = DirectX::XMVectorSubtract(DirectX::XMVector3Length(_v), DirectX::XMVectorSplatOne());
+		return DirectX::XMVector4Less(DirectX::XMVectorAbs(difference), unitVectorEpsilon);	
+	}
 }
 
 mtgb::Collider::Collider(EntityId _entityId) 
@@ -142,7 +148,8 @@ bool mtgb::Collider::IsHit(const Vector3& _origin, const Vector3& _dir, float* d
 	// 方向ベクトルを正規化（元のベクトルは保持）
 	Vector3 normalizedDir = Vector3::Normalize(_dir);
 	
-	if (!DirectX::Internal::XMVector3IsUnit(normalizedDir))
+	XMVECTOR vNormalizeDir = XMLoadFloat3(&normalizedDir);
+	if (!XMVECTORIsUnit(vNormalizeDir))
 	{
 		return false;
 	}

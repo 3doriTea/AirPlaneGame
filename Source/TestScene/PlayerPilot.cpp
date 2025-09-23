@@ -20,6 +20,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
 	float lockOnSide = 200.0f;
 	
+	
 	// PlayerGun‚ğ‰Šú‰»
 	pPlayerGun = new PlayerGun(WindowContext::First, GameObjectLayer::A,pTransform, lockOnSide);
 }

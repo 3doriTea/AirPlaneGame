@@ -229,10 +229,10 @@ void EnemyAI::Update()
 	}
 	EntityId id = input_.pSelfTrans->GetEntityId();
 	const std::string name = "EnemyAI:" + std::to_string(id);
-	MTImGui::Instance().DirectShow([mainStateStr,fightStateStr]() {		
+	/*MTImGui::Instance().DirectShow([mainStateStr,fightStateStr]() {		
 		ImGui::Text("MAIN_STATE : %s",mainStateStr.c_str());
 		ImGui::Text("FIGHT_STATE : %s",fightStateStr.c_str());
-		},name, ShowType::Inspector);
+		},name, ShowType::Inspector);*/
 }
 const bool EnemyAI::IsForwardToPlayerDir() const
 {
