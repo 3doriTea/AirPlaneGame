@@ -339,14 +339,14 @@ namespace mtgb
 				_pContext->PSSetSamplers(0, 1, &pSampler);
 			}, static_cast<int>(indices_.size()));
 
-		for (int z = 0; z < cellNum; z++)
+		/*for (int z = 0; z < cellNum; z++)
 		{
 			for (int x = 0; x < cellNum; x++)
 			{
 				
 				aabbs[z * cellNum + x]->Draw();
 			}
-		}
+		}*/
 	}
 
 	template<typename StageDataBit>

@@ -52,6 +52,8 @@
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="mtgb\UIDrawCommand.cpp" />
+    <ClCompile Include="Source\DemoScene\CameraTripod.cpp" />
+    <ClCompile Include="Source\DemoScene\HangerUI.cpp" />
     <ClCompile Include="Source\IAutoPilot.cpp" />
     <ClCompile Include="Source\Background.cpp" />
     <ClCompile Include="Bar.cpp" />
@@ -281,6 +283,8 @@
     <ClInclude Include="mtgb\Vector2F.h" />
     <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
+    <ClInclude Include="Source\DemoScene\CameraTripod.h" />
+    <ClInclude Include="Source\DemoScene\HangerUI.h" />
     <ClInclude Include="Source\IAutoPilot.h" />
     <ClInclude Include="Source\Background.h" />
     <ClInclude Include="Bar.h" />
