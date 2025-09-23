@@ -23,4 +23,7 @@ private:
 	Ranking* ranking_;
 	std::vector<int> rankingList_;
 	int32_t resultScore_;
+	
+	// 前のペアのスコア
+	int32_t prevPairScore_;
 };
