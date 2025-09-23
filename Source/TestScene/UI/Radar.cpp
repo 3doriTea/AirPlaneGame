@@ -7,9 +7,12 @@ namespace
 	const int ENEMY_POS_CAPACITY{ 20 };
 	const int ENEMY_MARK_SIZE_PX{ 20 };
 	const int MARGIN_PX{ 2 };
+	// 敵マークを端っこに表示する範囲
+	const int CLAMP_DISTANCE{ 140 };
+	const int CLAMP_DISTANCE_SQUARED{ CLAMP_DISTANCE * CLAMP_DISTANCE };
 	// 敵マークを消す範囲
-	const int HIDE_DISTANCE{ 140 };
-	const int HIDE_DISTANCE_DOUBLE{ HIDE_DISTANCE * HIDE_DISTANCE };
+	const int HIDE_DISTANCE{ 200 };
+	const int HIDE_DISTANCE_SQUARED{ HIDE_DISTANCE * HIDE_DISTANCE };
 	const Color ENEMY_BOX_COLOR = Color::RED;
 	const Color MISSILE_BOX_COLOR = Color::BLACK;
 
@@ -122,25 +125,31 @@ void Radar::Draw() const
 		{
 			for (const auto& mark : _marks)
 			{
-				float x = mark.pos.x;
-				float y = mark.pos.y;
+				float x = static_cast<float>(mark.pos.x);
+				float y = static_cast<float>(mark.pos.y);
 				RectF rect =
 				{
-					x + RADAR_OFFSET.x - ENEMY_MARK_SIZE_PX * 0.5f,
-					y + RADAR_OFFSET.y - ENEMY_MARK_SIZE_PX * 0.5f,
+					x  - ENEMY_MARK_SIZE_PX * 0.5f,
+					y  - ENEMY_MARK_SIZE_PX * 0.5f,
 					ENEMY_MARK_SIZE_PX,
 					ENEMY_MARK_SIZE_PX
 				};
 
 				// 距離がレーダー範囲外なら端っこに描画
-				int lengthDouble{ mark.pos.x * mark.pos.x + mark.pos.y * mark.pos.y };
-				float length{ std::sqrtf(static_cast<float>(lengthDouble)) };
-				if (lengthDouble >= HIDE_DISTANCE_DOUBLE)
+				int distanceSquared{ mark.pos.x * mark.pos.x + mark.pos.y * mark.pos.y };
+				float distance{ std::sqrtf(static_cast<float>(distanceSquared)) };
+
+				if (distanceSquared >= HIDE_DISTANCE_SQUARED)
+					continue;
+
+				if (distanceSquared >= CLAMP_DISTANCE_SQUARED)
 				{
-					rect.x /= length;
-					rect.y /= length;
+					rect.x = (rect.x / distance) * CLAMP_DISTANCE;
+					rect.y = (rect.y / distance) * CLAMP_DISTANCE;
 				}
 				
+				rect.point += RADAR_OFFSET;
+
 				// 回転角度は反転させる
 				Draw::Image(_hArrow, rect, { Vector2F::Zero(),Image::GetSizeF(_hArrow) }, -(mark.angle),UIParams{.depth = _layer,.layerFlag = layerFlag_});
 			}

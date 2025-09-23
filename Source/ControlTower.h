@@ -57,7 +57,7 @@ private:
 	void OnProjectionDestroyed(const ProjectTile::EventData& _data);
 	void OnEnemyAIStateChanged(const EnemyAI::EventData& _data);
 
-	void Speech(const SPEECH_ELEMENT& _speechElement);
+	void Speech(SpeechType _speechType);
 	void DetectionEnemy(Transform* _transform);
 
 	void DrawEnemies(const std::vector<EntityId>& _ids, ImageHandle _image) const;

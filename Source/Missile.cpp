@@ -101,11 +101,22 @@ void Missile::InitCommon(Shooter _shooter)
 			{
 				return;
 			}
-
-			if (pTarget->GetName() == "PlayerPlane" || pTarget->GetName() == "Bullet")
+			if (pTarget->GetName() == "PlayerPlane")
 			{
-
+				Game::System<EventManager>().GetEvent<EventData>().Invoke(
+					{
+						.id = GetEntityId(),
+						.shooter = _shooter,
+						.type = Type::Missile,
+						.eventType = EventType::Hit,
+					}
+					);
 				DestroyMe();
+			}
+			if (pTarget->GetName() == "Bullet")
+			{
+				DestroyMe();
+
 			}
 		});
 

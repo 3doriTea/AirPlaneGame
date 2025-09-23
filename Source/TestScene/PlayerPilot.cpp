@@ -20,14 +20,12 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
 	float lockOnSide = 200.0f;
 	
-
 	// PlayerGun‚ð‰Šú‰»
 	pPlayerGun = new PlayerGun(WindowContext::First, GameObjectLayer::A,pTransform, lockOnSide);
 }
 
 PlayerPilot::~PlayerPilot()
 {
-//	delete pTargetingSystem_;
 	delete pPlayerGun;
 }
 
@@ -48,16 +46,6 @@ void PlayerPilot::Update()
 			ImGui::Text("x,y(%.3f,%.3f)", xAxis, yAxis);
 		},"PilotJoystick", ShowType::Inspector);
 	MTImGui::Instance().TypedShow(pTransform, "PlayerPilot");
-
-	/*MTImGui::Instance().DirectShow([this]()
-		{
-			auto& targets = pTargetingSystem_->detector->GetDetectedTargets();
-			for (const ScreenCoordContainsInfo& info : targets)
-			{
-				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
-			}
-		}, "PilotContains", ShowType::Inspector);
-*/
 
 }
 

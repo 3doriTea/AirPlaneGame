@@ -64,9 +64,9 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 					return;
 				}
 
-				LOGIMGUI("%s‚Í%s‚ğ‚­‚ç‚Á‚½!", GetName().c_str(), pTarget->GetName().c_str());
 				ScoreManager::SubtractScore(100);
 				Instantiate<PlayerDamageEffect>();
+				//Game::System<EventManager>().GetEvent<>
 				return;
 			}
 			//LOGF("Id:%d(%s)‚ÆÕ“Ë‚µ‚½I by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
@@ -145,12 +145,7 @@ void PlayerPlane::Update()
 	curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
 	pTransform_->rotate = curr;
 #endif
-	if (InputUtil::GetKeyDown(KeyCode::F))
-	{
-		vVPlayer_.Play(u8"³–Ê‚É“G‚ª102‘Ì‚¢‚Ü‚·");
-	}
-
-
+	
 	// ƒgƒŠƒK[‚Ì‰Ÿ‚µ‚İ‹ï‡
 	float triggerValue = InputUtil::GetTrigger(FlightStickAxisCode::Slider, WindowContext::First);
 	triggerValue = -(triggerValue - 1.0f);

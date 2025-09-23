@@ -96,10 +96,7 @@ EnemyPlane::EnemyPlane(
 				//LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
 				return;
 			}
-			//LOGF("Id:%d(%s)と衝突した！ by %d(%s)\n", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
-			LOGIMGUI("Id:%d(%s)と衝突した！ by %d(%s)", _targetId, FindGameObject(_targetId)->GetName().c_str(), entityId_, GetName().c_str());
 
-			//massert(pTarget != nullptr && "当たったが、相手のゲームオブジェクトが見つからなかった");
 			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
 			{
 				ProjectTile* pProjectile{ dynamic_cast<ProjectTile*>(pTarget) };
@@ -127,6 +124,10 @@ EnemyPlane::EnemyPlane(
 					{
 						pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
 					}
+				}
+				else
+				{
+					Audio::PlayOneShotFile("Sound/Effect/ricochet.wav");
 				}
 			}
 		});
@@ -170,12 +171,7 @@ void EnemyPlane::Update()
 		Audio::PlayOneShotFile("Sound/Effect/enemySwing.wav");
 	}
 
-	//gun_.Update();
-	/*if (outData.isFire && ai_.GetMainState().Current() == EnemyAI::S_FIGHT)
-	{
-		
-		gun_.Shot(pTransform_->GetWorldPosition(), pTransform_->rotate, pTarget_);
-	}*/
+	
 	Fight(outData);
 	
 

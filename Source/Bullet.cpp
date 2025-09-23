@@ -10,23 +10,13 @@ namespace
 Bullet::Bullet(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter)
 	: ProjectTile(_position, _quaternion, _shooter, Type::Bullet)
 {
-	SetName("Bullet");
-	hModel_ = Fbx::Load("Model/NewBullet.fbx");
-	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
-
-	// 3•bŒo‚Á‚½‚çÁ‚·
-	Timer::AddAram(3.0f, [this] { DestroyMe(); });
+	InitCommon();
 }
 
 Bullet::Bullet(const Transform& _shooterTransform, Shooter _shooter)
 	: ProjectTile(_shooterTransform, _shooter, Type::Bullet)
 {
-	SetName("Bullet");
-	hModel_ = Fbx::Load("Model/NewBullet.fbx");
-	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
-
-	// 3•bŒo‚Á‚½‚çÁ‚·
-	Timer::AddAram(3.0f, [this] { DestroyMe(); });
+	InitCommon();
 }
 
 Bullet::~Bullet()
@@ -46,4 +36,16 @@ void Bullet::Draw() const
 const float Bullet::GetMoveSpeed()
 {
 	return BULLET_SPEED;
+}
+
+void Bullet::InitCommon()
+{
+	SetName("Bullet");
+	hModel_ = Fbx::Load("Model/NewBullet.fbx");
+	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ‚É¸”s");
+
+	// 3•bŒo‚Á‚½‚çÁ‚·
+	Timer::AddAram(3.0f, [this] { DestroyMe(); });
+
+	Audio::PlayOneShotFile("Sound/Effect/shot.wav");
 }

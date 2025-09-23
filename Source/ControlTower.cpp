@@ -11,7 +11,7 @@ namespace
 		{
 			.text_ = u8"ミサイル接近!逃げて!",
 			.audioFile_ = "Sound/Voice/012_ずんだもん（ノーマル）_ミサイル接近!逃げ….wav",
-			.time_ = 3.0f
+			.time_ = 3.5f
 		},
 		{
 			.text_ = u8"ミサイル接近!撃ち落として!",
@@ -19,38 +19,32 @@ namespace
 			.time_ = 4.5f
 		},
 	};
-	SpeechLines speechLinesOnHit;
-
-
-	// ミサイル発射された時、その1
-	/*SPEECH_ELEMENT speechOnFiredMissile1 =
+	SpeechLines speechLinesOnHit =
 	{
-		.text_ = u8"ミサイル接近!逃げて!",
-		.audioFile_ = "Sound/Voice/012_ずんだもん（ノーマル）_ミサイル接近!逃げ….wav",
-		.time_ = 3.0f
+		{
+			.text_ = u8"被弾したよ!",
+			.audioFile_ = "Sound/Voice/013_ずんだもん（ノーマル）_被弾したよ!.wav",
+			.time_ = 2.5f
+		},
+		{
+			.text_ = u8"ぬわーーーーーっ!",
+			.audioFile_ = "Sound/Voice/014_ずんだもん（ノーマル）_ぬわわわわわわわ.wav",
+			.time_ = 3.0f
+		},
 	};
-	SPEECH_ELEMENT speechOnFiredMissile2 =
-	{
-		.text_ = u8"ミサイル接近!撃ち落として!",
-		.audioFile_ = "Sound/Voice/016_ずんだもん（ノーマル）_ミサイル接近!撃ち….wav",
-		.time_ = 3.0f
-	};*/
+
+
 	
 
-	// 被弾時、その1
-	SPEECH_ELEMENT speechOnHit1 =
-	{
-		.text_ = u8"被弾した!",
-		.audioFile_  = "Sound/Voice/013_ずんだもん（ノーマル）_被弾した!.wav",
-		.time_ = 2.0f
-	};
+
+
 
 	// 字幕の表示位置
 	const Vector2F SPEECH_TEXT_POS{ 620, 820 };
 	// 字幕のフォントサイズ
 	const int SPEECH_TEXT_SIZE{ 48 };
 
-	const RectF WARNING_IMAGE_RECT{ 830,190,260,60 };
+	const RectF WARNING_IMAGE_RECT{ 830,170,260,60 };
 	
 
 	const float BLINK_INTERVAL{ 0.5f };
@@ -94,6 +88,7 @@ ControlTower::ControlTower() : GameObject(GameObjectBuilder()
 	pTextBox_ = Instantiate<TextBox>(0.01f, GenDrawScreenFrom(SPEECH_TEXT_POS), GenDrawScreenFontSize(SPEECH_TEXT_SIZE));
 
 	speechQueueMap_.emplace(SpeechType::FireMissle, ShuffleSpeechQueue{ speechLinesOnFiredMissile });
+	speechQueueMap_.emplace(SpeechType::Hit, ShuffleSpeechQueue{ speechLinesOnHit });
 }
 
 ControlTower::~ControlTower()
@@ -187,15 +182,7 @@ void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
 		// 脅威度が既にDangerなら回帰
 		if (currentThreatLevel_ == ThreatLevel::Danger) return;
 		// 警告のテキスト、音声
-		SPEECH_ELEMENT speechElement;
-		auto speechItr = speechQueueMap_.find(SpeechType::FireMissle);
-		if (speechItr != speechQueueMap_.end())
-		{
-			if (speechItr->second.TryGetNext(speechElement))
-			{
-				Speech(speechElement);
-			}
-		}
+		Speech(SpeechType::FireMissle);
 
 		// 警告の画像表示
 		pWarningBlinker_->StartBlink(BLINK_INTERVAL);
@@ -211,7 +198,7 @@ void ControlTower::OnProjectionFired(const ProjectTile::EventData& _data)
 
 void ControlTower::OnProjectionHit(const ProjectTile::EventData& _data)
 {
-
+	Speech(SpeechType::Hit);
 }
 
 void ControlTower::OnProjectionDestroyed(const ProjectTile::EventData& _data)
@@ -254,15 +241,20 @@ void ControlTower::OnEnemyAIStateChanged(const EnemyAI::EventData& _data)
 	}
 }
 
-void ControlTower::Speech(const SPEECH_ELEMENT& _speechElement)
+void ControlTower::Speech(SpeechType _speechType)
 {
-	LOGIMGUI_CAT("ControlTower", "Speech");
-	pTextBox_->Show(_speechElement.text_.data());
-	Game::System<Audio>().PlayOneShotFile(_speechElement.audioFile_.data());
+	SPEECH_ELEMENT speechElement;
+	auto speechItr = speechQueueMap_.find(_speechType);
+	if (speechItr == speechQueueMap_.end()) return;
+	
+	if (speechItr->second.TryGetNext(speechElement) == false) return;
+		
+	pTextBox_->Show(speechElement.text_.data());
+	Game::System<Audio>().PlayOneShotFile(speechElement.audioFile_.data());
 
 	Timer& timer = Game::System<Timer>();
 	timer.Remove(hTimer_);
-	hTimer_ = timer.AddAram(_speechElement.time_, [this]()
+	hTimer_ = timer.AddAram(speechElement.time_, [this]()
 		{
 			pTextBox_->Hide();
 		});
