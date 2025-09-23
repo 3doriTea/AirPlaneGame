@@ -70,7 +70,7 @@ EnemyPlane::EnemyPlane(
 			.oneShotTimeSec = ONE_SHOT_TIME_SEC,
 			.reloadTimeSec = RELOAD_TIME_SEC,
 			.bulletCount = BULLET_COUNT,
-			.bulletType = ProjectTile::Shooter::Enemy,
+			.shooterType = ProjectTile::Shooter::Enemy,
 			.projectileType = ProjectTile::Type::Missile,  // ミサイルを使用
 		}
 	},
@@ -214,7 +214,7 @@ void EnemyPlane::Update()
 void EnemyPlane::Draw() const
 {
 	const EnemyAI::OutData& outData{ ai_.GetOutData() };
-	if (outData.isActive == false)
+	if (status_.toDestroy_)
 	{
 		return;
 	}

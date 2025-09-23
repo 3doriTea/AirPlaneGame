@@ -116,13 +116,13 @@ void Gun::ShotImpl(const Vector3& _position, const Quaternion& _quaternion, Tran
 	switch (setting_.projectileType)
 	{
 	case ProjectTile::Type::Bullet:
-		GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.bulletType);
+		GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.shooterType);
 		break;
 	case ProjectTile::Type::Missile:
 		if (_target)
-			GameObject::Instantiate<Missile>(_position, _quaternion, setting_.bulletType, _target);
+			GameObject::Instantiate<Missile>(_position, _quaternion, setting_.shooterType, _target);
 		else
-			GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.bulletType); // fallback
+			GameObject::Instantiate<Bullet>(_position, _quaternion, setting_.shooterType); // fallback
 		break;
 	}
 
