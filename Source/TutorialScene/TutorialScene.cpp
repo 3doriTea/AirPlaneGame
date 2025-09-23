@@ -164,7 +164,7 @@ void TutorialScene::Initialize()
 						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = hControllerImagesA_,
-						.uIParams_ = { 10 }
+						.uIParams_ = { .depth = 10, .layerFlag = GameObjectLayer::A }
 					},
 					GameObjectLayer::A);
 				pImageAnimatorB_ = Instantiate<ImageAnimator>(
@@ -173,7 +173,7 @@ void TutorialScene::Initialize()
 						.drawRect_ = DRAW_RECT_CON_XBOX_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = hControllerImagesB_,
-						.uIParams_ = { 10 }
+						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::B }
 					},
 					GameObjectLayer::B);
 			})
