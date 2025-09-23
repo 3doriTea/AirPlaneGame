@@ -297,6 +297,7 @@ namespace mtgb
 				// 静的なコライダー
 				Collider* pCollider = &(Game::System<ColliderCP>().Get(terrainCellId,Collider::ColliderTag::STAGE));
 
+				pCollider->isStatic_ = true;
 				pCollider->type_ = Collider::TYPE_AABB;
 				pCollider->SetCenter(center);
 				pCollider->SetExtents(extents);
@@ -556,6 +557,7 @@ namespace mtgb
 				wallThickness / 2.0f
 			};
 
+			pCollider->isStatic_ = true;
 			pCollider->SetCenter(center);
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);
@@ -581,6 +583,7 @@ namespace mtgb
 				wallThickness / 2.0f
 			};
 
+			pCollider->isStatic_ = true;
 			pCollider->SetCenter(center);
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);
@@ -606,6 +609,7 @@ namespace mtgb
 				(stageMax - stageMin) / 2.0f
 			};
 
+			pCollider->isStatic_ = true;
 			pCollider->SetCenter(center);
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);
@@ -631,6 +635,7 @@ namespace mtgb
 				(stageMax - stageMin) / 2.0f
 			};
 
+			pCollider->isStatic_ = true;
 			pCollider->SetCenter(center);
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);
@@ -656,6 +661,7 @@ namespace mtgb
 				(stageMax - stageMin) / 2.0f
 			};
 
+			pCollider->isStatic_ = true;
 			pCollider->SetCenter(center);
 			pCollider->SetExtents(extents);
 			aabbs.push_back(pCollider);

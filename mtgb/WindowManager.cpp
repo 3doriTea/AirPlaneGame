@@ -123,6 +123,7 @@ void mtgb::WindowManager::SetWindowConfig(WindowContext windowContext, const Win
 mtgb::WindowConfig mtgb::WindowManager::GetWindowConfig(WindowContext windowContext)
 {
 	auto itr = windowConfigMap_.find(windowContext);
+	
 	massert(itr != windowConfigMap_.end() && "Žw’è‚³‚ê‚½WindowContext‚ÌConfig‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ");
 	return itr->second;
 }

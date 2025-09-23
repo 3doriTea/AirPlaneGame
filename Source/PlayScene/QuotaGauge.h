@@ -15,6 +15,14 @@ public:
 	/// </summary>
 	/// <param name="_point">加算するポイント</param>
 	void AddPoint(const int _point);
+
+	/// <summary>
+	/// ノルマ数を取得する
+	/// </summary>
+	/// <returns></returns>
+	const int GetQuotaCount() const;
+
+	bool IsQuotaClear() const { return currentPoint_ + 1 >= GetQuotaCount(); }
 private:
 	ImageHandle hImageBackNormal_;  // 裏ノルマ未達成
 	ImageHandle hImageBackClear_;  // 裏ノルマ達成
