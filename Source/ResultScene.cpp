@@ -19,7 +19,7 @@ using namespace mtgb;
 namespace
 {
 	static const size_t BUFFER_SIZE{ 1024 };
-	mtbin::Byte* buffer = new mtbin::Byte[BUFFER_SIZE];
+	mtbin::Byte buffer[BUFFER_SIZE]{};
 	// ランキング分のカウント（1～5位）
 	const int MAXRANKING_COUNT{ 5 };
 	// 前回のペアのスコア含めたカウント
@@ -32,12 +32,12 @@ namespace
 
 ResultScene::ResultScene()
 {
+	
 }
 
 ResultScene::~ResultScene()
 {
 	SAFE_DELETE(ranking_);
-	SAFE_DELETE(buffer);
 }
 
 void ResultScene::Initialize()

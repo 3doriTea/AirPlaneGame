@@ -18,7 +18,10 @@ SkipChecker::~SkipChecker()
 
 void SkipChecker::Update()
 {
-	if (InputUtil::GetAxis(Axis::Y, WindowContext::Both) < 0 && InputUtil::GetAxis(Axis::Y, WindowContext::Both) < 0)
+	Vector2F axisA = InputUtil::GetAxis(WindowContext::First);
+	Vector2F axisB = InputUtil::GetAxis(WindowContext::Second);
+
+	if (axisA.y > 0.0f && axisB.y < 0.0f)
 	{
 		rate_ = Mathf::Lerp(rate_, 1.0f, MOVE_RATE_SEC * Time::DeltaTimeF());
 	}
