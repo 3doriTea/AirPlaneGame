@@ -4,7 +4,10 @@
 #include "DrawScreenUtility.h"
 #include "CameraSystem.h"
 
-
+namespace
+{
+	Vector3 FIRE_POS_OFFSET{ 0,-0.5,0 };
+}
 
 TargetingSystem::~TargetingSystem()
 {
@@ -66,21 +69,22 @@ void TargetingSystem::ClearTarget()
 void TargetingSystem::FireAtTarget()
 {
 	Vector3 targetDirection;
+	Vector3 projectilePos = ownerTransform->GetWorldPosition() + FIRE_POS_OFFSET;
 	Quaternion fireDirection;
 
 	if (HasTarget())
 	{
 		RigidBody& rb{ RigidBody::Get(currentTarget->entityId) };
-		Vector3 targetPosition{ Mathf::TargetingPosition(ownerTransform->GetWorldPosition(), currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
-		targetDirection = Vector3::Normalize(targetPosition - ownerTransform->GetWorldPosition());
+		Vector3 targetPosition{ Mathf::TargetingPosition(projectilePos, currentTarget->worldPos, -rb.velocity_, Bullet::GetMoveSpeed()) };
+		targetDirection = Vector3::Normalize(targetPosition - projectilePos);
 	}
 	// ターゲットがいない場合は正面方向に射撃
 	else
 	{
 		targetDirection = ownerTransform->Forward();
 	}
-	fireDirection = Quaternion::LookRotation(targetDirection, Vector3::Up());
-	GameObject::Instantiate<Bullet>(ownerTransform->GetWorldPosition(), fireDirection, Bullet::Shooter::Player);
+	fireDirection = Quaternion::LookRotation(targetDirection,ownerTransform->Up() );
+	GameObject::Instantiate<Bullet>(projectilePos, fireDirection, Bullet::Shooter::Player);
 }
 
 mtgb::Vector3 TargetingSystem::GetCurrentTargetPosition() const

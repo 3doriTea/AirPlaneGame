@@ -3,6 +3,7 @@
 #include "WindowContextUtil.h"
 #include "Debug.h"
 #include "MTImGui.h"
+#include <processthreadsapi.h>
 using namespace mtgb;
 
 
@@ -47,8 +48,9 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 
 	// マルチモニター対応するかどうか
 	
+	DWORD processId = GetCurrentProcessId();
 
-	if (isMultiMonitor_)
+	if (isMultiMonitor_ && processId > 0)
 	{	
 		
 		std::optional<MonitorInfo> optMonitorInfo = dx11Manager.AssignAvailableMonitor(pOutput_.ReleaseAndGetAddressOf());
@@ -94,6 +96,8 @@ void DXGIResource::Initialize(WindowContext _windowContext)
 
 	//サーフェスとやらを作成
 	dx11Manager.CreateDXGISurface(pSwapChain1_.Get(), pDXGISurface_.ReleaseAndGetAddressOf());
+
+
 }
 
 void DXGIResource::SetResource()

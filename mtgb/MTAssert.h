@@ -42,10 +42,10 @@
 
 #else
 
-#define massert(expression) \
-	if (!!expression)       \
-	{                       \
-		mtgb::Game::Exit(); \
-	}
+#define massert(expression) {}
+	/*if (!!expression)       
+	{                       
+		mtgb::Game::Exit(); 
+	}*/
 
 #endif

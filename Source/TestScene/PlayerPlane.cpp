@@ -15,6 +15,8 @@ namespace
 	
 	// Å‚‘¬“x
 	float maxSpeed = 15.0f;
+
+	const uint32_t SUBTRACT_SCORE{ 100 };
 }
 
 #define __X m128_f32[0]
@@ -22,7 +24,7 @@ namespace
 #define __Z m128_f32[2]
 
 PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilder()
-	.SetPosition({ 0, 0, 0 })
+	.SetPosition({ 0, 10, 0 })
 	.SetName("PlayerPlane")
 	.SetTag(GameObjectTag::PlayerPlane)
 	.Build()),
@@ -37,7 +39,7 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 	hModel_ = Fbx::Load("Model/Enemy01.fbx");
 	pCollider_->type_ = Collider::TYPE_SPHERE;
 	pCollider_->SetCenter(Vector3::Zero());
-	pCollider_->SetRadius(1.0f);
+	pCollider_->SetRadius(3.0f);
 
 	pAutoControlText_ = Instantiate<AutoControlText>();
 	pAutoControlText_->SetEnabled(false);
@@ -64,7 +66,7 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 					return;
 				}
 
-				ScoreManager::SubtractScore(100);
+				ScoreManager::SubtractScore(SUBTRACT_SCORE);
 				Instantiate<PlayerDamageEffect>();
 				//Game::System<EventManager>().GetEvent<>
 				return;
@@ -159,7 +161,9 @@ void PlayerPlane::Update()
 	pRB_->velocity_ = pTransform_->Forward() * speed;
 
 	MTImGui::Instance().DirectShow([this]() {
-		TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
+		Vector3 worldPos = pTransform_->GetWorldPosition();
+		//TypeRegistry::Instance().CallFunc(&pTransform_->position, "Position");
+		TypeRegistry::Instance().CallFunc(&worldPos, "Position");
 		TypeRegistry::Instance().CallFunc(&pTransform_->rotate, "Rotation");
 		TypeRegistry::Instance().CallFunc(&pRB_->velocity_, "Velocity");
 		ImGui::InputFloat("Speed", &speed);
@@ -171,6 +175,7 @@ void PlayerPlane::Draw() const
 	// ‚à‚µ•`‰æ‚³‚ê‚È‚¢ê‡‚ÍlayerFlag_‚ðŠm”F
 
 	Draw::FBXModel(hModel_, *pTransform_,0);
+	pCollider_->Draw();
 }
 
 Quaternion PlayerPlane::RemoveZRotation(Quaternion _q) const

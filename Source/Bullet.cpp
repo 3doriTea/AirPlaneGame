@@ -26,6 +26,10 @@ Bullet::~Bullet()
 void Bullet::Update()
 {
 	pRb_->velocity_ = pTransform_->Forward() * BULLET_SPEED;
+	std::string name = name_ + std::to_string( entityId_);
+	MTImGui::Instance().TypedShow(pTransform_,name);
+
+
 }
 
 void Bullet::Draw() const
@@ -43,9 +47,9 @@ void Bullet::InitCommon()
 	SetName("Bullet");
 	hModel_ = Fbx::Load("Model/NewBullet.fbx");
 	massert(hModel_ >= 0 && "íeÇÃÉÇÉfÉãÇÃì«Ç›çûÇ›Ç…é∏îs");
-
+	pTransform_->scale *= {10, 10, 10};
 	// 3ïbåoÇ¡ÇΩÇÁè¡Ç∑
-	Timer::AddAram(3.0f, [this] { DestroyMe(); });
+	Timer::AddAram(30.0f, [this] { DestroyMe(); });
 
 	Audio::PlayOneShotFile("Sound/Effect/shot.wav");
 }
