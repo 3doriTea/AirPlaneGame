@@ -215,7 +215,7 @@ void EnemyPlane::Draw() const
 		return;
 	}
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	pCollider_->Draw();
+	//pCollider_->Draw();
 	Vector2Int pos = InputUtil::GetMousePosition();
 }
 
