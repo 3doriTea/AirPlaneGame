@@ -7,6 +7,7 @@ class PlayerGun
 {
 public:
 	PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside);
+	PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform,mtgb::RigidBody* _rigidBody, float _lockonside);
 	~PlayerGun();
 	void Update(); // クールタイム制御の更新処理
 	void Fire(); // 撃つボタンが押されているときの処理（内部で打てない間は無視する処理）

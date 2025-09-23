@@ -17,6 +17,8 @@ struct TargetingSystem
 {
 	template<typename DetectorConfigType>
 	TargetingSystem(Transform* _owner, const DetectorConfigType& _config);
+	template<typename DetectorConfigType>
+	TargetingSystem(Transform* _ownerTransform,RigidBody* _ownerRigidBody, const DetectorConfigType& _config);
 	~TargetingSystem();
 
 	ThreatLevel currentThreatLevel_;
@@ -38,6 +40,7 @@ struct TargetingSystem
 
 	// TargetingSystemを所有するオブジェクトのTransform
 	Transform* ownerTransform;
+	RigidBody* ownerRigidBody;
 
 	/// <summary>
 	/// 脅威度に応じた画像を返す
@@ -73,8 +76,9 @@ template <typename T>
 constexpr bool false_v = false;
 
 template<typename DetectorConfigType>
-TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigType& _config)
-	: ownerTransform{ _owner }
+TargetingSystem::TargetingSystem(Transform* _ownerTransform, RigidBody* _ownerRigidBody, const DetectorConfigType& _config)
+	: ownerTransform{ _ownerTransform }
+	, ownerRigidBody{ _ownerRigidBody}
 	, reticleRadius{ 30.0f }
 	, reticleRect{}
 	, targetReticleImage{ -1 }
@@ -118,6 +122,12 @@ TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigType& _c
 
 	// レティクル矩形のサイズを設定
 	reticleRect.size = { reticleRadius * 2.0f, reticleRadius * 2.0f };
+}
+
+template<typename DetectorConfigType>
+TargetingSystem::TargetingSystem(Transform* _owner, const DetectorConfigType& _config)
+	:TargetingSystem(_owner,&RigidBody::Get(_owner->GetEntityId()),_config)
+{
 }
 
 

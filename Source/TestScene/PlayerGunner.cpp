@@ -21,7 +21,6 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	angleY_{ 0.0f },
 	pRadarUI_{ nullptr },
 	pPlaneTransform_{ &Transform::Get(_plane) }
-//	pTargetingSystem_{}
 {
 	// PlayerGunner‚ªæ‚é”òs‹@‚ÌTransform‚Íe‚ÉÝ’è‚µ‚È‚¢
 	//pTransform_->SetParent(_plane);
@@ -29,20 +28,6 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
 	float lockOnSide = 100.0f;
-
-	// TargetingSystem‚ð‰Šú‰»	
-	/*CircleDetectorConfig config =
-	{
-		.center = rectCenter,
-		.radius = lockOnSide,
-	};
-	config.maxDistance = 200.0f;
-	config.minDistance = 0.0f;
-	config.targetTag = GameObjectTag::Enemy;
-	config.windowContext = WindowContext::Second;
-	config.uiParams.layerFlag = GameObjectLayer::B;
-	pTargetingSystem_ = new TargetingSystem(pTransform_, config);
-	pTargetingSystem_->uiParams.layerFlag = GameObjectLayer::B;*/
 
 	pPlayerGun_ = new PlayerGun(WindowContext::Second, GameObjectLayer::B, pTransform_, lockOnSide);
 
@@ -52,7 +37,6 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 PlayerGunner::~PlayerGunner()
 {
-//	delete pTargetingSystem_;
 	delete pPlayerGun_;
 }
 
@@ -184,12 +168,9 @@ void PlayerGunner::Update()
 
 	pTransform_->rotate = Quaternion::Euler({ angleX_, angleY_, 0.0f });
 
-//	pTargetingSystem_->SearchTargets();
 	pPlayerGun_->Update();
 	if (InputUtil::GetKey(KeyCode::Space) || InputUtil::GetGamePad(PadCode::RB,WindowContext::Second))
 	{
-		//Instantiate<PlayerBullet>(pTransform_->GetWorldPosition(), pTransform_->GetWorldRotate());
-	//	pTargetingSystem_->FireAtTarget();
 		pPlayerGun_->Fire();
 	}
 
@@ -206,7 +187,6 @@ void PlayerGunner::Update()
 		Vector3 angles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Forward()) };
 
 		Vector3 rightAngles{ XMVector3AngleBetweenVectors(pPlaneTransform_->Forward(), pTransform_->Right()) };
-		//angleQua *= mRotPlane * mRotSelf;
 
 		float angle{ angles.y };
 		
@@ -222,14 +202,6 @@ void PlayerGunner::Update()
 		pRadarUI_->SetViewAngle(angle);
 	}
 
-	/*MTImGui::Instance().DirectShow([this]()
-		{
-			auto& targets =pTargetingSystem_->detector->GetDetectedTargets();
-			for (const ScreenCoordContainsInfo& info : targets)
-			{
-				ImGui::Text("%.3f,%.3f", info.screenPos.x, info.screenPos.y);
-			}
-		},"GunnerContains",ShowType::Inspector);*/
 }
 
 void PlayerGunner::Draw() const

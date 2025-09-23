@@ -6,8 +6,10 @@
 
 namespace
 {
-	Vector3 FIRE_POS_OFFSET{ 0,-0.5,0 };
+	const Vector3 FIRE_POS_OFFSET{ 0,-0.5,0};
 }
+
+
 
 TargetingSystem::~TargetingSystem()
 {
@@ -69,7 +71,10 @@ void TargetingSystem::ClearTarget()
 void TargetingSystem::FireAtTarget()
 {
 	Vector3 targetDirection;
-	Vector3 projectilePos = ownerTransform->GetWorldPosition() + FIRE_POS_OFFSET;
+	Vector3 projectilePos = ownerTransform->GetWorldPosition()
+		+ ownerTransform->Right() * FIRE_POS_OFFSET.x
+		+ ownerTransform->Up() * FIRE_POS_OFFSET.y
+		+ ownerTransform->Forward() * FIRE_POS_OFFSET.z;
 	Quaternion fireDirection;
 
 	if (HasTarget())
@@ -83,8 +88,9 @@ void TargetingSystem::FireAtTarget()
 	{
 		targetDirection = ownerTransform->Forward();
 	}
-	fireDirection = Quaternion::LookRotation(targetDirection,ownerTransform->Up() );
+	fireDirection = Quaternion::LookRotation(targetDirection,Vector3::Up() );
 	GameObject::Instantiate<Bullet>(projectilePos, fireDirection, Bullet::Shooter::Player);
+	//GameObject::Instantiate<Bullet>(projectilePos, fireDirection, Bullet::Shooter::Player);
 }
 
 mtgb::Vector3 TargetingSystem::GetCurrentTargetPosition() const
