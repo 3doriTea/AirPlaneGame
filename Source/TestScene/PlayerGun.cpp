@@ -7,10 +7,10 @@ namespace
 	const float PILOT_COOL_TIME_SEC{ 0.22f };
 }
 
-PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside) 
+PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, mtgb::RigidBody* _rigidBody, float _lockonside)
 	: cooldownTimer_(0.0f)
 	, cooldownCount_(0.0f)
-	, targetingSystem_{ _transform, 
+	, targetingSystem_{ _transform, _rigidBody,
 	CircleDetectorConfig
 		{
 	.base = 
@@ -37,6 +37,10 @@ PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb
 	{
 		cooldownCount_ = GUNNER_COOL_TIME_SEC;
 	}
+}
+PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb::Transform* _transform, float _lockonside)
+	: PlayerGun{_wc,_layer,_transform,&RigidBody::Get(_transform->GetEntityId()),_lockonside}
+{
 }
 
 PlayerGun::~PlayerGun()
