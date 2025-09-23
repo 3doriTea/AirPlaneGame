@@ -1,6 +1,8 @@
 #include "DemoScene.h"
 #include "../CheckTutorialScene/CheckTutorialScene.h"
 #include "../TestScene/TestScene.h"
+#include "../SkySphere.h"
+#include "../TutorialScene/Runway.h"
 
 #include "HangerUI.h"
 #include "CameraTripod.h"
@@ -31,6 +33,8 @@ void DemoScene::Initialize()
 
 	Audio::Clear();
 
+	Instantiate<SkySphere>();
+
 	// ‰E‘¤‚Ì‰^“]Žè
 	CameraTripod* pTripodA = Instantiate<CameraTripod>(Vector3{ 3, 0, 0 }, Quaternion::Identity());
 	CameraHandleInScene hCamera1 = RegisterCameraGameObject(pTripodA);
@@ -46,6 +50,8 @@ void DemoScene::Initialize()
 	
 	pHangerUIA_ = Instantiate<HangerUI>(GameObjectLayer::A);
 	pHangerUIB_ = Instantiate<HangerUI>(GameObjectLayer::B);
+
+	Runway* pRunway{ Instantiate<Runway>(Vector3{ 0, -10, 20 }, Quaternion::Euler({ 0, 0, 0 })) };
 }
 
 void DemoScene::Update()
@@ -55,7 +61,7 @@ void DemoScene::Update()
 		Game::System<SceneSystem>().Move<TestScene>();
 	}
 
-	if (pHangerUIA_->IsOpennd() && pHangerUIB_->IsOpennd())
+	if (pHangerUIA_->IsOpened() && pHangerUIB_->IsOpened())
 	{
 		toMoveTimeLeft_ -= Time::DeltaTimeF();
 		if (toMoveTimeLeft_ <= 0.0f)

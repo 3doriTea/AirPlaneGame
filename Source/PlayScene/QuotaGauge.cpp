@@ -28,6 +28,7 @@ QuotaGauge::QuotaGauge() : GameObject(GameObjectBuilder()
 	currentPoint_{ 0 }
 {
 	hImageBackNormal_ = Image::Load("Image/QuotaGaugeBackNormal.png");
+	hImageBackClear_ = Image::Load("Image/QuotaGaugeBackClear.png");
 	hImageFill_ = Image::Load("Image/YellowScore 1.png");
 	hImageAir_ = Image::Load("Image/GrayScore 1.png");
 	hImageFillGood_ = Image::Load("Image/PurpleScore.png");
@@ -45,7 +46,15 @@ void QuotaGauge::Update()
 void QuotaGauge::Draw() const
 {
 	// 背景描画
-	Draw::Image(hImageBackNormal_, GenDrawScreenFrom(DRAW_RECT_BACK), UI_PARAMS_BACK);
+	// ノルマ達成しているなら
+	if (IsQuotaClear())
+	{
+		Draw::Image(hImageBackClear_, GenDrawScreenFrom(DRAW_RECT_BACK), UI_PARAMS_BACK);
+	}
+	else
+	{
+		Draw::Image(hImageBackNormal_, GenDrawScreenFrom(DRAW_RECT_BACK), UI_PARAMS_BACK);
+	}
 
 	// セルを描画
 	for (int i = 0; i < GAUGE_COUNT; i++)
@@ -74,12 +83,36 @@ void QuotaGauge::Draw() const
 	}
 
 	// テキストの描画
-	Draw::ImmediateText(
-		std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
-		GenDrawScreenFrom(DRAW_RECT_TEXT),
-		GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
-		TextAlignment::center,
-		UI_PARAMS_TEXT);
+	if (IsQuotaClear())
+	{
+		if (currentPoint_ == GAUGE_COUNT)
+		{
+			Draw::ImmediateText(
+				"ゲージ超過中！",
+				GenDrawScreenFrom(DRAW_RECT_TEXT),
+				GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+				TextAlignment::center,
+				UI_PARAMS_TEXT);
+		}
+		else
+		{
+			Draw::ImmediateText(
+				std::format("+{}ポイント", currentPoint_ - QUOTA_COUNT),
+				GenDrawScreenFrom(DRAW_RECT_TEXT),
+				GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+				TextAlignment::center,
+				UI_PARAMS_TEXT);
+		}
+	}
+	else
+	{
+		Draw::ImmediateText(
+			std::format("{}ポイント", QUOTA_COUNT - currentPoint_),
+			GenDrawScreenFrom(DRAW_RECT_TEXT),
+			GenDrawScreenFontSize(DRAW_TEXT_FONT_SIZE),
+			TextAlignment::center,
+			UI_PARAMS_TEXT);
+	}
 }
 
 void QuotaGauge::AddPoint(const int _point)
@@ -96,4 +129,9 @@ void QuotaGauge::AddPoint(const int _point)
 	{
 		currentPoint_ = 0;
 	}
+}
+
+const int QuotaGauge::GetQuotaCount() const
+{
+	return QUOTA_COUNT;
 }
