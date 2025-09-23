@@ -93,4 +93,6 @@ private:
 	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 
 	SpeechQueue speechQueue_;
+
+	Transform* pTransformRunway_;
 };

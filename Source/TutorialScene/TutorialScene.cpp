@@ -74,6 +74,9 @@ namespace
 	const int DRAW_FONT_TEXT_BOX{ 24 };
 	// コントローラーアニメーションヒントの1フレーム時間
 	const float FRAME_TIME_SEC_CON_ANIM{ 0.5f };
+
+	// 飛行場の退避スピード
+	const float MOVE_SPEED_RUNWAY{ 10.0f };
 }
 
 TutorialScene::TutorialScene() :
@@ -289,7 +292,8 @@ void TutorialScene::Initialize()
 	Instantiate<SkySphere>();
 	Instantiate<Terrain>();
 	Instantiate<Reticle>();
-	Instantiate<Runway>();
+	Runway* pRunway{ Instantiate<Runway>(Vector3{ 15, -20, 200 }, Quaternion::Euler({ 0, -DirectX::XM_PIDIV2, 0 })) };
+	pTransformRunway_ = pRunway->GetTransform();
 
 	PlayerPlane* pPlayerPlane{ Instantiate<PlayerPlane>(pAutoPilot_) };
 	EntityId eIdPlayer{ pPlayerPlane->GetEntityId() };
@@ -323,6 +327,9 @@ void TutorialScene::Update()
 	{
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
+
+	pTransformRunway_->position.z -= MOVE_SPEED_RUNWAY * Time::DeltaTimeF();
+
 
 	if (speechQueue_.IsFinished())
 	{

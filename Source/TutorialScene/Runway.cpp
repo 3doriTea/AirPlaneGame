@@ -2,9 +2,14 @@
 
 using namespace mtgb;
 
-Runway::Runway() : GameObject(GameObjectBuilder()
-	.SetPosition({ 15, -20, 200 })
-	.SetRotate(Quaternion::Euler({ 0, -DirectX::XM_PIDIV2, 0 }))
+namespace
+{
+	const float MOVE_SPEED{ 10.0f };
+}
+
+Runway::Runway(const Vector3 _position, const Quaternion _quaternion) : GameObject(GameObjectBuilder()
+	.SetPosition(_position)
+	.SetRotate(_quaternion)
 	.Build()),
 	pTransform_{ Component<Transform>() }
 {
