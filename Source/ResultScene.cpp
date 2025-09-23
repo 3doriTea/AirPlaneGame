@@ -36,6 +36,8 @@ ResultScene::ResultScene()
 
 ResultScene::~ResultScene()
 {
+	SAFE_DELETE(ranking_);
+	SAFE_DELETE(buffer);
 }
 
 void ResultScene::Initialize()
