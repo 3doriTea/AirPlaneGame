@@ -32,6 +32,13 @@ namespace
 		"Image/Hint-YawRight.png",
 		"Image/Hint-YawLeft.png",
 	};
+	const std::string CONTROLLER_ANIM_IMAGE_FILE_B[TutorialScene::CI_MAX]
+	{
+		"Image/Hint-PitchDown-Xbox.png",
+		"Image/Hint-PitchUp-Xbox.png",
+		"Image/Hint-YawRight-Xbox.png",
+		"Image/Hint-YawLeft-Xbox.png",
+	};
 
 	const std::string SIDE_IMAGE_FILE_B{ "Image/LeftSide.png" };
 	const std::string SIDE_IMAGE_FILE_A{ "Image/RightSide.png" };
@@ -43,8 +50,8 @@ namespace
 	};
 	const std::string TRIGGER_ANIM_IMAGE_FILE_B[TutorialScene::TA_MAX]
 	{
-		"Image/Hint-TriggerOff.png",
-		"Image/Hint-TriggerOn.png",
+		"Image/Hint-TriggerOff-Xbox.png",
+		"Image/Hint-TriggerOn-Xbox.png",
 	};
 
 	// スライダーの画像A
@@ -60,6 +67,7 @@ namespace
 
 	// コントローラーアニメーションヒントの描画範囲
 	const RectF DRAW_RECT_CON_ANIM_HINT{ 760.0f, 120.0f, 400.0f, 520.0f };
+	const RectF DRAW_RECT_CON_XBOX_ANIM_HINT{ 630.0f, 290.0f, 660.0f, 520.0f };
 	// 字幕の描画座標
 	const Vector2Int DRAW_POS_TEXT_BOX{ 320, 820 };
 	// 字幕のフォントサイズ
@@ -116,8 +124,7 @@ void TutorialScene::Initialize()
 	for (int i = 0; i < CI_MAX; i++)
 	{
 		// TODO: 画像準備でき次第Bに変更
-		hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_A[i]);
-		// hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_B[i]);
+		hControllerImagesB_[i] = Image::Load(CONTROLLER_ANIM_IMAGE_FILE_B[i]);
 	}
 
 	hSideImageA_ = Image::Load(SIDE_IMAGE_FILE_A);
@@ -157,16 +164,16 @@ void TutorialScene::Initialize()
 						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = hControllerImagesA_,
-						.uIParams_ = { 10 }
+						.uIParams_ = { .depth = 10, .layerFlag = GameObjectLayer::A }
 					},
 					GameObjectLayer::A);
 				pImageAnimatorB_ = Instantiate<ImageAnimator>(
 					ImageAnimator::Setting
 					{
-						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.drawRect_ = DRAW_RECT_CON_XBOX_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = hControllerImagesB_,
-						.uIParams_ = { 10 }
+						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::B }
 					},
 					GameObjectLayer::B);
 			})
@@ -223,7 +230,7 @@ void TutorialScene::Initialize()
 				pImageAnimatorB_ = Instantiate<ImageAnimator>(
 					ImageAnimator::Setting
 					{
-						.drawRect_ = DRAW_RECT_CON_ANIM_HINT,
+						.drawRect_ = DRAW_RECT_CON_XBOX_ANIM_HINT,
 						.defaultTimeSec_ = FRAME_TIME_SEC_CON_ANIM,
 						.elements_ = { { hTriggerImageB_[TA_OFF], hTriggerImageB_[TA_ON] }},
 						.uIParams_ = {.depth = 10, .layerFlag = GameObjectLayer::B }
