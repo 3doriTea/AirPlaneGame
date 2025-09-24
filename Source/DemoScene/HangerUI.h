@@ -17,6 +17,10 @@ private:
 	ImageHandle hHangerImage_;  // 格納庫の画像
 	ImageHandle hDoorImage_;    // 格納庫ドアの画像
 	ImageHandle hConHintImage_;    // 格納庫ドアの画像
+	ImageHandle hTextKeepImage_;    // 説明の画像
+	ImageHandle hTextReadyImage_;    // 説明の画像
+	ImageHandle hTextImage_;
 
 	mtgb::RectF drawRectDoor_;  // ドアの描画範囲
+	mtgb::RectF drawRectText_;  // テキストの描画範囲
 };
