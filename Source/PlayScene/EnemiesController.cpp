@@ -4,6 +4,11 @@
 
 using namespace mtgb;
 
+namespace
+{
+	const float SPAWAN_OFFSET_Y{ 100.0f };  // ÉXÉ|Å[ÉìÇ∑ÇÈçÇÇ≥y
+}
+
 EnemiesController::EnemiesController(const EntityId playerId_) : GameObject(GameObjectBuilder()
 	.Build()),
 	pPlayerTransform_{ &Transform::Get(playerId_) },
@@ -23,6 +28,6 @@ void EnemiesController::Update()
 
 void EnemiesController::Spawan(const Vector3 _worldPosition)
 {
-	Instantiate<EnemyPlane>(_worldPosition, playerId_, GetEntityId());
+	Instantiate<EnemyPlane>(_worldPosition + Vector3::Up() * SPAWAN_OFFSET_Y, playerId_, GetEntityId());
 	//Instantiate<Enemy>(_worldPosition, GetEntityId());
 }
