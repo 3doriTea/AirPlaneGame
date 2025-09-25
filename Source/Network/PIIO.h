@@ -45,6 +45,13 @@ namespace Network
 		/// ラズパイサーバとの接続を切断・ストップする
 		/// </summary>
 		void Stop();
+
+		/// <summary>
+		/// 現在のLED状態を取得する
+		/// </summary>
+		/// <returns>LED状態</returns>
+		const LED_STATUS GetLedStatus() const { return currentStatus_; }
+
 	private:
 		/// <summary>
 		/// サーバにjsonデータを送信する
@@ -58,6 +65,7 @@ namespace Network
 		/// <returns>キューが空である true / false</returns>
 		bool IsEmptySendQueue();
 
+		
 	private:
 		bool isRunning_;  // 通信が走っているか
 
@@ -67,5 +75,7 @@ namespace Network
 		std::queue<std::string> sendQueue_;  // 送信キュー
 		bool isStopped_;  // 停止命令がでているかのフラグ
 		std::mutex isStoppedMutex_;  // 停止命令フラグの排他制御用
+
+		LED_STATUS currentStatus_;  // 現在のLEDステータス
 	};
 }

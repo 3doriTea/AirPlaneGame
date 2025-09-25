@@ -8,6 +8,8 @@
 #include <cmath>
 using namespace mtgb;
 
+#define USE_SMOOTH_CON 1
+
 namespace
 {
 	float defaultSpeed = 3.0f;
@@ -17,6 +19,9 @@ namespace
 	float maxSpeed = 15.0f;
 
 	const uint32_t SUBTRACT_SCORE{ 100 };
+
+	// 飛行機の上方向をワールド軸上方向にすらーぷするレート
+	const float HEAD_UP_RATE{ 0.6f }; // 1/60s = 0.01f, 1s = 0.6f
 }
 
 #define __X m128_f32[0]
@@ -101,6 +106,31 @@ void PlayerPlane::Update()
 		// WindowContextを直接指定しない方いい
 		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 
+		LOGF("axis(%f, %f)\n", axis.x, axis.y);
+
+#if USE_SMOOTH_CON
+#pragma region 回転方法0 (細かく)
+		// 上
+		if (axis.y > 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * axis.y);
+		}
+		else if (axis.y < 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * axis.y);
+		}
+		// 右
+		if (axis.x > 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * axis.x);
+		}
+		else if (axis.x < 0)
+		{
+			curr *= XMQuaternionRotationAxis(pTransform_->Up(), ROT_ANGLE * axis.x);
+		}
+#pragma endregion
+#else
+#pragma region 回転方法1 (のっぺり)
 		// 上
 		if (axis.y > 0)
 		{
@@ -119,10 +149,11 @@ void PlayerPlane::Update()
 		{
 			curr *= XMQuaternionRotationAxis(pTransform_->Up(), -ROT_ANGLE);
 		}
-
+#pragma endregion
+#endif
 		// 前方向、頭は上方向に
 		Vector3 forward{ pTransform_->Forward() };
-		curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+		curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), Time::DeltaTimeF() * HEAD_UP_RATE);
 		pTransform_->rotate = curr;
 	}
 #else
