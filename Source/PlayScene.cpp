@@ -26,6 +26,9 @@ namespace
 {
 	static const mtnet::IPEndPoint LOCAL_IPEP{ "192.168.42.150", 60349 };
 	static const mtnet::IPEndPoint SERVER_IPEP{ "192.168.42.62", 60349 };
+
+	const float LED_TIME_CLEAR{ 2.0f };
+	const float LED_TIME_WARNNING{ 2.0f };
 }
 
 PlayScene::PlayScene() :
@@ -138,6 +141,15 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
+	if (ledTimeLeft_ > 0.0f)
+	{
+		ledTimeLeft_ -= Time::DeltaTimeF();
+		if (ledTimeLeft_ <= 0.0f)
+		{
+			ppiio_->SendLED(PIIO::LEDS_NORMAL);
+		}
+	}
+
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
 		Game::System<SceneSystem>().Move<ResultScene>();
@@ -218,4 +230,33 @@ void PlayScene::Draw() const
 
 void PlayScene::End()
 {
+}
+
+void PlayScene::SetStatusWarnning()
+{
+	if (ppiio_->GetLedStatus() != PIIO::LEDS_CLEAR)
+	{
+		ledTimeLeft_ = LED_TIME_WARNNING;
+		if (ppiio_->GetLedStatus() != PIIO::LEDS_WARNNING)
+		{
+			ppiio_->SendLED(PIIO::LEDS_WARNNING);
+		}
+	}
+}
+
+void PlayScene::SetStatusNormal()
+{
+	ledTimeLeft_ = 0.0f;
+}
+
+void PlayScene::SetStatusClear()
+{
+	//if (ppiio_->GetLedStatus() != PIIO::LEDS_WARNNING)
+	{
+		ledTimeLeft_ = LED_TIME_CLEAR;
+		if (ppiio_->GetLedStatus() != PIIO::LEDS_CLEAR)
+		{
+			ppiio_->SendLED(PIIO::LEDS_CLEAR);
+		}
+	}
 }

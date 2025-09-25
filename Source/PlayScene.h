@@ -21,10 +21,16 @@ public:
 	void Draw() const override;
 	void End() override;
 
+	void SetStatusWarnning();
+	void SetStatusNormal();
+	void SetStatusClear();
+
+	Network::PIIO* GetPiioPtr() const { return ppiio_; }
 private:
 	TimeLimit* timeLimit_;
 	Network::PIIO* ppiio_;
 	int val_;
+	float ledTimeLeft_;  // LED操作のためのダウンタイマ
 
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;
