@@ -159,12 +159,12 @@ void ResultScene::Draw() const
 	// ノルマ未達成なら失敗、達成なら成功のテキストを描画
 	if (ScoreManager::AchievedQuota() == false)
 	{
-		Draw::ImmediateText("ノルマ達成ならず…", { 170, 390 }, 48, TextAlignment::topLeft, UI_PARAMS);
+		Draw::ImmediateText("ノルマ達成ならず…", { 170, 390 + 200 }, 48, TextAlignment::topLeft, UI_PARAMS);
 	}
 	else
 	{
-		Draw::ImmediateText("あなたのスコア：", { 170, 390 }, 48, TextAlignment::topLeft, UI_PARAMS);
-		Draw::ImmediateText(std::to_string(resultScore_), { 800, 390 }, 48, TextAlignment::topLeft, UI_PARAMS);
+		Draw::ImmediateText("あなたのスコア：", { 170, 390 + 200 }, 48, TextAlignment::topLeft, UI_PARAMS);
+		Draw::ImmediateText(std::to_string(resultScore_), { 800, 390 + 200 }, 48, TextAlignment::topLeft, UI_PARAMS);
 	}
 	
 	for (auto i = 0; i < rankingList_.size() - 1; ++i)
@@ -173,8 +173,8 @@ void ResultScene::Draw() const
 			{ 0, 160 + i * 40 }, 32, TextAlignment::center, UI_PARAMS);
 	}
 
-	Draw::ImmediateText("前回のペアのスコア: ", {170, 300}, 48, TextAlignment::topLeft, UI_PARAMS);
-	Draw::ImmediateText(std::to_string(rankingList_[PREVPAIRSCORE_INDEX]), {800, 300}, 48, TextAlignment::topLeft, UI_PARAMS);
+	Draw::ImmediateText("前回のペアのスコア: ", {170, 300 + 200}, 48, TextAlignment::topLeft, UI_PARAMS);
+	Draw::ImmediateText(std::to_string(rankingList_[PREVPAIRSCORE_INDEX]), {800, 300 + 200}, 48, TextAlignment::topLeft, UI_PARAMS);
 
 	/*Draw::ImmediateText("Tキーを押したら10秒後にタイトルへ戻ります"
 		, { 0, 50 }, 16, TextAlignment::center);*/

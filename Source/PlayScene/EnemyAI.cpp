@@ -27,6 +27,7 @@ EnemyAI::EnemyAI()
 		.OnStart(S_SLEEP, [this]
 			{
 				out_.isActive = false;  // スリープ開始で非アクティブ化
+				out_.isSleep = true;  // スリープ開始で非アクティブ化
 			})
 		.OnUpdate(S_SLEEP, [this]
 			{
@@ -41,6 +42,7 @@ EnemyAI::EnemyAI()
 		.OnEnd(S_SLEEP, [this]
 			{
 				out_.isActive = true;  // スリープ終了でアクティブ化
+				out_.isSleep = false;
 			})
 
 		.OnUpdate(S_SEARCH, [this]

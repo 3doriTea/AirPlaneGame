@@ -27,7 +27,7 @@ PlayerGunner::PlayerGunner(const EntityId _plane) : GameObject(GameObjectBuilder
 
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
-	float lockOnSide = 100.0f;
+	float lockOnSide = 300.0f;
 
 	pPlayerGun_ = new PlayerGun(WindowContext::Second, GameObjectLayer::B, pTransform_, lockOnSide);
 

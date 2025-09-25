@@ -29,6 +29,14 @@ mtgb::ImageHandle mtgb::Image::Load(const std::string_view& _fileName)
 {
 	Image& instance{ Game::System<Image>() };
 
+	for (auto itr = instance.sprites_.begin(); itr != instance.sprites_.end(); itr++)
+	{
+		if ((*itr).second->GetFileName() == std::wstring{ _fileName.begin(), _fileName.end() })
+		{
+			return (*itr).first;
+		}
+	}
+
 	Sprite* pSprite{ new Sprite{} };
 	pSprite->Initialize();
 	pSprite->Load(ToWString(_fileName));

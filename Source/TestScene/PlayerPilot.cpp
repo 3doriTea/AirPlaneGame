@@ -18,7 +18,7 @@ PlayerPilot::PlayerPilot(const EntityId _plane) : GameObject(GameObjectBuilder()
 
 	Vector2Int screenSize = Game::System<Screen>().GetSize();
 	Vector2F rectCenter = { screenSize.x / 2.0f, screenSize.y / 2.0f };
-	float lockOnSide = 200.0f;
+	float lockOnSide = 300.0f;
 	
 	
 	// PlayerGun‚ğ‰Šú‰»

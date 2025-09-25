@@ -34,6 +34,7 @@ namespace mtgb
 	template<typename T>
 	inline const mtgb::RectT<T> GenDrawScreenFrom(const mtgb::RectT<T>& _to)
 	{
+		return _to;
 		const RectF RATE
 		{
 			_to.point.x / CANVAS_SIZE.x, _to.point.y / CANVAS_SIZE.y,
@@ -52,6 +53,7 @@ namespace mtgb
 	template<typename T>
 	inline const mtgb::Vector2T<T> GenDrawScreenFrom(const mtgb::Vector2T<T>& _to)
 	{
+		return _to;
 		const Vector2 RATE{ _to.x / CANVAS_SIZE.x, _to.y / CANVAS_SIZE.y };
 		const Vector2Int SCREEN_SIZE{ Game::System<Screen>().GetSize() };
 

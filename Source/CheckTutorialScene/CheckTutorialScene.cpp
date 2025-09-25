@@ -12,11 +12,14 @@ namespace
 	const float TO_MOVE_SCENE_WAIT_SEC{ 11.0f };
 	const Vector2Int BACKGROUND_IMAGE_SIZE{ 1920, 1080 };
 	const float TO_SKIP_THRESHOLD{ 0.7f };  // チュートリアルをスキップするしきい値
+
+	const RectF TO_MOVE_TIMER{ 900, 375, 700, 90 };
 }
 
 CheckTutorialScene::CheckTutorialScene() :
 	peekRate_{ 0.0f },
-	toMoveTimeLeft_{ TO_MOVE_SCENE_WAIT_SEC }
+	toMoveTimeLeft_{ TO_MOVE_SCENE_WAIT_SEC },
+	hImage_{ {} }
 {
 }
 
@@ -63,17 +66,25 @@ void CheckTutorialScene::Update()
 
 void CheckTutorialScene::Draw() const
 {
-	static auto drawImageLayer
+	auto drawImageLayer
 	{
 		[this](const IMAGE_LAYER _layer, const Vector2Int _position)
 		{
+			if (hImage_[_layer] <= 0)
+			{
+				return;
+			}
 			Draw::Image(hImage_[_layer], { _position, Game::System<Screen>().GetSize() }, { _layer });
 		}
 	};
-	static auto drawImageLayerRect
+	auto drawImageLayerRect
 	{
 		[this](const IMAGE_LAYER _layer, const RectF _rect)
 		{
+			if (hImage_[_layer] <= 0)
+			{
+				return;
+			}
 			Draw::Image(hImage_[_layer], _rect, { _layer });
 		}
 	};
@@ -93,7 +104,7 @@ void CheckTutorialScene::Draw() const
 		text = "0秒";
 	}
 
-	Draw::ImmediateText(text, GenTextBoxTimer(), 82, TextAlignment::middleLeft, { 0 });
+	Draw::ImmediateText(text, (TO_MOVE_TIMER), (82), TextAlignment::middleLeft, { .depth = 10 });
 	
 	RectF box{ GenSlideBar() };
 	Draw::Box(box.GetBegin(), box.GetEnd(), Color::WHITE, { 0 });

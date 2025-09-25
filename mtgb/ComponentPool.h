@@ -6,7 +6,7 @@
 
 namespace mtgb
 {
-	static constexpr size_t COMPONENT_CAPACITY{ 2048 };
+	static constexpr size_t COMPONENT_CAPACITY{ 8192 };
 
 	//class GameObject;
 	class Entity;
@@ -88,8 +88,8 @@ namespace mtgb
 		pool_.clear();
 		poolId_.clear();
 
-		pool_.reserve(COMPONENT_CAPACITY);
-		poolId_.reserve(COMPONENT_CAPACITY);
+		//pool_.reserve(COMPONENT_CAPACITY);
+		//poolId_.reserve(COMPONENT_CAPACITY);
 	}
 
 	template<class ComponentT, bool IsSingleton>

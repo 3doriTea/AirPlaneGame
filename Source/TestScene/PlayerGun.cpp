@@ -3,7 +3,7 @@
 
 namespace
 {
-	const float GUNNER_COOL_TIME_SEC{ 0.1024f };
+	const float GUNNER_COOL_TIME_SEC{ 0.15f };
 	const float PILOT_COOL_TIME_SEC{ 0.22f };
 }
 
@@ -17,7 +17,7 @@ PlayerGun::PlayerGun(mtgb::WindowContext _wc, mtgb::GameObjectLayer _layer, mtgb
 		{
 			.targetTag = GameObjectTag::Enemy,
 			.windowContext = _wc,
-			.maxDistance = 50.0f,
+			.maxDistance = 300.0f,
 			.minDistance = 0.0f,
 			.uiParams =
 			{

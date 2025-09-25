@@ -11,7 +11,7 @@ namespace
 	// 表示中のパネル範囲
 	const RectF DRAW_RECT_STAY_PANEL{ 118.0f, 0.0f, 244.0f, 202.0f };
 	// 表示中の文字範囲
-	const RectF DRAW_RECT_STAY_TEXT{ 100.0f, 95.0f, 150.0f, 40.0f };
+	const RectF DRAW_RECT_STAY_TEXT{ 200.0f, 180.0f, 150.0f, 40.0f };
 	//const RectF DRAW_RECT_STAY_TEXT{ 200.0f, 140.0f, 150.0f, 40.0f };
 
 	// 表示を被す範囲

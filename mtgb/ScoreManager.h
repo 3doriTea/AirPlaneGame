@@ -16,6 +16,10 @@ namespace mtgb
 		/// スコアの加点を行う
 		/// </summary>
 		static void AddScore(uint32_t _score);
+		/// <summary>
+		/// ノルマの加点を行う
+		/// </summary>
+		static void AddQuota(uint32_t _quota) { ScoreManager::quotaScore_ += _quota; }
 
 		/// <summary>
 		/// 現在のスコアを取得する

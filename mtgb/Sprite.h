@@ -84,6 +84,8 @@ namespace mtgb
 		/// <returns></returns>
 		inline const Vector2Int GetSize() const { return texture2D_.GetSize(); }
 
+		inline std::wstring GetFileName() { return fileName_; }
+
 	private:
 		void InitializeVertexBuffer(ID3D11Device* _pDevice) override;
 		void InitializeIndexBuffer(ID3D11Device* _pDevice) override;
@@ -91,5 +93,6 @@ namespace mtgb
 
 	private:
 		Texture2D texture2D_;  // 2Dのテクスチャ
+		std::wstring fileName_;  // 読み込んだファイル
 	};
 }

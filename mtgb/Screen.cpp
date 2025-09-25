@@ -19,8 +19,10 @@ mtgb::Screen::~Screen()
 void mtgb::Screen::Initialize()
 {
 	// ÉXÉNÉäÅ[ÉìÇÃèÓïÒÇéÊìæ
-	initialSize_.x   = ProfileInt::Load().Section("SCREEN").Param("Width") .InitValue(800).Get();
-	initialSize_.y   = ProfileInt::Load().Section("SCREEN").Param("Height").InitValue(600).Get();
+	//initialSize_.x   = ProfileInt::Load().Section("SCREEN").Param("Width") .InitValue(800).Get();
+	initialSize_.x   = 1920;
+	initialSize_.y   = 1080;
+	//initialSize_.y   = ProfileInt::Load().Section("SCREEN").Param("Height").InitValue(600).Get();
 	fpsLimit_ = ProfileInt::Load().Section("GAME")  .Param("Fps")   .InitValue(60) .Get();
 
 	size_ = initialSize_;

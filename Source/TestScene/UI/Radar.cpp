@@ -139,8 +139,8 @@ void Radar::Draw() const
 				int distanceSquared{ mark.pos.x * mark.pos.x + mark.pos.y * mark.pos.y };
 				float distance{ std::sqrtf(static_cast<float>(distanceSquared)) };
 
-				if (distanceSquared >= HIDE_DISTANCE_SQUARED)
-					continue;
+				//if (distanceSquared >= HIDE_DISTANCE_SQUARED)
+					//continue;
 
 				if (distanceSquared >= CLAMP_DISTANCE_SQUARED)
 				{

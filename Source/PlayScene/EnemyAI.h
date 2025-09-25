@@ -23,6 +23,7 @@ public:
 	/// </summary>
 	struct OutData
 	{
+		bool isSleep;
 		bool isActive;
 		bool isFire;
 		bool isRound;
