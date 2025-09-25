@@ -17,6 +17,9 @@ namespace
 	float maxSpeed = 15.0f;
 
 	const uint32_t SUBTRACT_SCORE{ 100 };
+
+	// 飛行機の上方向をワールド軸上方向にすらーぷするレート
+	const float HEAD_UP_RATE{ 0.6f }; // 1/60s = 0.01f, 1s = 0.6f
 }
 
 #define __X m128_f32[0]
@@ -122,7 +125,7 @@ void PlayerPlane::Update()
 
 		// 前方向、頭は上方向に
 		Vector3 forward{ pTransform_->Forward() };
-		curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), 0.01f);
+		curr = Quaternion::SLerp(curr, Quaternion::LookRotation(forward, Vector3::Up()), Time::DeltaTimeF() * HEAD_UP_RATE);
 		pTransform_->rotate = curr;
 	}
 #else

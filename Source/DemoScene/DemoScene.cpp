@@ -61,7 +61,8 @@ void DemoScene::Update()
 		Game::System<SceneSystem>().Move<TestScene>();
 	}
 
-	if (pHangerUIA_->IsOpened() && pHangerUIB_->IsOpened())
+	if ((pHangerUIA_->IsOpened() && pHangerUIB_->IsOpened())
+		|| InputUtil::GetKeyDown(KeyCode::Y))  // デバッグ用 Y キー
 	{
 		toMoveTimeLeft_ -= Time::DeltaTimeF();
 		if (toMoveTimeLeft_ <= 0.0f)
