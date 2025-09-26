@@ -234,13 +234,11 @@ void PlayScene::End()
 
 void PlayScene::SetStatusWarnning()
 {
-	if (ppiio_->GetLedStatus() != PIIO::LEDS_CLEAR)
+	// ノーマル状態のときだけ警告モードに切り替える
+	if (ppiio_->GetLedStatus() == PIIO::LEDS_NORMAL)
 	{
 		ledTimeLeft_ = LED_TIME_WARNNING;
-		if (ppiio_->GetLedStatus() != PIIO::LEDS_WARNNING)
-		{
-			ppiio_->SendLED(PIIO::LEDS_WARNNING);
-		}
+		ppiio_->SendLED(PIIO::LEDS_WARNNING);
 	}
 }
 
@@ -251,12 +249,10 @@ void PlayScene::SetStatusNormal()
 
 void PlayScene::SetStatusClear()
 {
+	// クリアなら強制的にクリア状態にする
 	//if (ppiio_->GetLedStatus() != PIIO::LEDS_WARNNING)
 	{
 		ledTimeLeft_ = LED_TIME_CLEAR;
-		if (ppiio_->GetLedStatus() != PIIO::LEDS_CLEAR)
-		{
-			ppiio_->SendLED(PIIO::LEDS_CLEAR);
-		}
+		ppiio_->SendLED(PIIO::LEDS_CLEAR);
 	}
 }
