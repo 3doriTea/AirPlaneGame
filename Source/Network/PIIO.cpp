@@ -15,7 +15,8 @@ Network::PIIO::PIIO(const mtnet::IPEndPoint& _localIPEP) :
 	client_{ _localIPEP },
 	isRunning_{ false },
 	isStopped_{ false },
-	sendQueue_{}
+	sendQueue_{},
+	currentStatus_{ LED_STATUS::LEDS_NORMAL }
 {
 }
 
@@ -104,9 +105,10 @@ void Network::PIIO::SendLED(const LED_STATUS _status)
 {
 	if (GetLedStatus() == _status)
 	{
+		LOGF("同じLEDStatusのためスキップ:%d\n", _status);
 		return;  // ステータスに変化がないなら回帰
 	}
-
+	
 	LOGF("LEDStatus:%d\n", _status);
 
 	json data{};
@@ -114,6 +116,7 @@ void Network::PIIO::SendLED(const LED_STATUS _status)
 	data["stat"] = _status;
 
 	SendJson(data);
+	currentStatus_ = _status;
 }
 
 void Network::PIIO::Stop()
