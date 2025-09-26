@@ -35,7 +35,6 @@ EnemyAI::EnemyAI()
 				// プレイヤーとの距離がアクティブ範囲内なら、索敵行動に遷移
 				if (distance <= SLEEP_DISTANCE && distance > FLT_EPSILON)
 				{
-					LOGF("アクティブ化 距離%f", GetToPlayerDistance());
 					sMain_.Change(S_SEARCH);
 				}
 			})
