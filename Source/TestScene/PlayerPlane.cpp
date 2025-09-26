@@ -108,8 +108,6 @@ void PlayerPlane::Update()
 		// WindowContext‚ğ’¼Úw’è‚µ‚È‚¢•û‚¢‚¢
 		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 
-		LOGF("axis(%f, %f)\n", axis.x, axis.y);
-
 #if USE_SMOOTH_CON
 #pragma region ‰ñ“]•û–@0 (×‚©‚­)
 		// ã
