@@ -328,8 +328,8 @@ void TutorialScene::Update()
 		Game::System<SceneSystem>().Move<PlayScene>();
 	}
 
-	pTransformRunway_->position.z -= MOVE_SPEED_RUNWAY * Time::DeltaTimeF();
-
+	//pTransformRunway_->position.z -= MOVE_SPEED_RUNWAY * Time::DeltaTimeF();
+	pTransformRunway_->scale = { 5, 5, 5 };
 
 	if (speechQueue_.IsFinished())
 	{

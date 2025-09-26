@@ -4,6 +4,7 @@
 #include "../PlayScene/EnemiesController.h"
 #include "../Bullet.h"
 #include "../PlayScene/QuotaGauge.h"
+#include "../PlayScene.h"
 
 using namespace mtgb;
 
@@ -118,6 +119,7 @@ EnemyPlane::EnemyPlane(
 					broken_ = true;  // ëÃóÕìIÇ…éÄÇÒÇ≈Ç¢ÇÈÇ»ÇÁîÚçsã@ÇâÛÇ∑
 					SetName("EnemyBroken");
 					Audio::PlayOneShotFile("Sound/Effect/boom.wav");
+					GetScene<PlayScene>().SetStatusClear();
 
 					QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
 					if (pQuotaGauge != nullptr)
@@ -199,14 +201,14 @@ void EnemyPlane::Update()
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
 
 		
-	MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
+	/*MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
 	MTImGui::Instance().DirectShow([this]() 
 		{
 			ImGui::Text("LockOnProgress:%.3f" ,gun_.GetLockOnProgress());
 			std::string hasTarget = targetingSystem_.HasTarget() ? "Yes" : "No";
 			ImGui::Text("HasTarget:%s", hasTarget.c_str());
 			
-		}, "EnemyTargetingSystem:" + std::to_string(entityId_), ShowType::Inspector);
+		}, "EnemyTargetingSystem:" + std::to_string(entityId_), ShowType::Inspector);*/
 }
 
 void EnemyPlane::Draw() const

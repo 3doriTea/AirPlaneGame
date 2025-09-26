@@ -24,8 +24,8 @@ using Network::PIIO;
 
 namespace
 {
-	static const mtnet::IPEndPoint LOCAL_IPEP{ "192.168.42.150", 60349 };
-	static const mtnet::IPEndPoint SERVER_IPEP{ "192.168.42.62", 60349 };
+	static const mtnet::IPEndPoint LOCAL_IPEP{ "192.168.1.10", 60349 };
+	static const mtnet::IPEndPoint SERVER_IPEP{ "192.168.1.20", 60349 };
 
 	const float LED_TIME_CLEAR{ 2.0f };
 	const float LED_TIME_WARNNING{ 2.0f };
@@ -41,7 +41,7 @@ PlayScene::~PlayScene()
 {
 	SAFE_DELETE(pReader8_);
 	SAFE_DELETE(pAutoPilot_);
-	//delete ppiio_;
+	delete ppiio_;
 }
 
 void PlayScene::Initialize()

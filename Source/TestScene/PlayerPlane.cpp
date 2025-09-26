@@ -4,6 +4,7 @@
 #include "../ProjectTile.h"
 #include "../IAutoPilot.h"
 #include "../PlayScene/AutoControlText.h"
+#include "../PlayScene.h"
 
 #include <cmath>
 using namespace mtgb;
@@ -73,6 +74,7 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 
 				ScoreManager::SubtractScore(SUBTRACT_SCORE);
 				Instantiate<PlayerDamageEffect>();
+				GetScene<PlayScene>().SetStatusWarnning();
 				//Game::System<EventManager>().GetEvent<>
 				return;
 			}

@@ -382,16 +382,16 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 
 void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
-    if (show == ShowType::SceneView)
-    {
-        // SceneViewは名前不要
-        sceneViewShowList_.push(func);
-    }
-    else
-    {
-        showQueues_[show].emplace(name, func);
-        //inspectorShowList_.emplace(name,func);
-    }
+    //if (show == ShowType::SceneView)
+    //{
+    //    // SceneViewは名前不要
+    //    sceneViewShowList_.push(func);
+    //}
+    //else
+    //{
+    //    showQueues_[show].emplace(name, func);
+    //    //inspectorShowList_.emplace(name,func);
+    //}
     
 }
 
