@@ -5,7 +5,7 @@
 #include "../IAutoPilot.h"
 #include "../PlayScene/AutoControlText.h"
 #include "../PlayScene.h"
-
+#include "../PlayScene/QuotaGauge.h"
 #include <cmath>
 using namespace mtgb;
 
@@ -19,7 +19,7 @@ namespace
 	// 最高速度
 	float maxSpeed = 15.0f;
 
-	const uint32_t SUBTRACT_SCORE{ 100 };
+	const int32_t SUBTRACT_SCORE{ 1 };
 
 	// 飛行機の上方向をワールド軸上方向にすらーぷするレート
 	const float HEAD_UP_RATE{ 0.6f }; // 1/60s = 0.01f, 1s = 0.6f
@@ -73,6 +73,13 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 				}
 
 				ScoreManager::SubtractScore(SUBTRACT_SCORE);
+				QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
+				if (pQuotaGauge != nullptr)
+				{
+					pQuotaGauge->AddPoint(-SUBTRACT_SCORE);
+					//Game::System<ScoreManager>().AddScore(ADD_QUOTA_POINT);
+
+				}
 				Instantiate<PlayerDamageEffect>();
 				GetScene<PlayScene>().SetStatusWarnning();
 				//Game::System<EventManager>().GetEvent<>
@@ -113,11 +120,11 @@ void PlayerPlane::Update()
 		// 上
 		if (axis.y > 0)
 		{
-			curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * axis.y);
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE * axis.y);
 		}
 		else if (axis.y < 0)
 		{
-			curr *= XMQuaternionRotationAxis(pTransform_->Right(), ROT_ANGLE * axis.y);
+			curr *= XMQuaternionRotationAxis(pTransform_->Right(), -ROT_ANGLE * axis.y);
 		}
 		// 右
 		if (axis.x > 0)

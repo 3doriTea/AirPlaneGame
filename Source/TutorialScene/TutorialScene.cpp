@@ -329,7 +329,7 @@ void TutorialScene::Update()
 	}
 
 	//pTransformRunway_->position.z -= MOVE_SPEED_RUNWAY * Time::DeltaTimeF();
-	pTransformRunway_->scale = { 5, 5, 5 };
+	pTransformRunway_->scale = { 2,2,2 };
 
 	if (speechQueue_.IsFinished())
 	{

@@ -41,7 +41,7 @@ PlayScene::~PlayScene()
 {
 	SAFE_DELETE(pReader8_);
 	SAFE_DELETE(pAutoPilot_);
-	delete ppiio_;
+	//delete ppiio_;
 }
 
 void PlayScene::Initialize()
