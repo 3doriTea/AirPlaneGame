@@ -23,6 +23,11 @@ public:
 	/// <returns></returns>
 	inline Vector3 GetPlayerPosition() const { return playerPosition_; }
 
+	/// <summary>
+	/// 敵が残っていればその敵を作動範囲までテレポートさせる
+	/// </summary>
+	void TeleportEnemy();
+
 private:
 	Transform* pPlayerTransform_;
 	Vector3 playerPosition_;

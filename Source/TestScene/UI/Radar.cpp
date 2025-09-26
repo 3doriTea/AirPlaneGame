@@ -1,5 +1,6 @@
 #include "Radar.h"
 #include "../EnemyPlane.h"
+#include "../../PlayScene/EnemiesController.h"
 
 namespace
 {
@@ -85,6 +86,27 @@ void Radar::Update()
 {
 	std::vector<GameObject*> pEnemies{};
 	FindGameObjects("Enemy", &pEnemies);
+
+	bool isShowEnemy{ false };
+	for (auto pEnemy : pEnemies)
+	{
+		Transform& eTrans{ Transform::Get(pEnemy->GetEntityId()) };
+		if ((eTrans.position - pPlayerTransform_->position).Size() <= CLAMP_DISTANCE)
+		{
+			isShowEnemy = true;
+			break;
+		}
+	}
+
+	// “G‚ªˆê‘Ì‚à•\Ž¦‚³‚ê‚Ä‚È‚©‚Á‚½Žž‚Ìˆ—
+	if (isShowEnemy == false)
+	{
+		EnemiesController* pECon{ FindGameObject<EnemiesController>() };
+		if (pECon != nullptr)
+		{
+			pECon->TeleportEnemy();
+		}
+	}
 
 	enemyMarkPos_.clear();
 	ToMark2D(*pPlayerTransform_, pEnemies, &enemyMarkPos_);

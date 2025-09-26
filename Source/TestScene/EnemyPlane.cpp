@@ -150,7 +150,6 @@ EnemyPlane::~EnemyPlane()
 
 void EnemyPlane::Update()
 {
-	
 	ai_.SetInputData(
 		{
 			.playerPos = pEnemiesController_->GetPlayerPosition(),

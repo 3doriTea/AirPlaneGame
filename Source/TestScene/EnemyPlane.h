@@ -9,6 +9,7 @@ class EnemiesController;
 
 class EnemyPlane : public GameObject
 {
+	friend EnemiesController;
 public:
 	EnemyPlane(const Vector3& _worldPosition, const EntityId _playerPlane, const EntityId _controllerId);
 	~EnemyPlane();
