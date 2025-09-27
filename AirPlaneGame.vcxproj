@@ -42,7 +42,6 @@
     <ClCompile Include="mtgb\MTNet\HttpHeaderBuilder.cpp" />
     <ClCompile Include="mtgb\MTStringUtility.cpp" />
     <ClCompile Include="mtgb\QuatToEuler.cpp" />
-    <ClCompile Include="mtgb\RankingManager.cpp" />
     <ClCompile Include="mtgb\RayDetector.cpp" />
     <ClCompile Include="mtgb\RectDetector.cpp" />
     <ClCompile Include="mtgb\RenderSystem.cpp" />
@@ -258,7 +257,6 @@
     <ClInclude Include="mtgb\Observer.h" />
     <ClInclude Include="mtgb\MTImGui.h" />
     <ClInclude Include="mtgb\QuatToEuler.h" />
-    <ClInclude Include="mtgb\RankingManager.h" />
     <ClInclude Include="mtgb\RayDetector.h" />
     <ClInclude Include="mtgb\RectDetector.h" />
     <ClInclude Include="mtgb\RectF.h" />
