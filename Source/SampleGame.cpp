@@ -10,7 +10,7 @@
 
 #pragma endregion
 
-#define TO_TEST_SCENE 1
+#define TO_TEST_SCENE 0
 
 using namespace mtgb;
 

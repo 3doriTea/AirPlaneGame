@@ -91,9 +91,9 @@ void Radar::Update()
 	for (auto pEnemy : pEnemies)
 	{
 		Transform& eTrans{ Transform::Get(pEnemy->GetEntityId()) };
-		Vector3 eneWorldPos = eTrans.GetWorldPosition();
+		/*Vector3 eneWorldPos = eTrans.GetWorldPosition();
 		Vector3 playerWorldPos = pPlayerTransform_->GetWorldPosition();
-		float distance = (eneWorldPos - playerWorldPos).Size();
+		float distance = (eneWorldPos - playerWorldPos).Size();*/
 		if ((eTrans.GetWorldPosition() - pPlayerTransform_->GetWorldPosition()).Size() <= CLAMP_DISTANCE)
 		{
 			isShowEnemy = true;
