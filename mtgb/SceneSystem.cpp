@@ -74,6 +74,12 @@ void mtgb::SceneSystem::Update()
 		// CameraResource‚ÍŒðŠ·‚µ‚È‚¢
 		//Game::System<WinCtxResManager>().SwapResource<InputResource>();
 	}
+	if (InputUtil::GetKeyDown(KeyCode::F8))
+	{
+		WinCtxRes::SwapWindow();
+		Game::System<WinCtxResManager>().SwapResource<InputResource>();
+	}
+
 	if (InputUtil::GetKeyDown(KeyCode::P))
 	{
 		Game::System<Input>().EnumJoystick();
