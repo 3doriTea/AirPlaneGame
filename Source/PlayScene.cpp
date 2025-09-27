@@ -157,15 +157,15 @@ void PlayScene::Update()
 
 	if (InputUtil::GetKeyDown(KeyCode::O))
 	{
-		timeLimit_->StartTimer();
+		//timeLimit_->StartTimer();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::P))
 	{
-		timeLimit_->PauseTimer();
+		//timeLimit_->PauseTimer();
 	}
 	if (InputUtil::GetKeyDown(KeyCode::I))
 	{
-		timeLimit_->ResumeTimer();
+		//timeLimit_->ResumeTimer();
 	}
 
 	using LED_STATUS = Network::PIIO::LED_STATUS;
