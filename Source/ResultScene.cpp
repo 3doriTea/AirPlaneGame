@@ -64,7 +64,6 @@ void ResultScene::Initialize()
 
 	mtbin::MemoryStream ms{ buffer, BUFFER_SIZE };
 
-
 	ranking_ = new Ranking();
 
 	if (ScoreManager::AchievedQuota() == true)
@@ -98,7 +97,7 @@ void ResultScene::Initialize()
 			}
 
 			prevPairScore_ = rankingList_[PREVPAIRSCORE_INDEX];
-			rankingList_[PREVPAIRSCORE_INDEX] = resultScore_;
+			
 		}
 
 
@@ -182,4 +181,5 @@ void ResultScene::Draw() const
 
 void ResultScene::End()
 {
+	rankingList_[PREVPAIRSCORE_INDEX] = resultScore_;
 }

@@ -148,6 +148,5 @@ void DemoScene::InitializeRanking()
 			rankingList_.resize(FULLSCORE_COUNT, 0);
 		}
 	}
-	prevPairScore_ = 0; // またはファイル内スコアの初期化処理
-
+	prevPairScore_ = rankingList_[PREVPAIRSCORE_INDEX]; // またはファイル内スコアの初期化処理
 }
