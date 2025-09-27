@@ -26,6 +26,40 @@ EnemiesController::~EnemiesController()
 void EnemiesController::Update()
 {
 	playerPosition_ = pPlayerTransform_->GetWorldPosition();
+
+#if 1
+	if (InputUtil::GetKeyDown(KeyCode::X))
+	{
+		std::vector<EnemyPlane*> founds{};
+		FindGameObjects<EnemyPlane>(&founds);
+
+		float minDist{ 100000.0f };
+		int minIndex{ -1 };
+		for (int i = 0; i < founds.size(); i++)
+		{
+			if (founds[i] == nullptr)
+			{
+				continue;
+			}
+			/*founds[i]->Break();
+			continue;*/
+			Transform& eTrans{ Transform::Get(founds[i]->GetEntityId()) };
+			Vector3 diff{ eTrans.position - playerPosition_ };
+			
+			float dist{ diff.Size() };
+			if (dist < minDist)
+			{
+				minDist = dist;
+				minIndex = i;
+			}
+		}
+
+		if (minIndex >= 0)
+		{
+			founds[minIndex]->Break();
+		}
+	}
+#endif
 }
 
 void EnemiesController::Spawan(const Vector3 _worldPosition)

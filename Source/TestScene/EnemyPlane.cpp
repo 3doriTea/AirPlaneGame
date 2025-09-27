@@ -283,3 +283,22 @@ bool EnemyPlane::IsActive() const
 	const EnemyAI::OutData& outData{ ai_.GetOutData() };
 	return outData.isActive;
 }
+
+void EnemyPlane::Break()
+{
+	health_.Damage(200);
+	if (health_.IsDead())
+	{
+		broken_ = true;  // ‘Ì—Í“I‚É€‚ñ‚Å‚¢‚é‚È‚ç”òs‹@‚ğ‰ó‚·
+		SetName("EnemyBroken");
+		Audio::PlayOneShotFile("Sound/Effect/boom.wav");
+		GetScene<PlayScene>().SetStatusClear();
+
+		QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
+		if (pQuotaGauge != nullptr)
+		{
+			pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
+			Game::System<ScoreManager>().AddScore(ADD_QUOTA_POINT);
+		}
+	}
+}
