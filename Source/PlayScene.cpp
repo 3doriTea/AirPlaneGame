@@ -70,6 +70,13 @@ void PlayScene::Initialize()
 
 	// 0を原点として、xとzを-540~540の間に配置する
 	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
+
+	/*pEnemiesController->Spawan({ 0,30,10 });
+	pEnemiesController->Spawan({ 0,30,300 });
+	pEnemiesController->Spawan({ 0,30,-300 });
+	pEnemiesController->Spawan({ 0,30,-600 });
+	pEnemiesController->Spawan({ 0,30,600 });*/
+
 	pEnemiesController->Spawan({ -540, 0, -440 });
 	pEnemiesController->Spawan({ -340, 50, -470 });
 	pEnemiesController->Spawan({ -280, 50, -470 });
@@ -111,6 +118,8 @@ void PlayScene::Initialize()
 	pEnemiesController->Spawan({ 180, 50, 420 });
 	pEnemiesController->Spawan({ 200, 50, 450 });
 	pEnemiesController->Spawan({ 220, 50, 480 });
+
+
 	//pEnemiesController->Spawan({ 0, 50, 300 });
 	//pEnemiesController->Spawan({ 0, -50, 500 });
 	//pEnemiesController->Spawan({ 0, 0, 1000 });

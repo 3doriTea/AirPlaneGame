@@ -44,7 +44,7 @@ void EnemiesController::Update()
 			/*founds[i]->Break();
 			continue;*/
 			Transform& eTrans{ Transform::Get(founds[i]->GetEntityId()) };
-			Vector3 diff{ eTrans.position - playerPosition_ };
+			Vector3 diff{ eTrans.GetWorldPosition() - playerPosition_};
 			
 			float dist{ diff.Size() };
 			if (dist < minDist)
@@ -70,8 +70,10 @@ void EnemiesController::Spawan(const Vector3 _worldPosition)
 
 void EnemiesController::TeleportEnemy()
 {
-	std::vector<EnemyPlane*> founds{};
-	FindGameObjects<EnemyPlane>(&founds);
+	std::vector<GameObject*> founds{};
+	//FindGameObjects<EnemyPlane>(&founds);
+	FindGameObjects("Enemy", &founds);
+
 
 	for (int i = 0; i < founds.size() && i < TELEPORT_ENEMY_COUNT; i++)
 	{
@@ -80,7 +82,7 @@ void EnemiesController::TeleportEnemy()
 			continue;
 		}
 		Transform& eTrans{ Transform::Get(founds[i]->GetEntityId()) };
-		Vector3 diff{ eTrans.position - playerPosition_ };
+		Vector3 diff{ eTrans.GetWorldPosition() - playerPosition_};
 		Vector3 add{ Vector3::Normalize(diff) * TELEPORT_PLAYER_DISTANCE };
 		eTrans.position = playerPosition_ + add;
 	}
