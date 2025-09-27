@@ -3,11 +3,15 @@
 #include "Game.h"
 #include "GameObject.h"
 #include <cmath>
+#include <string>
 #include "Screen.h"
 #include "Draw.h"
 #include "Image.h"
 namespace mtgb
 {
+    // ターゲットとして無視する敵の名前
+    const std::string ignoreName{ "EnemyBroken" };
+
     CircleDetector::CircleDetector()
     {
     }
@@ -38,6 +42,11 @@ namespace mtgb
 
         for (const auto& obj : findObjs)
         {
+            if (obj->GetName() == ignoreName)
+            {
+                continue;  // 名前が無視対象なら回帰
+            }
+            
             // Transform取得
             Transform* pTransform = &Transform::Get(obj->GetEntityId());
             Vector3 worldPos = pTransform->GetWorldPosition();
