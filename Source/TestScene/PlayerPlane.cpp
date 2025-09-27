@@ -115,6 +115,13 @@ void PlayerPlane::Update()
 		// WindowContext‚ğ’¼Úw’è‚µ‚È‚¢•û‚¢‚¢
 		Vector2F axis = InputUtil::GetAxis(WindowContext::First);
 
+#if 1
+		if (InputUtil::GetKey(KeyCode::W)) axis.y = 1.0f;
+		if (InputUtil::GetKey(KeyCode::S)) axis.y = -1.0f;
+		if (InputUtil::GetKey(KeyCode::A)) axis.x = -1.0f;
+		if (InputUtil::GetKey(KeyCode::D)) axis.x = 1.0f;
+#endif
+
 #if USE_SMOOTH_CON
 #pragma region ‰ñ“]•û–@0 (×‚©‚­)
 		// ã

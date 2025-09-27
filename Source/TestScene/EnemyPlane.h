@@ -20,6 +20,8 @@ public:
 	bool HandleCrash(); // Œ‚’Ä‚³‚ê‚½Û‚Ìˆ—
 	const EnemyAI& GetAI() const { return ai_; }
 	bool IsActive() const;
+
+	void Break();
 private:
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
