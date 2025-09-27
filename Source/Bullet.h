@@ -30,4 +30,6 @@ public:
 	static const float GetMoveSpeed();
 private:
 	void InitCommon();
+
+	float timeLeft_;
 };

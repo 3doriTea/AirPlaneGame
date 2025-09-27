@@ -10,7 +10,8 @@ namespace
 }
 
 Bullet::Bullet(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter)
-	: ProjectTile(_position, _quaternion, _shooter, Type::Bullet)
+	: ProjectTile(_position, _quaternion, _shooter, Type::Bullet),
+	timeLeft_{ BULLET_DESTROY_TIME_SEC }
 {
 	InitCommon();
 }
@@ -28,6 +29,11 @@ Bullet::~Bullet()
 void Bullet::Update()
 {
 	pRb_->velocity_ = pTransform_->Forward() * BULLET_SPEED;
+	timeLeft_ -= Time::DeltaTimeF();
+	if (timeLeft_ <= 0.0f)
+	{
+		DestroyMe();
+	}
 }
 
 void Bullet::Draw() const
@@ -46,7 +52,7 @@ void Bullet::InitCommon()
 	hModel_ = Fbx::Load("Model/NewBullet.fbx");
 	massert(hModel_ >= 0 && "’e‚Ìƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s");
 	pTransform_->scale *= BULLET_SCALE;
-	Timer::AddAram(BULLET_DESTROY_TIME_SEC, [this] { DestroyMe(); });
+	//Timer::AddAram(BULLET_DESTROY_TIME_SEC, [this] { DestroyMe(); });
 	pTransform_->Compute();
 	Audio::PlayOneShotFile("Sound/Effect/shot.wav");
 }
