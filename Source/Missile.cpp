@@ -128,5 +128,5 @@ void Missile::InitCommon(Shooter _shooter)
 			.eventType = EventType::Fired,
 		});
 
-	Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
+	//Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
 }
