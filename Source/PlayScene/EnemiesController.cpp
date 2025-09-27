@@ -1,7 +1,7 @@
 #include "EnemiesController.h"
 #include "../Enemy.h"
 #include "../TestScene/EnemyPlane.h"
-
+#include "../ResultScene.h"
 using namespace mtgb;
 
 namespace
@@ -26,6 +26,13 @@ EnemiesController::~EnemiesController()
 void EnemiesController::Update()
 {
 	playerPosition_ = pPlayerTransform_->GetWorldPosition();
+
+	std::vector<EnemyPlane*> founds{};
+	FindGameObjects<EnemyPlane>(&founds);
+	if (founds.empty())
+	{
+		Game::System<SceneSystem>().Move<ResultScene>();
+	}
 
 #if 1
 	if (InputUtil::GetKeyDown(KeyCode::X))

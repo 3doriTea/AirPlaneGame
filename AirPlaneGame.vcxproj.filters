@@ -877,6 +877,15 @@
     <ClCompile Include="Source\TutorialScene\Runway.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\DemoScene\CameraTripod.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DemoScene\HangerUI.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\RankingManager.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1556,6 +1565,15 @@
     </ClInclude>
     <ClInclude Include="Source\TutorialScene\Runway.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DemoScene\CameraTripod.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DemoScene\HangerUI.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\RankingManager.h">
+      <Filter>03mtgb</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

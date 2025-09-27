@@ -83,3 +83,8 @@ void DemoScene::Draw() const
 void DemoScene::End()
 {
 }
+
+void DemoScene::InitializeRanking()
+{
+
+}
