@@ -15,6 +15,7 @@ namespace
 Missile::Missile(const Vector3& _position, const Quaternion& _quaternion, const Shooter _shooter, Transform* _target)
 	: ProjectTile(_position, _quaternion, _shooter, Type::Missile)
 	, pTarget_{_target}
+	, timeLeft_{ DESTROY_TIME }
 {
 	pTransform_->scale *= SCALE_MAGNIFICATION;
 
@@ -44,6 +45,14 @@ Missile::~Missile()
 
 void Missile::Update()
 {
+	timeLeft_ -= Time::DeltaTimeF();
+	if (timeLeft_ <= 0.0f)
+	{
+		// カウントダウンが0以下なら消す
+		DestroyMe();
+		return;
+	}
+
 	if (pTarget_ == nullptr)
 	{
 		// ターゲットがない場合は直進

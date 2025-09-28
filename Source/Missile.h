@@ -12,4 +12,5 @@ public:
 private:
 	void InitCommon(Shooter _shooter);
 	Transform* pTarget_;
+	float timeLeft_;  // ミサイルが消えるまでのカウントダウン
 };
