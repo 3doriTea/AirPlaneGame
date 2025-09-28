@@ -60,7 +60,7 @@ void ResultScene::Initialize()
 		{
 			Game::System<SceneSystem>().Move<DemoScene>();
 		});
-	timeLimit_->StartTimer();
+	//timeLimit_->StartTimer();
 
 	mtbin::MemoryStream ms{ buffer, BUFFER_SIZE };
 
@@ -148,7 +148,8 @@ void ResultScene::Update()
 {
 	if (InputUtil::GetKeyDown(KeyCode::T))
 	{
-		Game::System<SceneSystem>().Move<TestScene>();
+		//Game::System<SceneSystem>().Move<TestScene>();
+		timeLimit_->StartTimer();
 	}
 }
 

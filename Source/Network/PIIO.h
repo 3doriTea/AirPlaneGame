@@ -15,10 +15,11 @@ namespace Network
 		/// </summary>
 		enum LED_STATUS : int32_t
 		{
-			LEDS_OTHER = -1,  // その他
-			LEDS_NORMAL = 1,  // ふつう
-			LEDS_WARNNING = 2,  // 危険です!
-			LEDS_CLEAR = 3,  // クリアおめでとう
+			LEDS_SLEEP = 0,  // 消灯
+			LEDS_NORMAL = 2,  // ふつう
+			LEDS_WARNNING = 3,  // 危険です!
+			LEDS_CLEAR = 1,  // クリアおめでとう
+
 		};
 
 		PIIO(const mtnet::IPEndPoint& _localIPEP);

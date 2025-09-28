@@ -41,7 +41,15 @@ PlayScene::~PlayScene()
 {
 	SAFE_DELETE(pReader8_);
 	SAFE_DELETE(pAutoPilot_);
-	delete ppiio_;
+	/*ppiio_->SendLED(PIIO::LED_STATUS::LEDS_SLEEP);
+	try
+	{
+		delete ppiio_;
+	}
+	catch(int)
+	{
+
+	}*/
 }
 
 void PlayScene::Initialize()
@@ -51,6 +59,9 @@ void PlayScene::Initialize()
 	MTImGui::Instance().Initialize();
 
 	Audio::Clear();
+
+	// スコアリセット
+	Game::System<ScoreManager>().ResetScore();
 
 	Instantiate<Background>();
 
@@ -146,6 +157,7 @@ void PlayScene::Initialize()
 
 	// ラズパイと通信を開始
 	ppiio_->Start(SERVER_IPEP);
+	ppiio_->SendLED(PIIO::LED_STATUS::LEDS_NORMAL);
 }
 
 void PlayScene::Update()

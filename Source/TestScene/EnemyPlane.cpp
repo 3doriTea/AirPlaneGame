@@ -19,7 +19,7 @@ namespace
 	const float ENEMY_SCALE{ 0.5f }; // スケール
 	const float SHOOT_COOLDOWN{ 5.0f }; // 弾を撃つクールダウン時間
 	const int MAX_BULLETS{ 3 }; // 同時に存在できる弾の最大数
-	const int ENEMY_PLANE_SCORE{ 100 }; // 倒された際に得られるスコア
+	const int ENEMY_PLANE_SCORE{ 300 }; // 倒された際に得られるスコア
 
 	// デフォルトの敵スピード
 	const float DEFAULT_SPEED{ 10.0f };
