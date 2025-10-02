@@ -25,6 +25,7 @@ mtgb::SceneSystem::SceneSystem() :
 
 mtgb::SceneSystem::~SceneSystem()
 {
+	SAFE_DELETE(GameScene::pInstance_);
 }
 
 void mtgb::SceneSystem::Initialize()

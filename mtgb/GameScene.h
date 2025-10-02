@@ -1,14 +1,16 @@
 #pragma once
 //#include "World.h"
+#include <cmtgb.h>
 #include <list>
 #include "Handlers.h"
 #include <string>
-#include <cmtgb.h>
 #include <vector>
 #include <type_traits>
 #include "GameObjectTag.h"
 namespace mtgb
 {
+	using EntityId = int64_t;
+
 	class GameObject;
 	class Transform;
 
@@ -17,6 +19,7 @@ namespace mtgb
 	{
 		friend class SceneSystem;
 		friend class RenderSystem;
+		friend class Game;
 	private:
 		static GameScene* pInstance_;
 

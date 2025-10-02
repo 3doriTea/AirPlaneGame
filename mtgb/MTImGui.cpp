@@ -42,6 +42,7 @@ void mtgb::MTImGui::Update()
 
     updatingImGuiShowable_ = false;
 
+
     // Settingsウィンドウに表示
     DirectShow([]()
         {
@@ -201,6 +202,18 @@ void mtgb::MTImGui::ShowLog()
 mtgb::MTImGui::MTImGui()
 {
 }
+mtgb::MTImGui::~MTImGui()
+{
+    for (auto queue : showQueues_)
+    {
+        while (!queue.second.empty())
+        {
+            queue.second.pop();
+        }
+    }
+    
+    showQueues_.clear();
+}
 void mtgb::MTImGui::SetupShowFunc()
 {
     using RegisterShowFuncHolder::Set;
@@ -329,7 +342,14 @@ void mtgb::MTImGui::ShowWindow(ShowType _showType)
 {
     ImGuiRenderer& imGui = Game::System<ImGuiRenderer>();
     auto& state = imguiWindowStates_[_showType];
-    if (!state.isOpen) return; // 閉じているなら何もしない
+    if (!state.isOpen)
+    {
+        auto& queue = showQueues_[_showType];
+        while (!queue.empty())
+        {
+            queue.pop();
+        }
+    }
 
     if (_showType == ShowType::SceneView)
     {
@@ -382,16 +402,15 @@ void mtgb::MTImGui::Unregister(ImGuiShowable* obj)
 
 void mtgb::MTImGui::DirectShow(std::function<void()> func, const std::string& name, ShowType show)
 {
-    //if (show == ShowType::SceneView)
-    //{
-    //    // SceneViewは名前不要
-    //    sceneViewShowList_.push(func);
-    //}
-    //else
-    //{
-    //    showQueues_[show].emplace(name, func);
-    //    //inspectorShowList_.emplace(name,func);
-    //}
+    if (show == ShowType::SceneView)
+    {
+        // SceneViewは名前不要
+        sceneViewShowList_.push(func);
+    }
+    else
+    {
+        showQueues_[show].emplace(name, func);
+    }
     
 }
 

@@ -123,6 +123,7 @@ namespace mtgb
 	private:
 		MTImGui();
 		MTImGui(const MTImGui& other) = delete;
+		~MTImGui();
 
 		/// <summary>
 		/// TypedShow‚Ì_target‚ÌŒ^‚É‘Î‰‚·‚éŠÖ”‚ğ“o˜^‚·‚é
@@ -136,12 +137,11 @@ namespace mtgb
 		std::map<ShowType, ShowQueue> showQueues_;
 		std::map<ShowType, ImGuiWindowState> imguiWindowStates_; // ShowType‚²‚Æ‚ÌƒEƒBƒ“ƒhƒE‚Ìó‘Ô
 
-		std::queue<std::pair<std::string,std::function<void()>>> inspectorShowList_;
+		//std::queue<std::pair<std::string,std::function<void()>>> inspectorShowList_;
 		std::queue<std::function<void()>> sceneViewShowList_;
 
 		void DrawRayImpl(const Vector3& _start, const Vector3& _dir, float _thickness);
 		void DrawLineImpl(const Vector3& _from, const Vector3& _to, float _thickness);
-		
 
 		bool updatingImGuiShowable_;
 	};

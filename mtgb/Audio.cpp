@@ -241,6 +241,10 @@ void mtgb::Audio::Clear()
 		delete oneShot;
 	}
 	pOneShotQueue_.clear();
+	for (auto& audioClip : pAudioClips_)
+	{
+		SAFE_DELETE(audioClip.second);
+	}
 	pAudioClips_.clear();
 }
 

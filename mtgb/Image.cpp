@@ -31,7 +31,8 @@ mtgb::ImageHandle mtgb::Image::Load(const std::string_view& _fileName)
 
 	for (auto itr = instance.sprites_.begin(); itr != instance.sprites_.end(); itr++)
 	{
-		if ((*itr).second->GetFileName() == std::wstring{ _fileName.begin(), _fileName.end() })
+		std::wstring str{ _fileName.begin(), _fileName.end() };
+		if ((*itr).second->GetFileName() == str)
 		{
 			return (*itr).first;
 		}

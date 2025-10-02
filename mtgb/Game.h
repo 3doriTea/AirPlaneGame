@@ -1,4 +1,6 @@
 #pragma once
+//#include "GameScene.h"
+#include <cmtgb.h>
 #include <string>
 #include <functional>
 #include <cstdint>
@@ -9,9 +11,9 @@
 #include <string_view>
 //#include <type_traits>
 #include "ISystem.h"
-#include "cmtgb.h"
 #include "Vector2Int.h"
 #include <typeindex>
+#include "ReleaseUtility.h"
 
 namespace mtgb
 {
@@ -226,6 +228,7 @@ namespace mtgb
 		pInstance_->ReleaseSystems(systems);
 		systems.clear();
 
+		
 		// インスタンスの解放
 		delete pInstance_;
 	}

@@ -14,6 +14,7 @@ mtgb::Sprite::~Sprite()
 
 void mtgb::Sprite::Load(const std::wstring& _fileName)
 {
+	fileName_ = _fileName;
 	texture2D_.Load({ _fileName });
 }
 

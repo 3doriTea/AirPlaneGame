@@ -1,6 +1,8 @@
 #include "WindowContextResourceManager.h"
 
 
+
+
 mtgb::WindowContextResourceManager::WindowContextResourceManager()
 {
 }

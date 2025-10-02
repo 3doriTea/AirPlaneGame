@@ -250,7 +250,7 @@ void ControlTower::Speech(SpeechType _speechType)
 	if (speechItr->second.TryGetNext(speechElement) == false) return;
 		
 	pTextBox_->Show(speechElement.text_.data());
-	Game::System<Audio>().PlayOneShotFile(speechElement.audioFile_.data());
+	//Game::System<Audio>().PlayOneShotFile(speechElement.audioFile_.data());
 
 	Timer& timer = Game::System<Timer>();
 	timer.Remove(hTimer_);
