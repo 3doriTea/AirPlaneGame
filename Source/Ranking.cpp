@@ -4,7 +4,8 @@
 
 namespace
 {
-	size_t maxRankingCount{ 5 };
+    // 1~5位と前回のスコア保存するために6
+	size_t maxRankingCount{ 6 };
 };
 
 Ranking::Ranking()

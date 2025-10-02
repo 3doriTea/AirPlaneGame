@@ -20,13 +20,13 @@ namespace
 	const UIParams UI_PARAMS{.depth = 7};
 
 	const int SCORE_POS_X_FIRST{ 110 };
-	const int SCORE_POS_X_SECOND{ 1430 };
+	const int SCORE_POS_X_SECOND{ 1380 };
 	const int SCORE_POS_Y{ 260 };
 	const int SCORE_MARGIN{ 60 };
 	const int PREPAIR_SCORE_Y{ 140 };
 	const std::string PREPARE_TEXT{ "前回のペアのスコア: " };
-	const int SCORE_SIZE{ 36 };
-	const int PREPARE_SCORE_SIZE{ 36 };
+	const int SCORE_SIZE{ 32 };
+	const int PREPARE_SCORE_SIZE{ 34 };
 }
 
 DemoScene::DemoScene() :
@@ -118,8 +118,6 @@ void DemoScene::Draw() const
 		Draw::ImmediateText(PREPARE_TEXT + std::to_string(rankingList_[PREVPAIRSCORE_INDEX]), { scorePos.x, PREPAIR_SCORE_Y }, scoreSize, TextAlignment::topLeft, UI_PARAMS);
 		//Draw::ImmediateText(std::to_string(rankingList_[PREVPAIRSCORE_INDEX]), { static_cast<float>(PREPARE_TEXT.size() * scoreSize), PREPAIR_SCORE_Y}, PREPARE_SCORE_SIZE, TextAlignment::topLeft, UI_PARAMS);
 	}
-	
-
 }
 
 void DemoScene::End()
