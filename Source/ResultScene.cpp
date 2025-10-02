@@ -182,5 +182,24 @@ void ResultScene::Draw() const
 
 void ResultScene::End()
 {
-	rankingList_[PREVPAIRSCORE_INDEX] = resultScore_;
+	mtbin::MemoryStream ms{ buffer, BUFFER_SIZE };
+	if (ScoreManager::AchievedQuota() == true)
+	{
+		struct _stat s;
+		int rc = _stat("ranking.dat", &s);
+
+		if(rc != -1)
+		{
+			// ファイルが存在する場合、読み込み
+			ranking_->LoadFileToMemoryStream("ranking.dat", ms);
+			rankingList_ = ranking_->GetRankingList();
+			rankingList_[PREVPAIRSCORE_INDEX] = resultScore_;
+		}
+
+		// 保存
+		ms.Seek(mtbin::MemoryStream::SeekDir::Head);
+		ms.Write(rankingList_.data(), static_cast<int>(rankingList_.size()));
+
+		ranking_->SaveMemoryStreamToFile("ranking.dat", ms, sizeof(int) * FULLSCORE_COUNT);
+	}
 }
