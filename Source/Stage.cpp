@@ -7,7 +7,7 @@ void GenerateStageFromJSON(const nlohmann::json& _json)
 {
 	GameScene* currentScene = Game::System<SceneSystem>().GetActiveScene();
 
-	for (json::iterator itr = _json.begin(); itr != _json.end(); itr++)
+	for (json::const_iterator itr = _json.begin(); itr != _json.end(); itr++)
 	{
 		// Box3Dクラスの生成に必要な情報が書かれているJSONを取得
 		json box3DJSON = *itr;
