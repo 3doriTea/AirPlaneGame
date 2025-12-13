@@ -1,0 +1,54 @@
+[
+    {
+        "fileName": "Model/Ground037.fbx",
+        "position": {
+            "x": 20.0,
+            "y": 0.0,
+            "z": 10.0
+        },
+        "scale": {
+            "x": 10.0,
+            "y": 1.0,
+            "z": 10.0
+        }
+    },
+    {
+        "fileName": "Model/Ground001.fbx",
+        "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 10.0
+        },
+        "scale": {
+            "x": 10.0,
+            "y": 1.0,
+            "z": 10.0
+        }
+    },
+    {
+        "fileName": "Model/Ground068.fbx",
+        "position": {
+            "x": 10.0,
+            "y": 0.0,
+            "z": 10.0
+        },
+        "scale": {
+            "x": 10.0,
+            "y": 1.0,
+            "z": 10.0
+        }
+    },
+    {
+        "fileName": "Model/Ground037.fbx",
+        "position": {
+            "x": -10.0,
+            "y": 0.0,
+            "z": 10.0
+        },
+        "scale": {
+            "x": 10.0,
+            "y": 1.0,
+            "z": 10.0
+        }
+    }
+]

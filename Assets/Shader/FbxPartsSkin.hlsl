@@ -10,7 +10,7 @@ cbuffer BoneMatrices : register(b1) //ボーンのポーズ行列が入る
 {
     matrix g_boneMatrices[MAX_BONE_MATRICES];
     bool g_hasSkinnedMesh;
-    float padding[3];
+    float g_padding[3];
 };
 
 //スキニング後の頂点・法線が入る

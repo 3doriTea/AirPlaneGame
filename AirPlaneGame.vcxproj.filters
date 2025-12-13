@@ -1633,5 +1633,8 @@
     <FxCompile Include="Assets\Shader\Terrain.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\Box3D.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

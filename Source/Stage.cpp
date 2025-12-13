@@ -1,4 +1,5 @@
 #include "Stage.h"
+#include "Box3D.h"
 
 #include <mtgb.h>
 
@@ -32,5 +33,7 @@ void GenerateStageFromJSON(const nlohmann::json& _json)
 		);
 
 		std::string fileName = fileNameJSON.get<std::string>();
+
+		currentScene->Instantiate<Box3D>(position, scale, fileName);
 	}
 }

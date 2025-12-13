@@ -36,7 +36,7 @@ namespace mtgb
 		void Calculate();
 
 		void SpinCamera(float _distance);
-		
+		void MoveCameraSphericalOnTheSpot();
 		void InitializeSpinAnglesFromCurrentPosition();
 		ImGuizmo::OPERATION operation_;
 		ImGuizmo::MODE mode_;

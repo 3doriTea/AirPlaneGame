@@ -19,6 +19,8 @@
 #include "PlayScene/AutoPilotPlay.h"
 
 #include "../Source/ControlTower.h"
+#include "../Source/Stage.h"
+#include <istream>
 using namespace mtgb;
 using Network::PIIO;
 
@@ -78,6 +80,10 @@ void PlayScene::Initialize()
 	pControlTower->SetControlTarget(pGunner->GetEntityId(), WindowContext::Second);
 	pControlTower->SetControlTarget(pPilot->GetEntityId(), WindowContext::First);
 
+	std::ifstream input("skyCombatStageDataTex.json");
+	json j;
+	input >> j;
+	GenerateStageFromJSON(j);
 	// 0を原点として、xとzを-540~540の間に配置する
 	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
 

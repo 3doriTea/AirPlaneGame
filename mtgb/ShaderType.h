@@ -17,6 +17,7 @@ namespace mtgb
 		Ground,
 		Trail,
 		Terrain,
+		Box3D,
 		Max,
 	};
 }

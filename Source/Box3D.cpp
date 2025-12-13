@@ -15,4 +15,5 @@ void Box3D::Update()
 
 void Box3D::Draw() const
 {
+	Draw::FBXModel(hModel_, *pTransform_, 0,ShaderType::Box3D);
 }
