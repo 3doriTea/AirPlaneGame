@@ -1,5 +1,6 @@
 #pragma once
 #include "cmtgb.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Vector4.h"
 #include "Matrix4x4.h"
@@ -53,6 +54,8 @@ namespace mtgb
 			Vector4 g_cameraPosition; // カメラの位置（ハイライトの計算に必要）
 			FLOAT g_shininess;     // スペキュラの強さ
 			BOOL g_isTexture;  // テクスチャの有無
+			Vector2 g_padding; // バイト境界のためのパティング
+			Vector4 g_textureScale; // UVに乗算するスケール。メッシュのスケール変化時にテクスチャの引き伸ばしを防ぎ、画像を等倍で繰り返す
 		};
 
 		/// <summary>

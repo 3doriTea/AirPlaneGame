@@ -35,6 +35,5 @@ private:
 	CameraHandleInScene hCamera1_;
 	CameraHandleInScene hCamera2_;
 
-	TerrainReader8* pReader8_;
 	IAutoPilot* pAutoPilot_;  // プレイヤー自動操縦機能
 };

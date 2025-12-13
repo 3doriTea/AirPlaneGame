@@ -851,6 +851,27 @@ void mtgb::DirectX11Manager::InitializeShaderBundle()
 			sizeof(INPUT_ELEMENT_DESC_SKINNED) / sizeof(D3D11_INPUT_ELEMENT_DESC),
 			&cRasterizerDesc);
 		
+		cRasterizerDesc = CD3D11_RASTERIZER_DESC(D3D11_RASTERIZER_DESC
+			{
+				.FillMode = D3D11_FILL_SOLID,   // 塗りつぶし: solid
+				.CullMode = D3D11_CULL_BACK,    // カリング: 陰面消去
+				.FrontCounterClockwise = TRUE,  // 三角形の正面向き = 時計回り
+				.DepthBias = {},
+				.DepthBiasClamp = {},
+				.SlopeScaledDepthBias = {},
+				.DepthClipEnable = true,        // クリッピングを有効にする
+				.ScissorEnable = {},
+				.MultisampleEnable = {},
+				.AntialiasedLineEnable = {},
+			});
+
+		CompileShader(
+			L"Shader/Box3D.hlsl",
+			ShaderType::Box3D,
+			INPUT_ELEMENT_DESC_3D,
+			sizeof(INPUT_ELEMENT_DESC_3D) / sizeof(D3D11_INPUT_ELEMENT_DESC),
+			&cRasterizerDesc
+		);
 	}
 }
 

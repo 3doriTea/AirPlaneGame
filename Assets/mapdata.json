@@ -1,0 +1,130 @@
+{
+    "actors": [
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 2.4100000858306886,
+                "y": 1.4194042682647706,
+                "z": 4.760000228881836
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": -1.0,
+                "z": 0.0,
+                "w": 1.4901161193847657e-8
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        },
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 7.98799991607666,
+                "y": 1.4194042682647706,
+                "z": 5.089000225067139
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        },
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 8.036544799804688,
+                "y": 1.4194042682647706,
+                "z": 7.033999919891357
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        },
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 7.953544616699219,
+                "y": 1.4194042682647706,
+                "z": 4.867000102996826
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        },
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 8.272000312805176,
+                "y": 1.4194042682647706,
+                "z": 7.033999919891357
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        },
+        {
+            "modelPath_": "Assets/Model/Enemy01.fbx",
+            "position_": {
+                "x": 2.121999979019165,
+                "y": 1.4194042682647706,
+                "z": 4.760000228881836
+            },
+            "rotation_": {
+                "x": 0.0,
+                "y": -1.0,
+                "z": 0.0,
+                "w": 1.4901161193847657e-8
+            },
+            "scale_": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "actorType_": "Enemy",
+            "actorSubType_": "Normal"
+        }
+    ]
+}

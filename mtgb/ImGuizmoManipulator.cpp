@@ -148,38 +148,43 @@ void mtgb::ImGuizmoManipulator::SpinCamera(float _distance)
 
 	// 回転中心からのオフセット
 	Vector3 offset;
-	
+
 	// 回転中心の方向を向く
-	Vector3 lookDir = Vector3::Zero();
-	if (_distance <= std::numeric_limits<float>::epsilon())
-	{
+
+
 		// 変換
-		offset.x = sinf(theta) * cos(phi);
-		offset.y = cos(theta);
-		offset.z = sin(theta) * sin(phi);
-	}
-	else
-	{
-		// 変換
-		offset.x = _distance * sinf(theta) * cos(phi);
-		offset.y = -_distance * cos(theta);
-		offset.z = -_distance * sin(theta) * sin(phi);
+	offset.x = _distance * sinf(theta) * cos(phi);
+	offset.y = -_distance * cos(theta);
+	offset.z = -_distance * sin(theta) * sin(phi);
 
-		// 位置を反映
-		pCameraTransform_->position =  center + offset;
+	Vector3 lookDir = center - pCameraTransform_->position;
 
-		lookDir = center - pCameraTransform_->position;
-	}
+	// 位置を反映
+	pCameraTransform_->position = center + offset;
+	pCameraTransform_->rotate = Quaternion::LookRotation(lookDir.Normalize(), pCameraTransform_->Up());
+	
+}
 
-	if (lookDir.Size() == 0.0f)
-	{
-		// その場回転の時はoffsetの方向を向く
-		pCameraTransform_->rotate = Quaternion::LookRotation(offset, pCameraTransform_->Up());
-	}
-	else
-	{
-		pCameraTransform_->rotate = Quaternion::LookRotation(lookDir.Normalize(), pCameraTransform_->Up());
-	}
+void mtgb::ImGuizmoManipulator::MoveCameraSphericalOnTheSpot()
+{
+	// ref:https://ja.wikipedia.org/wiki/%E7%90%83%E9%9D%A2%E5%BA%A7%E6%A8%99%E7%B3%BB
+
+	// θ (polar angle) : 鉛直方向
+	float theta = spinAngleX_;
+
+	// φ (azimuthal angle): 水平方向
+	float phi = spinAngleY_;
+
+	// 回転中心からのオフセット
+	Vector3 offset;
+
+	// 変換
+	offset.x = sinf(theta) * cos(phi);
+	offset.y = cos(theta);
+	offset.z = sin(theta) * sin(phi);
+
+	// その場回転の時はoffsetの方向を向く
+	pCameraTransform_->rotate = Quaternion::LookRotation(offset, Vector3::Up());
 }
 
 void mtgb::ImGuizmoManipulator::InitializeSpinAnglesFromCurrentPosition()
@@ -400,16 +405,13 @@ void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)
 		if (mouseMove.Size() != 0)
 		{
 			// マウス移動量を角度に変換
-			spinAngleY_ += mouseMove.x * rotateSensitivity_ * Time::DeltaTimeF(); // 水平角度
 			spinAngleX_ += mouseMove.y * rotateSensitivity_ * Time::DeltaTimeF(); // 鉛直角度
+			spinAngleY_ -= mouseMove.x * rotateSensitivity_ * Time::DeltaTimeF(); // 水平角度
 			
 			// 鉛直角度を制限
-			const float MAX_VERTICAL = DirectX::XMConvertToRadians(89.0f);
-			spinAngleX_ = std::clamp(spinAngleX_, -MAX_VERTICAL, MAX_VERTICAL);
+			spinAngleX_ = std::clamp(spinAngleX_, DirectX::XMConvertToRadians(0.1f), DirectX::XMConvertToRadians(179.0f));
 
-			static const float ROTATE_DISTANCE = 0.01f;
-			// 本当は0.0fを渡してその場で回転させたかったが上手くいかなかった
-			SpinCamera(ROTATE_DISTANCE);
+			MoveCameraSphericalOnTheSpot();
 		}
 	}
 
@@ -433,10 +435,16 @@ void mtgb::ImGuizmoManipulator::UpdateCamera(const char* _name)
 	if (cameraOperation_ == CameraOperation::Spin)
 	{
 		Vector3 mouseMove = InputUtil::GetMouseMove();
-		spinAngleX_ += mouseMove.y * spinSpeed_ * Time::DeltaTimeF();
-		spinAngleY_ += mouseMove.x * spinSpeed_ * Time::DeltaTimeF();
+		if (mouseMove.Size() != 0)
+		{
+			spinAngleX_ += mouseMove.y * spinSpeed_ * Time::DeltaTimeF();
+			spinAngleY_ -= mouseMove.x * spinSpeed_ * Time::DeltaTimeF();
 
-		SpinCamera(spinDistance_);
+			// 鉛直角度を制限
+			spinAngleX_ = std::clamp(spinAngleX_, DirectX::XMConvertToRadians(0.1f), DirectX::XMConvertToRadians(179.0f));
+			SpinCamera(spinDistance_);
+		}
+		
 	}
 
 }

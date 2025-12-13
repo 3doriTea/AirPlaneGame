@@ -52,6 +52,7 @@
     <ClCompile Include="mtgb\TransformGuizmo.cpp" />
     <ClCompile Include="mtgb\TypeRegistry.cpp" />
     <ClCompile Include="mtgb\UIDrawCommand.cpp" />
+    <ClCompile Include="Source\FBXModelEntity.cpp" />
     <ClCompile Include="Source\DemoScene\CameraTripod.cpp" />
     <ClCompile Include="Source\DemoScene\HangerUI.cpp" />
     <ClCompile Include="Source\IAutoPilot.cpp" />
@@ -176,6 +177,7 @@
     <ClCompile Include="Source\PlayScene\QuotaGauge.cpp" />
     <ClCompile Include="Source\ProjectTile.cpp" />
     <ClCompile Include="Source\ShuffleSpeechQueue.cpp" />
+    <ClCompile Include="Source\Stage.cpp" />
     <ClCompile Include="Source\TargetingSystem.cpp" />
     <ClCompile Include="Source\Ranking.cpp" />
     <ClCompile Include="Source\ResultLogo.cpp" />
@@ -283,6 +285,7 @@
     <ClInclude Include="mtgb\Vector2F.h" />
     <ClInclude Include="mtgb\Vector2T.h" />
     <ClInclude Include="mtgb\WorldToScreenData.h" />
+    <ClInclude Include="Source\FBXModelEntity.h" />
     <ClInclude Include="Source\DemoScene\CameraTripod.h" />
     <ClInclude Include="Source\DemoScene\HangerUI.h" />
     <ClInclude Include="Source\IAutoPilot.h" />
@@ -426,6 +429,7 @@
     <ClInclude Include="Source\PlayScene\QuotaGauge.h" />
     <ClInclude Include="Source\ProjectTile.h" />
     <ClInclude Include="Source\ShuffleSpeechQueue.h" />
+    <ClInclude Include="Source\Stage.h" />
     <ClInclude Include="Source\TargetingSystem.h" />
     <ClInclude Include="Source\Ranking.h" />
     <ClInclude Include="Source\ResultLogo.h" />
@@ -485,6 +489,12 @@
     <None Include="通信体系.txt" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shader\Box3D.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -512,6 +522,7 @@
     <FxCompile Include="Assets\Shader\FbxPartsSkin.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Figure.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

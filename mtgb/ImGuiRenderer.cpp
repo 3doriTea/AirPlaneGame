@@ -132,12 +132,6 @@ void mtgb::ImGuiRenderer::Begin(const char* _str, bool* _isOpen, WindowFlag _fla
 
 void mtgb::ImGuiRenderer::SetImGuizmoRenderTargetView()
 {
-	//ID3D11ShaderResourceView* nullSRV[16]{};
-	//// 全スロットのSRVをクリア
-	//DirectX11Draw::pContext_->PSSetShaderResources(0, 16, nullSRV);
-
-	//DirectX11Draw::pContext_->PSSetShaderResources(0, 0, pSRV_.GetAddressOf());
-	//Game::System<DirectX11Manager>().ChangeViewport(viewport_);
 	Game::System<DirectX11Manager>().ChangeRenderTargets(pRenderTargetView_,pDepthStencilView_);
 }
 void mtgb::ImGuiRenderer::SetGameViewCamera()
@@ -168,7 +162,6 @@ void mtgb::ImGuiRenderer::SetDrawList()
 
 void mtgb::ImGuiRenderer::RenderSceneView()
 {
-	
 	ImGui::Image((void*)pSRV_.Get(), ImVec2(static_cast<float>(winWidth_), static_cast<float>(winHeight_)));
 }
 
@@ -176,14 +169,6 @@ void mtgb::ImGuiRenderer::RenderSceneView()
 
 bool mtgb::ImGuizmoManipulator::IsMouseInWindow(const char* _name)
 {
-	//	前フレームの矩形情報を使用
-	/*if (gameViewRectValid_)
-	{
-		ImVec2 mousePos = ImGui::GetIO().MousePos;
-		return mousePos.x >= gameViewPos_.x && mousePos.x <= gameViewPos_.x + gameViewSize_.x &&
-			   mousePos.y >= gameViewPos_.y && mousePos.y <= gameViewPos_.y + gameViewSize_.y;
-	}*/
-
 	//	ウィンドウを検索
 	ImGuiWindow* window = ImGui::FindWindowByName(_name);
 	if (window && window->WasActive)

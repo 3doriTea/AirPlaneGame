@@ -19,6 +19,8 @@
 #include "PlayScene/AutoPilotPlay.h"
 
 #include "../Source/ControlTower.h"
+#include "../Source/Stage.h"
+#include <istream>
 using namespace mtgb;
 using Network::PIIO;
 
@@ -39,7 +41,6 @@ PlayScene::PlayScene() :
 
 PlayScene::~PlayScene()
 {
-	SAFE_DELETE(pReader8_);
 	SAFE_DELETE(pAutoPilot_);
 	/*ppiio_->SendLED(PIIO::LED_STATUS::LEDS_SLEEP);
 	try
@@ -79,6 +80,10 @@ void PlayScene::Initialize()
 	pControlTower->SetControlTarget(pGunner->GetEntityId(), WindowContext::Second);
 	pControlTower->SetControlTarget(pPilot->GetEntityId(), WindowContext::First);
 
+	std::ifstream input("skyCombatStageDataTex.json");
+	json j;
+	input >> j;
+	GenerateStageFromJSON(j);
 	// 0を原点として、xとzを-540~540の間に配置する
 	EnemiesController* pEnemiesController{ Instantiate<EnemiesController>(pPlayerPlane->GetEntityId()) };
 
@@ -129,14 +134,6 @@ void PlayScene::Initialize()
 	pEnemiesController->Spawan({ 180, 50, 420 });
 	pEnemiesController->Spawan({ 200, 50, 450 });
 	pEnemiesController->Spawan({ 220, 50, 480 });
-
-
-	//pEnemiesController->Spawan({ 0, 50, 300 });
-	//pEnemiesController->Spawan({ 0, -50, 500 });
-	//pEnemiesController->Spawan({ 0, 0, 1000 });
-
-	pReader8_ = new TerrainReader8{};
-	pReader8_->Initialize();
 
 	WinCtxRes::Get<CameraResource>(WindowContext::First).SetHCamera(hCamera1);
 	WinCtxRes::Get<CameraResource>(WindowContext::Second).SetHCamera(hCamera2);
@@ -246,7 +243,7 @@ void PlayScene::Update()
 
 void PlayScene::Draw() const
 {
-	pReader8_->TestDraw();
+	
 }
 
 void PlayScene::End()

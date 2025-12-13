@@ -883,6 +883,12 @@
     <ClCompile Include="Source\DemoScene\HangerUI.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Box3D.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Stage.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mtgb\AssetsManager.h">
@@ -1569,6 +1575,12 @@
     <ClInclude Include="Source\DemoScene\HangerUI.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Box3D.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Stage.h">
+      <Filter>01Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2DCommon.hlsli" />
@@ -1619,6 +1631,9 @@
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Terrain.hlsl">
+      <Filter>02Assets\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\Box3D.hlsl">
       <Filter>02Assets\Shader</Filter>
     </FxCompile>
   </ItemGroup>
