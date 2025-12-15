@@ -5,12 +5,12 @@ namespace
 	// 作戦範囲外 y軸最低点
 	const float DEAD_ZONE_Y_MIN{ 20.0f };
 	// 作戦範囲外 y軸最高点
-	const float DEAD_ZONE_Y_MAX{ 300.0f };
+	const float DEAD_ZONE_Y_MAX{ 310.0f };
 
 	// 範囲外から出たときの向かうべき場所 y軸最低点
 	const float RETURN_SAFE_Y_MIN{ 25.0f };
 	// 範囲外から出たときに向かうべき場所 y軸最高点
-	const float RETURN_SAFE_Y_MAX{ 295.0f };
+	const float RETURN_SAFE_Y_MAX{ 300.0f };
 
 	const float AUTO_ROTATE_ZONE_Y{ 25.0f };
 	const float LOOK_AT_DISTANCE{ 20.0f };

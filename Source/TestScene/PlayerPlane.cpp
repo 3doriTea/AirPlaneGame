@@ -6,6 +6,7 @@
 #include "../PlayScene/AutoControlText.h"
 #include "../PlayScene.h"
 #include "../PlayScene/QuotaGauge.h"
+#include "../PlayScene/AltitudeWarn.h"
 #include <cmath>
 using namespace mtgb;
 
@@ -23,6 +24,8 @@ namespace
 
 	// 飛行機の上方向をワールド軸上方向にすらーぷするレート
 	const float HEAD_UP_RATE{ 0.6f }; // 1/60s = 0.01f, 1s = 0.6f
+
+	const float BORDER_LINE_Y{ 300.0f };
 }
 
 #define __X m128_f32[0]
@@ -49,6 +52,9 @@ PlayerPlane::PlayerPlane(IAutoPilot* _pIAutoPilot) : GameObject(GameObjectBuilde
 
 	pAutoControlText_ = Instantiate<AutoControlText>();
 	pAutoControlText_->SetEnabled(false);
+
+	pAltitudeWarn_ = Instantiate<AltitudeWarn>();
+	pAltitudeWarn_->SetEnabled(false);
 
 	pRB_->OnCollisionEnter([this](EntityId _targetId)
 		{
@@ -102,7 +108,7 @@ void PlayerPlane::Update()
 
 	const float ROT_ANGLE{ Time::DeltaTimeF() };
 
-
+	pAltitudeWarn_->SetEnabled(pTransform_->GetWorldPosition().y > BORDER_LINE_Y);
 #if 1
 	if (pIAutoPilot_->TryUpdate())
 	{

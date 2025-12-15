@@ -168,6 +168,7 @@
     <ClCompile Include="Source\DemoScene\DemoScene.cpp" />
     <ClCompile Include="Source\ImageBlinker.cpp" />
     <ClCompile Include="Source\Missile.cpp" />
+    <ClCompile Include="Source\PlayScene\AltitudeWarn.cpp" />
     <ClCompile Include="Source\PlayScene\AutoControlText.cpp" />
     <ClCompile Include="Source\PlayScene\AutoPilotPlay.cpp" />
     <ClCompile Include="Source\PlayScene\EnemiesController.cpp" />
@@ -420,6 +421,7 @@
     <ClInclude Include="Source\DemoScene\DemoScene.h" />
     <ClInclude Include="Source\ImageBlinker.h" />
     <ClInclude Include="Source\Missile.h" />
+    <ClInclude Include="Source\PlayScene\AltitudeWarn.h" />
     <ClInclude Include="Source\PlayScene\AutoControlText.h" />
     <ClInclude Include="Source\PlayScene\AutoPilotPlay.h" />
     <ClInclude Include="Source\PlayScene\EnemiesController.h" />

@@ -5,6 +5,7 @@
 class Radar;
 class IAutoPilot;
 class AutoControlText;
+class AltitudeWarn;
 
 class PlayerPlane : public mtgb::GameObject
 {
@@ -26,4 +27,5 @@ private:
 	VVPlayer vVPlayer_;
 	IAutoPilot* pIAutoPilot_;
 	AutoControlText* pAutoControlText_;
+	AltitudeWarn* pAltitudeWarn_;
 };
