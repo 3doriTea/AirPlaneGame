@@ -478,8 +478,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions\copilot-comment.instructions.md" />
-    <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="Assets\Shader\3DCommon.hlsli" />
+    <None Include="Assets\Shader\2DCommon.hlsli" />
     <None Include="mtgb\DefaultShow.inl" />
     <None Include="Other\History\log20250720.md">
       <SubType>
@@ -494,6 +494,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <EntryPointName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">VS</EntryPointName>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\Shader\Debug3D.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
@@ -746,5 +747,11 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\boost.1.87.0\build\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\boost.1.87.0\build\boost.targets'))" />
     <Error Condition="!Exists('packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\nlohmann.json.3.12.0\build\native\nlohmann.json.targets'))" />
+  </Target>
+  <Target Name="CopyGameAssets" AfterTargets="Build">
+    <ItemGroup>
+      <GameAssets Include="$(ProjectDir)Assets\**\*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(GameAssets)" DestinationFiles="@(GameAssets->'$(TargetDir)Assets\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 </Project>
