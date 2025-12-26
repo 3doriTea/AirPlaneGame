@@ -41,6 +41,6 @@ private:
 	float speed_;  // ˆÚ“®‘¬“x m/s
 	bool broken_;  // ‰ó‚ê‚Ä‚¢‚é‚©
 	float timeSinceLastshot_;
-	std::shared_ptr<EffectParameters> pSmokeEffect_;
-	std::shared_ptr<EffectParameters> pFireEffect_;;
+	std::weak_ptr<EffectParameters> pSmokeEffect_;
+	std::weak_ptr<EffectParameters> pFireEffect_;;
 };

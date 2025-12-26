@@ -14,7 +14,7 @@ namespace
 	const int HIT_DAMAGE{ 10 };
 	const float BROKEN_DOWN_SPEED{ 30.0f };
 	const float BROKEN_ROTATE_Z_SPEED_PER_SEC{ 3.0f };  // 墜落中のz軸回転(1秒間あたりの回転角度)
-	const float DESTROY_HEIGHT{ -100 };  // 飛行機を消す高さ
+	const float DESTROY_HEIGHT{ 0 };  // 飛行機を消す高さ
 	const float CHASE_SPEED{ 3.0f }; // ターゲットを追いかける速さ
 	const float ENEMY_SCALE{ 0.5f }; // スケール
 	const float SHOOT_COOLDOWN{ 5.0f }; // 弾を撃つクールダウン時間
@@ -238,11 +238,29 @@ bool EnemyPlane::HandleCrash()
 	{
 		// スコア加算
 		Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
+
+		// 墜落時の爆発エフェクト
+		Matrix4x4 mat;
+		pTransform_->GenerateWorldMatrix(&mat);
+		EffectParameters params;
+		params.isLoop = false;
+		params.speed = 1.0f;
+		params.worldMat = mat;
+		Game::System<EffectManager>().Play("Explosion", params);
+
 		// エフェクトを破棄
-		if (pSmokeEffect_)
+		if (std::shared_ptr<EffectParameters> effect = pSmokeEffect_.lock())
 		{
-			pSmokeEffect_->destoryMe = true;
+			effect->destroyMe = true;
 		}
+		pSmokeEffect_.reset();
+
+		if (std::shared_ptr<EffectParameters> effect = pFireEffect_.lock())
+		{
+			effect->destroyMe = true;
+		}
+		pFireEffect_.reset();
+
 		DestroyMe();
 		return true;
 	}
@@ -259,14 +277,23 @@ bool EnemyPlane::HandleCrash()
 
 	Matrix4x4 mat;
 	pTransform_->GenerateWorldMatrix(&mat);
-	// 黒煙のエフェクトを機体の座標に追従させる
-	if (pSmokeEffect_)
+	// エフェクトを機体の座標に追従させる
+	if (std::shared_ptr<EffectParameters> effect = pSmokeEffect_.lock())
 	{
-		pSmokeEffect_->worldMat = mat;
+		effect->worldMat = mat;
 	}
-	if (pFireEffect_)
+	else
 	{
-		pFireEffect_->worldMat = mat;
+		pSmokeEffect_.reset();
+	}
+
+	if (std::shared_ptr<EffectParameters> effect = pFireEffect_.lock())
+	{
+		effect->worldMat = mat;
+	}
+	else
+	{
+		pSmokeEffect_.reset();
 	}
 	return true;
 }
@@ -288,11 +315,11 @@ void EnemyPlane::OnBreak()
 	params.speed = 1.0f;
 	params.worldMat = mat;
 	// 黒煙のエフェクト再生、参照保持
-	pSmokeEffect_ = Game::System<EffectManager>().Play("Smoke", params, false);
-	pFireEffect_ = Game::System<EffectManager>().Play("Fire", params, false);
+	pSmokeEffect_ = Game::System<EffectManager>().Play("Smoke", params);
+	pFireEffect_ = Game::System<EffectManager>().Play("Fire", params);
 	// 爆発エフェクト再生
 	params.isLoop = false;
-	Game::System<EffectManager>().Play("Explosion", params, false);
+	Game::System<EffectManager>().Play("Explosion", params);
 	
 
 	// 爆発SE再生
