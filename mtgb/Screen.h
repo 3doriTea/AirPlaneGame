@@ -15,6 +15,7 @@ namespace mtgb
 
 		inline const Vector2Int GetSize() const { return size_; }
 		inline const Vector2F GetSizeF() const { return Vector2F{ static_cast<float>(size_.x),static_cast<float>(size_.y) }; }
+		inline const int GetFPS() const { return fpsLimit_; }
 		//inline const Vector2Int GetInitialSize() const { return Vector2Int{ initialWidth_,initialHeight_ }; }
 		/// <summary>
 		/// 初期値を1としたときのスクリーンサイズの比率を返す

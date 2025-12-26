@@ -332,6 +332,9 @@
     <Filter Include="mtgb\System\ImGui">
       <UniqueIdentifier>{867fb158-f2d8-4419-8c6c-57ce9b6e131b}</UniqueIdentifier>
     </Filter>-->
+    <Filter Include="03mtgb\System\Effect">
+      <UniqueIdentifier>{4803d41a-aef1-43a3-af55-acffec0010c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mtgb\AssetsManager.cpp">
@@ -883,11 +886,14 @@
     <ClCompile Include="Source\DemoScene\HangerUI.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Box3D.cpp">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Stage.cpp">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\FBXModelEntity.cpp">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="mtgb\EffekseerVFX.cpp">
+      <Filter>03mtgb\System\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1575,11 +1581,14 @@
     <ClInclude Include="Source\DemoScene\HangerUI.h">
       <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Box3D.h">
-      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Stage.h">
       <Filter>01Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\FBXModelEntity.h">
+      <Filter>未フィルターのなんとかしなきゃいけないファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="mtgb\EffekseerVFX.h">
+      <Filter>03mtgb\System\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

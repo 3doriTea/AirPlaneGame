@@ -11,6 +11,7 @@ public:
 	void Draw() const override;
 private:
 	void InitCommon(Shooter _shooter);
+	void OnShotDown();
 	Transform* pTarget_;
 	float timeLeft_;  // ミサイルが消えるまでのカウントダウン
 };

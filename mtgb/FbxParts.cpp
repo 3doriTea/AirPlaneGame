@@ -56,11 +56,6 @@ void mtgb::FbxParts::Initialize()
 	polygonVertexCount_ = pMesh_->GetPolygonVertexCount();  // ポリゴン頂点インデックス数 
 	InitializeMaterial();
 	IShader::Initialize();  // 頂点・インデックス・定数 バッファの初期化
-	//InitializeVertexBuffer(DirectX11Draw::pDevice_);
-	//InitializeIndexBuffer(DirectX11Draw::pDevice_);
-	//InitializeConstantBuffer(DirectX11Draw::pDevice_);
-
-	
 }
 
 void mtgb::FbxParts::Release()

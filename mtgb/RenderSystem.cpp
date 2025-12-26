@@ -7,6 +7,7 @@
 #include "GameObject.h"
 #include "Debug.h"
 #include "MTImGui.h"
+#include "EffekseerVFX.h"
 #include "../ImGui/imgui.h"
 #include "Draw.h"
 void mtgb::RenderSystem::Initialize()
@@ -30,6 +31,7 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	WinCtxRes::ChangeResource(WindowContext::First);
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::A); });
+	Game::System<EffectManager>().Draw();
 	Draw::FlushUIDrawCommands(GameObjectLayer::A);
 	DirectX11Draw::End();
 	Draw::ClearUICommands();
@@ -38,6 +40,7 @@ void mtgb::RenderSystem::RenderDirectXWindows(GameScene& _scene)
 	WinCtxRes::ChangeResource(WindowContext::Second);
 	DirectX11Draw::Begin();
 	DrawGameObjects(_scene, [](GameObject* pGameObject) { return pGameObject->GetLayerFlag().Has(GameObjectLayer::B); });
+	Game::System<EffectManager>().Draw();
 	Draw::FlushUIDrawCommands(GameObjectLayer::B);
 	DirectX11Draw::End();
 	Draw::ClearUICommands();

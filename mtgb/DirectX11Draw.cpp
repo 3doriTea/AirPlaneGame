@@ -44,7 +44,7 @@ void mtgb::DirectX11Draw::SetBlendMode(const BlendMode _mode)
 
 	// ‰ÁŽZ‡¬
 	float blendFactor[]{ D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
-	pContext_->OMSetBlendState(pBlendState_[INDEX].Get(), blendFactor, 0xffffffffU);
+	pContext_->OMSetBlendState(pBlendState_[INDEX].Get(), nullptr, 0xffffffff);
 
 	// [“xƒXƒeƒ“ƒVƒ‹‚Ö‚Ì‘‚«ž‚Ý
 	pContext_->OMSetDepthStencilState(pDepthStencilState_[INDEX].Get(), 0);

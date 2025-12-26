@@ -57,6 +57,7 @@
 #include "ImGuiShowable.h"
 #include "MTImGui.h"
 #include "EventManager.h"
+#include "EffekseerVFX.h"
 #pragma endregion
 
 #include "GameObjectBuilder.h"

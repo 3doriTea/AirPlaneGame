@@ -82,7 +82,7 @@ void SampleGame::SetupSystems(const RegisterSystemFuncHolder& _register)
 
 	_register.Set<Draw>(SystemUpdateType::DontCallMe);
 	_register.Set<EventManager>(SystemUpdateType::DontCallMe);
-
+	_register.Set<EffectManager>(SystemUpdateType::Frame,false);
 	_register.Set<SceneSystem>(SystemUpdateType::Frame);
 
 	// 開始時のシーン

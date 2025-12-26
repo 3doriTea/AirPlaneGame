@@ -94,47 +94,37 @@ EnemyPlane::EnemyPlane(
 			GameObject* pTarget{ FindGameObject(_targetId) };
 			if (pTarget == nullptr)
 			{
-				//LOGF("Id:%d(壁)と衝突した！ by %d(%s)\n", _targetId,entityId_, GetName().c_str());
 				return;
 			}
 
+			// 弾丸に接触した場合
 			if (pTarget->GetName() == "Bullet" || pTarget->GetName() == "Missile")
 			{
 				ProjectTile* pProjectile{ dynamic_cast<ProjectTile*>(pTarget) };
 
 				if (pProjectile == nullptr)
-				{
 					return;
-				}
-
 				if (pProjectile->GetShooter() != ProjectTile::Shooter::Player)
-				{
 					return;
-				}
-
+				
+				// 弾丸を破棄
 				pTarget->DestroyMe();
+				// ダメージを負う
 				health_.Damage(HIT_DAMAGE);
+				// 死んでいるか
 				if (health_.IsDead())
 				{
-					broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
-					SetName("EnemyBroken");
-					Audio::PlayOneShotFile("Sound/Effect/boom.wav");
-					GetScene<PlayScene>().SetStatusClear();
-
-					QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
-					if (pQuotaGauge != nullptr)
-					{
-						pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
-						Game::System<ScoreManager>().AddScore(ADD_QUOTA_POINT);
-
-					}
+					// 機体が破壊された
+					OnBreak();
 				}
 				else
 				{
+					// ダメージを負った際のSE
 					Audio::PlayOneShotFile("Sound/Effect/ricochet.wav");
 				}
 			}
 		});
+
 
 	pEnemiesController_ = dynamic_cast<EnemiesController*>(FindGameObject(controllerId_));
 	if (pEnemiesController_ == nullptr)
@@ -198,29 +188,16 @@ void EnemyPlane::Update()
 	EntityId eId{ GetEntityId() };
 
 	pRB_->velocity_ = pTransform_->Forward() * speed_;
-
-		
-	/*MTImGui::Instance().TypedShow(pTransform_, "EnemyPlane:" + std::to_string(entityId_));
-	MTImGui::Instance().DirectShow([this]() 
-		{
-			ImGui::Text("LockOnProgress:%.3f" ,gun_.GetLockOnProgress());
-			std::string hasTarget = targetingSystem_.HasTarget() ? "Yes" : "No";
-			ImGui::Text("HasTarget:%s", hasTarget.c_str());
-			
-		}, "EnemyTargetingSystem:" + std::to_string(entityId_), ShowType::Inspector);*/
 }
 
 void EnemyPlane::Draw() const
 {
 	const EnemyAI::OutData& outData{ ai_.GetOutData() };
-	//if (status_.toDestroy_)
 	if (outData.isSleep)
 	{
 		return;
 	}
 	Draw::FBXModel(hModel_, *pTransform_, 0);
-	//pCollider_->Draw();
-	Vector2Int pos = InputUtil::GetMousePosition();
 }
 
 void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
@@ -254,28 +231,44 @@ void EnemyPlane::Fight(const EnemyAI::OutData& _outData)
 
 bool EnemyPlane::HandleCrash()
 {
-	if (broken_)  // 破壊中の処理
+	if (broken_ == false)
+		return false;
+
+	if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
 	{
-		if (pTransform_->GetWorldPosition().y < DESTROY_HEIGHT)
+		// スコア加算
+		Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
+		// エフェクトを破棄
+		if (pSmokeEffect_)
 		{
-			// スコア加算
-			Game::System<ScoreManager>().AddScore(ENEMY_PLANE_SCORE);
-			DestroyMe();
-			return true;
+			pSmokeEffect_->destoryMe = true;
 		}
-
-		const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
-		Quaternion curr{ pTransform_->rotate };
-
-		curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
-
-		Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down()) };
-		pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
-		pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
-
+		DestroyMe();
 		return true;
 	}
-	return false;
+
+	// 破壊中の処理
+	const float ROT_ANGLE{ Time::DeltaTimeF() * BROKEN_ROTATE_Z_SPEED_PER_SEC };
+	Quaternion curr{ pTransform_->rotate };
+
+	curr *= XMQuaternionRotationAxis((pTransform_->Right() + pTransform_->Forward()).Normalize(), ROT_ANGLE);
+
+	Quaternion toLook{ Quaternion::FromToRotation(pTransform_->Forward(), Vector3::Down()) };
+	pTransform_->rotate = Quaternion::SLerp(curr, curr * toLook, Time::DeltaTimeF());
+	pRB_->velocity_ = pTransform_->Forward() * BROKEN_DOWN_SPEED;
+
+	Matrix4x4 mat;
+	pTransform_->GenerateWorldMatrix(&mat);
+	// 黒煙のエフェクトを機体の座標に追従させる
+	if (pSmokeEffect_)
+	{
+		pSmokeEffect_->worldMat = mat;
+	}
+	if (pFireEffect_)
+	{
+		pFireEffect_->worldMat = mat;
+	}
+	return true;
 }
 
 bool EnemyPlane::IsActive() const
@@ -284,21 +277,35 @@ bool EnemyPlane::IsActive() const
 	return outData.isActive;
 }
 
-void EnemyPlane::Break()
-{
-	health_.Damage(200);
-	if (health_.IsDead())
-	{
-		broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
-		SetName("EnemyBroken");
-		Audio::PlayOneShotFile("Sound/Effect/boom.wav");
-		GetScene<PlayScene>().SetStatusClear();
 
-		QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
-		if (pQuotaGauge != nullptr)
-		{
-			pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
-			Game::System<ScoreManager>().AddScore(ADD_QUOTA_POINT);
-		}
+void EnemyPlane::OnBreak()
+{
+	// エフェクト再生に使うワールド行列を作成
+	Matrix4x4 mat;
+	pTransform_->GenerateWorldMatrix(&mat);
+	EffectParameters params;
+	params.isLoop = true;
+	params.speed = 1.0f;
+	params.worldMat = mat;
+	// 黒煙のエフェクト再生、参照保持
+	pSmokeEffect_ = Game::System<EffectManager>().Play("Smoke", params, false);
+	pFireEffect_ = Game::System<EffectManager>().Play("Fire", params, false);
+	// 爆発エフェクト再生
+	params.isLoop = false;
+	Game::System<EffectManager>().Play("Explosion", params, false);
+	
+
+	// 爆発SE再生
+	Audio::PlayOneShotFile("Sound/Effect/boom.wav");
+	broken_ = true;  // 体力的に死んでいるなら飛行機を壊す
+	SetName("EnemyBroken");
+	GetScene<PlayScene>().SetStatusClear();
+
+	// スコア加算
+	QuotaGauge* pQuotaGauge{ FindGameObject<QuotaGauge>() };
+	if (pQuotaGauge != nullptr)
+	{
+		pQuotaGauge->AddPoint(ADD_QUOTA_POINT);
+		Game::System<ScoreManager>().AddScore(ADD_QUOTA_POINT);
 	}
 }

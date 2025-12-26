@@ -49,7 +49,7 @@ void Missile::Update()
 	if (timeLeft_ <= 0.0f)
 	{
 		// カウントダウンが0以下なら消す
-		DestroyMe();
+		OnShotDown();
 		return;
 	}
 
@@ -120,12 +120,11 @@ void Missile::InitCommon(Shooter _shooter)
 						.eventType = EventType::Hit,
 					}
 					);
-				DestroyMe();
+				OnShotDown();
 			}
 			if (pTarget->GetName() == "Bullet")
 			{
-				DestroyMe();
-
+				OnShotDown();
 			}
 		});
 
@@ -138,4 +137,16 @@ void Missile::InitCommon(Shooter _shooter)
 		});
 
 	//Timer::AddAram(DESTROY_TIME, [this] { DestroyMe(); });
+}
+
+void Missile::OnShotDown()
+{
+	EffectParameters params;
+	Matrix4x4 mat;
+	pTransform_->GenerateWorldMatrix(&mat);
+	params.speed = 1.0f;
+	params.worldMat = mat;
+	params.isLoop = false;
+	Game::System<EffectManager>().Play("MissileShotDown", params);
+	DestroyMe();
 }

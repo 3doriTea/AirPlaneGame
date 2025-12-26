@@ -21,8 +21,9 @@ public:
 	const EnemyAI& GetAI() const { return ai_; }
 	bool IsActive() const;
 
-	void Break();
 private:
+	void OnBreak();
+
 	FBXModelHandle hModel_;
 	RigidBody* pRB_;
 	Collider* pCollider_;
@@ -40,4 +41,6 @@ private:
 	float speed_;  // ˆÚ“®‘¬“x m/s
 	bool broken_;  // ‰ó‚ê‚Ä‚¢‚é‚©
 	float timeSinceLastshot_;
+	std::shared_ptr<EffectParameters> pSmokeEffect_;
+	std::shared_ptr<EffectParameters> pFireEffect_;;
 };

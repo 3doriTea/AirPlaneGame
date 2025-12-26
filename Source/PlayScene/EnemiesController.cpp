@@ -60,11 +60,6 @@ void EnemiesController::Update()
 				minIndex = i;
 			}
 		}
-
-		if (minIndex >= 0)
-		{
-			founds[minIndex]->Break();
-		}
 	}
 #endif
 }
